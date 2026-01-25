@@ -177,9 +177,9 @@ background {
         Map<String, String> material;
 
         if (MONOCHROMATIC) {
-            material = getMaterialPlain(aggregate);
+            material = getMaterialMonochromatic(aggregate);
         } else {
-            material = getMaterialDifferentiate(aggregate);
+            material = getMaterial(aggregate);
         }
 
         aggregate.getRefParticles().forEach(e -> {
@@ -214,21 +214,25 @@ background {
 
     //--------------------------------------------------
 
-    private static Map<String, String> getMaterialPlain(FAggregate aggregate) {
+    private static Map<String, String> getMaterialMonochromatic(FAggregate aggregate) {
         Map<String, String> map = new HashMap<>();
 
         for (Shape particle : aggregate) {
-            map.put(particle.getMeta(), "        color rgbt <0.1,0.1,0.1,0.0>\n");
+            for (int i = 0 ; i < particle.getLayerCount() ; i++) {
+                map.put(particle.getMeta(i), "        color rgbt <0.1,0.1,0.1,0.0>\n");
+            }
         }
 
         return map;
     }
 
-    private static Map<String, String> getMaterialDifferentiate(FAggregate aggregate) {
+    private static Map<String, String> getMaterial(FAggregate aggregate) {
         Map<String, String> map = new HashMap<>();
 
         for (Shape particle : aggregate) {
-            map.put(particle.getMeta(), "");
+            for (int i = 0 ; i < particle.getLayerCount() ; i++) {
+                map.put(particle.getMeta(i), "");
+            }
         }
 
         double pigmentStep = 1d / (map.size() + 1);

@@ -4,14 +4,13 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public class FAggregateModuleSupportDef {
@@ -38,7 +37,7 @@ public class FAggregateModuleSupportDef {
         return this.aggregate.getRefParticles().registerWithCheck(particle);
     }
 
-    protected boolean delRefParticle(Shape particle) {
+    protected boolean deleteRefParticle(Shape particle) {
 
         return this.aggregate.getRefParticles().deregisterWithCheck(particle);
     }
@@ -106,6 +105,77 @@ public class FAggregateModuleSupportDef {
     protected void translate(FPairPos3D offset) {
 
         this.aggregate.getRefParticles().translate(offset);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected double project(FAggregate target, FVector dir) {
+        FRay translator = this.factory.getFRay();
+        translator.getRefOrigin().set(dir);
+        List<Shape> candidates = new ArrayList<>(this.aggregate.getRefParticles().asList());
+
+        FPoint centerArg = target.getCenter(factory.getFPoint(), Center.SPATIAL);
+
+        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
+
+        for (Shape candidate : candidates) {
+            translator.getRefOrigin().moveBase(candidate.getRefCenter());
+
+            double shift = candidate.projectFromDryRun(target, translator);
+
+            if (shift >= 0) {
+                boolean overlaps = this.aggregate.overlapsWithShift(target, translator.toFVector(shift));
+
+                if (!overlaps) {
+                    for (Shape particle : this.aggregate) {
+                        translator.getRefOrigin().set(dir);
+                        translator.shiftForward(particle, shift);
+                    }
+
+                    return shift;
+                }
+            }
+
+        }
+
+        return -1;
+    }
+
+    protected double project(FAggregate target, FVector dir, double distLimit) {
+        FPoint centerRef = this.aggregate.getCenter(this.factory.getFPoint(), Center.SPATIAL);
+        FPoint centerArg = target.getCenter(this.factory.getFPoint(), Center.SPATIAL);
+
+        if (centerRef.getDistance(centerArg) > this.aggregate.getRadiusFrom(centerRef) + this.aggregate.getRadiusFrom(centerArg) + distLimit) {
+            return -1;
+        }
+
+        FRay translator = this.factory.getFRay();
+        translator.getRefOrigin().set(dir);
+        List<Shape> candidates = new ArrayList<>(this.aggregate.getRefParticles().asList());
+
+        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
+
+        for (Shape candidate : candidates) {
+            translator.getRefOrigin().moveBase(candidate.getRefCenter());
+
+            double shift = candidate.projectFromDryRun(target, translator);
+
+            if (shift >= 0 && shift <= distLimit) {
+                boolean overlaps = this.aggregate.overlapsWithShift(target, translator.toFVector(shift));
+
+                if (!overlaps) {
+                    for (Shape particle : this.aggregate) {
+                        translator.getRefOrigin().set(dir);
+                        translator.shiftForward(particle, shift);
+                    }
+
+                    return shift;
+                }
+            }
+
+        }
+
+        return -1;
     }
 
     // -------------------------------------------------------------------------------------------------

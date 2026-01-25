@@ -296,7 +296,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             factory.getFModelContext().pc().ballistic(this.dimension, fragment).build();
         }
 
-        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
 
         if (buffer != null) {
             for (FAggregate fragment : this.fragments) {

@@ -2,9 +2,9 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.extension.FExtension;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.physics.material.FMaterial;
@@ -16,12 +16,12 @@ import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.*;
+import eu.scattering.core.impl.component.aggregate.extension.FExtensionDef;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -29,8 +29,7 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "aggregate";
     private static final String JSON_PARTICLES = "particles";
-    private static final String JSON_CAPACITY = "capacity";
-    private static final String JSON_MATERIAL = "material";
+    private static final String JSON_EXTENSION = "extension";
 
     private final ScatFactory factory;
     private final FAssembly<Shape> particles;
@@ -43,10 +42,9 @@ public class FAggregateDef implements FAggregate {
     private final FAggregateModuleMorphologyDef moduleMorphology;
     private final FAggregateModuleSupportDef moduleSupport;
 
-    private FMaterial material;
-    private FBuffer<FBufferData> buffer;
+    private final FExtension extension;
 
-    private FAggregateDef(ScatFactory factory, FAssembly<Shape> refParticles) {
+    private FAggregateDef(ScatFactory factory, FAssembly<Shape> refParticles, FExtension refExtension) {
 
         this.factory = factory;
         this.particles = refParticles;
@@ -58,16 +56,23 @@ public class FAggregateDef implements FAggregate {
         this.moduleGeometry = new FAggregateModuleGeometryDef(this.factory, this);
         this.moduleMorphology = new FAggregateModuleMorphologyDef(this.factory, this);
         this.moduleSupport = new FAggregateModuleSupportDef(this.factory, this);
+
+        this.extension = Objects.requireNonNullElseGet(refExtension, () -> FExtensionDef.create(this.factory));
+    }
+
+    public static FAggregate create(ScatFactory factory, FAssembly<Shape> refParticles, FExtension extension) {
+
+        return new FAggregateDef(factory, refParticles, extension);
     }
 
     public static FAggregate create(ScatFactory factory, FAssembly<Shape> refParticles) {
 
-        return new FAggregateDef(factory, refParticles);
+        return new FAggregateDef(factory, refParticles, null);
     }
 
     public static FAggregate create(ScatFactory factory, List<Shape> refParticles) {
 
-        return new FAggregateDef(factory, factory.getFAssembly(refParticles));
+        return new FAggregateDef(factory, factory.getFAssembly(refParticles), null);
     }
 
     public static FAggregate create(ScatFactory factory, JSONObject json) {
@@ -76,17 +81,14 @@ public class FAggregateDef implements FAggregate {
             throw new IllegalArgumentException("Invalid JSON header (FAggregate)");
         }
 
-        FAggregate fAggregate = new FAggregateDef(factory, factory.getFAssembly(json.getJSONObject(JSON_PARTICLES)));
+        FAssembly<Shape> particles = factory.getFAssembly(json.getJSONObject(JSON_PARTICLES));
+        FExtension extension = null;
 
-        if (json.has(JSON_MATERIAL)) {
-            fAggregate.setRefFMaterial(factory.getFMaterial(json.getJSONObject(JSON_MATERIAL)));
+        if (json.has(JSON_EXTENSION)) {
+            extension = FExtensionDef.create(factory, json.getJSONObject(JSON_EXTENSION));
         }
 
-        if (json.has(JSON_CAPACITY)) {
-            fAggregate.addFBuffer(json.getInt(JSON_CAPACITY));
-        }
-
-        return fAggregate;
+        return new FAggregateDef(factory, particles, extension);
     }
 
     @Override
@@ -512,9 +514,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public boolean delRefParticle(Shape particle) {
+    public boolean deleteRefParticle(Shape particle) {
 
-        return this.moduleSupport.delRefParticle(particle);
+        return this.moduleSupport.deleteRefParticle(particle);
     }
 
     @Override
@@ -578,31 +580,21 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public double project(FAggregate arg, FVector dir) {
+
+        return this.moduleSupport.project(arg, dir);
+    }
+
+    @Override
+    public double project(FAggregate arg, FVector dir, double distLimit) {
+
+        return this.moduleSupport.project(arg, dir, distLimit);
+    }
+
+    @Override
     public void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
 
         this.moduleSupport.forEachPairInContact(consumer);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private FBuffer<FBufferData> supplyFBuffer(int capacity) {
-
-        return factory.getFBuffer(capacity);
-    }
-
-    private FMaterial supplyFMaterial() {
-
-        return factory.getFMaterial();
-    }
-
-    private FPoint supplyFPoint() {
-
-        return factory.getFPoint();
-    }
-
-    private FRay supplyFRay() {
-
-        return factory.getFRay();
     }
 
     //--------------------------------------------------
@@ -612,30 +604,20 @@ public class FAggregateDef implements FAggregate {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
-
-        if (getRefFBuffer() != null) {
-            json.put(JSON_CAPACITY, getRefFBuffer().capacity());
-        }
-
-        if (getRefFMaterial() != null) {
-            json.put(JSON_MATERIAL, getRefFMaterial().toJSON());
-        }
-
         json.put(JSON_PARTICLES, getRefParticles().toJSON());
+        json.put(JSON_EXTENSION, getRefFExtension().toJSON());
 
         return json;
     }
 
     @Override
     public FAggregate copy(boolean deep) {
-        FAggregate copy = FAggregateDef.create(this.factory, getRefParticles().copy());
 
         if (deep) {
-            copy.setRefFMaterial(getRefFMaterial().copy());
-            copy.setRefFBuffer(supplyFBuffer(getRefFBuffer().capacity()));
+            return FAggregateDef.create(this.factory, getRefParticles().copy(), getRefFExtension().copy());
         }
 
-        return copy;
+        return FAggregateDef.create(this.factory, getRefParticles().copy());
     }
 
     @Override
@@ -645,95 +627,13 @@ public class FAggregateDef implements FAggregate {
             return false;
         }
 
-        if (getRefFMaterial() == null && aggregate.getRefFMaterial() != null) {
-            return false;
-        }
-
-        if (getRefFMaterial() != null && aggregate.getRefFMaterial() == null) {
-            return false;
-        }
-
-        if (getRefFMaterial() != null && aggregate.getRefFMaterial() != null) {
-            if (!getRefFMaterial().isEqual(aggregate.getRefFMaterial())) {
-                return false;
-            }
-        }
-
-        if (getRefFBuffer() == null && aggregate.getRefFBuffer() != null) {
-            return false;
-        }
-
-        if (getRefFBuffer() != null && aggregate.getRefFBuffer() == null) {
-            return false;
-        }
-
-        if (getRefFBuffer() != null && aggregate.getRefFBuffer() != null) {
-            return getRefFBuffer().capacity() == aggregate.getRefFBuffer().capacity();
-        }
-
-        return true;
+        return getRefFExtension().isExact(aggregate.getRefFExtension());
     }
 
     @Override
     public boolean isExactData(FAggregate aggregate) {
 
         return getRefParticles().isExact(aggregate.getRefParticles());
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FAggregate addFBuffer(int capacity) {
-
-        if (capacity < 1) {
-            throw new IllegalArgumentException("The buffer must consist of at least one element");
-        }
-
-        setRefFBuffer(supplyFBuffer(capacity));
-
-        return this;
-    }
-
-    @Override
-    public FAggregate addFMaterial() {
-
-        setRefFMaterial(supplyFMaterial());
-
-        return this;
-    }
-
-    @Override
-    public FAssembly<Shape> getRefParticles() {
-
-        return this.particles;
-    }
-
-    @Override
-    public FBuffer<FBufferData> getRefFBuffer() {
-
-        return this.buffer;
-    }
-
-    @Override
-    public FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer) {
-
-        this.buffer = refFBuffer;
-
-        return this;
-    }
-
-    @Override
-    public FMaterial getRefFMaterial() {
-
-        return this.material;
-    }
-
-    @Override
-    public FAggregate setRefFMaterial(FMaterial refMaterial) {
-
-        this.material = refMaterial;
-
-        return this;
     }
 
     @Override
@@ -751,74 +651,47 @@ public class FAggregateDef implements FAggregate {
     //--------------------------------------------------
 
     @Override
-    public double project(FAggregate target, FVector dir) {
-        FRay translator = supplyFRay();
-        translator.getRefOrigin().set(dir);
-        List<Shape> candidates = new ArrayList<>(getRefParticles().asList());
+    public FAggregate addFBuffer(int capacity) {
 
-        FPoint centerArg = target.getCenter(supplyFPoint(), Center.SPATIAL);
+        getRefFExtension().addFBuffer(capacity);
 
-        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
-
-        for (Shape candidate : candidates) {
-            translator.getRefOrigin().moveBase(candidate.getRefCenter());
-
-            double shift = candidate.projectFromDryRun(target, translator);
-
-            if (shift >= 0) {
-                boolean overlaps = overlapsWithShift(target, translator.toFVector(shift));
-
-                if (!overlaps) {
-                    for (Shape particle : getRefParticles()) {
-                        translator.getRefOrigin().set(dir);
-                        translator.shiftForward(particle, shift);
-                    }
-
-                    return shift;
-                }
-            }
-
-        }
-
-        return -1;
+        return this;
     }
 
     @Override
-    public double project(FAggregate target, FVector dir, double distLimit) {
-        FPoint centerRef = getCenter(supplyFPoint(), Center.SPATIAL);
-        FPoint centerArg = target.getCenter(supplyFPoint(), Center.SPATIAL);
+    public FAggregate addFMaterial() {
 
-        if (centerRef.getDistance(centerArg) > getRadiusFrom(centerRef) + getRadiusFrom(centerArg) + distLimit) {
-            return -1;
-        }
+        getRefFExtension().addFMaterial();
 
-        FRay translator = supplyFRay();
-        translator.getRefOrigin().set(dir);
-        List<Shape> candidates = new ArrayList<>(getRefParticles().asList());
+        return this;
+    }
 
-        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
+    @Override
+    public FAggregate setRefFBuffer(FBuffer<FBufferData> buffer) {
 
-        for (Shape candidate : candidates) {
-            translator.getRefOrigin().moveBase(candidate.getRefCenter());
+        getRefFExtension().setRefFBuffer(buffer);
 
-            double shift = candidate.projectFromDryRun(target, translator);
+        return this;
+    }
 
-            if (shift >= 0 && shift <= distLimit) {
-                boolean overlaps = overlapsWithShift(target, translator.toFVector(shift));
+    @Override
+    public FAggregate setRefFMaterial(FMaterial material) {
 
-                if (!overlaps) {
-                    for (Shape particle : getRefParticles()) {
-                        translator.getRefOrigin().set(dir);
-                        translator.shiftForward(particle, shift);
-                    }
+        getRefFExtension().setRefFMaterial(material);
 
-                    return shift;
-                }
-            }
+        return this;
+    }
 
-        }
+    @Override
+    public FAssembly<Shape> getRefParticles() {
 
-        return -1;
+        return this.particles;
+    }
+
+    @Override
+    public FExtension getRefFExtension() {
+
+        return this.extension;
     }
 }
 

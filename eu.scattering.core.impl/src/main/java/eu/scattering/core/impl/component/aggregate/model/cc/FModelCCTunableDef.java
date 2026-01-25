@@ -311,7 +311,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
             model.build();
         }
 
-        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
 
         if (buffer != null) {
             for (FAggregate fragment : this.fragments) {

@@ -83,4 +83,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.model.cc.dlca;
     exports eu.scattering.core.design.component.aggregate.monitor.cc.module;
     exports eu.scattering.core.design.component.aggregate.monitor.cc;
+    exports eu.scattering.core.design.component.aggregate.extension;
 }

@@ -48,7 +48,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
     private void getRadiusOfGyrationSimpleMonoPrecise(FComplex data, double radius) {
 
-        if (this.aggregate.getRefFMaterial() == null) {
+        if (this.aggregate.getRefFExtension().getRefFMaterial() == null) {
             getRadiusOfGyrationSimpleMonoPreciseMath(data);
         } else {
             getRadiusOfGyrationSimpleMonoPrecisePhys(data, radius);
@@ -66,7 +66,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
     }
 
     private void getRadiusOfGyrationSimpleMonoPrecisePhys(FComplex data, double radius) {
-        FMaterial material = this.aggregate.getRefFMaterial();
+        FMaterial material = this.aggregate.getRefFExtension().getRefFMaterial();
         FPos3D center = this.aggregate.getMassCenter(MassCenter.SIMPLE_MONO);
 
         for (Shape shape : this.aggregate) {
@@ -90,7 +90,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
     private void getRadiusOfGyrationSimplePolyPrecise(FComplex data, FPoint center, Shape shape) {
 
-        if (this.aggregate.getRefFMaterial() == null) {
+        if (this.aggregate.getRefFExtension().getRefFMaterial() == null) {
             getRadiusOfGyrationSimplePolyPreciseMath(data, center, shape);
         } else {
             getRadiusOfGyrationSimplePolyPrecisePhys(data, center, shape);
@@ -105,7 +105,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
     }
 
     private void getRadiusOfGyrationSimplePolyPrecisePhys(FComplex data, FPoint center, Shape shape) {
-        FMaterial material = this.aggregate.getRefFMaterial();
+        FMaterial material = this.aggregate.getRefFExtension().getRefFMaterial();
 
         double mass = getParticleMass(shape, material);
 
@@ -126,7 +126,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
     private void getRadiusOfGyrationComplexApprox(FComplex data, FPoint center, Shape shape) {
 
-        if (this.aggregate.getRefFMaterial() == null) {
+        if (this.aggregate.getRefFExtension().getRefFMaterial() == null) {
             getRadiusOfGyrationComplexApproxMath(data, center, shape);
         } else {
             getRadiusOfGyrationComplexApproxPhys(data, center, shape);
@@ -134,7 +134,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
     }
 
     private void getRadiusOfGyrationComplexApproxMath(FComplex data, FPoint center, Shape shape) {
-        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
 
         if (buffer == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
@@ -144,26 +144,26 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
         double unitVolume = shape.fillVolumeArray(buffer, this.aggregate.getRefParticles().asList());
 
-        this.aggregate.getRefFBuffer().forEach((index, d0, d1, d2, dummy, meta) -> {
+        this.aggregate.getRefFExtension().getRefFBuffer().forEach((index, d0, d1, d2, dummy, meta) -> {
             data.setRe(data.getRe() + (unitVolume * center.getDistanceP2(d0, d1, d2)));
             data.setIm(data.getIm() + unitVolume);
         });
     }
 
     private void getRadiusOfGyrationComplexApproxPhys(FComplex data, FPoint center, Shape shape) {
-        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
 
         if (buffer == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
         }
 
-        FMaterial material = this.aggregate.getRefFMaterial();
+        FMaterial material = this.aggregate.getRefFExtension().getRefFMaterial();
 
         buffer.clear();
 
         double unitVolume = shape.fillVolumeArray(buffer, this.aggregate.getRefParticles().asList());
 
-        this.aggregate.getRefFBuffer().forEach((index, d0, d1, d2, dummy, meta) -> {
+        this.aggregate.getRefFExtension().getRefFBuffer().forEach((index, d0, d1, d2, dummy, meta) -> {
             double mass = unitVolume * material.getDensity(meta.getMeta());
 
             data.setRe(data.getRe() + (mass * center.getDistanceP2(d0, d1, d2)));

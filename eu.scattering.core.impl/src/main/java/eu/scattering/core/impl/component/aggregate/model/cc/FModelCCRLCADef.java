@@ -202,7 +202,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
             factory.getFModelContext().pc().rla(this.dimension, fragment).build();
         }
 
-        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
 
         if (buffer != null) {
             for (FAggregate fragment : this.fragments) {

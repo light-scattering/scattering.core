@@ -147,7 +147,7 @@ public class FAggregateModuleCenterDef {
 
     private double getMassCenterMethodSimpleMonoPrecise(FPoint center, Shape shape, double radius) {
 
-        if (this.aggregate.getRefFMaterial() == null) {
+        if (this.aggregate.getRefFExtension().getRefFMaterial() == null) {
             return getMassCenterMethodSimpleMonoPreciseMath(center, shape, radius);
         }
 
@@ -165,7 +165,7 @@ public class FAggregateModuleCenterDef {
     }
 
     private double getMassCenterMethodSimpleMonoPrecisePhys(FPoint center, Shape shape, double radius) {
-        FMaterial material = this.aggregate.getRefFMaterial();
+        FMaterial material = this.aggregate.getRefFExtension().getRefFMaterial();
 
         double volume = this.factory.getFSphereHelper().getVolume(radius);
         double mass = volume * material.getDensity(shape.getMeta());
@@ -184,7 +184,7 @@ public class FAggregateModuleCenterDef {
 
     private double getMassCenterMethodSimplePolyPrecise(FPoint center, Shape shape) {
 
-        if (this.aggregate.getRefFMaterial() == null) {
+        if (this.aggregate.getRefFExtension().getRefFMaterial() == null) {
             return getMassCenterMethodSimplePolyPreciseMath(center, shape);
         }
 
@@ -206,7 +206,7 @@ public class FAggregateModuleCenterDef {
     }
 
     private double getMassCenterMethodSimplePolyPrecisePhys(FPoint center, Shape shape) {
-        FMaterial material = this.aggregate.getRefFMaterial();
+        FMaterial material = this.aggregate.getRefFExtension().getRefFMaterial();
 
         double mass = 0;
 
@@ -230,7 +230,7 @@ public class FAggregateModuleCenterDef {
 
     private double getMassCenterMethodComplexApprox(FPoint center, Shape shape) {
 
-        if (this.aggregate.getRefFMaterial() == null) {
+        if (this.aggregate.getRefFExtension().getRefFMaterial() == null) {
             return getMassCenterMethodComplexApproxMath(center, shape);
         }
 
@@ -238,7 +238,7 @@ public class FAggregateModuleCenterDef {
     }
 
     private double getMassCenterMethodComplexApproxMath(FPoint center, Shape shape) {
-        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
 
         if (buffer == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
@@ -250,7 +250,7 @@ public class FAggregateModuleCenterDef {
 
         FBoxDouble volume = this.factory.getFBoxDouble();
 
-        this.aggregate.getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+        this.aggregate.getRefFExtension().getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
             center.setX(center.getX() + (d0 * unitVolume));
             center.setY(center.getY() + (d1 * unitVolume));
             center.setZ(center.getZ() + (d2 * unitVolume));
@@ -262,13 +262,13 @@ public class FAggregateModuleCenterDef {
     }
 
     private double getMassCenterMethodComplexApproxPhys(FPoint center, Shape shape) {
-        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
 
         if (buffer == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
         }
 
-        FMaterial material = this.aggregate.getRefFMaterial();
+        FMaterial material = this.aggregate.getRefFExtension().getRefFMaterial();
 
         buffer.clear();
 
@@ -276,7 +276,7 @@ public class FAggregateModuleCenterDef {
 
         FBoxDouble mass = this.factory.getFBoxDouble();
 
-        this.aggregate.getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+        this.aggregate.getRefFExtension().getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
             double unitMass = unitVolume * material.getDensity(meta.getMeta());
 
             center.setX(center.getX() + (d0 * unitMass));

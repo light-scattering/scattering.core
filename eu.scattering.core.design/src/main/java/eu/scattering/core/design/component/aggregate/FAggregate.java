@@ -3,6 +3,7 @@ package eu.scattering.core.design.component.aggregate;
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
+import eu.scattering.core.design.component.aggregate.extension.FExtension;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -19,7 +20,7 @@ import eu.scattering.core.design.type.*;
 
 import java.util.function.BiConsumer;
 
-public interface FAggregate extends FAggregateModuleInteraction, Component, Iterable<Shape> {
+public interface FAggregate extends Component, Iterable<Shape> {
 
     int size();
 
@@ -52,8 +53,8 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     void setRadiusFrom(FPos3D center, double radius);
     void setRadiusFrom(Center type, double radius);
 
-    FStat getFStatParticleRadius();
     FStat getFStatDistance(Center type);
+    FStat getFStatParticleRadius();
 
     //--------------------------------------------------
 
@@ -152,10 +153,13 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
 
+    double project(FAggregate arg, FVector dir);
+    double project(FAggregate arg, FVector dir, double distLimit);
+
     @Modificator
     boolean addRefParticle(Shape particle);
     @Modificator
-    boolean delRefParticle(Shape particle);
+    boolean deleteRefParticle(Shape particle);
 
     //--------------------------------------------------
 
@@ -166,19 +170,17 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     //--------------------------------------------------
 
+    @Modificator
+    FAssembly<Shape> getRefParticles();
+
     FAggregate addFBuffer(int capacity);
     FAggregate addFMaterial();
 
     @Modificator
-    FAssembly<Shape> getRefParticles();
+    FAggregate setRefFBuffer(FBuffer<FBufferData> buffer);
+    @Modificator
+    FAggregate setRefFMaterial(FMaterial material);
 
     @Modificator
-    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
-    @Modificator
-    FAggregate setRefFMaterial(FMaterial refMaterial);
-
-    @Modificator
-    FBuffer<FBufferData> getRefFBuffer();
-    @Modificator
-    FMaterial getRefFMaterial();
+    FExtension getRefFExtension();
 }

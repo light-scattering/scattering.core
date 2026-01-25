@@ -45,8 +45,8 @@ public class FAggregateTest {
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(0, fAggregate.size()),
-                    () -> assertNull(fAggregate.getRefFBuffer()),
-                    () -> assertNull(fAggregate.getRefFMaterial())
+                    () -> assertNull(fAggregate.getRefFExtension().getRefFBuffer()),
+                    () -> assertNull(fAggregate.getRefFExtension().getRefFMaterial())
             );
         }
 
@@ -60,8 +60,8 @@ public class FAggregateTest {
             Assertions.assertAll("Validate FAggregate",
                     () -> assertSame(fAssembly, fAggregate.getRefParticles()),
                     () -> assertEquals(fAssembly.size(), fAggregate.size()),
-                    () -> assertNull(fAggregate.getRefFBuffer()),
-                    () -> assertNull(fAggregate.getRefFMaterial())
+                    () -> assertNull(fAggregate.getRefFExtension().getRefFBuffer()),
+                    () -> assertNull(fAggregate.getRefFExtension().getRefFMaterial())
             );
         }
 
@@ -90,13 +90,13 @@ public class FAggregateTest {
         void addFBuffer() {
             FAggregate fAggregateA = factory.getFAggregate();
 
-            assertNull(fAggregateA.getRefFBuffer());
+            assertNull(fAggregateA.getRefFExtension().getRefFBuffer());
 
             FAggregate fAggregateB = fAggregateA.addFBuffer(100);
 
             assertSame(fAggregateA, fAggregateB);
-            assertEquals(100, fAggregateA.getRefFBuffer().capacity());
-            assertEquals(0, fAggregateA.getRefFBuffer().size());
+            assertEquals(100, fAggregateA.getRefFExtension().getRefFBuffer().capacity());
+            assertEquals(0, fAggregateA.getRefFExtension().getRefFBuffer().size());
         }
 
         @Test
@@ -108,7 +108,7 @@ public class FAggregateTest {
 
             FAggregate fAggregateB = fAggregateA.setRefFBuffer(fBufferA);
 
-            FBuffer<FBufferData> fBufferB = fAggregateA.getRefFBuffer();
+            FBuffer<FBufferData> fBufferB = fAggregateA.getRefFExtension().getRefFBuffer();
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertSame(fAggregateA, fAggregateB,
@@ -123,14 +123,14 @@ public class FAggregateTest {
         void addFMaterial() {
             FAggregate fAggregateA = factory.getFAggregate();
 
-            assertNull(fAggregateA.getRefFMaterial());
+            assertNull(fAggregateA.getRefFExtension().getRefFMaterial());
 
             FAggregate fAggregateB = fAggregateA.addFMaterial();
 
-            fAggregateA.getRefFMaterial().setDensity("X", 1);
+            fAggregateA.getRefFExtension().getRefFMaterial().setDensity("X", 1);
 
             assertSame(fAggregateA, fAggregateB);
-            assertEquals(2, fAggregateA.getRefFMaterial().size());
+            assertEquals(2, fAggregateA.getRefFExtension().getRefFMaterial().size());
         }
 
         @Test
@@ -142,7 +142,7 @@ public class FAggregateTest {
 
             FAggregate fAggregateB = fAggregateA.setRefFMaterial(fMaterialA);
 
-            FMaterial fMaterialB = fAggregateA.getRefFMaterial();
+            FMaterial fMaterialB = fAggregateA.getRefFExtension().getRefFMaterial();
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertSame(fAggregateA, fAggregateB,
@@ -177,11 +177,11 @@ public class FAggregateTest {
         @DisplayName("Parse JSON - B")
         void parseJSONB() {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1).addFBuffer(10).addFMaterial();
-            fAggregate.getRefFMaterial().setDensity("A", 3);
-            fAggregate.getRefFMaterial().setDensity("B", 6);
-            fAggregate.getRefFMaterial().setRefIndexRe("C", 3);
-            fAggregate.getRefFMaterial().setRefIndexIm("D", 6);
-            fAggregate.getRefFMaterial().setRefIndex("E", 4, 8);
+            fAggregate.getRefFExtension().getRefFMaterial().setDensity("A", 3);
+            fAggregate.getRefFExtension().getRefFMaterial().setDensity("B", 6);
+            fAggregate.getRefFExtension().getRefFMaterial().setRefIndexRe("C", 3);
+            fAggregate.getRefFExtension().getRefFMaterial().setRefIndexIm("D", 6);
+            fAggregate.getRefFExtension().getRefFMaterial().setRefIndex("E", 4, 8);
 
             JSONObject json = fAggregate.toJSON();
 
@@ -212,22 +212,22 @@ public class FAggregateTest {
             FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA).addFBuffer(10).addFMaterial();
             FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB).addFBuffer(10).addFMaterial();
 
-            fAggregateA.getRefFMaterial().setDensity("X", 5);
-            fAggregateB.getRefFMaterial().setDensity("X", 5);
+            fAggregateA.getRefFExtension().getRefFMaterial().setDensity("X", 5);
+            fAggregateB.getRefFExtension().getRefFMaterial().setDensity("X", 5);
 
             assertTrue(fAggregateA.isExact(fAggregateB));
             assertTrue(fAggregateB.isExact(fAggregateA));
             assertTrue(fAggregateA.isExactData(fAggregateB));
             assertTrue(fAggregateB.isExactData(fAggregateA));
 
-            fAggregateB.getRefFMaterial().setDensity("X", 6);
+            fAggregateB.getRefFExtension().getRefFMaterial().setDensity("X", 6);
 
             assertFalse(fAggregateA.isExact(fAggregateB));
             assertFalse(fAggregateB.isExact(fAggregateA));
             assertTrue(fAggregateA.isExactData(fAggregateB));
             assertTrue(fAggregateB.isExactData(fAggregateA));
 
-            fAggregateB.getRefFMaterial().setDensity("X", 5);
+            fAggregateB.getRefFExtension().getRefFMaterial().setDensity("X", 5);
             fAggregateB.getRefParticles().asList().get(0).setRadius(2);
 
             assertFalse(fAggregateA.isExact(fAggregateB));
@@ -248,7 +248,7 @@ public class FAggregateTest {
 
             FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA).addFBuffer(10).addFMaterial();
 
-            fAggregateA.getRefFMaterial().setDensity("X", 5);
+            fAggregateA.getRefFExtension().getRefFMaterial().setDensity("X", 5);
 
             FAggregate fAggregateB = fAggregateA.copy(true);
 
@@ -268,7 +268,7 @@ public class FAggregateTest {
 
             FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA).addFBuffer(10).addFMaterial();
 
-            fAggregateA.getRefFMaterial().setDensity("X", 5);
+            fAggregateA.getRefFExtension().getRefFMaterial().setDensity("X", 5);
 
             FAggregate fAggregateB = fAggregateA.copy(false);
 
@@ -2634,9 +2634,9 @@ public class FAggregateTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFMaterial();
 
-            fAggregate.getRefFMaterial().setDensity("X", 5);
+            fAggregate.getRefFExtension().getRefFMaterial().setDensity("X", 5);
 
-            assertEquals(5, fAggregate.getRefFMaterial().getDensity("X"));
+            assertEquals(5, fAggregate.getRefFExtension().getRefFMaterial().getDensity("X"));
         }
 
         @Test
@@ -2645,10 +2645,10 @@ public class FAggregateTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFMaterial();
 
-            fAggregate.getRefFMaterial().setRefIndex("X", 2, 3);
+            fAggregate.getRefFExtension().getRefFMaterial().setRefIndex("X", 2, 3);
 
-            assertEquals(2, fAggregate.getRefFMaterial().getRefIndexRe("X"));
-            assertEquals(3, fAggregate.getRefFMaterial().getRefIndexIm("X"));
+            assertEquals(2, fAggregate.getRefFExtension().getRefFMaterial().getRefIndexRe("X"));
+            assertEquals(3, fAggregate.getRefFExtension().getRefFMaterial().getRefIndexIm("X"));
         }
 
         @Test
@@ -3266,9 +3266,9 @@ public class FAggregateTest {
             fAggregate.addRefParticle(fSphereB);
             fAggregate.addRefParticle(fSphereC);
 
-            boolean resultsA = fAggregate.delRefParticle(fSphereA);
+            boolean resultsA = fAggregate.deleteRefParticle(fSphereA);
 
-            boolean resultsEmpty = fAggregate.delRefParticle(fSphereA);
+            boolean resultsEmpty = fAggregate.deleteRefParticle(fSphereA);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(2, fAggregate.size()),

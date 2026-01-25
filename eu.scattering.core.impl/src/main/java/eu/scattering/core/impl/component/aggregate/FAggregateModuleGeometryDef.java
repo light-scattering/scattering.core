@@ -211,17 +211,17 @@ public class FAggregateModuleGeometryDef {
 
     protected FMesh<FBufferData> getVolumeMesh() {
 
-        if (this.aggregate.getRefFBuffer() == null) {
+        if (this.aggregate.getRefFExtension().getRefFBuffer() == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
         }
 
-        this.aggregate.getRefFBuffer().clear();
+        this.aggregate.getRefFExtension().getRefFBuffer().clear();
 
         for (Shape shape : this.aggregate) {
-            shape.fillVolumeArray(this.aggregate.getRefFBuffer(), this.aggregate.getRefParticles().asList());
+            shape.fillVolumeArray(this.aggregate.getRefFExtension().getRefFBuffer(), this.aggregate.getRefParticles().asList());
         }
 
-        FMesh<FBufferData> mesh = this.aggregate.getRefFBuffer().toFArrayMesh();
+        FMesh<FBufferData> mesh = this.aggregate.getRefFExtension().getRefFBuffer().toFArrayMesh();
 
         mesh.deduplicate((a, b) -> b.getLayerIndex() < a.getLayerIndex());
 
