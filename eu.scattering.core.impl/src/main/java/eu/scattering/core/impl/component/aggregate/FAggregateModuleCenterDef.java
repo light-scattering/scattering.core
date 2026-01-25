@@ -5,7 +5,9 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.physics.material.FMaterial;
+import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.transfer.box.FBoxDouble;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.MassCenter;
@@ -137,7 +139,7 @@ public class FAggregateModuleCenterDef {
     private double getMassCenterMethodSimpleMonoStep(FPoint center, Shape shape, double radius) {
 
         if (shape.getCoatCount() > 0) {
-            throw new IllegalArgumentException("Coated particles cannot be used with the SIMPLE_MONO procedure");
+            throw new IllegalArgumentException("SIMPLE_MONO option cannot be used with coated particles");
         }
 
         return getMassCenterMethodSimpleMonoPrecise(center, shape, radius);
@@ -177,33 +179,19 @@ public class FAggregateModuleCenterDef {
 
     private double getMassCenterMethodSimplePolyStep(FPoint center, Shape shape) {
 
-        return getMassCenterMethodAdaptivePrecise(center, shape);
+        return getMassCenterMethodSimplePolyPrecise(center, shape);
     }
 
-    private double getMassCenterMethodComplexStep(FPoint center, Shape shape) {
-
-        return getMassCenterMethodAdaptivePrecise(center, shape);
-    }
-
-    private double getMassCenterMethodAdaptiveStep(FPoint center, Shape shape) {
-
-        if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
-            return getMassCenterMethodAdaptivePrecise(center, shape);
-        }
-
-        return getMassCenterMethodAdaptiveApprox(center, shape);
-    }
-
-    private double getMassCenterMethodAdaptivePrecise(FPoint center, Shape shape) {
+    private double getMassCenterMethodSimplePolyPrecise(FPoint center, Shape shape) {
 
         if (this.aggregate.getRefFMaterial() == null) {
-            return getMassCenterMethodAdaptivePreciseMath(center, shape);
+            return getMassCenterMethodSimplePolyPreciseMath(center, shape);
         }
 
-        return getMassCenterMethodAdaptivePrecisePhys(center, shape);
+        return getMassCenterMethodSimplePolyPrecisePhys(center, shape);
     }
 
-    private double getMassCenterMethodAdaptivePreciseMath(FPoint center, Shape shape) {
+    private double getMassCenterMethodSimplePolyPreciseMath(FPoint center, Shape shape) {
         double volume = 0;
 
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
@@ -217,7 +205,7 @@ public class FAggregateModuleCenterDef {
         return volume;
     }
 
-    private double getMassCenterMethodAdaptivePrecisePhys(FPoint center, Shape shape) {
+    private double getMassCenterMethodSimplePolyPrecisePhys(FPoint center, Shape shape) {
         FMaterial material = this.aggregate.getRefFMaterial();
 
         double mass = 0;
@@ -235,24 +223,30 @@ public class FAggregateModuleCenterDef {
         return mass;
     }
 
-    private double getMassCenterMethodAdaptiveApprox(FPoint center, Shape shape) {
+    private double getMassCenterMethodComplexStep(FPoint center, Shape shape) {
 
-        if (this.aggregate.getRefFMaterial() == null) {
-            return getMassCenterMethodAdaptiveApproxMath(center, shape);
-        }
-
-        return getMassCenterMethodAdaptiveApproxPhys(center, shape);
+        return getMassCenterMethodComplexApprox(center, shape);
     }
 
-    private double getMassCenterMethodAdaptiveApproxMath(FPoint center, Shape shape) {
+    private double getMassCenterMethodComplexApprox(FPoint center, Shape shape) {
 
-        if (this.aggregate.getRefFBuffer() == null) {
+        if (this.aggregate.getRefFMaterial() == null) {
+            return getMassCenterMethodComplexApproxMath(center, shape);
+        }
+
+        return getMassCenterMethodComplexApproxPhys(center, shape);
+    }
+
+    private double getMassCenterMethodComplexApproxMath(FPoint center, Shape shape) {
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+
+        if (buffer == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
         }
 
-        this.aggregate.getRefFBuffer().clear();
+        buffer.clear();
 
-        double unitVolume = shape.fillVolumeArray(this.aggregate.getRefFBuffer(), this.aggregate.getRefParticles().asList());
+        double unitVolume = shape.fillVolumeArray(buffer, this.aggregate.getRefParticles().asList());
 
         FBoxDouble volume = this.factory.getFBoxDouble();
 
@@ -267,17 +261,18 @@ public class FAggregateModuleCenterDef {
         return volume.getValue();
     }
 
-    private double getMassCenterMethodAdaptiveApproxPhys(FPoint center, Shape shape) {
+    private double getMassCenterMethodComplexApproxPhys(FPoint center, Shape shape) {
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
 
-        if (this.aggregate.getRefFBuffer() == null) {
+        if (buffer == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
         }
 
         FMaterial material = this.aggregate.getRefFMaterial();
 
-        this.aggregate.getRefFBuffer().clear();
+        buffer.clear();
 
-        double unitVolume = shape.fillVolumeArray(this.aggregate.getRefFBuffer(), this.aggregate.getRefParticles().asList());
+        double unitVolume = shape.fillVolumeArray(buffer, this.aggregate.getRefParticles().asList());
 
         FBoxDouble mass = this.factory.getFBoxDouble();
 
@@ -292,6 +287,15 @@ public class FAggregateModuleCenterDef {
         });
 
         return mass.getValue();
+    }
+
+    private double getMassCenterMethodAdaptiveStep(FPoint center, Shape shape) {
+
+        if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
+            return getMassCenterMethodSimplePolyPrecise(center, shape);
+        }
+
+        return getMassCenterMethodComplexApprox(center, shape);
     }
 
     // -------------------------------------------------------------------------------------------------

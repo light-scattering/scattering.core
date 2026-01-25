@@ -228,7 +228,7 @@ public class FAggregateModuleOverlapDef {
             case PARTICLE_LINEAR -> getParticleLinearOF();
             case PARTICLE_VOLUMETRIC -> getParticleVolumetricOF();
             case PARTICLE_QUANTITATIVE -> getParticleQuantitativeOF();
-            case MATERIAL_VOLUMETRIC -> getMaterialVolumetricOF();
+            case CLUSTER_VOLUMETRIC -> getClusterVolumetricOF();
         };
     }
 
@@ -339,26 +339,26 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    private FStat getMaterialVolumetricOF() {
+    private FStat getClusterVolumetricOF() {
         List<Double> volume = new ArrayList<>();
 
         for (Shape shape : this.aggregate.getRefParticles()) {
-            getMaterialVolumetricMethod(shape, volume);
+            getClusterVolumetricMethod(shape, volume);
         }
 
-        return getMaterialTotalVolumetricProcess(volume);
+        return getClusterTotalVolumetricProcess(volume);
     }
 
-    private void getMaterialVolumetricMethod(Shape shape, List<Double> volume) {
+    private void getClusterVolumetricMethod(Shape shape, List<Double> volume) {
 
         if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
-            getMaterialVolumetricMethodPrecise(shape, volume);
+            getClusterVolumetricMethodPrecise(shape, volume);
         } else {
-            getMaterialVolumetricMethodApprox(shape, volume);
+            getClusterVolumetricMethodApprox(shape, volume);
         }
     }
 
-    private void getMaterialVolumetricMethodPrecise(Shape shape, List<Double> volume) {
+    private void getClusterVolumetricMethodPrecise(Shape shape, List<Double> volume) {
 
         if (volume.size() < 1) {
             volume.add(0d);
@@ -367,7 +367,7 @@ public class FAggregateModuleOverlapDef {
         volume.set(0, volume.get(0) + shape.getVolumeAlgebraic());
     }
 
-    private void getMaterialVolumetricMethodApprox(Shape shape, List<Double> volume) {
+    private void getClusterVolumetricMethodApprox(Shape shape, List<Double> volume) {
         FLayer fLayer = this.factory.getFLayer();
 
         shape.fillVolumeLayerOverlap(fLayer, this.aggregate.getRefParticles());
@@ -383,7 +383,7 @@ public class FAggregateModuleOverlapDef {
         }
     }
 
-    private FStat getMaterialTotalVolumetricProcess(List<Double> volume) {
+    private FStat getClusterTotalVolumetricProcess(List<Double> volume) {
         FStat results = this.factory.getFStat();
 
         double volTmp;

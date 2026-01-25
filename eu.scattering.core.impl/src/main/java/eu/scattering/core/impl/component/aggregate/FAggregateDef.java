@@ -374,7 +374,7 @@ public class FAggregateDef implements FAggregate {
     @Override
     public double getRadiusOfGyration(RadiusOfGyration type) {
 
-        return this.moduleRadiusOfGyration.get(type);
+        return this.moduleRadiusOfGyration.getRadiusOfGyration(type);
     }
 
     @Override

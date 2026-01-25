@@ -86,8 +86,8 @@ background {
     }
 
     private static void radiusOfGyration(FAggregate aggregate, FAggregate aggregateParsed, StringBuilder builder) {
-        double radius = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
-        double radiusParsed = aggregateParsed.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
+        double radius = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
+        double radiusParsed = aggregateParsed.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
 
         builder.append("// Radius of gyration - ").append(radius).append("\n");
         builder.append("sphere {\n");

@@ -70,8 +70,8 @@ public class FMonitorCCTest {
 
             FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 
-            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -101,8 +101,8 @@ public class FMonitorCCTest {
 
             FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 
-            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -132,8 +132,8 @@ public class FMonitorCCTest {
 
             FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 
-            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -164,9 +164,9 @@ public class FMonitorCCTest {
 
             FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
             FMonitorCCRadiusOfGyration fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.COMPLEX);
-            FMonitorCCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
-            FMonitorCCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
-            FMonitorCCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
+            FMonitorCCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
+            FMonitorCCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);

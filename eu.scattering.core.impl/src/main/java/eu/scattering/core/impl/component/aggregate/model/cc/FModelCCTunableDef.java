@@ -323,8 +323,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
     private double getMassCenterDistance(FAggregate aggA, FAggregate aggB) {
         int npA = aggA.size();
         int npB = aggB.size();
-        double rgA = aggA.getRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
-        double rgB = aggB.getRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+        double rgA = aggA.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+        double rgB = aggB.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
 
         double stepA = Math.pow((npA + npB) / kf, 2 / df) * ((npA + npB) * (npA + npB) * rp * rp) / (npA * npB);
         double stepB = ((npA + npB) * rgA * rgA) / npB;

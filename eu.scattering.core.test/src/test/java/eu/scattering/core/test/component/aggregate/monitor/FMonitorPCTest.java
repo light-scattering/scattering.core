@@ -100,8 +100,8 @@ public class FMonitorPCTest {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
-            FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.DEDICATED_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -132,8 +132,8 @@ public class FMonitorPCTest {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
-            FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.DEDICATED_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -164,8 +164,8 @@ public class FMonitorPCTest {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
-            FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.DEDICATED_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -198,9 +198,9 @@ public class FMonitorPCTest {
 
             FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
             FMonitorPCRadiusOfGyration fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.COMPLEX);
-            FMonitorPCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
-            FMonitorPCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
-            FMonitorPCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
+            FMonitorPCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
+            FMonitorPCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);
@@ -231,9 +231,9 @@ public class FMonitorPCTest {
 
             FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
             FMonitorPCRadiusOfGyration fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.COMPLEX);
-            FMonitorPCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_MONO);
-            FMonitorPCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_POLY);
-            FMonitorPCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorPCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_MONO_06R1);
+            FMonitorPCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_POLY_06R1);
+            FMonitorPCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.DEDICATED_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);

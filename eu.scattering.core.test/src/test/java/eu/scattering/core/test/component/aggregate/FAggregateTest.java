@@ -1188,7 +1188,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC);
 
             assertEquals(1, overlap.sum(), epsilon);
         }
@@ -1204,7 +1204,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC);
 
             assertEquals(1, overlap.sum(), epsilon);
         }
@@ -1219,7 +1219,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC);
 
             assertEquals(0, overlap.sum(), epsilon);
         }
@@ -1234,7 +1234,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC);
 
             double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
             double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -1257,7 +1257,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC);
 
             double volAlgOverlap = (4  * Math.PI / 3) +
                     2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -2615,9 +2615,9 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000).addFMaterial();
 
             double rgDefault = fAggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX);
-            double rgLegacyMono = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
-            double rgLegacyPoly = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
-            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            double rgLegacyMono = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
+            double rgLegacyPoly = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
+            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
 
             double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
             double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
