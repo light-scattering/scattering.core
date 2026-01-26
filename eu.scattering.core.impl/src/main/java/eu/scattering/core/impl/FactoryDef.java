@@ -46,8 +46,11 @@ import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.physics.material.data.FMaterialData;
 import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
@@ -82,8 +85,11 @@ import eu.scattering.core.impl.physics.FMaterialDataDef;
 import eu.scattering.core.impl.physics.FMaterialDef;
 import eu.scattering.core.impl.statistics.FStatHelperDef;
 import eu.scattering.core.impl.statistics.base.FStatDef;
-import eu.scattering.core.impl.statistics.construct.FPlotBarDef;
-import eu.scattering.core.impl.statistics.construct.FPlotDef;
+import eu.scattering.core.impl.statistics.base.FStatMetaDef;
+import eu.scattering.core.impl.statistics.construct.plot.FPlotMetaDef;
+import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarDef;
+import eu.scattering.core.impl.statistics.construct.plot.FPlotDef;
+import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarMetaDef;
 import eu.scattering.core.impl.storage.FBufferDef;
 import eu.scattering.core.impl.storage.FCacheDef;
 import eu.scattering.core.impl.storage.FLayerDef;
@@ -519,15 +525,21 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FPlotBar getRefFPlotBar(FStat refDataX, List<FStat> refDataY) {
-
-        return FPlotBarDef.create(this, refDataX, refDataY);
-    }
-
-    @Override
     public FPlotBar getFPlotBar(JSONObject json) {
 
         return FPlotBarDef.create(this, json);
+    }
+
+    @Override
+    public FPlotBarMeta getFPlotBarMeta() {
+
+        return FPlotBarMetaDef.create(this);
+    }
+
+    @Override
+    public FPlotBar getRefFPlotBar(FStat refDataX, List<FStat> refDataY) {
+
+        return FPlotBarDef.create(this, refDataX, refDataY);
     }
 
     @Override
@@ -543,15 +555,21 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FPlot getRefFPlot(FStat refDataX, FStat refDataY) {
-
-        return FPlotDef.create(this, refDataX, refDataY);
-    }
-
-    @Override
     public FPlot getFPlot(JSONObject json) {
 
         return FPlotDef.create(this, json);
+    }
+
+    @Override
+    public FPlotMeta getFPlotMeta() {
+
+        return FPlotMetaDef.create(this);
+    }
+
+    @Override
+    public FPlot getRefFPlot(FStat refDataX, FStat refDataY) {
+
+        return FPlotDef.create(this, refDataX, refDataY);
     }
 
     @Override
@@ -567,15 +585,21 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FStat getRefFStat(List<Double> refData) {
-
-        return FStatDef.create(this, refData);
-    }
-
-    @Override
     public FStat getFStat(JSONObject json) {
 
         return FStatDef.create(this, json);
+    }
+
+    @Override
+    public FStatMeta getFStatMeta() {
+
+        return FStatMetaDef.create(this);
+    }
+
+    @Override
+    public FStat getRefFStat(List<Double> refData) {
+
+        return FStatDef.create(this, refData);
     }
 
     //--------------------------------------------------

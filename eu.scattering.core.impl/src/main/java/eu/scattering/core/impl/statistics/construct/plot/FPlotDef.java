@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.statistics.construct;
+package eu.scattering.core.impl.statistics.construct.plot;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.lambda.TriConsumer;
@@ -11,6 +11,8 @@ import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.design.type.Round;
+import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotInterpolatorDef;
+import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotRegressorDef;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

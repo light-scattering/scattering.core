@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.statistics.construct;
+package eu.scattering.core.impl.statistics.construct.plot.utils;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -15,7 +15,7 @@ public class FPlotRegressorDef implements FPlotRegressor {
         this.data = data;
     }
 
-    protected static FPlotRegressor create(ScatFactory factory, FPlot data) {
+    public static FPlotRegressor create(ScatFactory factory, FPlot data) {
 
         return new FPlotRegressorDef(factory, data);
     }

@@ -20,6 +20,10 @@ public interface FPlotBarFactory {
 
     //--------------------------------------------------
 
+    FPlotBarMeta getFPlotBarMeta();
+
+    //--------------------------------------------------
+
     default FPlotBar getFPlotBar(String text) {
 
         try {

@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.FractalDimension;
@@ -249,9 +250,11 @@ public class FAggregateModuleFractalDimensionDef {
         FPlot fit = data.copy();
         fit.setY(regression);
 
+        FPlotMeta plotConfig = factory.getFPlotMeta()
+                .setAnnotation("Test data");
+
         String plot = factory.getExportAspect().getStatisticsContext()
-                .setAnnotation("Test data")
-                .toPythonPlotly(data, fit);
+                .toPythonPlotly(plotConfig, data, fit);
 
         return regression.at(1);
     }
@@ -268,9 +271,11 @@ public class FAggregateModuleFractalDimensionDef {
         FPlot fit = data.copy();
         fit.setY(regression);
 
+        FPlotMeta plotConfig = factory.getFPlotMeta()
+                .setAnnotation("Test data");
+
         String plot = factory.getExportAspect().getStatisticsContext()
-                .setAnnotation("Test data")
-                .toPythonPlotly(data, fit);
+                .toPythonPlotly(plotConfig, data, fit);
 
         return 3 + regression.at(1);
     }

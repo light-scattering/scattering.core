@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.statistics.construct;
+package eu.scattering.core.impl.statistics.construct.plotbar;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.lambda.TriConsumer;

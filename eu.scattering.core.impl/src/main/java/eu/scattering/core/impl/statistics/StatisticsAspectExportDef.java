@@ -2,23 +2,18 @@ package eu.scattering.core.impl.statistics;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.StatisticsAspectExport;
-import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.base.FStatMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsAspectExportDef implements StatisticsAspectExport {
     private final ScatFactory factory;
-
-    private String name = "";
-    private String nameX = "";
-    private String nameY = "";
-    private String annotation = "";
-    private FPos2D rangeX = null;
-    private FPos2D rangeY = null;
 
     private StatisticsAspectExportDef(ScatFactory factory) {
 
@@ -31,12 +26,17 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
     }
 
     @Override
-    public String toPythonPlotlyHistogram(FStat... stat) {
+    public String toPythonPlotlyHistogram(FStatMeta config, FStat... stat) {
+
+        if (config == null) {
+            config = this.factory.getFStatMeta();
+        }
+
         StringBuilder builder = new StringBuilder();
-        String nameAnnotation = getAnnotation().isEmpty() ? "" : getAnnotation();
-        String namePlot = getName().isEmpty() ? "" : getName();
-        String nameX = getNameX().isEmpty() ? "" : getNameX();
-        String nameY = getNameY().isEmpty() ? "" : getNameY();
+        String nameAnnotation = config.getAnnotation().isEmpty() ? "" : config.getAnnotation();
+        String namePlot = config.getName().isEmpty() ? "" : config.getName();
+        String nameX = config.getNameX().isEmpty() ? "" : config.getNameX();
+        String nameY = config.getNameY().isEmpty() ? "" : config.getNameY();
 
         builder.append("import plotly.graph_objects as go\n");
         builder.append("import numpy as np\n\n");
@@ -64,12 +64,12 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
         builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
         builder.append("  title=dict(text='").append(namePlot).append("'),\n");
         builder.append("  xaxis_title='").append(nameX).append("',\n");
-        if (getRangeX() != null) {
-            builder.append("  xaxis_range=[").append(getRangeX().getD0()).append(",").append(getRangeX().getD1()).append("],\n");
+        if (config.getRangeX() != null) {
+            builder.append("  xaxis_range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
         }
         builder.append("  yaxis_title='").append(nameY).append("',\n");
-        if (getRangeY() != null) {
-            builder.append("  yaxis_range=[").append(getRangeY().getD0()).append(",").append(getRangeY().getD1()).append("],\n");
+        if (config.getRangeY() != null) {
+            builder.append("  yaxis_range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
         builder.append(")\n\n");
 
@@ -86,12 +86,17 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public String toPythonPlotly(FPlot... plot) {
+    public String toPythonPlotly(FPlotMeta config, FPlot... plot) {
+
+        if (config == null) {
+            config = this.factory.getFPlotMeta();
+        }
+
         StringBuilder builder = new StringBuilder();
-        String nameAnnotation = getAnnotation().isEmpty() ? "" : getAnnotation();
-        String namePlot = getName().isEmpty() ? "" : getName();
-        String nameX = getNameX().isEmpty() ? "x" : getNameX();
-        String nameY = getNameY().isEmpty() ? "y" : getNameY();
+        String nameAnnotation = config.getAnnotation().isEmpty() ? "" : config.getAnnotation();
+        String namePlot = config.getName().isEmpty() ? "" : config.getName();
+        String nameX = config.getNameX().isEmpty() ? "x" : config.getNameX();
+        String nameY = config.getNameY().isEmpty() ? "y" : config.getNameY();
 
         builder.append("import plotly.graph_objects as go\n");
         builder.append("import numpy as np\n\n");
@@ -125,12 +130,12 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
         builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
         builder.append("  title=dict(text='").append(namePlot).append("'),\n");
         builder.append("  xaxis_title='").append(nameX).append("',\n");
-        if (getRangeX() != null) {
-            builder.append("  xaxis_range=[").append(getRangeX().getD0()).append(",").append(getRangeX().getD1()).append("],\n");
+        if (config.getRangeX() != null) {
+            builder.append("  xaxis_range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
         }
         builder.append("  yaxis_title='").append(nameY).append("',\n");
-        if (getRangeY() != null) {
-            builder.append("  yaxis_range=[").append(getRangeY().getD0()).append(",").append(getRangeY().getD1()).append("],\n");
+        if (config.getRangeY() != null) {
+            builder.append("  yaxis_range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
         builder.append(")\n\n");
 
@@ -145,12 +150,17 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
     }
 
     @Override
-    public String toPythonPlotlyHistogram(FPlot... plot) {
+    public String toPythonPlotlyHistogram(FPlotMeta config, FPlot... plot) {
+
+        if (config == null) {
+            config = this.factory.getFPlotMeta();
+        }
+
         StringBuilder builder = new StringBuilder();
-        String nameAnnotation = getAnnotation().isEmpty() ? "" : getAnnotation();
-        String namePlot = getName().isEmpty() ? "" : getName();
-        String nameX = getNameX().isEmpty() ? "" : getNameX();
-        String nameY = getNameY().isEmpty() ? "" : getNameY();
+        String nameAnnotation = config.getAnnotation().isEmpty() ? "" : config.getAnnotation();
+        String namePlot = config.getName().isEmpty() ? "" : config.getName();
+        String nameX = config.getNameX().isEmpty() ? "" : config.getNameX();
+        String nameY = config.getNameY().isEmpty() ? "" : config.getNameY();
 
         builder.append("import plotly.graph_objects as go\n");
         builder.append("import numpy as np\n\n");
@@ -188,12 +198,12 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
         builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
         builder.append("  title=dict(text='").append(namePlot).append("'),\n");
         builder.append("  xaxis_title='").append(nameX).append("',\n");
-        if (getRangeX() != null) {
-            builder.append("  xaxis_range=[").append(getRangeX().getD0()).append(",").append(getRangeX().getD1()).append("],\n");
+        if (config.getRangeX() != null) {
+            builder.append("  xaxis_range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
         }
         builder.append("  yaxis_title='").append(nameY).append("',\n");
-        if (getRangeY() != null) {
-            builder.append("  yaxis_range=[").append(getRangeY().getD0()).append(",").append(getRangeY().getD1()).append("],\n");
+        if (config.getRangeY() != null) {
+            builder.append("  yaxis_range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
         builder.append(")\n\n");
 
@@ -210,12 +220,17 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public String toPythonPlotly(FPlotBar fPlotBar) {
+    public String toPythonPlotly(FPlotBarMeta config, FPlotBar plotBar) {
+
+        if (config == null) {
+            config = this.factory.getFPlotBarMeta();
+        }
+
         StringBuilder builder = new StringBuilder();
-        String nameAnnotation = getAnnotation().isEmpty() ? "" : getAnnotation();
-        String namePlot = getName().isEmpty() ? "" : getName();
-        String nameX = getNameX().isEmpty() ? "x" : getNameX();
-        String nameY = getNameY().isEmpty() ? "y" : getNameY();
+        String nameAnnotation = config.getAnnotation().isEmpty() ? "" : config.getAnnotation();
+        String namePlot = config.getName().isEmpty() ? "" : config.getName();
+        String nameX = config.getNameX().isEmpty() ? "x" : config.getNameX();
+        String nameY = config.getNameY().isEmpty() ? "y" : config.getNameY();
 
         builder.append("import plotly.graph_objects as go\n");
         builder.append("import numpy as np\n\n");
@@ -227,17 +242,17 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
         List<String> min = new ArrayList<>();
         List<String> max = new ArrayList<>();
 
-        String name = fPlotBar.getName().isEmpty() ? "data" : fPlotBar.getName();
+        String name = plotBar.getName().isEmpty() ? "data" : plotBar.getName();
 
-        for (int i = 0; i < fPlotBar.size() ; i++) {
-            if (fPlotBar.getRefY(i).size() > 0) {
-                x.add("" + fPlotBar.getX(i));
-                avg.add("" + fPlotBar.getRefY(i).mean());
-                min.add("" + fPlotBar.getRefY(i).min());
-                max.add("" + fPlotBar.getRefY(i).max());
+        for (int i = 0; i < plotBar.size() ; i++) {
+            if (plotBar.getRefY(i).size() > 0) {
+                x.add("" + plotBar.getX(i));
+                avg.add("" + plotBar.getRefY(i).mean());
+                min.add("" + plotBar.getRefY(i).min());
+                max.add("" + plotBar.getRefY(i).max());
 
-                if (fPlotBar.getRefY(i).size() > 2) {
-                    std.add("" + fPlotBar.getRefY(i).std(true));
+                if (plotBar.getRefY(i).size() > 2) {
+                    std.add("" + plotBar.getRefY(i).std(true));
                 } else {
                     std.add("0");
                 }
@@ -315,12 +330,12 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
         builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
         builder.append("  title=dict(text='").append(namePlot).append("'),\n");
         builder.append("  xaxis_title='").append(nameX).append("',\n");
-        if (getRangeX() != null) {
-            builder.append("  xaxis_range=[").append(getRangeX().getD0()).append(",").append(getRangeX().getD1()).append("],\n");
+        if (config.getRangeX() != null) {
+            builder.append("  xaxis_range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
         }
         builder.append("  yaxis_title='").append(nameY).append("',\n");
-        if (getRangeY() != null) {
-            builder.append("  yaxis_range=[").append(getRangeY().getD0()).append(",").append(getRangeY().getD1()).append("],\n");
+        if (config.getRangeY() != null) {
+            builder.append("  yaxis_range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
         builder.append(")\n\n");
 
@@ -332,92 +347,6 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
         builder.append("fig.show()");
 
         return builder.toString();
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public String getName() {
-
-        return this.name;
-    }
-
-    @Override
-    public StatisticsAspectExport setName(String name) {
-
-        this.name = name;
-
-        return this;
-    }
-
-    @Override
-    public String getNameX() {
-
-        return this.nameX;
-    }
-
-    @Override
-    public StatisticsAspectExport setNameX(String nameX) {
-
-        this.nameX = nameX;
-
-        return this;
-    }
-
-    @Override
-    public String getNameY() {
-
-        return this.nameY;
-    }
-
-    @Override
-    public StatisticsAspectExport setNameY(String nameY) {
-
-        this.nameY = nameY;
-
-        return this;
-    }
-
-    @Override
-    public String getAnnotation() {
-
-        return this.annotation;
-    }
-
-    @Override
-    public StatisticsAspectExport setAnnotation(String annotation) {
-
-        this.annotation = annotation;
-
-        return this;
-    }
-
-    @Override
-    public FPos2D getRangeX() {
-
-        return this.rangeX;
-    }
-
-    @Override
-    public StatisticsAspectExport setRangeX(double min, double max) {
-
-        this.rangeX = factory.getFPos2D(min, max);
-
-        return this;
-    }
-
-    @Override
-    public FPos2D getRangeY() {
-
-        return this.rangeY;
-    }
-
-    @Override
-    public StatisticsAspectExport setRangeY(double min, double max) {
-
-        this.rangeY = factory.getFPos2D(min, max);
-
-        return this;
     }
 }
 

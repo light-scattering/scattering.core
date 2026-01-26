@@ -9,6 +9,7 @@ import java.util.List;
 public interface FStatFactory {
 
     FStat getFStat();
+
     FStat getFStat(double... data);
 
     @Modificator
@@ -17,6 +18,10 @@ public interface FStatFactory {
     //--------------------------------------------------
 
     FStat getFStat(JSONObject json);
+
+    //--------------------------------------------------
+
+    FStatMeta getFStatMeta();
 
     //--------------------------------------------------
 

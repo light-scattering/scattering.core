@@ -21,6 +21,10 @@ public interface FPlotFactory {
 
     //--------------------------------------------------
 
+    FPlotMeta getFPlotMeta();
+
+    //--------------------------------------------------
+
     default FPlot getFPlot(String text) {
 
         try {

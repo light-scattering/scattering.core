@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.statistics.construct;
+package eu.scattering.core.impl.statistics.construct.plot.utils;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -22,7 +22,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
         this.data = data;
     }
 
-    protected static FPlotInterpolator create(ScatFactory factory, FPlot data) {
+    public static FPlotInterpolator create(ScatFactory factory, FPlot data) {
 
         return new FPlotInterpolatorDef(factory, data);
     }
