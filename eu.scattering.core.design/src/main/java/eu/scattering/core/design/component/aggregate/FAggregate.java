@@ -41,7 +41,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
     FPairPos3D getBoundary();
 
     FPos3D getLength();
-    double getLength(LinearDimension type);
+    double getLength(Length type);
 
     double getRadiusFrom(double x, double y, double z);
     double getRadiusFrom(FPoint center);

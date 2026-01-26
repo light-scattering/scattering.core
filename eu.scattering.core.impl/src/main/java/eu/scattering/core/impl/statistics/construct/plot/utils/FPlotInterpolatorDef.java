@@ -4,7 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
-import eu.scattering.core.design.type.Round;
+import eu.scattering.core.design.type.RoundMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -240,7 +240,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     private int getIndexL1(FPlot data, double x) {
-        int indexL1 = data.getIndexX(Round.FLOOR, x);
+        int indexL1 = data.getIndexX(RoundMethod.FLOOR, x);
 
         if (indexL1 == -1) {
             throw new IllegalArgumentException("The provided value is out of range");
@@ -250,7 +250,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     private int getIndexR1(FPlot data, double x) {
-        int indexR1 = data.getIndexX(Round.CEIL, x);
+        int indexR1 = data.getIndexX(RoundMethod.CEIL, x);
 
         if (indexR1 == -1) {
             throw new IllegalArgumentException("The provided value is out of range");

@@ -11,7 +11,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.type.Dimension;
-import eu.scattering.core.design.type.PovRayPreset;
+import eu.scattering.core.design.type.PovRay;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRayPreset.BOX);
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRay.BOX);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -103,7 +103,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRayPreset.BOX);
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRay.BOX);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -136,7 +136,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRayPreset.RADIUS);
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRay.RADIUS);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",

@@ -3,7 +3,7 @@ package eu.scattering.core.test.statistics;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.type.Round;
+import eu.scattering.core.design.type.RoundMethod;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -321,10 +321,10 @@ public class FPlotBarTest {
             fPlotBar.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(4, fPlotBar.getIndexX(Round.CLOSEST, 1.8)),
-                    () -> assertEquals(1, fPlotBar.getIndexX(Round.CLOSEST, -1.1)),
-                    () -> assertEquals(4, fPlotBar.getIndexX(Round.CLOSEST, 100)),
-                    () -> assertEquals(0, fPlotBar.getIndexX(Round.CLOSEST, -100))
+                    () -> assertEquals(4, fPlotBar.getIndexX(RoundMethod.CLOSEST, 1.8)),
+                    () -> assertEquals(1, fPlotBar.getIndexX(RoundMethod.CLOSEST, -1.1)),
+                    () -> assertEquals(4, fPlotBar.getIndexX(RoundMethod.CLOSEST, 100)),
+                    () -> assertEquals(0, fPlotBar.getIndexX(RoundMethod.CLOSEST, -100))
             );
         }
 
@@ -340,10 +340,10 @@ public class FPlotBarTest {
             fPlotBar.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlotBar.getIndexX(Round.CLOSEST, 1.8)),
-                    () -> assertEquals(4, fPlotBar.getIndexX(Round.CLOSEST, -1.1)),
-                    () -> assertEquals(3, fPlotBar.getIndexX(Round.CLOSEST, 100)),
-                    () -> assertEquals(2, fPlotBar.getIndexX(Round.CLOSEST, -100))
+                    () -> assertEquals(3, fPlotBar.getIndexX(RoundMethod.CLOSEST, 1.8)),
+                    () -> assertEquals(4, fPlotBar.getIndexX(RoundMethod.CLOSEST, -1.1)),
+                    () -> assertEquals(3, fPlotBar.getIndexX(RoundMethod.CLOSEST, 100)),
+                    () -> assertEquals(2, fPlotBar.getIndexX(RoundMethod.CLOSEST, -100))
             );
         }
 
@@ -359,10 +359,10 @@ public class FPlotBarTest {
             fPlotBar.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlotBar.getIndexX(Round.FLOOR, 1.8)),
-                    () -> assertEquals(0, fPlotBar.getIndexX(Round.FLOOR, -1.1)),
-                    () -> assertEquals(4, fPlotBar.getIndexX(Round.FLOOR, 100)),
-                    () -> assertEquals(-1, fPlotBar.getIndexX(Round.FLOOR, -100))
+                    () -> assertEquals(3, fPlotBar.getIndexX(RoundMethod.FLOOR, 1.8)),
+                    () -> assertEquals(0, fPlotBar.getIndexX(RoundMethod.FLOOR, -1.1)),
+                    () -> assertEquals(4, fPlotBar.getIndexX(RoundMethod.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlotBar.getIndexX(RoundMethod.FLOOR, -100))
             );
         }
 
@@ -378,10 +378,10 @@ public class FPlotBarTest {
             fPlotBar.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(0, fPlotBar.getIndexX(Round.FLOOR, 1.8)),
-                    () -> assertEquals(2, fPlotBar.getIndexX(Round.FLOOR, -1.1)),
-                    () -> assertEquals(3, fPlotBar.getIndexX(Round.FLOOR, 100)),
-                    () -> assertEquals(-1, fPlotBar.getIndexX(Round.FLOOR, -100))
+                    () -> assertEquals(0, fPlotBar.getIndexX(RoundMethod.FLOOR, 1.8)),
+                    () -> assertEquals(2, fPlotBar.getIndexX(RoundMethod.FLOOR, -1.1)),
+                    () -> assertEquals(3, fPlotBar.getIndexX(RoundMethod.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlotBar.getIndexX(RoundMethod.FLOOR, -100))
             );
         }
 
@@ -397,10 +397,10 @@ public class FPlotBarTest {
             fPlotBar.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlotBar.getIndexX(Round.CEIL, 0.8)),
-                    () -> assertEquals(1, fPlotBar.getIndexX(Round.CEIL, -1.1)),
-                    () -> assertEquals(-1, fPlotBar.getIndexX(Round.CEIL, 100)),
-                    () -> assertEquals(0, fPlotBar.getIndexX(Round.CEIL, -100))
+                    () -> assertEquals(3, fPlotBar.getIndexX(RoundMethod.CEIL, 0.8)),
+                    () -> assertEquals(1, fPlotBar.getIndexX(RoundMethod.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlotBar.getIndexX(RoundMethod.CEIL, 100)),
+                    () -> assertEquals(0, fPlotBar.getIndexX(RoundMethod.CEIL, -100))
             );
         }
 
@@ -416,10 +416,10 @@ public class FPlotBarTest {
             fPlotBar.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(0, fPlotBar.getIndexX(Round.CEIL, 0.8)),
-                    () -> assertEquals(4, fPlotBar.getIndexX(Round.CEIL, -1.1)),
-                    () -> assertEquals(-1, fPlotBar.getIndexX(Round.CEIL, 100)),
-                    () -> assertEquals(2, fPlotBar.getIndexX(Round.CEIL, -100))
+                    () -> assertEquals(0, fPlotBar.getIndexX(RoundMethod.CEIL, 0.8)),
+                    () -> assertEquals(4, fPlotBar.getIndexX(RoundMethod.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlotBar.getIndexX(RoundMethod.CEIL, 100)),
+                    () -> assertEquals(2, fPlotBar.getIndexX(RoundMethod.CEIL, -100))
             );
         }
 

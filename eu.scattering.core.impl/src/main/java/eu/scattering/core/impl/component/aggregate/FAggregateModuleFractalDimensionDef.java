@@ -10,7 +10,7 @@ import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.FractalDimension;
-import eu.scattering.core.design.type.LinearDimension;
+import eu.scattering.core.design.type.Length;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ public class FAggregateModuleFractalDimensionDef {
         double radius = this.aggregate.getFStatParticleRadius().mean();
 
         double cutoffInner = radius * 2;
-        double cutoffOuter = this.aggregate.getLength(LinearDimension.MAX);
+        double cutoffOuter = this.aggregate.getLength(Length.MAX);
 
         results.add(cutoffOuter, 1);
 

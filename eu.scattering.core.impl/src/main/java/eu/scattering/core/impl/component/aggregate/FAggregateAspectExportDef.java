@@ -2,7 +2,7 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateAspectExport;
-import eu.scattering.core.design.type.PovRayPreset;
+import eu.scattering.core.design.type.PovRay;
 import eu.scattering.core.impl.component.aggregate.export.FlageDef;
 import eu.scattering.core.impl.component.aggregate.export.NetGenDef;
 import eu.scattering.core.impl.component.aggregate.export.PovRayDef;
@@ -32,7 +32,7 @@ public class FAggregateAspectExportDef implements FAggregateAspectExport {
     }
 
     @Override
-    public void toPovRay(FAggregate aggregate, PovRayPreset preset, StringBuilder builder) {
+    public void toPovRay(FAggregate aggregate, PovRay preset, StringBuilder builder) {
 
         PovRayDef.core(aggregate, preset, builder);
     }

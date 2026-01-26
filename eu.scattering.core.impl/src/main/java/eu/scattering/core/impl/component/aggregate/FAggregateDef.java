@@ -164,7 +164,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getLength(LinearDimension type) {
+    public double getLength(Length type) {
 
         return this.moduleGeometry.getLength(type);
     }

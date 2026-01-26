@@ -6,7 +6,7 @@ import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.type.Round;
+import eu.scattering.core.design.type.RoundMethod;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -28,7 +28,7 @@ public interface FPlotBar extends Statistics<FPlotBar> {
     FStat getY(int index);
     FPlotBar setY(int index, FStat y);
 
-    int getIndexX(Round type, double x);
+    int getIndexX(RoundMethod type, double x);
 
     // -------------------------------------------------------------------------------------------------
 

@@ -5,7 +5,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
-import eu.scattering.core.design.type.Round;
+import eu.scattering.core.design.type.RoundMethod;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -484,10 +484,10 @@ public class FPlotTest {
             fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(4, fPlot.getIndexX(Round.CLOSEST, 1.8)),
-                    () -> assertEquals(1, fPlot.getIndexX(Round.CLOSEST, -1.1)),
-                    () -> assertEquals(4, fPlot.getIndexX(Round.CLOSEST, 100)),
-                    () -> assertEquals(0, fPlot.getIndexX(Round.CLOSEST, -100))
+                    () -> assertEquals(4, fPlot.getIndexX(RoundMethod.CLOSEST, 1.8)),
+                    () -> assertEquals(1, fPlot.getIndexX(RoundMethod.CLOSEST, -1.1)),
+                    () -> assertEquals(4, fPlot.getIndexX(RoundMethod.CLOSEST, 100)),
+                    () -> assertEquals(0, fPlot.getIndexX(RoundMethod.CLOSEST, -100))
             );
         }
 
@@ -503,10 +503,10 @@ public class FPlotTest {
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlot.getIndexX(Round.CLOSEST, 1.8)),
-                    () -> assertEquals(4, fPlot.getIndexX(Round.CLOSEST, -1.1)),
-                    () -> assertEquals(3, fPlot.getIndexX(Round.CLOSEST, 100)),
-                    () -> assertEquals(2, fPlot.getIndexX(Round.CLOSEST, -100))
+                    () -> assertEquals(3, fPlot.getIndexX(RoundMethod.CLOSEST, 1.8)),
+                    () -> assertEquals(4, fPlot.getIndexX(RoundMethod.CLOSEST, -1.1)),
+                    () -> assertEquals(3, fPlot.getIndexX(RoundMethod.CLOSEST, 100)),
+                    () -> assertEquals(2, fPlot.getIndexX(RoundMethod.CLOSEST, -100))
             );
         }
 
@@ -522,10 +522,10 @@ public class FPlotTest {
             fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlot.getIndexX(Round.FLOOR, 1.8)),
-                    () -> assertEquals(0, fPlot.getIndexX(Round.FLOOR, -1.1)),
-                    () -> assertEquals(4, fPlot.getIndexX(Round.FLOOR, 100)),
-                    () -> assertEquals(-1, fPlot.getIndexX(Round.FLOOR, -100))
+                    () -> assertEquals(3, fPlot.getIndexX(RoundMethod.FLOOR, 1.8)),
+                    () -> assertEquals(0, fPlot.getIndexX(RoundMethod.FLOOR, -1.1)),
+                    () -> assertEquals(4, fPlot.getIndexX(RoundMethod.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexX(RoundMethod.FLOOR, -100))
             );
         }
 
@@ -541,10 +541,10 @@ public class FPlotTest {
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(0, fPlot.getIndexX(Round.FLOOR, 1.8)),
-                    () -> assertEquals(2, fPlot.getIndexX(Round.FLOOR, -1.1)),
-                    () -> assertEquals(3, fPlot.getIndexX(Round.FLOOR, 100)),
-                    () -> assertEquals(-1, fPlot.getIndexX(Round.FLOOR, -100))
+                    () -> assertEquals(0, fPlot.getIndexX(RoundMethod.FLOOR, 1.8)),
+                    () -> assertEquals(2, fPlot.getIndexX(RoundMethod.FLOOR, -1.1)),
+                    () -> assertEquals(3, fPlot.getIndexX(RoundMethod.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexX(RoundMethod.FLOOR, -100))
             );
         }
 
@@ -560,10 +560,10 @@ public class FPlotTest {
             fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlot.getIndexX(Round.CEIL, 0.8)),
-                    () -> assertEquals(1, fPlot.getIndexX(Round.CEIL, -1.1)),
-                    () -> assertEquals(-1, fPlot.getIndexX(Round.CEIL, 100)),
-                    () -> assertEquals(0, fPlot.getIndexX(Round.CEIL, -100))
+                    () -> assertEquals(3, fPlot.getIndexX(RoundMethod.CEIL, 0.8)),
+                    () -> assertEquals(1, fPlot.getIndexX(RoundMethod.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexX(RoundMethod.CEIL, 100)),
+                    () -> assertEquals(0, fPlot.getIndexX(RoundMethod.CEIL, -100))
             );
         }
 
@@ -579,10 +579,10 @@ public class FPlotTest {
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(0, fPlot.getIndexX(Round.CEIL, 0.8)),
-                    () -> assertEquals(4, fPlot.getIndexX(Round.CEIL, -1.1)),
-                    () -> assertEquals(-1, fPlot.getIndexX(Round.CEIL, 100)),
-                    () -> assertEquals(2, fPlot.getIndexX(Round.CEIL, -100))
+                    () -> assertEquals(0, fPlot.getIndexX(RoundMethod.CEIL, 0.8)),
+                    () -> assertEquals(4, fPlot.getIndexX(RoundMethod.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexX(RoundMethod.CEIL, 100)),
+                    () -> assertEquals(2, fPlot.getIndexX(RoundMethod.CEIL, -100))
             );
         }
 
@@ -598,10 +598,10 @@ public class FPlotTest {
             fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(0, fPlot.getIndexY(Round.CLOSEST, 1.8)),
-                    () -> assertEquals(3, fPlot.getIndexY(Round.CLOSEST, -1.1)),
-                    () -> assertEquals(0, fPlot.getIndexY(Round.CLOSEST, 100)),
-                    () -> assertEquals(4, fPlot.getIndexY(Round.CLOSEST, -100))
+                    () -> assertEquals(0, fPlot.getIndexY(RoundMethod.CLOSEST, 1.8)),
+                    () -> assertEquals(3, fPlot.getIndexY(RoundMethod.CLOSEST, -1.1)),
+                    () -> assertEquals(0, fPlot.getIndexY(RoundMethod.CLOSEST, 100)),
+                    () -> assertEquals(4, fPlot.getIndexY(RoundMethod.CLOSEST, -100))
             );
         }
 
@@ -617,10 +617,10 @@ public class FPlotTest {
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(2, fPlot.getIndexY(Round.CLOSEST, 1.8)),
-                    () -> assertEquals(0, fPlot.getIndexY(Round.CLOSEST, -1.1)),
-                    () -> assertEquals(2, fPlot.getIndexY(Round.CLOSEST, 100)),
-                    () -> assertEquals(3, fPlot.getIndexY(Round.CLOSEST, -100))
+                    () -> assertEquals(2, fPlot.getIndexY(RoundMethod.CLOSEST, 1.8)),
+                    () -> assertEquals(0, fPlot.getIndexY(RoundMethod.CLOSEST, -1.1)),
+                    () -> assertEquals(2, fPlot.getIndexY(RoundMethod.CLOSEST, 100)),
+                    () -> assertEquals(3, fPlot.getIndexY(RoundMethod.CLOSEST, -100))
             );
         }
 
@@ -636,10 +636,10 @@ public class FPlotTest {
             fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(1, fPlot.getIndexY(Round.FLOOR, 1.8)),
-                    () -> assertEquals(4, fPlot.getIndexY(Round.FLOOR, -1.1)),
-                    () -> assertEquals(0, fPlot.getIndexY(Round.FLOOR, 100)),
-                    () -> assertEquals(-1, fPlot.getIndexY(Round.FLOOR, -100))
+                    () -> assertEquals(1, fPlot.getIndexY(RoundMethod.FLOOR, 1.8)),
+                    () -> assertEquals(4, fPlot.getIndexY(RoundMethod.FLOOR, -1.1)),
+                    () -> assertEquals(0, fPlot.getIndexY(RoundMethod.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexY(RoundMethod.FLOOR, -100))
             );
         }
 
@@ -655,10 +655,10 @@ public class FPlotTest {
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(4, fPlot.getIndexY(Round.FLOOR, 1.8)),
-                    () -> assertEquals(3, fPlot.getIndexY(Round.FLOOR, -1.1)),
-                    () -> assertEquals(2, fPlot.getIndexY(Round.FLOOR, 100)),
-                    () -> assertEquals(-1, fPlot.getIndexY(Round.FLOOR, -100))
+                    () -> assertEquals(4, fPlot.getIndexY(RoundMethod.FLOOR, 1.8)),
+                    () -> assertEquals(3, fPlot.getIndexY(RoundMethod.FLOOR, -1.1)),
+                    () -> assertEquals(2, fPlot.getIndexY(RoundMethod.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexY(RoundMethod.FLOOR, -100))
             );
         }
 
@@ -674,10 +674,10 @@ public class FPlotTest {
             fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(1, fPlot.getIndexY(Round.CEIL, 0.8)),
-                    () -> assertEquals(3, fPlot.getIndexY(Round.CEIL, -1.1)),
-                    () -> assertEquals(-1, fPlot.getIndexY(Round.CEIL, 100)),
-                    () -> assertEquals(4, fPlot.getIndexY(Round.CEIL, -100))
+                    () -> assertEquals(1, fPlot.getIndexY(RoundMethod.CEIL, 0.8)),
+                    () -> assertEquals(3, fPlot.getIndexY(RoundMethod.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexY(RoundMethod.CEIL, 100)),
+                    () -> assertEquals(4, fPlot.getIndexY(RoundMethod.CEIL, -100))
             );
         }
 
@@ -693,10 +693,10 @@ public class FPlotTest {
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(4, fPlot.getIndexY(Round.CEIL, 0.8)),
-                    () -> assertEquals(0, fPlot.getIndexY(Round.CEIL, -1.1)),
-                    () -> assertEquals(-1, fPlot.getIndexY(Round.CEIL, 100)),
-                    () -> assertEquals(3, fPlot.getIndexY(Round.CEIL, -100))
+                    () -> assertEquals(4, fPlot.getIndexY(RoundMethod.CEIL, 0.8)),
+                    () -> assertEquals(0, fPlot.getIndexY(RoundMethod.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexY(RoundMethod.CEIL, 100)),
+                    () -> assertEquals(3, fPlot.getIndexY(RoundMethod.CEIL, -100))
             );
         }
 

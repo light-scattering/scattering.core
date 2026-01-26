@@ -9,7 +9,7 @@ import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolat
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.transfer.primitive.FPoly;
-import eu.scattering.core.design.type.Round;
+import eu.scattering.core.design.type.RoundMethod;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -30,8 +30,8 @@ public interface FPlot extends Statistics<FPlot> {
     double getY(int index);
     FPlot setY(int index, double y);
 
-    int getIndexX(Round type, double x);
-    int getIndexY(Round type, double y);
+    int getIndexX(RoundMethod type, double x);
+    int getIndexY(RoundMethod type, double y);
 
     double integrate();
 

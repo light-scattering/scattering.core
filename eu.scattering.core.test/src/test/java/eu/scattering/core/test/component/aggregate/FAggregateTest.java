@@ -309,7 +309,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get volume, point contact B")
         void getVolumePointContactB() {
-            Producer<FPoint> fPointProd = factory.getFPointProducer(20, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
@@ -472,7 +472,7 @@ public class FAggregateTest {
             double delta = 0.1;
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .setDelta(delta)
                     .correctAddCoat(1, 1)
@@ -670,7 +670,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get surface, point contact B")
         void getSurfacePointContactB() {
-            Producer<FPoint> fPointProd = factory.getFPointProducer(20, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
@@ -810,7 +810,7 @@ public class FAggregateTest {
             double delta = 0.1;
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .setDelta(delta)
                     .correctAddCoat(1, 1)
@@ -1637,11 +1637,11 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             FPos3D length = fAggregate.getLength();
-            double lengthX = fAggregate.getLength(LinearDimension.X);
-            double lengthY = fAggregate.getLength(LinearDimension.Y);
-            double lengthZ = fAggregate.getLength(LinearDimension.Z);
-            double lengthMax = fAggregate.getLength(LinearDimension.MAX);
-            double lengthMin = fAggregate.getLength(LinearDimension.MIN);
+            double lengthX = fAggregate.getLength(Length.X);
+            double lengthY = fAggregate.getLength(Length.Y);
+            double lengthZ = fAggregate.getLength(Length.Z);
+            double lengthMax = fAggregate.getLength(Length.MAX);
+            double lengthMin = fAggregate.getLength(Length.MIN);
 
 
             Assertions.assertAll("Validate range",
@@ -2446,7 +2446,7 @@ public class FAggregateTest {
         void getVolumeRadiusSingle() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -2468,7 +2468,7 @@ public class FAggregateTest {
         void getVolumeRadius() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -2511,7 +2511,7 @@ public class FAggregateTest {
         void getSurfaceRadiusSingle() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -2535,7 +2535,7 @@ public class FAggregateTest {
         void getSurfaceRadius() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -2605,7 +2605,7 @@ public class FAggregateTest {
             int quantity = 25;
             double delta = 0.1;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, Location.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .setDelta(delta)
                     .validateNoOverlap();

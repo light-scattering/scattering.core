@@ -4,7 +4,7 @@ import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.type.PointLocation;
+import eu.scattering.core.design.type.Location;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -63,13 +63,13 @@ public interface FPointFactory {
         return getFPointProducer().withInRange(range);
     }
 
-    default FPointProducer getFPointProducer(double radius, PointLocation type) {
+    default FPointProducer getFPointProducer(double radius, Location type) {
 
-        if (type == PointLocation.IN_SPHERE) {
+        if (type == Location.IN_SPHERE) {
             return getFPointProducer().withInSphere(radius);
         }
 
-        if (type == PointLocation.ON_SPHERE) {
+        if (type == Location.ON_SPHERE) {
             return getFPointProducer().withOnSphere(radius);
         }
 
