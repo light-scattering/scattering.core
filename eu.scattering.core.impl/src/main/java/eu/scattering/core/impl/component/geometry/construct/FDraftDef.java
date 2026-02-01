@@ -90,7 +90,7 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     }
 
     @Override
-    public FDraft applyStateFrom(Construct<?> arg) {
+    public FDraft set(Construct<?> arg) {
 
         getRefOrigin().set(arg.getRefOrigin());
 

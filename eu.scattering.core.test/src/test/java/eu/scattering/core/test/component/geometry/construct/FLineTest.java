@@ -192,7 +192,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(1, 2, 3, 4, 5, 6));
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(9, 8, 7, 6, 5, 4));
 
-            FLine results = fLine.applyStateFrom(fPlane);
+            FLine results = fLine.set(fPlane);
 
             Assertions.assertAll("Validate FLine",
                     () -> assertSame(fLine, results,

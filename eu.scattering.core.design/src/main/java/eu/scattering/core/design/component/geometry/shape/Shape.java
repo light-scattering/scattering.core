@@ -19,6 +19,8 @@ public interface Shape extends Geometry,
     double getDelta();
     Shape setDelta(double delta);
 
+    //--------------------------------------------------
+
     double getIndex();
     Shape setIndex(double index);
 

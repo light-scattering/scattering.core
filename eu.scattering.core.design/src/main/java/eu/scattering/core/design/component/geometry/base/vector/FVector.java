@@ -270,6 +270,8 @@ public interface FVector extends Base<FVector> {
     double getAngleBaseZero(FPoint head);
     double getAngleBaseZero(FPos3D head);
 
+    //--------------------------------------------------
+
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
     double getInclination();

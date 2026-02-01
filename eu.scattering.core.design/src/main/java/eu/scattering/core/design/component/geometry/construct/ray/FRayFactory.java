@@ -9,6 +9,8 @@ public interface FRayFactory {
 
     FRayProducer getFRayProducer();
 
+    FRayHelper getFRayHelper();
+
     //--------------------------------------------------
 
     FRay getFRay();

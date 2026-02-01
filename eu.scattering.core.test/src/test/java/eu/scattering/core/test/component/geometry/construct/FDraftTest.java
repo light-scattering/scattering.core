@@ -191,7 +191,7 @@ public class FDraftTest {
             FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 2, 3, 4, 5, 6));
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(9, 8, 7, 6, 5, 4));
 
-            FDraft results = fDraft.applyStateFrom(fPlane);
+            FDraft results = fDraft.set(fPlane);
 
             Assertions.assertAll("Validate FDraft",
                     () -> assertSame(fDraft, results,

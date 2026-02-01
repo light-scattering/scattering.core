@@ -190,7 +190,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(1, 2, 3, 4, 5, 6));
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(9, 8, 7, 6, 5, 4));
 
-            FRay results = fRay.applyStateFrom(fSegment);
+            FRay results = fRay.set(fSegment);
 
             Assertions.assertAll("Validate FRay",
                     () -> assertSame(fRay, results,
@@ -457,6 +457,28 @@ public class FRayTest {
     class FRayAdvancedTest {
 
         @Test
+        @DisplayName("Is projectable (below base)")
+        void isProjectableBelowBase() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
+            FRay fRay = factory.getRefFRay(fVector);
+
+            assertFalse(fRay.isProjectable(0, -9, 0));
+            assertFalse(fRay.isProjectable(factory.getFPoint(0, -9, 0)));
+            assertFalse(fRay.isProjectable(factory.getFPos3D(0, -9, 0)));
+        }
+
+        @Test
+        @DisplayName("Is projectable (above head)")
+        void isProjectableAboveHead() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
+            FRay fRay = factory.getRefFRay(fVector.copy());
+
+            assertTrue(fRay.isProjectable(0, 9, 0));
+            assertTrue(fRay.isProjectable(factory.getFPoint(0, 9, 0)));
+            assertTrue(fRay.isProjectable(factory.getFPos3D(0, 9, 0)));
+        }
+
+        @Test
         @DisplayName("Project primitives")
         void projectPrimitives() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
@@ -472,8 +494,8 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Project unit")
-        void projectUnit() {
+        @DisplayName("Project FPoint")
+        void projectFPoint() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
@@ -486,6 +508,17 @@ public class FRayTest {
 
             assertTrue(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project FPos3D")
+        void projectFPos3D() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(0, 3, 0);
+
+            FPos3D results = fRay.project(fPos3D);
+
+            assertTrue(factory.getFPoint(1, 1, 1).isSimilar(results));
         }
 
         @Test
@@ -589,8 +622,8 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Reflect unit")
-        void reflectUnit() {
+        @DisplayName("Reflect FPoint")
+        void reflectFPoint() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
@@ -598,6 +631,17 @@ public class FRayTest {
 
             assertTrue(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Reflect FPos3D")
+        void reflectFPos3D() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(0, 3, 0);
+
+            FPos3D results = fRay.reflect(fPos3D);
+
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(results));
         }
 
         @Test
@@ -662,7 +706,7 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Reflect (above head")
+        @DisplayName("Reflect (above head)")
         void reflectAboveHead() {
             FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
             FRay fRay = factory.getRefFRay(fVector.copy());
@@ -685,12 +729,31 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Location unit")
-        void isUnitPartOf() {
+        @DisplayName("Location primitives")
+        void isPrimitivePartOf() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+
+            assertTrue(fRay.isPartOf(1, 1 + (0.5 * epsilon), 1),
+                    "The distance should be negligible");
+        }
+
+        @Test
+        @DisplayName("Location FPoint")
+        void isFPointPartOf() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
             assertTrue(fRay.isPartOf(fPoint),
+                    "The distance should be negligible");
+        }
+
+        @Test
+        @DisplayName("Location FPos3D")
+        void isFPos3DPartOf() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(1, 1 + (0.5 * epsilon), 1);
+
+            assertTrue(fRay.isPartOf(fPos3D),
                     "The distance should be negligible");
         }
 
@@ -705,16 +768,6 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Location unit (fail)")
-        void isUnitPartOfFail() {
-            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
-
-            assertFalse(fRay.isPartOf(fPoint),
-                    "The distance should not be negligible");
-        }
-
-        @Test
         @DisplayName("Location (fail)")
         void isPartOfFail() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
@@ -725,12 +778,51 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Location unit epsilon")
-        void isUnitPartOfEpsilon() {
+        @DisplayName("Location FPoint (fail)")
+        void isFPointPartOfFail() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
+
+            assertFalse(fRay.isPartOf(fPoint),
+                    "The distance should not be negligible");
+        }
+
+        @Test
+        @DisplayName("Location FPos3D (fail)")
+        void isFPos3DPartOfFail() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(1, 1 + (1.5 * epsilon), 1);
+
+            assertFalse(fRay.isPartOf(fPos3D),
+                    "The distance should not be negligible");
+        }
+
+        @Test
+        @DisplayName("Location primitives epsilon")
+        void isPrimitivePartOfEpsilon() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(1, 0, 0));
+
+            assertTrue(fRay.isPartOf(1, 3, 1, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location FPoint epsilon")
+        void isFPointPartOfEpsilon() {
             FRay fRay = factory.getRefFRay(factory.getFVector(1, 0, 0));
             FPoint fPoint = factory.getFPoint(1, 3, 1);
 
             assertTrue(fRay.isPartOf(fPoint, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location FPos3D epsilon")
+        void isFPos3DPartOfEpsilon() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(1, 0, 0));
+            FPos3D fPos3D = factory.getFPos3D(1, 3, 1);
+
+            assertTrue(fRay.isPartOf(fPos3D, 5),
                     "The distance should be correct");
         }
 
@@ -745,12 +837,22 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Location unit epsilon (fail)")
-        void isUnitPartOfEpsilonFail() {
+        @DisplayName("Location FPoint epsilon (fail)")
+        void isFPointPartOfEpsilonFail() {
             FRay fRay = factory.getRefFRay(factory.getFVector(1, 0, 0));
             FPoint fPoint = factory.getFPoint(1, 1, 5);
 
             assertFalse(fRay.isPartOf(fPoint),
+                    "The distance should not be correct");
+        }
+
+        @Test
+        @DisplayName("Location FPos3D epsilon (fail)")
+        void isFPos3DPartOfEpsilonFail() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(1, 0, 0));
+            FPos3D fPos3D = factory.getFPos3D(1, 1, 5);
+
+            assertFalse(fRay.isPartOf(fPos3D),
                     "The distance should not be correct");
         }
 
@@ -807,8 +909,8 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Get unit distance")
-        void getUnitDistance() {
+        @DisplayName("Get FPoint distance")
+        void getFPointDistance() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
@@ -818,6 +920,15 @@ public class FRayTest {
             fPoint.addXYZ(offset);
 
             assertEquals(Math.sqrt(6), fRay.getDistance(fPoint));
+        }
+
+        @Test
+        @DisplayName("Get FPos3D distance")
+        void getFPos3DDistance() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(0, 3, 0);
+
+            assertEquals(Math.sqrt(6), fRay.getDistance(fPos3D));
         }
 
         @Test
@@ -845,8 +956,8 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Set unit distance")
-        void setUnitDistance() {
+        @DisplayName("Set FPoint distance")
+        void setFPointDistance() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
@@ -858,6 +969,18 @@ public class FRayTest {
             fRay.setDistance(fPoint, 1);
 
             Assertions.assertTrue(Math.abs(fRay.getDistance(fPoint) - 1) < epsilon,
+                    "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Set FPos3D distance")
+        void setFPos3DDistance() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(0, 3, 0);
+
+            FPos3D results = fRay.setDistance(fPos3D, 1);
+
+            Assertions.assertTrue(Math.abs(fRay.getDistance(results) - 1) < epsilon,
                     "The distance is erroneous");
         }
 
@@ -951,8 +1074,8 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Move unit forward")
-        void moveUnitForward() {
+        @DisplayName("Move FPoint forward")
+        void moveFPointForward() {
             FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
@@ -960,6 +1083,31 @@ public class FRayTest {
             fRay.shiftForward(fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
+                    "The translation is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move FPos3D forward")
+        void moveFPos3DForward() {
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
+            FRay fRay = factory.getRefFRay(fVector.copy());
+            FPos3D fPos3D = factory.getFPos3D(1, 0, 0);
+
+            FPos3D results = fRay.shiftForward(fPos3D, Math.sqrt(3));
+
+            assertTrue(factory.getFPoint(2, 1, 1).isSimilar(results),
+                    "The translation is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move primitives forward")
+        void movePrimitivesForward() {
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
+            FRay fRay = factory.getRefFRay(fVector.copy());
+
+            FPos3D results = fRay.shiftForward(1, 0, 0, Math.sqrt(3));
+
+            assertTrue(factory.getFPoint(2, 1, 1).isSimilar(results),
                     "The translation is erroneous");
         }
 
@@ -1001,8 +1149,8 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Move unit backward")
-        void moveUnitBackward() {
+        @DisplayName("Move FPoint backward")
+        void moveFPointBackward() {
             FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
@@ -1010,6 +1158,31 @@ public class FRayTest {
             fRay.shiftBackward(fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
+                    "The translation is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move FPos3D backward")
+        void moveFPos3DBackward() {
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
+            FRay fRay = factory.getRefFRay(fVector.copy());
+            FPos3D fPos3D = factory.getFPos3D(1, 0, 0);
+
+            FPos3D results = fRay.shiftBackward(fPos3D, Math.sqrt(3));
+
+            assertTrue(factory.getFPoint(0, -1, -1).isSimilar(results),
+                    "The translation is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move primitives backward")
+        void movePrimitivesBackward() {
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
+            FRay fRay = factory.getRefFRay(fVector.copy());
+
+            FPos3D results = fRay.shiftBackward(1, 0, 0, Math.sqrt(3));
+
+            assertTrue(factory.getFPoint(0, -1, -1).isSimilar(results),
                     "The translation is erroneous");
         }
 
@@ -1057,12 +1230,28 @@ public class FRayTest {
             double length = fRay.getRefOrigin().getMagnitude();
 
             Assertions.assertAll("Validate FPoint",
-                    () -> assertTrue(fRay.getFPointAtDistance(0).isSimilar(fRay.getRefOrigin().getRefBase()),
+                    () -> assertTrue(fRay.getFPointAtLength(0).isSimilar(fRay.getRefOrigin().getRefBase()),
                             "The FPoint base is incorrect"),
-                    () -> assertTrue(fRay.getFPointAtDistance(length).isSimilar(fRay.getRefOrigin().getRefHead()),
+                    () -> assertTrue(fRay.getFPointAtLength(length).isSimilar(fRay.getRefOrigin().getRefHead()),
                             "The FPoint head is incorrect"),
-                    () -> assertNotNull(fRay.getFPointAtDistance(2 * length),
+                    () -> assertNotNull(fRay.getFPointAtLength(2 * length),
                             "The distant FPoint exists")
+            );
+        }
+
+        @Test
+        @DisplayName("Get FPos3D")
+        void getFPos3D() {
+            FRay fRay = factory.getRefFRay(TestHelper.getRandFVector());
+            double length = fRay.getRefOrigin().getMagnitude();
+
+            Assertions.assertAll("Validate FPoint",
+                    () -> assertTrue(fRay.getRefOrigin().getRefBase().isSimilar(fRay.getFPos3DAtLength(0)),
+                            "The FPos3D base is incorrect"),
+                    () -> assertTrue(fRay.getRefOrigin().getRefHead().isSimilar(fRay.getFPos3DAtLength(length)),
+                            "The FPos3D head is incorrect"),
+                    () -> assertNotNull(fRay.getFPos3DAtLength(2 * length),
+                            "The distant FPos3D exists")
             );
         }
 
@@ -1071,7 +1260,7 @@ public class FRayTest {
         void getFPointThrowIllegalStateException() {
             FRay fRay = factory.getRefFRay(factory.getFVector());
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.getFPointAtDistance(1),
+            Assertions.assertThrows(IllegalStateException.class, () -> fRay.getFPointAtLength(1),
                     "The origin is a non-directional FVector");
         }
 
@@ -1080,7 +1269,7 @@ public class FRayTest {
         void getFPointThrowIllegalArgumentException() {
             FRay fRay = factory.getRefFRay(TestHelper.getRandFVector());
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fRay.getFPointAtDistance(-1),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fRay.getFPointAtLength(-1),
                     "The origin is a non-directional FVector");
         }
 
@@ -1090,7 +1279,7 @@ public class FRayTest {
             FVector fVectorOrigin = TestHelper.getRandFVector();
             FRay fRay = factory.getRefFRay(fVectorOrigin.copy());
 
-            fRay.getFPointAtDistance(0);
+            fRay.getFPointAtLength(0);
 
             assertTrue(fVectorOrigin.isExact(fRay.getRefOrigin()),
                     "The position should remain unchanged");

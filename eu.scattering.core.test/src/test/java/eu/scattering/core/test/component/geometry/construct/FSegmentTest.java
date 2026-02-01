@@ -190,7 +190,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(1, 2, 3, 4, 5, 6));
             FLine fLine = factory.getRefFLine(factory.getFVector(9, 8, 7, 6, 5, 4));
 
-            FSegment results = fSegment.applyStateFrom(fLine);
+            FSegment results = fSegment.set(fLine);
 
             Assertions.assertAll("Validate FSegment",
                     () -> assertSame(fSegment, results,

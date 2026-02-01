@@ -102,7 +102,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public FPlane applyStateFrom(Construct<?> arg) {
+    public FPlane set(Construct<?> arg) {
 
         getRefOrigin().set(arg.getRefOrigin());
 

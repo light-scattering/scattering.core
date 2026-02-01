@@ -82,7 +82,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     @Override
-    public FSegment applyStateFrom(Construct<?> arg) {
+    public FSegment set(Construct<?> arg) {
 
         getRefOrigin().set(arg.getRefOrigin());
 

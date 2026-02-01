@@ -210,7 +210,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 2, 3, 4, 5, 6));
             FRay fPay = factory.getRefFRay(factory.getFVector(9, 8, 7, 6, 5, 4));
 
-            FPlane results = fPlane.applyStateFrom(fPay);
+            FPlane results = fPlane.set(fPay);
 
             Assertions.assertAll("Validate FPlane",
                     () -> assertSame(fPlane, results,

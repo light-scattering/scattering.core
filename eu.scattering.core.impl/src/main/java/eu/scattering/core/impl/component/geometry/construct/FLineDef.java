@@ -84,7 +84,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public FLine applyStateFrom(Construct<?> arg) {
+    public FLine set(Construct<?> arg) {
 
         getRefOrigin().set(arg.getRefOrigin());
 
