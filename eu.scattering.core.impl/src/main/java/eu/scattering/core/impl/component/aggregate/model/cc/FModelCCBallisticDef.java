@@ -7,7 +7,6 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.type.Center;
@@ -35,7 +34,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     private final FRotAspect rotation;
 
     private final FPoint cAggA, cAggB;
-    private final FRay pathA, pathB;
+    private final FVector pathA, pathB;
 
     private final FAggregate aggregate;
 
@@ -67,8 +66,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         this.cAggA = factory.getFPoint();
         this.cAggB = factory.getFPoint();
 
-        this.pathA = factory.getFRay();
-        this.pathB = factory.getFRay();
+        this.pathA = factory.getFVector();
+        this.pathB = factory.getFVector();
 
         this.aggregate = aggregate;
 
@@ -202,12 +201,10 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     }
 
     private void project3D(FAggregate aggA, FAggregate aggB) {
-        FVector vectorRnd = this.pathA.getRefOrigin();
-        FPoint baseRnd = vectorRnd.getRefBase();
-        FPoint headRnd = vectorRnd.getRefHead();
-        FVector vectorDir = this.pathB.getRefOrigin();
-        FPoint baseDir = vectorDir.getRefBase();
-        FPoint headDir = vectorDir.getRefHead();
+        FPoint baseRnd = this.pathA.getRefBase();
+        FPoint headRnd = this.pathA.getRefHead();
+        FPoint baseDir = this.pathB.getRefBase();
+        FPoint headDir = this.pathB.getRefHead();
 
         while (true) {
             aggA.getCenter(this.cAggA, Center.SPATIAL);
@@ -225,12 +222,9 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             aggB.getRefParticles().translate(this.cAggB, headRnd);
 
             this.random.ortToBaseInCircle(headDir, this.pathA, rAggA);
+            this.random.ortToHeadInCircle(baseDir, this.pathA, rAggB);
 
-            vectorRnd.swapBaseWithHead();
-
-            this.random.ortToBaseInCircle(baseDir, this.pathA, rAggB);
-
-            double shift = aggB.project(aggA, vectorDir);
+            double shift = aggB.project(aggA, this.pathB);
 
             if (shift >= 0) {
                 break;
@@ -239,12 +233,10 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     }
 
     private void project2D(FAggregate aggA, FAggregate aggB) {
-        FVector vectorRnd = this.pathA.getRefOrigin();
-        FPoint baseRnd = vectorRnd.getRefBase();
-        FPoint headRnd = vectorRnd.getRefHead();
-        FVector vectorDir = this.pathB.getRefOrigin();
-        FPoint baseDir = vectorDir.getRefBase();
-        FPoint headDir = vectorDir.getRefHead();
+        FPoint baseRnd = this.pathA.getRefBase();
+        FPoint headRnd = this.pathA.getRefHead();
+        FPoint baseDir = this.pathB.getRefBase();
+        FPoint headDir = this.pathB.getRefHead();
 
         while (true) {
             aggA.getCenter(this.cAggA, Center.SPATIAL);
@@ -269,7 +261,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             headDir.set(this.random.getFRand().nextDouble(-rAggA, rAggA), 0, 0);
             this.rotation.setRgAngle(headDir, headRnd, Math.PI * 0.5);
 
-            double shift = aggB.project(aggA, vectorDir);
+            double shift = aggB.project(aggA, this.pathB);
 
             if (shift >= 0) {
                 break;

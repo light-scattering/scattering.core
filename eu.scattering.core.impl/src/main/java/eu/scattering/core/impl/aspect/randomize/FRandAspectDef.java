@@ -6,8 +6,6 @@ import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
-import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
@@ -276,50 +274,6 @@ public class FRandAspectDef implements FRandAspect {
         in.add(dir.getRefHead());
 
         return in;
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FPoint ortToBaseInCircle(FPoint in, FRay dir, double radius) {
-
-        return ortToBaseInCircle(in, dir.getRefOrigin(), radius);
-    }
-
-    @Override
-    public FPoint ortToBaseOnCircle(FPoint in, FRay dir, double radius) {
-
-        return ortToBaseOnCircle(in, dir.getRefOrigin(), radius);
-    }
-
-    @Override
-    public FPoint onSegment(FPoint in, FSegment ref) {
-
-        return onAxis(in, ref.getRefOrigin());
-    }
-
-    @Override
-    public FPoint ortToPosAInCircle(FPoint in, FSegment ref, double radius) {
-
-        return ortToBaseInCircle(in, ref.getRefOrigin(), radius);
-    }
-
-    @Override
-    public FPoint ortToPosAOnCircle(FPoint in, FSegment ref, double radius) {
-
-        return ortToBaseOnCircle(in, ref.getRefOrigin(), radius);
-    }
-
-    @Override
-    public FPoint ortToPosBInCircle(FPoint in, FSegment ref, double radius) {
-
-        return ortToHeadInCircle(in, ref.getRefOrigin(), radius);
-    }
-
-    @Override
-    public FPoint ortToPosBOnCircle(FPoint in, FSegment ref, double radius) {
-
-        return ortToHeadOnCircle(in, ref.getRefOrigin(), radius);
     }
 
     //--------------------------------------------------
