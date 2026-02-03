@@ -457,6 +457,28 @@ public class FSegmentTest {
     class FSegmentAdvancedTest {
 
         @Test
+        @DisplayName("Is projectable (below base)")
+        void isProjectableBelowBase() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
+            FSegment fSegment = factory.getRefFSegment(fVector);
+
+            assertFalse(fSegment.isProjectable(0, -9, 0));
+            assertFalse(fSegment.isProjectable(factory.getFPoint(0, -9, 0)));
+            assertFalse(fSegment.isProjectable(factory.getFPos3D(0, -9, 0)));
+        }
+
+        @Test
+        @DisplayName("Is projectable (above head)")
+        void isProjectableAboveHead() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
+            FSegment fSegment = factory.getRefFSegment(fVector);
+
+            assertFalse(fSegment.isProjectable(0, 9, 0));
+            assertFalse(fSegment.isProjectable(factory.getFPoint(0, 9, 0)));
+            assertFalse(fSegment.isProjectable(factory.getFPos3D(0, 9, 0)));
+        }
+
+        @Test
         @DisplayName("Project primitives")
         void projectPrimitives() {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));

@@ -9,6 +9,8 @@ public interface FSegmentFactory {
 
     FSegmentProducer getFSegmentProducer();
 
+    FSegmentHelper getFSegmentHelper();
+
     //--------------------------------------------------
 
     FSegment getFSegment();

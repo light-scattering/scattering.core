@@ -471,7 +471,7 @@ public class FRayTest {
         @DisplayName("Is projectable (above head)")
         void isProjectableAboveHead() {
             FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
-            FRay fRay = factory.getRefFRay(fVector.copy());
+            FRay fRay = factory.getRefFRay(fVector);
 
             assertTrue(fRay.isProjectable(0, 9, 0));
             assertTrue(fRay.isProjectable(factory.getFPoint(0, 9, 0)));

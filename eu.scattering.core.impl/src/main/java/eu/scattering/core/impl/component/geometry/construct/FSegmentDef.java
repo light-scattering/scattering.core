@@ -6,29 +6,25 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegmentHelper;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import org.json.JSONObject;
-
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegment {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "segment";
     private static final String JSON_VAL = "val";
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields must be redefined while extending the class.
-    // -------------------------------------------------------------------------------------------------
-
     private final ConstructFactory factory;
-
+    private final FSegmentHelper helper;
     private FVector origin;
 
     private FSegmentDef(ConstructFactory factory, FVector origin) {
 
         this.factory = factory;
+        this.helper = factory.getFSegmentHelper();
         this.origin = origin;
     }
 
@@ -61,22 +57,11 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     // -------------------------------------------------------------------------------------------------
-    // The following fields do not have to modified while extending the class.
-    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
-    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FSegment set(FPairPos3D position) {
 
         getRefOrigin().set(position);
-
-        return this;
-    }
-
-    @Override
-    public FSegment applyStateTo(Construct<?> in) {
-
-        getRefOrigin().applyStateTo(in.getRefOrigin());
 
         return this;
     }
@@ -99,6 +84,14 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         var origin = supplyFVector().set(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
+    }
+
+    @Override
+    public FSegment applyStateTo(Construct<?> in) {
+
+        getRefOrigin().applyStateTo(in.getRefOrigin());
+
+        return this;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -145,6 +138,8 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         return copy();
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
     public FPairPos3D toFPairPos3D() {
 
@@ -161,8 +156,6 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         return json;
     }
 
-    // -------------------------------------------------------------------------------------------------
-
     @Override
     public String toString() {
 
@@ -172,301 +165,162 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isProjectable(FPoint arg) {
+    public boolean isPartOf(double x, double y, double z) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return getUnitDistance(arg.getX(), arg.getY(), arg.getZ()) > -1;
-    }
-
-    // TODO - Not optimized
-    @Override
-    public FPos3D project(double x, double y, double z) {
-        FPoint fPoint = supplyFPoint().set(x, y, z);
-
-        project(fPoint);
-
-        return fPoint.toFPos3D();
+        return this.helper.isPartOf(getRefOrigin(), x, y, z);
     }
 
     @Override
-    public boolean project(FPoint in) {
+    public boolean isPartOf(double x, double y, double z, double epsilon) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return projectUnit(in);
-    }
-
-    @Override
-    public boolean project(Geometry in) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return in.toFPoints().stream()
-                .allMatch(this::projectUnit);
-    }
-
-    // TODO - Not optimized
-    @Override
-    public FPos3D reflect(double x, double y, double z) {
-        FPoint fPoint = supplyFPoint().set(x, y, z);
-
-        reflect(fPoint);
-
-        return fPoint.toFPos3D();
-    }
-
-    @Override
-    public boolean reflect(FPoint in) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return reflectUnit(in);
-    }
-
-    @Override
-    public boolean reflect(Geometry in) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return in.toFPoints().stream()
-                .allMatch(this::reflectUnit);
+        return this.helper.isPartOf(getRefOrigin(), x, y, z, epsilon);
     }
 
     @Override
     public boolean isPartOf(FPoint arg) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return isUnitPartOf(arg);
+        return this.helper.isPartOf(getRefOrigin(), arg);
     }
 
     @Override
     public boolean isPartOf(FPoint arg, double epsilon) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
+        return this.helper.isPartOf(getRefOrigin(), arg, epsilon);
+    }
 
-        return isUnitPartOf(arg, epsilon);
+    @Override
+    public boolean isPartOf(FPos3D arg) {
+
+        return this.helper.isPartOf(getRefOrigin(), arg);
+    }
+
+    @Override
+    public boolean isPartOf(FPos3D arg, double epsilon) {
+
+        return this.helper.isPartOf(getRefOrigin(), arg, epsilon);
     }
 
     @Override
     public boolean isPartOf(Geometry arg) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return arg.toFPoints().stream()
-                .allMatch(this::isUnitPartOf);
+        return this.helper.isPartOf(getRefOrigin(), arg);
     }
 
     @Override
     public boolean isPartOf(Geometry arg, double epsilon) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
+        return this.helper.isPartOf(getRefOrigin(), arg, epsilon);
+    }
 
-        return arg.toFPoints().stream()
-                .allMatch(e -> isUnitPartOf(e, epsilon));
+    @Override
+    public boolean isProjectable(double x, double y, double z) {
+
+        return this.helper.isProjectable(getRefOrigin(), x, y, z);
+    }
+
+    @Override
+    public boolean isProjectable(FPoint arg) {
+
+        return this.helper.isProjectable(getRefOrigin(), arg);
+    }
+
+    @Override
+    public boolean isProjectable(FPos3D arg) {
+
+        return this.helper.isProjectable(getRefOrigin(), arg);
+    }
+
+    @Override
+    public FPos3D project(double x, double y, double z) {
+
+        return this.helper.project(getRefOrigin(), x, y, z);
+    }
+
+    @Override
+    public boolean project(FPoint in) {
+
+        return this.helper.project(getRefOrigin(), in);
+    }
+
+    @Override
+    public FPos3D project(FPos3D arg) {
+
+        return this.helper.project(getRefOrigin(), arg);
+    }
+
+    @Override
+    public boolean project(Geometry in) {
+
+        return this.helper.project(getRefOrigin(), in);
+    }
+
+    @Override
+    public FPos3D reflect(double x, double y, double z) {
+
+        return this.helper.reflect(getRefOrigin(), x, y, z);
+    }
+
+    @Override
+    public boolean reflect(FPoint in) {
+
+        return this.helper.reflect(getRefOrigin(), in);
+    }
+
+    @Override
+    public FPos3D reflect(FPos3D arg) {
+
+        return this.helper.reflect(getRefOrigin(), arg);
+    }
+
+    @Override
+    public boolean reflect(Geometry in) {
+
+        return this.helper.reflect(getRefOrigin(), in);
     }
 
     @Override
     public double getDistance(double x, double y, double z) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return getUnitDistance(x, y, z);
+        return this.helper.getDistance(getRefOrigin(), x, y, z);
     }
 
     @Override
     public double getDistance(FPoint arg) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return getUnitDistance(arg.getX(), arg.getY(), arg.getZ());
+        return this.helper.getDistance(getRefOrigin(), arg);
     }
 
     @Override
-    public void setDistance(FPoint in, double distance) {
+    public double getDistance(FPos3D arg) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        setUnitDistance(in, distance);
+        return this.helper.getDistance(getRefOrigin(), arg);
     }
 
     @Override
-    public void setDistance(Geometry in, double distance) {
+    public FPos3D setDistance(double x, double y, double z, double distance) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
+        return this.helper.setDistance(getRefOrigin(), x, y, z, distance);
+    }
 
-        in.toFPoints()
-                .forEach(p -> setUnitDistance(p, distance));
+    @Override
+    public FPos3D setDistance(FPos3D arg, double distance) {
+
+        return this.helper.setDistance(getRefOrigin(), arg, distance);
+    }
+
+    @Override
+    public boolean setDistance(FPoint in, double distance) {
+
+        return this.helper.setDistance(getRefOrigin(), in, distance);
+    }
+
+    @Override
+    public boolean setDistance(Geometry in, double distance) {
+
+        return this.helper.setDistance(getRefOrigin(), in, distance);
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    private boolean isUnitPartOf(FPoint arg) {
-        double dist = getUnitDistance(arg.getX(), arg.getY(), arg.getZ());
-
-        return dist != -1 && dist < EPSILON;
-    }
-
-    private boolean isUnitPartOf(FPoint arg, double epsilon) {
-        double dist = getUnitDistance(arg.getX(), arg.getY(), arg.getZ());
-
-        return dist != -1 && dist < epsilon;
-    }
-
-    private boolean isUnitPartOfSegment(double x, double y, double z) {
-        FPoint oBase = getRefOrigin().getRefBase();
-        FPoint oHead = getRefOrigin().getRefHead();
-
-        double oMagnitude = getRefOrigin().getMagnitude();
-
-        double distBase = oBase.getDistance(x, y, z);
-        double distHead = oHead.getDistance(x, y, z);
-
-        return Math.abs(distBase + distHead - oMagnitude) < EPSILON;
-    }
-
-    private double getUnitDistance(double x, double y, double z) {
-        FVector origin = getRefOrigin();
-        double originMag = origin.getMagnitude();
-
-        double headX = x - origin.getBaseX();
-        double headY = y - origin.getBaseY();
-        double headZ = z - origin.getBaseZ();
-
-        double opX = (origin.getHeadX() - origin.getBaseX()) / originMag;
-        double opY = (origin.getHeadY() - origin.getBaseY()) / originMag;
-        double opZ = (origin.getHeadZ() - origin.getBaseZ()) / originMag;
-
-        double dotProduct = (headX * opX) + (headY * opY) + (headZ * opZ);
-
-        opX *= dotProduct;
-        opY *= dotProduct;
-        opZ *= dotProduct;
-
-        opX += origin.getBaseX();
-        opY += origin.getBaseY();
-        opZ += origin.getBaseZ();
-
-        boolean isValid = isUnitPartOfSegment(opX, opY, opZ);
-
-        if (!isValid) {
-            return -1;
-        }
-
-        double distX = x - opX;
-        double distY = y - opY;
-        double distZ = z - opZ;
-
-        return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
-    }
-
-    private void setUnitDistance(FPoint in, double distance) {
-        double oX = in.getX();
-        double oY = in.getY();
-        double oZ = in.getZ();
-
-        boolean isValid = projectUnit(in);
-
-        double pX = in.getX();
-        double pY = in.getY();
-        double pZ = in.getZ();
-
-        in.set(oX, oY, oZ);
-
-        if (!isValid) {
-            return;
-        }
-
-        in.setDistance(pX, pY, pZ, distance);
-    }
-
-    private boolean reflectUnit(FPoint in) {
-        double oX = in.getX();
-        double oY = in.getY();
-        double oZ = in.getZ();
-
-        boolean isValid = projectUnit(in);
-
-        double pX = in.getX();
-        double pY = in.getY();
-        double pZ = in.getZ();
-
-        in.set(oX, oY, oZ);
-
-        if (!isValid) {
-            return false;
-        }
-
-        in.reflect(pX, pY, pZ);
-
-        return true;
-    }
-
-    private boolean projectUnit(FPoint in) {
-        FVector origin = getRefOrigin();
-
-        double memoX = in.getX();
-        double memoY = in.getY();
-        double memoZ = in.getZ();
-
-        double headX = in.getX() - origin.getBaseX();
-        double headY = in.getY() - origin.getBaseY();
-        double headZ = in.getZ() - origin.getBaseZ();
-
-        in.set(origin.getRefHead());
-
-        in.subXYZ(origin.getRefBase());
-        in.normalize();
-
-        double dotProduct = in.getDotProduct(headX, headY, headZ);
-
-        in.mulFactor(dotProduct);
-        in.addXYZ(origin.getRefBase());
-
-        boolean isValid = isUnitPartOfSegment(in.getX(), in.getY(), in.getZ());
-
-        if (isValid) {
-            return true;
-        }
-
-        in.set(memoX, memoY, memoZ);
-
-        return false;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private FPoint supplyFPoint() {
-
-        return factory.getFPoint();
-    }
 
     private FVector supplyFVector() {
 

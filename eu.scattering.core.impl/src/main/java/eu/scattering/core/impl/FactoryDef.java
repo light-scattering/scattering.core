@@ -30,6 +30,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayHelper;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegmentHelper;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
@@ -119,6 +120,7 @@ public final class FactoryDef implements ScatFactory {
     private final FPointHelper fPointHelper;
     private final FRayHelper fRayHelper;
     private final FLineHelper fLineHelper;
+    private final FSegmentHelper fSegmentHelper;
     private final FSphereHelper fSphereHelper;
 
     private FactoryDef() {
@@ -148,6 +150,7 @@ public final class FactoryDef implements ScatFactory {
         this.fPointHelper = FPointHelperDef.get();
         this.fRayHelper = FRayHelperDef.get(this);
         this.fLineHelper = FLineHelperDef.get(this);
+        this.fSegmentHelper = FSegmentHelperDef.get(this);
         this.fSphereHelper = FSphereHelperDef.get(this.fPointHelper);
     }
 
@@ -336,6 +339,12 @@ public final class FactoryDef implements ScatFactory {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public FSegmentHelper getFSegmentHelper() {
+
+        return this.fSegmentHelper;
+    }
 
     @Override
     public FSegmentProducer getFSegmentProducer() {
