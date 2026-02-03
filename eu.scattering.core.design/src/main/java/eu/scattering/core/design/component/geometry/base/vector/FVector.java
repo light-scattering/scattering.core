@@ -282,6 +282,38 @@ public interface FVector extends Base<FVector> {
 
     //--------------------------------------------------
 
+    FVector setRgAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FVector setRgAngle(FVector ref, double angle);
+    FVector setRgAngle(FPairPos3D ref, double angle);
+    FVector setRgAngleBaseCommon(double hX, double hY, double hZ, double angle);
+    FVector setRgAngleBaseCommon(FPoint ref, double angle);
+    FVector setRgAngleBaseCommon(FPos3D ref, double angle);
+    FVector setRgAngleBaseZero(double hX, double hY, double hZ, double angle);
+    FVector setRgAngleBaseZero(FPoint ref, double angle);
+    FVector setRgAngleBaseZero(FPos3D ref, double angle);
+
+    FVector rotRgAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FVector rotRgAround(FVector ref, double angle);
+    FVector rotRgAround(FPairPos3D ref, double angle);
+    FVector rotRgAroundBaseCommon(double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundBaseCommon(FPoint ref, double angle);
+    FVector rotRgAroundBaseCommon(FPos3D ref, double angle);
+    FVector rotRgAroundBaseZero(double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundBaseZero(FPoint ref, double angle);
+    FVector rotRgAroundBaseZero(FPos3D ref, double angle);
+
+    FVector rotRgAroundAxis(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundAxis(FVector ref, double angle);
+    FVector rotRgAroundAxis(FPairPos3D ref, double angle);
+    FVector rotRgAroundAxisBaseCommon(double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundAxisBaseCommon(FPoint ref, double angle);
+    FVector rotRgAroundAxisBaseCommon(FPos3D ref, double angle);
+    FVector rotRgAroundAxisBaseZero(double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundAxisBaseZero(FPoint ref, double angle);
+    FVector rotRgAroundAxisBaseZero(FPos3D ref, double angle);
+
+    //--------------------------------------------------
+
     @Modificator
     FVector setRef(FPoint refBase, FPoint refHead);
 

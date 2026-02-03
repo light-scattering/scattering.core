@@ -1014,6 +1014,137 @@ public class FPointDef implements FPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public FPoint setRgAngle(double x, double y, double z, double angle) {
+        if (isNearZero()) {
+            throw new IllegalStateException("The input vector is non-directional");
+        }
+
+        if (isSimilar(x, y, z)) {
+            throw new IllegalStateException("The vectors are similar");
+        }
+
+        if (Math.abs(x) < EPSILON && Math.abs(y) < EPSILON && Math.abs(z) < EPSILON) {
+            throw new IllegalArgumentException("The reference vector is non-directional");
+        }
+
+        double memoMag = getMagnitude();
+
+        normalize();
+
+        double opRawX = x;
+        double opRawY = y;
+        double opRawZ = z;
+
+        double opRawFactor = 1 / Math.sqrt((opRawX * opRawX) + (opRawY * opRawY) + (opRawZ * opRawZ));
+
+        opRawX *= opRawFactor;
+        opRawY *= opRawFactor;
+        opRawZ *= opRawFactor;
+
+        double opX = (opRawY * getZ()) - (opRawZ * getY());
+        double opY = (opRawZ * getX()) - (opRawX * getZ());
+        double opZ = (opRawX * getY()) - (opRawY * getX());
+
+        double opFactor = 1 / Math.sqrt((opX * opX) + (opY * opY) + (opZ * opZ));
+
+        opX *= opFactor;
+        opY *= opFactor;
+        opZ *= opFactor;
+
+        if (Math.abs(opX) < EPSILON && Math.abs(opY) < EPSILON && Math.abs(opZ) < EPSILON) {
+            throw new IllegalStateException("The rotation vector is non-directional");
+        }
+
+        var aDelta = angle - Math.acos(getDotProduct(opRawX, opRawY, opRawZ));
+
+        var aCos = Math.cos(aDelta);
+        var aSin = Math.sin(aDelta);
+
+        var tmpSuffix = (1 - aCos) * (opX * getX() + opY * getY() + opZ * getZ());
+
+        var resX = aCos * getX() + aSin * (opY * getZ() - opZ * getY()) + opX * tmpSuffix;
+        var resY = aCos * getY() + aSin * (opZ * getX() - opX * getZ()) + opY * tmpSuffix;
+        var resZ = aCos * getZ() + aSin * (opX * getY() - opY * getX()) + opZ * tmpSuffix;
+
+        set(resX, resY, resZ);
+
+        setMagnitude(memoMag);
+
+        return self();
+    }
+
+    @Override
+    public FPoint setRgAngle(FPoint ref, double angle) {
+
+        return setRgAngle(ref.getX(), ref.getY(), ref.getZ(), angle);
+    }
+
+    @Override
+    public FPoint setRgAngle(FPos3D ref, double angle) {
+
+        return setRgAngle(ref.getD0(), ref.getD1(), ref.getD2(), angle);
+    }
+
+    @Override
+    public FPoint rotRgAround(double x, double y, double z, double angle) {
+
+        if (Math.abs(x) < EPSILON && Math.abs(y) < EPSILON && Math.abs(z) < EPSILON) {
+            throw new IllegalArgumentException("The reference vector is non-directional");
+        }
+
+        double memoMag = getMagnitude();
+
+        if (memoMag < EPSILON) {
+            return self();
+        }
+
+        normalize();
+
+        double opRawX = x;
+        double opRawY = y;
+        double opRawZ = z;
+
+        double opRawFactor = 1 / Math.sqrt((opRawX * opRawX) + (opRawY * opRawY) + (opRawZ * opRawZ));
+
+        opRawX *= opRawFactor;
+        opRawY *= opRawFactor;
+        opRawZ *= opRawFactor;
+
+        if (Math.abs(opRawX) < EPSILON && Math.abs(opRawY) < EPSILON && Math.abs(opRawZ) < EPSILON) {
+            throw new IllegalStateException("The rotation vector is non-directional");
+        }
+
+        double aCos = Math.cos(-angle);
+        double aSin = Math.sin(-angle);
+
+        double tmpSuffix = (1 - aCos) * (opRawX * getX() + opRawY * getY() + opRawZ * getZ());
+
+        double resX = aCos * getX() + aSin * (opRawY * getZ() - opRawZ * getY()) + opRawX * tmpSuffix;
+        double resY = aCos * getY() + aSin * (opRawZ * getX() - opRawX * getZ()) + opRawY * tmpSuffix;
+        double resZ = aCos * getZ() + aSin * (opRawX * getY() - opRawY * getX()) + opRawZ * tmpSuffix;
+
+        set(resX, resY, resZ);
+
+        setMagnitude(memoMag);
+
+        return self();
+    }
+
+    @Override
+    public FPoint rotRgAround(FPoint ref, double angle) {
+
+        return rotRgAround(ref.getX(), ref.getY(), ref.getZ(), angle);
+    }
+
+    @Override
+    public FPoint rotRgAround(FPos3D ref, double angle) {
+
+        return rotRgAround(ref.getD0(), ref.getD1(), ref.getD2(), angle);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
     public FPoint apply(Consumer<FPoint> action) {
 
         action.accept(this);

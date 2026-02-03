@@ -126,6 +126,16 @@ public interface FPoint extends Base<FPoint> {
 
     //--------------------------------------------------
 
+    FPoint setRgAngle(double x, double y, double z, double angle);
+    FPoint setRgAngle(FPoint ref, double angle);
+    FPoint setRgAngle(FPos3D ref, double angle);
+
+    FPoint rotRgAround(double x, double y, double z, double angle);
+    FPoint rotRgAround(FPoint ref, double angle);
+    FPoint rotRgAround(FPos3D ref, double angle);
+
+    //--------------------------------------------------
+
     @Fragment
     double getMagnitudeP2();
     @Fragment
