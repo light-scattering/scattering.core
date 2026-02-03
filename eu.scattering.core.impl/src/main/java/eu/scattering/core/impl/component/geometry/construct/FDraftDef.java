@@ -20,9 +20,7 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     private static final String JSON_MAIN = "draft";
     private static final String JSON_VAL = "val";
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields must be redefined while extending the class.
-    // -------------------------------------------------------------------------------------------------
+    //--------------------------------------------------
 
     private final ConstructFactory factory;
 
@@ -67,24 +65,13 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
         return this;
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields do not have to modified while extending the class.
-    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
-    // -------------------------------------------------------------------------------------------------
+    //--------------------------------------------------
 
 
     @Override
     public FDraft set(FPairPos3D position) {
 
         getRefOrigin().set(position);
-
-        return this;
-    }
-
-    @Override
-    public FDraft applyStateTo(Construct<?> in) {
-
-        getRefOrigin().applyStateTo(in.getRefOrigin());
 
         return this;
     }
@@ -107,6 +94,14 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
         FVector origin = supplyFVector().set(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
+    }
+
+    @Override
+    public FDraft applyStateTo(Construct<?> in) {
+
+        getRefOrigin().applyStateTo(in.getRefOrigin());
+
+        return this;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -170,8 +165,6 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
         return json;
     }
 
-    // -------------------------------------------------------------------------------------------------
-
     @Override
     public String toString() {
 
@@ -182,6 +175,12 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
 
     @Override
     public FPos3D project(double x, double y, double z) {
+
+        throw new RuntimeException("The 'project' method cannot be used with FDraft");
+    }
+
+    @Override
+    public FPos3D project(FPos3D arg) {
 
         throw new RuntimeException("The 'project' method cannot be used with FDraft");
     }
@@ -205,6 +204,12 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     }
 
     @Override
+    public FPos3D reflect(FPos3D arg) {
+
+        throw new RuntimeException("The 'reflect' method cannot be used with FDraft");
+    }
+
+    @Override
     public boolean reflect(FPoint in) {
 
         throw new RuntimeException("The 'reflect' method cannot be used with FDraft");
@@ -217,19 +222,43 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     }
 
     @Override
+    public boolean isPartOf(double x, double y, double z) {
+
+        throw new RuntimeException("The 'isPartOf' method cannot be used with FDraft");
+    }
+
+    @Override
+    public boolean isPartOf(FPos3D arg) {
+
+        throw new RuntimeException("The 'isPartOf' method cannot be used with FDraft");
+    }
+
+    @Override
     public boolean isPartOf(FPoint arg) {
 
         throw new RuntimeException("The 'isPartOf' method cannot be used with FDraft");
     }
 
     @Override
-    public boolean isPartOf(FPoint arg, double epsilon) {
+    public boolean isPartOf(Geometry arg) {
 
         throw new RuntimeException("The 'isPartOf' method cannot be used with FDraft");
     }
 
     @Override
-    public boolean isPartOf(Geometry arg) {
+    public boolean isPartOf(double x, double y, double z, double epsilon) {
+
+        throw new RuntimeException("The 'isPartOf' method cannot be used with FDraft");
+    }
+
+    @Override
+    public boolean isPartOf(FPos3D arg, double epsilon) {
+
+        throw new RuntimeException("The 'isPartOf' method cannot be used with FDraft");
+    }
+
+    @Override
+    public boolean isPartOf(FPoint arg, double epsilon) {
 
         throw new RuntimeException("The 'isPartOf' method cannot be used with FDraft");
     }

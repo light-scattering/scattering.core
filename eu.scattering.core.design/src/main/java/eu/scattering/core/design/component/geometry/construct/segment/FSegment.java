@@ -29,13 +29,4 @@ public interface FSegment extends Construct<FSegment> {
 
     boolean setDistance(FPoint in, double distance);
     boolean setDistance(Geometry in, double distance);
-
-    //-------------------------------------------------- RELOCATE
-
-    boolean isPartOf(double x, double y, double z);
-    boolean isPartOf(FPos3D arg);
-    boolean isPartOf(double x, double y, double z, double epsilon);
-    boolean isPartOf(FPos3D arg, double epsilon);
-    FPos3D project(FPos3D arg);
-    FPos3D reflect(FPos3D arg);
 }

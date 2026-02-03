@@ -35,13 +35,4 @@ public interface FLine extends Construct<FLine> {
     Optional<FPoint> getFPointAtZ(double z);
 
     Optional<FPoint> getFPointAtIntersection(FLine arg);
-
-    //-------------------------------------------------- RELOCATE
-
-    boolean isPartOf(double x, double y, double z);
-    boolean isPartOf(FPos3D arg);
-    boolean isPartOf(double x, double y, double z, double epsilon);
-    boolean isPartOf(FPos3D arg, double epsilon);
-    FPos3D project(FPos3D arg);
-    FPos3D reflect(FPos3D arg);
 }
