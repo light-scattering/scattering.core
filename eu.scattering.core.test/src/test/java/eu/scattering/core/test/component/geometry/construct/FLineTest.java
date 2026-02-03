@@ -543,8 +543,8 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Project unit")
-        void projectUnit() {
+        @DisplayName("Project FPoint")
+        void projectFPoint() {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
@@ -557,6 +557,17 @@ public class FLineTest {
 
             assertTrue(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project FPos3D")
+        void projectFPos3D() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(0, 3, 0);
+
+            FPos3D results = fLine.project(fPos3D);
+
+            assertTrue(factory.getFPoint(1, 1, 1).isSimilar(results));
         }
 
         @Test
@@ -676,8 +687,8 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Reflect unit")
-        void reflectUnit() {
+        @DisplayName("Reflect FPoint")
+        void reflectFPoint() {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
@@ -685,6 +696,17 @@ public class FLineTest {
 
             assertTrue(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Reflect FPos3D")
+        void reflectFPos3D() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(0, 3, 0);
+
+            FPos3D results = fLine.reflect(fPos3D);
+
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(results));
         }
 
         @Test
@@ -772,12 +794,31 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Location unit")
-        void isUnitPartOf() {
+        @DisplayName("Location primitives")
+        void isPrimitivePartOf() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+
+            assertTrue(fLine.isPartOf(1, 1 + (0.5 * epsilon), 1),
+                    "The distance should be negligible");
+        }
+
+        @Test
+        @DisplayName("Location FPoint")
+        void isFPointPartOf() {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
             assertTrue(fLine.isPartOf(fPoint), "The distance should be negligible");
+        }
+
+        @Test
+        @DisplayName("Location FPos3D")
+        void isFPos3DPartOf() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(1, 1 + (0.5 * epsilon), 1);
+
+            assertTrue(fLine.isPartOf(fPos3D),
+                    "The distance should be negligible");
         }
 
         @Test
@@ -787,16 +828,6 @@ public class FLineTest {
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
             assertTrue(fLine.isPartOf((Geometry) fPoint), "The distance should be negligible");
-        }
-
-        @Test
-        @DisplayName("Location unit (fail)")
-        void isUnitPartOfFail() {
-            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
-
-            assertFalse(fLine.isPartOf(fPoint),
-                    "The distance should not be negligible");
         }
 
         @Test
@@ -810,12 +841,51 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Location unit epsilon")
-        void isUnitPartOfEpsilon() {
+        @DisplayName("Location FPoint (fail)")
+        void isFPointPartOfFail() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
+
+            assertFalse(fLine.isPartOf(fPoint),
+                    "The distance should not be negligible");
+        }
+
+        @Test
+        @DisplayName("Location FPos3D (fail)")
+        void isFPos3DPartOfFail() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPos3D fPos3D = factory.getFPos3D(1, 1 + (1.5 * epsilon), 1);
+
+            assertFalse(fLine.isPartOf(fPos3D),
+                    "The distance should not be negligible");
+        }
+
+        @Test
+        @DisplayName("Location primitives epsilon")
+        void isPrimitivePartOfEpsilon() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(1, 0, 0));
+
+            assertTrue(fLine.isPartOf(1, 3, 1, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location FPoint epsilon")
+        void isFPointPartOfEpsilon() {
             FLine fLine = factory.getRefFLine(factory.getFVector(1, 0, 0));
             FPoint fPoint = factory.getFPoint(1, 1, 3);
 
             assertTrue(fLine.isPartOf(fPoint, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location FPos3D epsilon")
+        void isFPos3DPartOfEpsilon() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(1, 0, 0));
+            FPos3D fPos3D = factory.getFPos3D(1, 3, 1);
+
+            assertTrue(fLine.isPartOf(fPos3D, 5),
                     "The distance should be correct");
         }
 
@@ -830,8 +900,8 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Location unit epsilon (fail)")
-        void isUnitEpsilonPartOfFail() {
+        @DisplayName("Location FPoint epsilon (fail)")
+        void isFPointEpsilonPartOfFail() {
             FLine fLine = factory.getRefFLine(factory.getFVector(1, 0, 0));
             FPoint fPoint = factory.getFPoint(1, 1, 5);
 

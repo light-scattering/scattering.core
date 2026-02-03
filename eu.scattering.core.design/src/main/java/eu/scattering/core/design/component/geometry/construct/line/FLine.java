@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.Optional;
 
@@ -15,6 +16,18 @@ public interface FLine extends Construct<FLine> {
 
     //--------------------------------------------------
 
+    double getDistance(double x, double y, double z);
+    double getDistance(FPoint arg);
+    double getDistance(FPos3D arg);
+
+    FPos3D setDistance(double x, double y, double z, double distance);
+    FPos3D setDistance(FPos3D arg, double distance);
+
+    boolean setDistance(FPoint in, double distance);
+    boolean setDistance(Geometry in, double distance);
+
+    //--------------------------------------------------
+
     boolean isSameLine(FLine arg);
 
     Optional<FPoint> getFPointAtX(double x);
@@ -23,8 +36,12 @@ public interface FLine extends Construct<FLine> {
 
     Optional<FPoint> getFPointAtIntersection(FLine arg);
 
-    void setDistance(FPoint in, double distance);
-    void setDistance(Geometry in, double distance);
+    //-------------------------------------------------- RELOCATE
 
-    double getDistance(FPoint arg);
+    boolean isPartOf(double x, double y, double z);
+    boolean isPartOf(FPos3D arg);
+    boolean isPartOf(double x, double y, double z, double epsilon);
+    boolean isPartOf(FPos3D arg, double epsilon);
+    FPos3D project(FPos3D arg);
+    FPos3D reflect(FPos3D arg);
 }

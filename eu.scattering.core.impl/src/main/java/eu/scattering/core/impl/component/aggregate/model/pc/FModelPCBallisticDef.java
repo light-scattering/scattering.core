@@ -7,7 +7,6 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
@@ -36,7 +35,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
     private final FAggregate aggregate;
 
     private final FPoint center;
-    private final FRay pathRnd, pathDir;
+    private final FVector pathRnd, pathDir;
 
     private final FAssembly<Shape> attached;
     private final List<Shape> detached;
@@ -65,8 +64,8 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
         this.aggregate = aggregate;
 
         this.center = factory.getFPoint();
-        this.pathRnd = factory.getFRay();
-        this.pathDir = factory.getFRay();
+        this.pathRnd = factory.getFVector();
+        this.pathDir = factory.getFVector();
 
         this.attached = this.aggregate.getRefParticles();
         this.detached = new ArrayList<>(this.aggregate.size());
@@ -170,12 +169,10 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
     }
 
     private void project3D(Shape particle) {
-        FVector vectorRnd = this.pathRnd.getRefOrigin();
-        FPoint baseRnd = vectorRnd.getRefBase();
-        FPoint headRnd = vectorRnd.getRefHead();
-        FVector vectorDir = this.pathDir.getRefOrigin();
-        FPoint baseDir = vectorDir.getRefBase();
-        FPoint headDir = vectorDir.getRefHead();
+        FPoint baseRnd = this.pathRnd.getRefBase();
+        FPoint headRnd = this.pathRnd.getRefHead();
+        FPoint baseDir = this.pathDir.getRefBase();
+        FPoint headDir = this.pathDir.getRefHead();
 
         while (true) {
             FPos3D pos3D = this.random.getFRand().nextDoubleOnSphere(4 * this.distance);
@@ -183,7 +180,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
             baseRnd.set(0, 0, 0);
             headRnd.set(pos3D);
 
-            vectorRnd.moveBase(this.center);
+            this.pathRnd.moveBase(this.center);
 
             this.random.ortToBaseInCircle(headDir, this.pathRnd, this.distance);
 
@@ -198,9 +195,8 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
     }
 
     private void project2D(Shape particle) {
-        FVector vectorDir = this.pathDir.getRefOrigin();
-        FPoint baseDir = vectorDir.getRefBase();
-        FPoint headDir = vectorDir.getRefHead();
+        FPoint baseDir = this.pathDir.getRefBase();
+        FPoint headDir = this.pathDir.getRefHead();
 
         while (true) {
             FPos2D pos2D = this.random.getFRand().nextDoubleOnCircle(4 * this.distance);
@@ -211,7 +207,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
 
             this.rotation.setRgAngle(headDir, baseDir, Math.PI * 0.5);
 
-            vectorDir.translate(this.center);
+            this.pathDir.translate(this.center);
 
             double distance = particle.projectFrom(this.attached, this.pathDir);
 

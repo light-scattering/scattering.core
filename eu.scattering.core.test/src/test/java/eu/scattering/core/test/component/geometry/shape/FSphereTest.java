@@ -1,20 +1,19 @@
 package eu.scattering.core.test.component.geometry.shape;
 
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.transfer.complex.FBufferData;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.extension.Producer;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.Location;
 import eu.scattering.core.test.TestHelper;
 import org.json.JSONObject;
@@ -4829,9 +4828,9 @@ public class FSphereTest {
 
                 fSphereRef.setCenter(factory.getFRand().nextDoubleOnSphere(100));
 
-                FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 9, 0, 0));
+                FVector path = factory.getFVector(10, 0, 0, 9, 0, 0);
 
-                double shift = fSphereRef.projectFrom(fSphereArg, ray);
+                double shift = fSphereRef.projectFrom(fSphereArg, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.touches(fSphereArg),
@@ -4852,9 +4851,9 @@ public class FSphereTest {
                 FPoint fRayBase = factory.getFPoint(factory.getFRand().nextDoubleOnSphere(10));
                 FPoint fRayHead = factory.getFPoint(factory.getFRand().nextDoubleInSphere(1.9));
 
-                FRay ray = factory.getRefFRay(factory.getRefFVector(fRayBase, fRayHead));
+                FVector path = factory.getRefFVector(fRayBase, fRayHead);
 
-                double shift = fSphereRef.projectFrom(fSphereArg, ray);
+                double shift = fSphereRef.projectFrom(fSphereArg, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.touches(fSphereArg),
@@ -4872,9 +4871,9 @@ public class FSphereTest {
 
                 fSphereRef.setCenter(factory.getFRand().nextDoubleInSphere(100));
 
-                FRay ray = factory.getRefFRay(factory.getFVector(9, 0, 0, 10, 0, 0));
+                FVector path = factory.getFVector(9, 0, 0, 10, 0, 0);
 
-                double shift = fSphereRef.projectFrom(fSphereArg, ray);
+                double shift = fSphereRef.projectFrom(fSphereArg, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(shift < 0,
@@ -4890,9 +4889,9 @@ public class FSphereTest {
 
                 fSphereRef.setCenter(factory.getFRand().nextDoubleInSphere(100));
 
-                FRay ray = factory.getRefFRay(factory.getFVector(5, 0, 5, 0, 5, 0));
+                FVector path = factory.getFVector(5, 0, 5, 0, 5, 0);
 
-                double shift = fSphereRef.projectFrom(fSphereArg, ray);
+                double shift = fSphereRef.projectFrom(fSphereArg, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(shift < 0,
@@ -4910,14 +4909,14 @@ public class FSphereTest {
 
                 FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-                FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 0, 0, 0));
+                FVector path = factory.getFVector(10, 0, 0, 0, 0, 0);
 
                 FPos3D offset = factory.getFRand().nextDoubleInSphere(100);
 
                 fAssembly.translate(offset);
-                ray.getRefOrigin().translate(offset);
+                path.translate(offset);
 
-                double shift = fSphereRef.projectFrom(fAssembly, ray);
+                double shift = fSphereRef.projectFrom(fAssembly, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.touches(fSphereA) || fSphereRef.touches(fSphereB),
@@ -4941,14 +4940,14 @@ public class FSphereTest {
 
                 FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-                FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 0, 0, 0));
+                FVector path = factory.getFVector(10, 0, 0, 0, 0, 0);
 
                 FPos3D offset = factory.getFRand().nextDoubleInSphere(100);
 
                 fAssembly.translate(offset);
-                ray.getRefOrigin().translate(offset);
+                path.translate(offset);
 
-                double shift = fSphereRef.projectFrom(fAssembly, ray);
+                double shift = fSphereRef.projectFrom(fAssembly, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.touches(fSphereA) || fSphereRef.touches(fSphereB),
@@ -4981,9 +4980,9 @@ public class FSphereTest {
                 FPoint fRayBase = factory.getFPoint(factory.getFRand().nextDoubleOnSphere(10));
                 FPoint fRayHead = factory.getFPoint(factory.getFRand().nextDoubleInSphere(2));
 
-                FRay ray = factory.getRefFRay(factory.getRefFVector(fRayBase, fRayHead));
+                FVector path = factory.getRefFVector(fRayBase, fRayHead);
 
-                double distance = fSphereRef.projectFrom(fAssembly, ray);
+                double distance = fSphereRef.projectFrom(fAssembly, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.touches(fAssembly) > 0,
@@ -5001,9 +5000,9 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere(1, 2, 3, 1);
                 FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-                FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 9, 0, 0));
+                FVector path = factory.getFVector(10, 0, 0, 9, 0, 0);
 
-                double shift = fSphereRef.projectFromDryRun(fSphereArg, ray);
+                double shift = fSphereRef.projectFromDryRun(fSphereArg, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.isExact(factory.getFSphere(1, 2, 3, 1)),
@@ -5023,9 +5022,9 @@ public class FSphereTest {
 
                 FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-                FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 0, 0, 0));
+                FVector path = factory.getFVector(10, 0, 0, 0, 0, 0);
 
-                double shift = fSphereRef.projectFromDryRun(fAssembly, ray);
+                double shift = fSphereRef.projectFromDryRun(fAssembly, path);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.isExact(factory.getFSphere(1, 2, 3, 1)),
@@ -5041,10 +5040,10 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere(1, 2, 3, 1);
                 FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-                FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 9, 0, 0));
+                FVector path = factory.getFVector(10, 0, 0, 9, 0, 0);
 
-                double shiftTrue = fSphereRef.projectFromDryRun(fSphereArg, ray, 9);
-                double shiftFalse = fSphereRef.projectFromDryRun(fSphereArg, ray, 7);
+                double shiftTrue = fSphereRef.projectFromDryRun(fSphereArg, path, 9);
+                double shiftFalse = fSphereRef.projectFromDryRun(fSphereArg, path, 7);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.isExact(factory.getFSphere(1, 2, 3, 1)),
@@ -5066,10 +5065,10 @@ public class FSphereTest {
 
                 FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-                FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 0, 0, 0));
+                FVector path = factory.getFVector(10, 0, 0, 0, 0, 0);
 
-                double shiftTrue = fSphereRef.projectFromDryRun(fAssembly, ray, 9);
-                double shiftFalse = fSphereRef.projectFromDryRun(fAssembly, ray, 8);
+                double shiftTrue = fSphereRef.projectFromDryRun(fAssembly, path, 9);
+                double shiftFalse = fSphereRef.projectFromDryRun(fAssembly, path, 8);
 
                 Assertions.assertAll("Validate position",
                         () -> assertTrue(fSphereRef.isExact(factory.getFSphere(1, 2, 3, 1)),
@@ -5101,7 +5100,7 @@ public class FSphereTest {
 
                 List<Shape> collisions = new ArrayList<>();
 
-                fSphereRef.getCollisionsLinear(collisions, fAssembly, path);
+                fSphereRef.getProjectCollisions(collisions, fAssembly, path);
 
                 assertTrue(collisions.size() > 0,
                         "At least on element should be present");
@@ -5142,23 +5141,23 @@ public class FSphereTest {
                 FPoint fRayBase = factory.getFPoint(factory.getFRand().nextDoubleOnSphere(100));
                 FPoint fRayHead = factory.getFPoint();
 
-                FRay ray = factory.getRefFRay(factory.getRefFVector(fRayBase, fRayHead));
+                FVector path = factory.getRefFVector(fRayBase, fRayHead);
 
                 List<Shape> collisions = new ArrayList<>();
 
-                fSphereRef.getCollisionsFromLinear(collisions, fAssembly, ray);
+                fSphereRef.getProjectFromCollisions(collisions, fAssembly, path);
 
                 assertTrue(collisions.size() > 0,
                         "At least on element should be present");
 
                 for (Shape shape : fAssembly) {
                     if (collisions.contains(shape)) {
-                        assertTrue(fSphereRef.projectFrom(shape, ray) >= 0,
+                        assertTrue(fSphereRef.projectFrom(shape, path) >= 0,
                                 "The FSphere should be projectable");
                         assertTrue(fSphereRef.touches(shape),
                                 "The FSpheres should be in point contact");
                     } else {
-                        assertFalse(fSphereRef.projectFrom(shape, ray) >= 0,
+                        assertFalse(fSphereRef.projectFrom(shape, path) >= 0,
                                 "The FSphere should not be projectable");
                         assertFalse(fSphereRef.touches(shape),
                                 "The FSpheres should not be in point contact");
@@ -5184,7 +5183,7 @@ public class FSphereTest {
 
                 List<Shape> collisions = new ArrayList<>();
 
-                fSphereRef.getCollisionsSpherical(collisions, fAssembly, 1, 2, 3);
+                fSphereRef.getAttachSphericalCollisions(collisions, fAssembly, 1, 2, 3);
 
                 assertTrue(collisions.size() > 0,
                         "At least on element should be present");
@@ -5224,7 +5223,7 @@ public class FSphereTest {
 
                 List<Shape> collisions = new ArrayList<>();
 
-                fSphereRef.getCollisionsSpherical(collisions, fAssembly, center);
+                fSphereRef.getAttachSphericalCollisions(collisions, fAssembly, center);
 
                 assertTrue(collisions.size() > 0,
                         "At least on element should be present");
@@ -5264,7 +5263,7 @@ public class FSphereTest {
 
                 List<Shape> collisions = new ArrayList<>();
 
-                fSphereRef.getCollisionsSpherical(collisions, fAssembly, center);
+                fSphereRef.getAttachSphericalCollisions(collisions, fAssembly, center);
 
                 assertTrue(collisions.size() > 0,
                         "At least on element should be present");
@@ -5306,7 +5305,7 @@ public class FSphereTest {
 
                 FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
 
-                fSphere.getCollisionsCircular(collisions, field, fLine);
+                fSphere.getAttachCircularCollisions(collisions, field, fLine);
 
                 assertEquals(8, collisions.size());
             }
@@ -5333,7 +5332,7 @@ public class FSphereTest {
 
                 FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
 
-                fSphere.getCollisionsCircular(collisions, field, fLine);
+                fSphere.getAttachCircularCollisions(collisions, field, fLine);
 
                 assertEquals(8, collisions.size());
             }
@@ -5350,7 +5349,7 @@ public class FSphereTest {
 
                 FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
 
-                fSphere.getCollisionsCircular(collisions, field, fLine);
+                fSphere.getAttachCircularCollisions(collisions, field, fLine);
 
                 assertEquals(1, collisions.size());
             }
@@ -5367,7 +5366,7 @@ public class FSphereTest {
 
                 FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
 
-                fSphere.getCollisionsCircular(collisions, field, fLine);
+                fSphere.getAttachCircularCollisions(collisions, field, fLine);
 
                 assertEquals(1, collisions.size());
             }
@@ -5392,7 +5391,7 @@ public class FSphereTest {
 
                 FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
 
-                fSphere.getCollisionsCircular(collisions, field, fLine);
+                fSphere.getAttachCircularCollisions(collisions, field, fLine);
 
                 assertEquals(0, collisions.size());
             }
@@ -5411,7 +5410,7 @@ public class FSphereTest {
 
                 fDraft.asFRay().shiftForward(fSphere, 1);
 
-                fSphere.getCollisionsCircular(collisions, field, fDraft.asFLine());
+                fSphere.getAttachCircularCollisions(collisions, field, fDraft.asFLine());
 
                 assertEquals(1, collisions.size());
             }
@@ -5438,7 +5437,7 @@ public class FSphereTest {
 
                 FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
 
-                fSphere.getCollisionsCircular(collisions, field, fLine);
+                fSphere.getAttachCircularCollisions(collisions, field, fLine);
 
                 assertEquals(0, collisions.size());
             }
@@ -5465,7 +5464,7 @@ public class FSphereTest {
 
                 FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
 
-                fSphere.getCollisionsCircular(collisions, field, fLine);
+                fSphere.getAttachCircularCollisions(collisions, field, fLine);
 
                 assertEquals(0, collisions.size());
             }
@@ -5484,7 +5483,7 @@ public class FSphereTest {
 
                 fDraft.asFRay().shiftForward(fSphere, 2);
 
-                fSphere.getCollisionsCircular(collisions, field, fDraft.asFLine());
+                fSphere.getAttachCircularCollisions(collisions, field, fDraft.asFLine());
 
                 assertEquals(0, collisions.size());
             }

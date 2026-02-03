@@ -6,7 +6,6 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.storage.buffer.FBuffer;
@@ -42,7 +41,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private final FPoint cAggA, cAggB;
 
-    private final FRay path;
+    private final FVector path;
 
     private final FPoint tmpFPoint;
     private final FVector tmpFVector;
@@ -84,7 +83,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         this.cAggA = factory.getFPoint();
         this.cAggB = factory.getFPoint();
 
-        this.path = factory.getFRay();
+        this.path = factory.getFVector();
 
         this.tmpFPoint = factory.getFPoint();
         this.tmpFVector = factory.getFVector();
@@ -176,9 +175,9 @@ public class FModelCCDLCADef implements FModelCCDLCA {
                 positionVariantDimension(aggA, aggB);
 
                 while (true) {
-                    this.path.getRefOrigin().set(0, 0, 0, 0, 0, 0);
+                    this.path.set(0, 0, 0, 0, 0, 0);
 
-                    this.movement.accept(aggB, this.random, this.path.getRefOrigin().getRefHead());
+                    this.movement.accept(aggB, this.random, this.path.getRefHead());
 
                     buildStepValidationVersionDimension();
 
@@ -235,9 +234,9 @@ public class FModelCCDLCADef implements FModelCCDLCA {
             positionVariantDimension(aggA, aggB);
 
             while (true) {
-                this.path.getRefOrigin().set(0, 0, 0, 0, 0, 0);
+                this.path.set(0, 0, 0, 0, 0, 0);
 
-                this.movement.accept(aggB, this.random, this.path.getRefOrigin().getRefHead());
+                this.movement.accept(aggB, this.random, this.path.getRefHead());
 
                 buildStepValidationVersionDimension();
 
@@ -276,7 +275,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     private void buildStepValidationVersionDimension() {
 
         if (dimension.equals(Dimension.D2)) {
-            if (this.path.getRefOrigin().getRefHead().getZ() < 0 || this.path.getRefOrigin().getRefHead().getZ() > 0) {
+            if (this.path.getRefHead().getZ() < 0 || this.path.getRefHead().getZ() > 0) {
                 throw new IllegalStateException("The position of at least one particle is not 2D");
             }
         }
@@ -417,7 +416,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     }
 
     private boolean move(FAggregate aggA, FAggregate aggB) {
-        double maxShift = this.path.getRefOrigin().getMagnitude();
+        double maxShift = this.path.getMagnitude();
 
         if (this.cAggA.getDistance(this.cAggB) > this.rAggA + this.rAggB + maxShift) {
             shiftGeometry(aggB, maxShift);
@@ -425,7 +424,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
             return false;
         }
 
-        if (!aggB.overlapsWithShift(aggA, this.path.getRefOrigin())) {
+        if (!aggB.overlapsWithShift(aggA, this.path)) {
             shiftGeometry(aggB, maxShift);
 
             return false;
@@ -440,12 +439,12 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(this.cAggA)));
 
         for (Shape candidate : candidates) {
-            this.path.getRefOrigin().moveBase(candidate.getRefCenter());
+            this.path.moveBase(candidate.getRefCenter());
 
             double shift = candidate.projectFromDryRun(aggA, this.path);
 
             if (shift >= 0 && shift <= maxShift) {
-                this.tmpFVector.set(this.path.getRefOrigin());
+                this.tmpFVector.set(this.path);
                 this.tmpFVector.setMagnitude(shift);
 
                 boolean overlaps = aggB.overlapsWithShift(aggA, this.tmpFVector);
@@ -467,10 +466,10 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     private void shiftGeometry(FAggregate aggB, double shift) {
 
         for (Shape particle : aggB) {
-            this.path.shiftForward(particle, shift);
+            this.factory.getFRayHelper().shiftForward(this.path, particle, shift);
         }
 
-        this.path.shiftForward(this.cAggB, shift);
+        this.factory.getFRayHelper().shiftForward(path, this.cAggB, shift);
     }
 
     //--------------------------------------------------

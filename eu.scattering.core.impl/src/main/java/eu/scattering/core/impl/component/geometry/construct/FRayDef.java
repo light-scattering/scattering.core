@@ -248,6 +248,12 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
+    public FPos3D project(FPos3D arg) {
+
+        return this.helper.project(getRefOrigin(), arg);
+    }
+
+    @Override
     public boolean project(Geometry in) {
 
         return this.helper.project(getRefOrigin(), in);
@@ -263,6 +269,12 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     public boolean reflect(FPoint in) {
 
         return this.helper.reflect(getRefOrigin(), in);
+    }
+
+    @Override
+    public FPos3D reflect(FPos3D arg) {
+
+        return this.helper.reflect(getRefOrigin(), arg);
     }
 
     @Override
@@ -311,18 +323,6 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     public boolean setDistance(Geometry in, double distance) {
 
         return this.helper.setDistance(getRefOrigin(), in, distance);
-    }
-
-    @Override
-    public FPos3D project(FPos3D arg) {
-
-        return this.helper.project(getRefOrigin(), arg);
-    }
-
-    @Override
-    public FPos3D reflect(FPos3D arg) {
-
-        return this.helper.reflect(getRefOrigin(), arg);
     }
 
     @Override

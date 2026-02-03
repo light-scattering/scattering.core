@@ -522,7 +522,7 @@ public class FRandAspectDef implements FRandAspect {
         }
 
         List<Shape> candidates = new ArrayList<>();
-        in.getCollisionsSpherical(candidates, field, target.getCenter());
+        in.getAttachSphericalCollisions(candidates, field, target.getCenter());
 
         if (candidates.size() == 0) {
             return false;
@@ -549,13 +549,10 @@ public class FRandAspectDef implements FRandAspect {
 
     @Override
     public double project(Shape in, FPos3D center, double radius, Iterable<? extends Shape> field, int corrections) {
-        FRay pathRnd = this.factory.getFRay();
-        FRay pathDir = this.factory.getFRay();
-
-        FVector vectorRnd = pathRnd.getRefOrigin();
+        FVector vectorRnd = this.factory.getFVector();
         FPoint baseRnd = vectorRnd.getRefBase();
         FPoint headRnd = vectorRnd.getRefHead();
-        FVector vectorDir = pathDir.getRefOrigin();
+        FVector vectorDir = this.factory.getFVector();
         FPoint baseDir = vectorDir.getRefBase();
         FPoint headDir = vectorDir.getRefHead();
 
@@ -567,11 +564,11 @@ public class FRandAspectDef implements FRandAspect {
 
             vectorRnd.moveBase(center);
 
-            this.factory.getRandAspect().ortToBaseInCircle(headDir, pathRnd, radius);
+            this.factory.getRandAspect().ortToBaseInCircle(headDir, vectorRnd, radius);
 
             baseDir.set(headRnd);
 
-            double distance = in.projectFrom(field, pathDir);
+            double distance = in.projectFrom(field, vectorDir);
 
             if (distance >= 0) {
                 return distance;
@@ -587,9 +584,8 @@ public class FRandAspectDef implements FRandAspect {
         if (center.getD2() > EPSILON || center.getD2() < -EPSILON) {
             throw new IllegalArgumentException("The center should be two dimensional");
         }
-        FRay pathDir = this.factory.getFRay();
 
-        FVector vectorDir = pathDir.getRefOrigin();
+        FVector vectorDir = this.factory.getFVector();
         FPoint baseDir = vectorDir.getRefBase();
         FPoint headDir = vectorDir.getRefHead();
 
@@ -604,7 +600,7 @@ public class FRandAspectDef implements FRandAspect {
 
             vectorDir.translate(center);
 
-            double distance = in.projectFrom(field, pathDir);
+            double distance = in.projectFrom(field, vectorDir);
 
             if (distance >= 0) {
                 return distance;

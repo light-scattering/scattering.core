@@ -22,6 +22,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraftProducer;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
+import eu.scattering.core.design.component.geometry.construct.line.FLineHelper;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
@@ -117,6 +118,7 @@ public final class FactoryDef implements ScatFactory {
 
     private final FPointHelper fPointHelper;
     private final FRayHelper fRayHelper;
+    private final FLineHelper fLineHelper;
     private final FSphereHelper fSphereHelper;
 
     private FactoryDef() {
@@ -145,6 +147,7 @@ public final class FactoryDef implements ScatFactory {
 
         this.fPointHelper = FPointHelperDef.get();
         this.fRayHelper = FRayHelperDef.get(this);
+        this.fLineHelper = FLineHelperDef.get(this);
         this.fSphereHelper = FSphereHelperDef.get(this.fPointHelper);
     }
 
@@ -307,6 +310,12 @@ public final class FactoryDef implements ScatFactory {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public FLineHelper getFLineHelper() {
+
+        return this.fLineHelper;
+    }
 
     @Override
     public FLineProducer getFLineProducer() {

@@ -6,7 +6,7 @@ import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.lambda.TriConsumer;
@@ -40,7 +40,7 @@ public class FModelPCDLADef implements FModelPCDLA {
 
     private final FPoint center;
 
-    private final FRay path;
+    private final FVector path;
 
     private double rAggregate, rSpawn, rExile;
     private double fSpawn, fExile, fStep;
@@ -75,7 +75,7 @@ public class FModelPCDLADef implements FModelPCDLA {
 
         this.center = factory.getFPoint();
 
-        this.path = factory.getFRay();
+        this.path = factory.getFVector();
 
         this.fExile = 4;
         this.fSpawn = 4;
@@ -197,15 +197,15 @@ public class FModelPCDLADef implements FModelPCDLA {
             positionVariantDimension(particle);
 
             while (true) {
-                this.path.getRefOrigin().set(0, 0, 0, 0, 0, 0);
+                this.path.set(0, 0, 0, 0, 0, 0);
 
-                this.movement.accept(particle, this.rndEng, this.path.getRefOrigin().getRefHead());
+                this.movement.accept(particle, this.rndEng, this.path.getRefHead());
 
                 buildStepValidationVersionDimension();
 
-                this.path.getRefOrigin().moveBase(particle.getRefCenter());
+                this.path.moveBase(particle.getRefCenter());
 
-                particle.getRefCenter().set(this.path.getRefOrigin().getRefHead());
+                particle.getRefCenter().set(this.path.getRefHead());
 
                 if (particle.getRefCenter().getDistance(this.center) > this.rExile) {
                     continue main;
@@ -219,7 +219,7 @@ public class FModelPCDLADef implements FModelPCDLA {
                     continue;
                 }
 
-                double distance = particle.projectFrom(this.attached, this.path, this.path.getRefOrigin().getMagnitude());
+                double distance = particle.projectFrom(this.attached, this.path, this.path.getMagnitude());
 
                 if (distance < 0) {
                     continue;
@@ -244,7 +244,7 @@ public class FModelPCDLADef implements FModelPCDLA {
     private void buildStepValidationVersionDimension() {
 
         if (dimension.equals(Dimension.D2)) {
-            if (this.path.getRefOrigin().getRefHead().getZ() < 0 || this.path.getRefOrigin().getRefHead().getZ() > 0) {
+            if (this.path.getRefHead().getZ() < 0 || this.path.getRefHead().getZ() > 0) {
                 throw new IllegalStateException("The position of at least one particle is not 2D");
             }
         }

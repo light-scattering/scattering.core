@@ -4,7 +4,6 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
@@ -110,32 +109,32 @@ public class FAggregateModuleSupportDef {
     // -------------------------------------------------------------------------------------------------
 
     protected double project(FAggregate target, FVector dir) {
-        FRay translator = this.factory.getFRay();
-        translator.getRefOrigin().set(dir);
+        FVector translator = dir.copy();
         List<Shape> candidates = new ArrayList<>(this.aggregate.getRefParticles().asList());
 
-        FPoint centerArg = target.getCenter(factory.getFPoint(), Center.SPATIAL);
+        FPoint centerArg = target.getCenter(this.factory.getFPoint(), Center.SPATIAL);
 
         candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
 
         for (Shape candidate : candidates) {
-            translator.getRefOrigin().moveBase(candidate.getRefCenter());
+            translator.moveBase(candidate.getRefCenter());
 
             double shift = candidate.projectFromDryRun(target, translator);
 
             if (shift >= 0) {
-                boolean overlaps = this.aggregate.overlapsWithShift(target, translator.toFVector(shift));
+                translator.setMagnitude(shift);
+
+                boolean overlaps = this.aggregate.overlapsWithShift(target, translator);
 
                 if (!overlaps) {
                     for (Shape particle : this.aggregate) {
-                        translator.getRefOrigin().set(dir);
-                        translator.shiftForward(particle, shift);
+                        translator.set(dir);
+                        this.factory.getFRayHelper().shiftForward(translator, particle, shift);
                     }
 
                     return shift;
                 }
             }
-
         }
 
         return -1;
@@ -149,30 +148,30 @@ public class FAggregateModuleSupportDef {
             return -1;
         }
 
-        FRay translator = this.factory.getFRay();
-        translator.getRefOrigin().set(dir);
+        FVector translator = dir.copy();
         List<Shape> candidates = new ArrayList<>(this.aggregate.getRefParticles().asList());
 
         candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
 
         for (Shape candidate : candidates) {
-            translator.getRefOrigin().moveBase(candidate.getRefCenter());
+            translator.moveBase(candidate.getRefCenter());
 
             double shift = candidate.projectFromDryRun(target, translator);
 
             if (shift >= 0 && shift <= distLimit) {
-                boolean overlaps = this.aggregate.overlapsWithShift(target, translator.toFVector(shift));
+                translator.setMagnitude(shift);
+
+                boolean overlaps = this.aggregate.overlapsWithShift(target, translator);
 
                 if (!overlaps) {
                     for (Shape particle : this.aggregate) {
-                        translator.getRefOrigin().set(dir);
-                        translator.shiftForward(particle, shift);
+                        translator.set(dir);
+                        this.factory.getFRayHelper().shiftForward(translator, particle, shift);
                     }
 
                     return shift;
                 }
             }
-
         }
 
         return -1;

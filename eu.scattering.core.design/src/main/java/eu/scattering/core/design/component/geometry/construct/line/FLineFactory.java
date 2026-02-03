@@ -9,6 +9,8 @@ public interface FLineFactory {
 
     FLineProducer getFLineProducer();
 
+    FLineHelper getFLineHelper();
+
     //--------------------------------------------------
 
     FLine getFLine();
