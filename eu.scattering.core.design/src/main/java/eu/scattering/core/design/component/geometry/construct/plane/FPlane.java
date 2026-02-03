@@ -19,6 +19,18 @@ public interface FPlane extends Construct<FPlane> {
 
     //--------------------------------------------------
 
+    double getDistance(double x, double y, double z);
+    double getDistance(FPoint arg);
+    double getDistance(FPos3D arg);
+
+    FPos3D setDistance(double x, double y, double z, double distance);
+    FPos3D setDistance(FPos3D arg, double distance);
+
+    boolean setDistance(FPoint in, double distance);
+    boolean setDistance(Geometry in, double distance);
+
+    //--------------------------------------------------
+
     boolean isSamePlane(FPlane arg);
 
     boolean isCut(Geometry arg);
@@ -28,10 +40,14 @@ public interface FPlane extends Construct<FPlane> {
 
     Optional<FPoint> getFPointAtIntersection(FLine arg);
     Optional<FLine> getFLineAtIntersection(FPlane arg);
+    //-------------------------------------------------- RELOCATE
 
-    void setDistance(FPoint in, double distance);
-    void setDistance(Geometry in, double distance);
+    boolean isPartOf(double x, double y, double z);
+    boolean isPartOf(FPos3D arg);
+    boolean isPartOf(double x, double y, double z, double epsilon);
+    boolean isPartOf(FPos3D arg, double epsilon);
+    FPos3D project(FPos3D arg);
+    FPos3D reflect(FPos3D arg);
 
-    double getDistance(FPoint arg);
 }
 

@@ -9,6 +9,8 @@ public interface FPlaneFactory {
 
     FPlaneProducer getFPlaneProducer();
 
+    FPlaneHelper getFPlaneHelper();
+
     //--------------------------------------------------
 
     FPlane getFPlane();
