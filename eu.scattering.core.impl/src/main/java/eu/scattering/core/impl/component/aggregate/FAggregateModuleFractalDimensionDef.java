@@ -11,6 +11,8 @@ import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.FractalDimension;
 import eu.scattering.core.design.type.Length;
+import eu.scattering.core.design.type.MassCenter;
+import eu.scattering.core.design.type.RadiusOfGyration;
 
 import java.util.*;
 
@@ -131,15 +133,15 @@ public class FAggregateModuleFractalDimensionDef {
     private FStat getCorePairDistance(double rangeFactor) {
         FStat results = this.factory.getFStat();
 
-        FPos3D center = this.aggregate.getSphericalCenter(100);
+        FPos3D center = this.aggregate.getMassCenter(MassCenter.SIMPLE_POLY);
 
-        double radius = this.aggregate.getRadiusFrom(center);
-        double range = radius * rangeFactor;
+        double cutoff = this.aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
+        double range = cutoff * rangeFactor;
 
         List<Shape> internal = new ArrayList<>();
         List<Shape> external = new ArrayList<>();
 
-        splitByRange(internal, external, center, range);
+        splitByRange(internal, external, center, range, cutoff);
 
         addInternalPairDistance(results, internal, range);
         addExternalPairDistance(results, internal, external, range);
@@ -147,7 +149,7 @@ public class FAggregateModuleFractalDimensionDef {
         return results;
     }
 
-    private void splitByRange(Collection<Shape> internal, Collection<Shape> external, FPos3D center, double range) {
+    private void splitByRange(Collection<Shape> internal, Collection<Shape> external, FPos3D center, double range, double cutoff) {
         List<Shape> particles = this.aggregate.getRefParticles().asList();
 
         if (range <= 0) {
@@ -156,12 +158,15 @@ public class FAggregateModuleFractalDimensionDef {
         }
 
         double rangeP2 = range * range;
+        double cutoffP2 = cutoff * cutoff;
 
         for (Shape particle : particles) {
-            if (particle.getDistCenterP2(center) > rangeP2) {
-                external.add(particle);
-            } else {
+            double distance = particle.getDistCenterP2(center);
+
+            if (distance < rangeP2) {
                 internal.add(particle);
+            } else if (distance < cutoffP2) {
+                external.add(particle);
             }
         }
     }
@@ -187,7 +192,7 @@ public class FAggregateModuleFractalDimensionDef {
                 double distance = inner.getDistCenter(outer);
 
                 if (distance <= range) {
-                    distances.add(inner.getDistCenter(outer));
+                    distances.add(distance);
                 }
             }
         }
@@ -199,7 +204,7 @@ public class FAggregateModuleFractalDimensionDef {
         double step = min;
         while (step <= max) {
             results.add(step, 0);
-            step = log ? step * 1.01 : step + delta;
+            step = log ? step * 1.1 : step + delta;
         }
 
         for (double distance : distances) {

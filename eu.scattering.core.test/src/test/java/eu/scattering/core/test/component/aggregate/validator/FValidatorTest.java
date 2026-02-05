@@ -61,25 +61,25 @@ public class FValidatorTest {
         @Test
         @DisplayName("Correlation dimension PC - Ballistic")
         void dimensionCorrelationPC() {
-            int quantity = 100;
+            int quantity = 250;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.CORRELATION, 2.2, 0.2);
+            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.CORRELATION, 2.5, 0.2);
 
             fModel.addCompletionValidator(fValidator);
             fModel.build();
 
             FStat results = fValidator.getRefFStat();
 
-            assertEquals(2.2, results.get(results.size() - 1), 0.2);
+            assertEquals(2.5, results.get(results.size() - 1), 0.2);
         }
 
         @Test
         @DisplayName("Correlation dimension CC - Ballistic")
         void dimensionCorrelationCC() {
-            int quantity = 100;
+            int quantity = 250;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
@@ -103,48 +103,30 @@ public class FValidatorTest {
         @Test
         @DisplayName("Box counting dimension PC - Ballistic")
         void dimensionBoxPC() {
-            int quantity = 100;
+            int quantity = 250;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BOX, 2.0, 0.2);
+            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BOX, 2.5, 0.2);
 
             fModel.addCompletionValidator(fValidator);
             fModel.build();
 
             FStat results = fValidator.getRefFStat();
 
-            assertEquals(2.0, results.get(results.size() - 1), 0.2);
+            assertEquals(2.5, results.get(results.size() - 1), 0.2);
         }
 
         @Test
         @DisplayName("Box counting dimension CC - Ballistic")
         void dimensionBoxCC() {
-            int quantity = 100;
+            int quantity = 250;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BOX, 2.0, 0.2);
-
-            fModel.addCompletionValidator(fValidator);
-            fModel.build();
-
-            FStat results = fValidator.getRefFStat();
-
-            assertEquals(2.0, results.get(results.size() - 1), 0.2);
-        }
-
-        @Test
-        @DisplayName("Correlation dimension PC - Ballistic")
-        void dimensionCorrelationPC() {
-            int quantity = 100;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
-
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.CORRELATION, 2.2, 0.2);
+            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BOX, 2.2, 0.2);
 
             fModel.addCompletionValidator(fValidator);
             fModel.build();
@@ -155,9 +137,27 @@ public class FValidatorTest {
         }
 
         @Test
+        @DisplayName("Correlation dimension PC - Ballistic")
+        void dimensionCorrelationPC() {
+            int quantity = 250;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
+
+            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.CORRELATION, 2.5, 0.2);
+
+            fModel.addCompletionValidator(fValidator);
+            fModel.build();
+
+            FStat results = fValidator.getRefFStat();
+
+            assertEquals(2.5, results.get(results.size() - 1), 0.2);
+        }
+
+        @Test
         @DisplayName("Correlation dimension CC - Ballistic")
         void dimensionCorrelationCC() {
-            int quantity = 100;
+            int quantity = 250;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 

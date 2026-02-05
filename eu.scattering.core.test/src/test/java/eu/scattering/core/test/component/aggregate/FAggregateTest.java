@@ -3651,7 +3651,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get density dimension - Basic geometry")
         void getDensityDimensionBasicGeometry() {
-            FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(17);
+            FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(30);
             FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 15);
             FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(13, 13, 13);
 
@@ -3667,8 +3667,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get density dimension - Basic geometry (asymmetric)")
         void getDensityDimensionBasicGeometryAsymmetric() {
-            FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(13, 15);
-            FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(13, 15, 17);
+            FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 17);
+            FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(15, 17, 19);
 
             double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
             double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
@@ -3680,7 +3680,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get density dimension - Basic geometry (translated)")
         void getDensityDimensionBasicGeometryTranslated() {
-            FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(17);
+            FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(30);
             FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 15);
             FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(13, 13, 13);
 
@@ -3700,8 +3700,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get density dimension - Sphere")
         void getDensityDimensionSphereGeometry() {
-            FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullCircle(10);
-            FAggregate fAggregate3d = factory.getFAggregateContext().geometry().fullSphere(10);
+            FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullCircle(12);
+            FAggregate fAggregate3d = factory.getFAggregateContext().geometry().fullSphere(12);
 
             double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
             double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
