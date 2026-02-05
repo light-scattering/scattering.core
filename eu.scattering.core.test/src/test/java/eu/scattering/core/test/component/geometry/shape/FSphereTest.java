@@ -994,21 +994,21 @@ public class FSphereTest {
             void addInternalCoat() {
                 FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
 
-                Shape results = fSphere.addCoatInternal(3);
+                Shape results = fSphere.addInternalCoat(3);
 
                 assertEquals(10, fSphere.getRadius(),
                         EPSILON, "The radius is incorrect");
                 assertSame(fSphere, results,
                         "The reference should not change");
 
-                fSphere.addCoatInternal(2);
-                fSphere.addCoatInternal(1);
+                fSphere.addInternalCoat(2);
+                fSphere.addInternalCoat(1);
 
                 assertEquals(10, fSphere.getRadius(),
                         "The radius is incorrect");
-                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addInternalCoat(-1),
                         "The coat width cannot be negative");
-                assertThrows(IllegalStateException.class, () -> fSphere.addCoatInternal(10),
+                assertThrows(IllegalStateException.class, () -> fSphere.addInternalCoat(10),
                         "The coat width is too large");
             }
 
@@ -1017,13 +1017,13 @@ public class FSphereTest {
             void addInternalCoatVararg() {
                 FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
 
-                Shape results = fSphere.addCoatInternal(3, 2, 1);
+                Shape results = fSphere.addInternalCoat(3, 2, 1);
 
                 assertEquals(10, fSphere.getRadius(),
                         "The radius is incorrect");
-                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addInternalCoat(-1),
                         "The coat width cannot be negative");
-                assertThrows(IllegalStateException.class, () -> fSphere.addCoatInternal(10),
+                assertThrows(IllegalStateException.class, () -> fSphere.addInternalCoat(10),
                         "The coat width is too large");
                 assertSame(fSphere, results,
                         "The reference should not change");
@@ -1080,15 +1080,15 @@ public class FSphereTest {
                 assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(0),
                         "The shape is not coated");
 
-                fSphere.addCoatInternal(3);
+                fSphere.addInternalCoat(3);
 
                 assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(-1),
                         "The index is lower then zero");
                 assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(1),
                         "The index is erroneous");
 
-                fSphere.addCoatInternal(2);
-                fSphere.addCoatInternal(1);
+                fSphere.addInternalCoat(2);
+                fSphere.addInternalCoat(1);
 
                 assertEquals(10, fSphere.getRadius(),
                         EPSILON, "The shape radius is erroneous");
@@ -1106,7 +1106,7 @@ public class FSphereTest {
                 FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
 
                 fSphere.addCoat(3);
-                fSphere.addCoatInternal(2);
+                fSphere.addInternalCoat(2);
 
                 assertEquals(5, fSphere.getLayerWidthRemaining(0),
                         EPSILON, "The total coat width is erroneous");
@@ -1136,9 +1136,9 @@ public class FSphereTest {
                 assertEquals(0, fSphere.getCoatCount(),
                         "The FSphere is not coated");
 
-                fSphere.addCoatInternal(3);
-                fSphere.addCoatInternal(2);
-                fSphere.addCoatInternal(1);
+                fSphere.addInternalCoat(3);
+                fSphere.addInternalCoat(2);
+                fSphere.addInternalCoat(1);
 
                 assertEquals(3, fSphere.getCoatCount(),
                         "The number of coats is erroneous");
@@ -1166,7 +1166,7 @@ public class FSphereTest {
                 assertEquals(1, fSphere.getLayerCount(),
                         "The FSphere is not coated");
 
-                fSphere.addCoatInternal(3, 2, 1);
+                fSphere.addInternalCoat(3, 2, 1);
 
                 assertEquals(4, fSphere.getLayerCount(),
                         "The number of layers is erroneous");
@@ -4515,14 +4515,12 @@ public class FSphereTest {
                 );
             }
 
-            // TODO - Check method
             @Test
             @DisplayName("Attach monodisperse, field")
             void attachMonodisperseField() {
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(2, Location.ON_SPHERE);
-                Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
-
-                FAssembly<FSphere> fSphereField = factory.getFAssembly(fSphereProducer.getListFixed(3));
+                FAssembly<FSphere> fSphereField = factory.getFAssembly();
+                fSphereField.register(factory.getFSphere(2, 0, 0, 1));
+                fSphereField.register(factory.getFSphere(-2, 0, 0, 1));
 
                 Producer<FPoint> fPointRefProducer = factory.getFPointProducer(4, Location.IN_SPHERE);
                 Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer(fPointRefProducer, 1);
@@ -4531,7 +4529,7 @@ public class FSphereTest {
 
                 FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-                boolean isPositioned = fSphereRef.attachLinearWithSphericalCorrection(fSphereArg, fSphereField, 100);
+                boolean isPositioned = fSphereRef.attachLinearWithSphericalCorrection(fSphereArg, fSphereField, 5);
 
                 fSphereField.register(fSphereRef);
                 fSphereField.register(fSphereArg);
@@ -5832,9 +5830,9 @@ public class FSphereTest {
         @DisplayName("Get hash code with coating (fail)")
         void getHashCodeWithCoatingFail() {
             Shape fSphereRef = factory.getFSphere(1, 2, 3, 10)
-                    .addCoatInternal(3).addCoatInternal(2).addCoatInternal(1);
+                    .addInternalCoat(3).addInternalCoat(2).addInternalCoat(1);
             Shape fSphereArg = factory.getFSphere(1, 2, 3, 10)
-                    .addCoatInternal(3).addCoatInternal(2);
+                    .addInternalCoat(3).addInternalCoat(2);
 
             assertNotEquals(fSphereRef.hashCode(), fSphereArg.hashCode(),
                     "Two different FSpheres should have the same hash code");

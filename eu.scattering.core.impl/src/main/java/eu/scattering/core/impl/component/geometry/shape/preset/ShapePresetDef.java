@@ -1099,7 +1099,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape addCoatInternal(double width) {
+    public Shape addInternalCoat(double width) {
 
         if (width < 0) {
             throw new IllegalArgumentException("The coat width cannot be lower than zero");
@@ -1119,10 +1119,10 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape addCoatInternal(double... width) {
+    public Shape addInternalCoat(double... width) {
 
         for (double v : width) {
-            addCoatInternal(v);
+            addInternalCoat(v);
         }
 
         return this;

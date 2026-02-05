@@ -19,6 +19,4 @@ public interface FRotGenerator {
     // FRotQt getRotationQt(FRotEuler angles);
 
     // FRotEuler getEulerAngles(FRotQt core);
-
-
 }

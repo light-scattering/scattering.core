@@ -18,16 +18,16 @@ public interface ShapeModuleDimension {
     double getCoatWidth(int index);
     Shape setCoatWidth(int index, double width);
 
-    int getLayerCount();
     int getCoatCount();
+    int getLayerCount();
 
     Shape applyCoatsFrom(Shape shape);
 
     Shape addCoat(double width);
     Shape addCoat(double... width);
 
-    Shape addCoatInternal(double width);
-    Shape addCoatInternal(double... width);
+    Shape addInternalCoat(double width);
+    Shape addInternalCoat(double... width);
 
     Shape removeCoats();
 

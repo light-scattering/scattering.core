@@ -8,6 +8,8 @@ public interface FAggregateAspectRand {
     void moveMassCenter(FAggregate ref, FAggregate arg, MassCenter type, double distance);
     void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, MassCenter type, double distance);
 
+    // -------------------------------------------------------------------------------------------------
+
     void attach(FAggregate ref, FAggregate arg);
     void attachOnSurface(FAggregate ref, FAggregate arg);
 

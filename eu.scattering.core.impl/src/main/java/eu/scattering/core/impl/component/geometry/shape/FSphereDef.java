@@ -105,7 +105,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
             getCoatWidth().clear();
             for (int i = 0 ; i < coats.length() ; i++) {
-                addCoatInternal(coats.getDouble(i));
+                addInternalCoat(coats.getDouble(i));
             }
 
         }
@@ -129,7 +129,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         getCoatWidth().clear();
         for (int i = 0; i < arg.getCoatCount() ; i++) {
-            this.addCoatInternal(arg.getCoatWidth(i));
+            this.addInternalCoat(arg.getCoatWidth(i));
         }
 
         setMeta(arg.getMeta());
@@ -366,7 +366,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     @Override
     public boolean attachLinearWithSphericalCorrection(Shape target, Iterable<? extends Shape> field, int corrections) {
-        int repositions = 1;
+        int repositions = 0;
 
         if (!attachLinear(target)) {
             return false;
@@ -380,7 +380,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             return true;
         }
 
-        while (closestNeighbour != null && repositions++ < corrections + 1) {
+        while (closestNeighbour != null && repositions++ < corrections) {
 
             if (!attachSpherical(closestNeighbour, target.getCenterX(), target.getCenterY(), target.getCenterZ())) {
                 return false;

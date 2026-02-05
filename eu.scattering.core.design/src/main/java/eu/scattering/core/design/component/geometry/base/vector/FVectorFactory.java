@@ -9,6 +9,7 @@ public interface FVectorFactory {
     FVectorProducer getFVectorProducer();
 
     //--------------------------------------------------
+
     FVector getFVector();
 
     @Modificator
