@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.aggregate;
 
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.aggregate.model.FModelFactory;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactory;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactory;

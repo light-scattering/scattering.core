@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.shape;
 
-import eu.scattering.core.design.annotation.Fragment;
+import eu.scattering.core.design.utility.annotation.Fragment;
 import org.json.JSONObject;
 
 public interface ShapeCommon<T> extends Shape {

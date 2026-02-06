@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.shape;
 
-import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.functionality.Producer;
 
 import java.util.List;
 import java.util.stream.Stream;

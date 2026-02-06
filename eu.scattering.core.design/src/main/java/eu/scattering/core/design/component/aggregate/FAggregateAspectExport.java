@@ -1,11 +1,9 @@
 package eu.scattering.core.design.component.aggregate;
 
-import eu.scattering.core.design.annotation.Legacy;
-import eu.scattering.core.design.type.PovRay;
+import eu.scattering.core.design.utility.type.PovRay;
 
 public interface FAggregateAspectExport {
 
-    @Legacy
     void toFLAGE(FAggregate aggregate, StringBuilder builder);
 
     void toNGSolve(FAggregate aggregate, StringBuilder builder);
@@ -14,7 +12,6 @@ public interface FAggregateAspectExport {
 
     //--------------------------------------------------
 
-    @Legacy
     default String toFLAGE(FAggregate aggregate) {
         StringBuilder builder = new StringBuilder();
 

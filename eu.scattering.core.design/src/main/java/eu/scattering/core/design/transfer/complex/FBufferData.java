@@ -1,14 +1,11 @@
 package eu.scattering.core.design.transfer.complex;
 
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.box.variants.FBoxString;
 import eu.scattering.core.design.transfer.Transfer;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.box.FBoxString;
 import org.json.JSONObject;
 
 public class FBufferData implements Transfer {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
-
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "meta";
     private static final String JSON_LAYER = "layer";
@@ -16,17 +13,19 @@ public class FBufferData implements Transfer {
 
     private final int layer;
 
-    private final FBoxString meta = factoryExt.getFBoxString();
+    private final FBoxString meta;
 
-    private FBufferData(String meta, int layerIndex) {
+    private FBufferData(StorageFactory factory, String meta, int layerIndex) {
 
         this.layer = layerIndex;
+
+        this.meta = factory.getFBoxString();
         this.meta.setValue(meta);
     }
 
-    public static FBufferData crete(String tag, int layer) {
+    public static FBufferData create(StorageFactory factory, String tag, int layer) {
 
-        return new FBufferData(tag, layer);
+        return new FBufferData(factory, tag, layer);
     }
 
     public int getLayerIndex() {

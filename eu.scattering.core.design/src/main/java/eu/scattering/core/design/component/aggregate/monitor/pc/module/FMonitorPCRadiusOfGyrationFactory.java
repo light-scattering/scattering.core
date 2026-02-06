@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.aggregate.monitor.pc.module;
 
-import eu.scattering.core.design.type.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.RadiusOfGyration;
 
 public interface FMonitorPCRadiusOfGyrationFactory {
 

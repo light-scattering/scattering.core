@@ -1,8 +1,8 @@
 package eu.scattering.core.design.component.number.quaternion;
 
-import eu.scattering.core.design.annotation.Extension;
-import eu.scattering.core.design.annotation.Fragment;
-import eu.scattering.core.design.annotation.Terminator;
+import eu.scattering.core.design.utility.annotation.Extension;
+import eu.scattering.core.design.utility.annotation.Fragment;
+import eu.scattering.core.design.utility.annotation.Terminator;
 import eu.scattering.core.design.component.number.Number;
 import eu.scattering.core.design.transfer.primitive.FPos4D;
 

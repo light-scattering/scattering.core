@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.aggregate.extension;
 
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.storage.buffer.FBuffer;

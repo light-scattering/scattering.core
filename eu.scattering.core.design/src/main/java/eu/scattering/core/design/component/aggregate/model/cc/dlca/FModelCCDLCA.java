@@ -4,7 +4,7 @@ import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.lambda.TriConsumer;
+import eu.scattering.core.design.utility.lambda.TriConsumer;
 
 public interface FModelCCDLCA extends FModelCC {
 

@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.aggregate;
 
-import eu.scattering.core.design.annotation.Fragment;
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.utility.annotation.Fragment;
+import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -16,7 +16,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.type.*;
+import eu.scattering.core.design.utility.type.*;
 
 import java.util.function.BiConsumer;
 

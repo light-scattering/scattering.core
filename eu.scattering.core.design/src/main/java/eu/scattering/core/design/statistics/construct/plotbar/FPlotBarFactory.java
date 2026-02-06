@@ -1,6 +1,6 @@
 package eu.scattering.core.design.statistics.construct.plotbar;
 
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.statistics.base.FStat;
 import org.json.JSONException;
 import org.json.JSONObject;

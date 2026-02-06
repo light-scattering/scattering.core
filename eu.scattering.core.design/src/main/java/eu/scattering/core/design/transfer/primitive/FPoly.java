@@ -1,6 +1,6 @@
 package eu.scattering.core.design.transfer.primitive;
 
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.transfer.Transfer;
 import org.json.JSONArray;
 import org.json.JSONObject;

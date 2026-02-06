@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.number.quaternion;
 
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.functionality.Producer;
 
 import java.util.List;
 import java.util.function.BiFunction;

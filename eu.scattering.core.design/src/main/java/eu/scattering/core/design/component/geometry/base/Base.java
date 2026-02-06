@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.base;
 
-import eu.scattering.core.design.annotation.Fragment;
+import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;

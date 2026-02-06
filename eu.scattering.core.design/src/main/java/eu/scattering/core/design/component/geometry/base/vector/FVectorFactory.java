@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.base.vector;
 
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 

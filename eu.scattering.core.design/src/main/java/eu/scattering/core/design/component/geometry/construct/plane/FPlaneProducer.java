@@ -2,7 +2,7 @@ package eu.scattering.core.design.component.geometry.construct.plane;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.functionality.Producer;
 
 import java.util.List;
 import java.util.function.BiFunction;
