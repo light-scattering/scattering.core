@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.container.assembly;
 
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;

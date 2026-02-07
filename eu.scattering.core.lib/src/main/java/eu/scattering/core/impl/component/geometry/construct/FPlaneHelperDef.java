@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.GeometryFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneHelper;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 
 import java.util.List;
 import java.util.Optional;

@@ -12,7 +12,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.utility.type.Location;
 import eu.scattering.core.test.TestHelper;

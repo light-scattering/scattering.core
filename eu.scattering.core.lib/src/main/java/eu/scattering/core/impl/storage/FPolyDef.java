@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.storage;
 
-import eu.scattering.core.design.storage.polynomial.variant.FPoly;
+import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import org.json.JSONArray;
 import org.json.JSONObject;

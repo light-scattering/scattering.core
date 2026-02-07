@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.quaternion;
 
-import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
 
 public interface FQuaternionFactory {
 

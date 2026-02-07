@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.complex;
 
-import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
 import eu.scattering.core.design.utility.annotation.Extension;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.utility.annotation.Terminator;

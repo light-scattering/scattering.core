@@ -15,13 +15,13 @@ import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.joint.
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.fixed.FDist3DFixed;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.custom.FDist3DCustom;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.uniform.FDist3DUniform;
-import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos2D;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos4D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos4D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
 import eu.scattering.core.impl.aspect.randomize.core.FRandCoreOptimizedDef;
 import eu.scattering.core.impl.aspect.randomize.core.FRandCoreSimpleDef;
 import eu.scattering.core.impl.aspect.randomize.module.*;
@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class FRandGeneratorDef implements FRandGenerator {
-    private final StorageFactory factory;
+    private final TransferFactory factoryExt;
 
     private final FPos2D posZero2D;
     private final FPos3D posZero3D;
@@ -42,34 +42,34 @@ public class FRandGeneratorDef implements FRandGenerator {
 
     //--------------------------------------------------
 
-    private FRandGeneratorDef(StorageFactory factory) {
+    private FRandGeneratorDef(TransferFactory factoryExt) {
 
         this.core = FRandCoreOptimizedDef.create();
 
-        this.factory = factory;
+        this.factoryExt = factoryExt;
 
-        this.posZero2D = this.factory.getFPos2D(0, 0);
-        this.posZero3D = this.factory.getFPos3D(0, 0, 0);
+        this.posZero2D = this.factoryExt.getFPos2D(0, 0);
+        this.posZero3D = this.factoryExt.getFPos3D(0, 0, 0);
     }
 
-    private FRandGeneratorDef(StorageFactory factory, long seed) {
+    private FRandGeneratorDef(TransferFactory factoryExt, long seed) {
 
         this.core = FRandCoreSimpleDef.create(seed);
 
-        this.factory = factory;
+        this.factoryExt = factoryExt;
 
-        this.posZero2D = this.factory.getFPos2D(0, 0);
-        this.posZero3D = this.factory.getFPos3D(0, 0, 0);
+        this.posZero2D = this.factoryExt.getFPos2D(0, 0);
+        this.posZero3D = this.factoryExt.getFPos3D(0, 0, 0);
     }
 
-    public static FRandGenerator create(StorageFactory factory) {
+    public static FRandGenerator create(TransferFactory factoryExt) {
 
-        return new FRandGeneratorDef(factory);
+        return new FRandGeneratorDef(factoryExt);
     }
 
-    public static FRandGenerator create(StorageFactory factory, long seed) {
+    public static FRandGenerator create(TransferFactory factoryExt, long seed) {
 
-        return new FRandGeneratorDef(factory, seed);
+        return new FRandGeneratorDef(factoryExt, seed);
     }
 
     //--------------------------------------------------
@@ -133,7 +133,7 @@ public class FRandGeneratorDef implements FRandGenerator {
         double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
         double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
 
-        return factory.getFPos2D(rndD0, rndD1);
+        return factoryExt.getFPos2D(rndD0, rndD1);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class FRandGeneratorDef implements FRandGenerator {
         double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
         double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
 
-        return factory.getFPos3D(rndD0, rndD1, rndD2);
+        return factoryExt.getFPos3D(rndD0, rndD1, rndD2);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class FRandGeneratorDef implements FRandGenerator {
         double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
         double rndD3 = nextDouble(range.getPosA().getD3(), range.getPosB().getD3());
 
-        return factory.getFPos4D(rndD0, rndD1, rndD2, rndD3);
+        return factoryExt.getFPos4D(rndD0, rndD1, rndD2, rndD3);
     }
 
     @Override
@@ -162,17 +162,17 @@ public class FRandGeneratorDef implements FRandGenerator {
         double d0 = Math.sin(rnd) * radius;
         double d1 = Math.cos(rnd) * radius;
 
-        return factory.getFPos2D(d0, d1);
+        return factoryExt.getFPos2D(d0, d1);
     }
 
     @Override
     public FPos2D nextDoubleInCircle(double radius) {
         double radiusP2 = radius * radius;
 
-        FPos2D posA = factory.getFPos2D(-radius, -radius);
-        FPos2D posB = factory.getFPos2D(radius, radius);
+        FPos2D posA = factoryExt.getFPos2D(-radius, -radius);
+        FPos2D posB = factoryExt.getFPos2D(radius, radius);
 
-        FPairPos2D range = factory.getFPairPos2D(posA, posB);
+        FPairPos2D range = factoryExt.getFPairPos2D(posA, posB);
 
         int retries = 0;
 
@@ -209,17 +209,17 @@ public class FRandGeneratorDef implements FRandGenerator {
         double y = 2 * x2 * Math.sqrt(1 - f) * radius;
         double z = (1 - 2 * f) * radius;
 
-        return factory.getFPos3D(x, y, z);
+        return factoryExt.getFPos3D(x, y, z);
     }
 
     @Override
     public FPos3D nextDoubleInSphere(double radius) {
         double radiusP2 = radius * radius;
 
-        FPos3D posA = factory.getFPos3D(-radius, -radius, -radius);
-        FPos3D posB = factory.getFPos3D(radius, radius, radius);
+        FPos3D posA = factoryExt.getFPos3D(-radius, -radius, -radius);
+        FPos3D posB = factoryExt.getFPos3D(radius, radius, radius);
 
-        FPairPos3D range = factory.getFPairPos3D(posA, posB);
+        FPairPos3D range = factoryExt.getFPairPos3D(posA, posB);
 
         int retries = 0;
 
@@ -341,72 +341,72 @@ public class FRandGeneratorDef implements FRandGenerator {
     @Override
     public FDist2DCustom getFDist2DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
-        return FDist2DManualDef.get(this.factory, this, consumer);
+        return FDist2DManualDef.create(this.factoryExt, this, consumer);
     }
 
     @Override
     public FDist2DJoint getFDist2DJoint(FDist1D dX, FDist1D dY) {
 
-        return FDist2DJointDef.get(this.factory, dX, dY);
+        return FDist2DJointDef.create(this.factoryExt, dX, dY);
     }
 
     @Override
     public FDist2DFixed getFDist2DFixed(double x, double y) {
 
-        return FDist2DFixedDef.get(this.factory, x, y);
+        return FDist2DFixedDef.create(this.factoryExt, x, y);
     }
 
     @Override
     public FDist2DFixed getFDist2DFixed(FPos2D val) {
 
-        return FDist2DFixedDef.get(this.factory, val);
+        return FDist2DFixedDef.create(this.factoryExt, val);
     }
 
     @Override
     public FDist2DUniform getFDist2DUniform(double x1, double x2, double y1, double y2) {
 
-        return FDist2DUniformDef.get(this.factory, this, x1, x2, y1, y2);
+        return FDist2DUniformDef.create(this.factoryExt, this, x1, x2, y1, y2);
     }
 
     @Override
     public FDist2DUniform getFDist2DUniform(FPairPos2D range) {
 
-        return FDist2DUniformDef.get(this.factory, this, range);
+        return FDist2DUniformDef.create(this.factoryExt, this, range);
     }
 
     @Override
     public FDist3DCustom getFDist3DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
-        return FDist3DManualDef.get(this.factory, this, consumer);
+        return FDist3DManualDef.create(this.factoryExt, this, consumer);
     }
 
     @Override
     public FDist3DJoint getFDist3DJoint(FDist1D dX, FDist1D dY, FDist1D dZ) {
 
-        return FDist3DJointDef.get(this.factory, dX, dY, dZ);
+        return FDist3DJointDef.create(this.factoryExt, dX, dY, dZ);
     }
 
     @Override
     public FDist3DFixed getFDist3DFixed(double x, double y, double z) {
 
-        return FDist3DFixedDef.get(this.factory, x, y, z);
+        return FDist3DFixedDef.create(this.factoryExt, x, y, z);
     }
 
     @Override
     public FDist3DFixed getFDist3DFixed(FPos3D val) {
 
-        return FDist3DFixedDef.get(this.factory, val);
+        return FDist3DFixedDef.create(this.factoryExt, val);
     }
 
     @Override
     public FDist3DUniform getFDist3DUniform(double x1, double x2, double y1, double y2, double z1, double z2) {
 
-        return FDist3DUniformDef.get(this.factory, this, x1, x2, y1, y2, z1, z2);
+        return FDist3DUniformDef.create(this.factoryExt, this, x1, x2, y1, y2, z1, z2);
     }
 
     @Override
     public FDist3DUniform getFDist3DUniform(FPairPos3D range) {
 
-        return FDist3DUniformDef.get(this.factory, this, range);
+        return FDist3DUniformDef.create(this.factoryExt, this, range);
     }
 }

@@ -1,9 +1,8 @@
 package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
-import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,29 +12,22 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FQuaternionDef implements FQuaternion {
-    private final StorageFactory factory;
-
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "qt";
     private static final String JSON_VAL = "val";
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields must be redefined while extending the class.
-    // -------------------------------------------------------------------------------------------------
-
-    private final FQuaternionFactory factorySelf;
+    private final TransferFactory factoryExt;
 
     private double oRe, oI, oJ, oK;
 
-    private FQuaternionDef(StorageFactory factory, FQuaternionFactory factorySelf) {
+    private FQuaternionDef(TransferFactory factoryExt) {
 
-        this.factory = factory;
-        this.factorySelf = factorySelf;
+        this.factoryExt = factoryExt;
     }
 
-    public static FQuaternion create(StorageFactory factory, FQuaternionFactory factorySelf) {
+    public static FQuaternion create(TransferFactory factoryExt) {
 
-        return new FQuaternionDef(factory, factorySelf);
+        return new FQuaternionDef(factoryExt);
     }
 
     @Override
@@ -94,9 +86,6 @@ public class FQuaternionDef implements FQuaternion {
         return this;
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields do not have to modified while extending the class.
-    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -158,7 +147,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FPos4D toFPos4D() {
 
-        return factory.getFPos4D(getRe(), getI(), getJ(), getK());
+        return factoryExt.getFPos4D(getRe(), getI(), getJ(), getK());
     }
 
     @Override
@@ -657,7 +646,7 @@ public class FQuaternionDef implements FQuaternion {
 
     private FQuaternion supplyFQuaternion() {
 
-        return factorySelf.getFQuaternion();
+        return create(this.factoryExt);
     }
 }
 

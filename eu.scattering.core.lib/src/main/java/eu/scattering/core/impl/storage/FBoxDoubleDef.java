@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.storage;
 
-import eu.scattering.core.design.storage.box.variant.FBoxDouble;
+import eu.scattering.core.design.storage.transfer.box.variants.FBoxDouble;
 import org.json.JSONObject;
 
 import java.util.Objects;

@@ -12,7 +12,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import org.json.JSONObject;
@@ -35,8 +35,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     private static final double DEF_RADIUS = 1;
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final FSphereHelper helper;
@@ -85,9 +83,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return this;
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields do not have to modified while extending the class.
-    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
 
     @Override

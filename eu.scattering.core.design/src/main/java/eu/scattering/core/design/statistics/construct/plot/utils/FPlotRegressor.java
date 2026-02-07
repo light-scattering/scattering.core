@@ -1,6 +1,6 @@
 package eu.scattering.core.design.statistics.construct.plot.utils;
 
-import eu.scattering.core.design.storage.polynomial.variant.FPoly;
+import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
 
 public interface FPlotRegressor {
 

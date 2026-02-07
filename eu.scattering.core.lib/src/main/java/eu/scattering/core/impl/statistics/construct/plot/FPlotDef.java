@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.statistics.construct.plot;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.storage.polynomial.variant.FPoly;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;

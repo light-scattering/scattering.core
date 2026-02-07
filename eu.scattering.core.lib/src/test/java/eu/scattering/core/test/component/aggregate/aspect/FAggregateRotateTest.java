@@ -3,7 +3,7 @@ package eu.scattering.core.test.component.aggregate.aspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
 import eu.scattering.core.design.transfer.complex.FRotQt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

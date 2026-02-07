@@ -1,9 +1,9 @@
 package eu.scattering.core.impl.storage;
 
-import eu.scattering.core.design.storage.StorageFactory;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.mesh.utils.FMeshConsumer;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3DI;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos3DI;
 import org.json.JSONObject;
 
 import java.util.HashSet;
@@ -13,12 +13,12 @@ import java.util.function.BiFunction;
 public class FMeshDef<T> implements FMesh<T> {
     private static final int DEF_CAPACITY = 1_000_000;
 
-    private final StorageFactory factory;
-
     private static final String JSON_MAIN = "array";
     private static final String JSON_TYPE = "type";
     private static final String JSON_SIZE = "size";
     private static final String JSON_CAPACITY = "capacity";
+
+    private final TransferFactory factoryExt;
 
     private final int capacity;
 
@@ -29,29 +29,29 @@ public class FMeshDef<T> implements FMesh<T> {
 
     private double data;
 
-    private FMeshDef(StorageFactory factory) {
+    private FMeshDef(TransferFactory factoryExt) {
 
-        this(factory, DEF_CAPACITY);
+        this(factoryExt, DEF_CAPACITY);
     }
 
-    private FMeshDef(StorageFactory factory, int capacity) {
+    private FMeshDef(TransferFactory factoryExt, int capacity) {
         this.index = 0;
 
-        this.factory = factory;
+        this.factoryExt = factoryExt;
         this.capacity = capacity;
 
         this.value = new int[3][this.capacity];
         this.meta = new Object[this.capacity];
     }
 
-    public static <T> FMesh<T> create(StorageFactory factory) {
+    public static <T> FMesh<T> create(TransferFactory factoryExt) {
 
-        return new FMeshDef<>(factory);
+        return new FMeshDef<>(factoryExt);
     }
 
-    public static <T> FMesh<T> create(StorageFactory factory, int capacity) {
+    public static <T> FMesh<T> create(TransferFactory factoryExt, int capacity) {
 
-        return new FMeshDef<>(factory, capacity);
+        return new FMeshDef<>(factoryExt, capacity);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class FMeshDef<T> implements FMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factory.getFPos3DI(
+        return factoryExt.getFPos3DI(
                 this.value[0][index], this.value[1][index], this.value[2][index]
         );
     }

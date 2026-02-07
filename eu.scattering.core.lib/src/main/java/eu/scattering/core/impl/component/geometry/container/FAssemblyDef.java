@@ -11,9 +11,9 @@ import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,21 +24,20 @@ import java.util.function.Consumer;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
-    private final StorageFactory factory;
-
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "assembly";
     private static final String JSON_VAL = "val";
 
-    private final GeometryFactory factorySelf;
+    private final TransferFactory factoryExt;
+    private final GeometryFactory factory;
 
     private final List<T> elements;
     private final List<FPoint> fPoints = new ArrayList<>();
 
-    private FAssemblyDef(StorageFactory factory, GeometryFactory factorySelf, List<T> elements) {
-
+    private FAssemblyDef(TransferFactory factoryExt, GeometryFactory factory, List<T> elements) {
+        this.factoryExt = factoryExt;
         this.factory = factory;
-        this.factorySelf = factorySelf;
+
         this.elements = elements;
 
         for (T geometry : elements) {
@@ -46,13 +45,13 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         }
     }
 
-    public static <T extends Geometry> FAssembly<T> create(StorageFactory factory, GeometryFactory factorySelf, List<? extends T> elements) {
+    public static <T extends Geometry> FAssembly<T> create(TransferFactory factoryExt, GeometryFactory factory, List<? extends T> elements) {
 
-        return new FAssemblyDef<>(factory, factorySelf, new ArrayList<>(elements));
+        return new FAssemblyDef<>(factoryExt, factory, new ArrayList<>(elements));
     }
 
-    public static <T extends Geometry> FAssembly<T> create(StorageFactory factory, GeometryFactory factorySelf, JSONObject json) {
-        FAssembly<T> assembly = new FAssemblyDef<>(factory, factorySelf, new ArrayList<>());
+    public static <T extends Geometry> FAssembly<T> create(TransferFactory factoryExt, GeometryFactory factory, JSONObject json) {
+        FAssembly<T> assembly = new FAssemblyDef<>(factoryExt, factory, new ArrayList<>());
 
         assembly.set(json);
 
@@ -401,7 +400,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         this.elements.clear();
         this.fPoints.clear();
 
-        GeometryParser parser = factorySelf.getGeometryParser();
+        GeometryParser parser = factory.getGeometryParser();
 
         JSONArray candidates = json.getJSONArray(JSON_VAL);
 
@@ -589,7 +588,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
             }
         }
 
-        return factory.getFPairPos3D(minX, minY, minZ, maxX, maxY, maxZ);
+        return factoryExt.getFPairPos3D(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     @Override
@@ -681,7 +680,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     private FAssembly<T> supplyFAssembly() {
 
-        return factorySelf.getFAssembly();
+        return factory.getFAssembly();
     }
 
     // -------------------------------------------------------------------------------------------------

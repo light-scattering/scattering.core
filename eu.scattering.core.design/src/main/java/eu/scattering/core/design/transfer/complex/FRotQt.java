@@ -1,20 +1,15 @@
 package eu.scattering.core.design.transfer.complex;
 
-import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
 import eu.scattering.core.design.transfer.Transfer;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONObject;
 
 import java.util.Objects;
 
 public class FRotQt implements Transfer {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
-
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "engRotQt";
     private static final String JSON_OFFSET = "offset";
@@ -32,20 +27,20 @@ public class FRotQt implements Transfer {
         this.matrix = matrix;
     }
 
-    public static FRotQt create(StorageFactory factory, FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
+    public static FRotQt create(TransferFactory factoryExt, FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
 
         return new FRotQt(qt, offset, matrix);
     }
 
-    public static FRotQt create(ScatFactory factory, JSONObject json) {
+    public static FRotQt create(TransferFactory factoryExt, JSONObject json) {
 
         if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
            throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FPos4D qt = factory.getFPos4D(json.getJSONObject(JSON_QUATERNION));
-        FPos3D offset = factory.getFPos3D(json.getJSONObject(JSON_OFFSET));
-        FMatrix3x3D matrix = factory.getFMatrix3x3D(json.getJSONObject(JSON_MATRIX));
+        FPos4D qt = factoryExt.getFPos4D(json.getJSONObject(JSON_QUATERNION));
+        FPos3D offset = factoryExt.getFPos3D(json.getJSONObject(JSON_OFFSET));
+        FMatrix3x3D matrix = factoryExt.getFMatrix3x3D(json.getJSONObject(JSON_MATRIX));
 
         return new FRotQt(qt, offset, matrix);
     }

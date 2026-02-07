@@ -2,11 +2,11 @@ package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
-import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,28 +19,25 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FVectorDef implements FVector {
-    private final StorageFactory factory;
-
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "vector";
     private static final String JSON_VAL = "position";
 
     // -------------------------------------------------------------------------------------------------
-    // The following fields must be redefined while extending the class.
-    // -------------------------------------------------------------------------------------------------
 
-    private final FVectorFactory factorySelf;
+    private final TransferFactory factoryExt;
+    private final FPointFactory factoryFPoint;
 
     private FPoint oBase;
     private FPoint oHead;
 
-    private FVectorDef(StorageFactory factory, FVectorFactory factorySelf) {
+    private FVectorDef(TransferFactory factoryExt, FPointFactory factoryFPoint) {
 
-        this.factory = factory;
-        this.factorySelf = factorySelf;
+        this.factoryExt = factoryExt;
+        this.factoryFPoint = factoryFPoint;
     }
 
-    public static FVector create(StorageFactory factory, FVectorFactory factorySelf, FPoint refBase, FPoint refHead) {
+    public static FVector create(TransferFactory factoryExt, FPointFactory factoryFPoint, FPoint refBase, FPoint refHead) {
 
         if (refBase == null) {
             throw new NullPointerException("The base FPoint cannot be null");
@@ -50,7 +47,7 @@ public class FVectorDef implements FVector {
             throw new NullPointerException("The head FPoint cannot be null");
         }
 
-        var fVector = new FVectorDef(factory, factorySelf);
+        var fVector = new FVectorDef(factoryExt, factoryFPoint);
 
         fVector.setRefBase(refBase);
         fVector.setRefHead(refHead);
@@ -99,9 +96,6 @@ public class FVectorDef implements FVector {
         return this;
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields do not have to modified while extending the class.
-    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -490,7 +484,7 @@ public class FVectorDef implements FVector {
         FPos3D posA = getRefBase().toFPos3D();
         FPos3D posB = getRefHead().toFPos3D();
 
-        return factory.getFPairPos3D(posA, posB);
+        return factoryExt.getFPairPos3D(posA, posB);
     }
 
     @Override
@@ -2680,6 +2674,6 @@ public class FVectorDef implements FVector {
 
     private FVector supplyFVector() {
 
-        return factorySelf.getFVector();
+        return create(this.factoryExt, this.factoryFPoint, this.factoryFPoint.getFPoint(), this.factoryFPoint.getFPoint());
     }
 }

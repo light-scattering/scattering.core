@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.Base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.base.support.FPointTestHelper;

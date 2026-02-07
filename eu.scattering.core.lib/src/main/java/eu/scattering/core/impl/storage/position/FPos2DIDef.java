@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.storage.position;
 
-import eu.scattering.core.design.storage.transfer.single.variants.FPos2DI;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos2DI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -1,6 +1,6 @@
 package eu.scattering.core.design.statistics.construct.plot;
 
-import eu.scattering.core.design.storage.polynomial.variant.FPoly;
+import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.utility.lambda.TriConsumer;

@@ -1,8 +1,8 @@
 package eu.scattering.core.design.helper.transfer;
 
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos2D;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos4D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos4D;
 
 public interface FTransferHelper {
 

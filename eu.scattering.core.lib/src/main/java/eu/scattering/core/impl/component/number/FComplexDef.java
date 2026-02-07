@@ -1,9 +1,8 @@
 package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.component.number.complex.FComplexFactory;
-import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,29 +12,24 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FComplexDef implements FComplex {
-    private final StorageFactory factory;
-
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "cpx";
     private static final String JSON_VAL = "val";
 
     // -------------------------------------------------------------------------------------------------
-    // The following fields must be redefined while extending the class.
-    // -------------------------------------------------------------------------------------------------
 
-    private final FComplexFactory factorySelf;
+    private final TransferFactory factoryExt;
 
     private double oRe, oIm;
 
-    private FComplexDef(StorageFactory factory, FComplexFactory factorySelf) {
+    private FComplexDef(TransferFactory factoryExt) {
 
-        this.factory = factory;
-        this.factorySelf = factorySelf;
+        this.factoryExt = factoryExt;
     }
 
-    public static FComplex create(StorageFactory factory, FComplexFactory factorySelf) {
+    public static FComplex create(TransferFactory factoryExt) {
 
-        return new FComplexDef(factory, factorySelf);
+        return new FComplexDef(factoryExt);
     }
 
     @Override
@@ -66,9 +60,6 @@ public class FComplexDef implements FComplex {
         return this;
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields do not have to modified while extending the class.
-    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -128,7 +119,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FPos2D toFPos2D() {
 
-        return factory.getFPos2D(getRe(), getIm());
+        return factoryExt.getFPos2D(getRe(), getIm());
     }
 
     @Override
@@ -566,6 +557,6 @@ public class FComplexDef implements FComplex {
 
     private FComplex supplyFComplex() {
 
-        return factorySelf.getFComplex();
+        return create(this.factoryExt);
     }
 }

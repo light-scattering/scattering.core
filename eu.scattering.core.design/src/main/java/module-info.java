@@ -83,10 +83,13 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.monitor.cc.module;
     exports eu.scattering.core.design.component.aggregate.monitor.cc;
     exports eu.scattering.core.design.component.aggregate.extension;
-    exports eu.scattering.core.design.storage.box;
-    exports eu.scattering.core.design.storage.box.variant;
-    exports eu.scattering.core.design.storage.transfer.single.variants;
-    exports eu.scattering.core.design.storage.transfer.pair.variants;
-    exports eu.scattering.core.design.storage.polynomial;
-    exports eu.scattering.core.design.storage.polynomial.variant;
+    exports eu.scattering.core.design.storage.transfer.box;
+    exports eu.scattering.core.design.storage.transfer.box.variants;
+    exports eu.scattering.core.design.storage.transfer.position.p1.variants;
+    exports eu.scattering.core.design.storage.transfer.position.p2.variants;
+    exports eu.scattering.core.design.storage.transfer.polynomial;
+    exports eu.scattering.core.design.storage.transfer.polynomial.variants;
+    exports eu.scattering.core.design.storage.transfer.position.p1.variants.integer;
+    exports eu.scattering.core.design.storage.transfer.position.p2.variants.integer;
+    exports eu.scattering.core.design.storage.transfer;
 }

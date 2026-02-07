@@ -4,7 +4,7 @@ import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolat
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.layer.FLayer;
-import eu.scattering.core.design.storage.polynomial.variant.FPoly;
+import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
 import eu.scattering.core.design.utility.type.RoundMethod;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;

@@ -2,7 +2,7 @@ package eu.scattering.core.design.storage.mesh;
 
 import eu.scattering.core.design.storage.Storage;
 import eu.scattering.core.design.storage.mesh.utils.FMeshConsumer;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3DI;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos3DI;
 
 import java.util.function.BiFunction;
 

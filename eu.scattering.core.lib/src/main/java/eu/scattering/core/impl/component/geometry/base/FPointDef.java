@@ -2,10 +2,9 @@ package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
-import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONObject;
 
@@ -17,29 +16,24 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FPointDef implements FPoint {
-    private final StorageFactory factory;
-
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "point";
     private static final String JSON_VAL = "position";
 
     // -------------------------------------------------------------------------------------------------
-    // The following fields must be redefined while extending the class.
-    // -------------------------------------------------------------------------------------------------
 
-    private final FPointFactory factorySelf;
+    private final TransferFactory factoryExt;
 
     private double oX, oY, oZ;
 
-    private FPointDef(StorageFactory factory, FPointFactory factorySelf) {
+    private FPointDef(TransferFactory factoryExt) {
 
-        this.factory = factory;
-        this.factorySelf = factorySelf;
+        this.factoryExt = factoryExt;
     }
 
-    public static FPoint create(StorageFactory factory, FPointFactory factorySelf) {
+    public static FPoint create(TransferFactory factoryExt) {
 
-        return new FPointDef(factory, factorySelf);
+        return new FPointDef(factoryExt);
     }
 
     protected static boolean isParsable(String tag) {
@@ -89,9 +83,6 @@ public class FPointDef implements FPoint {
         return this;
     }
 
-    // -------------------------------------------------------------------------------------------------
-    // The following fields do not have to modified while extending the class.
-    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -237,7 +228,7 @@ public class FPointDef implements FPoint {
     @Override
     public FPos3D toFPos3D() {
 
-        return factory.getFPos3D(getX(), getY(), getZ());
+        return factoryExt.getFPos3D(getX(), getY(), getZ());
     }
 
     @Override
@@ -1178,6 +1169,6 @@ public class FPointDef implements FPoint {
 
     private FPoint supplyFPoint() {
 
-        return factorySelf.getFPoint();
+        return create(this.factoryExt);
     }
 }

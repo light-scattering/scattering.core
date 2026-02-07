@@ -1,10 +1,10 @@
 package eu.scattering.core.impl.storage;
 
-import eu.scattering.core.design.storage.StorageFactory;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.utils.FBufferConsumer;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import org.json.JSONObject;
 
 import java.util.HashSet;
@@ -12,12 +12,12 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 public class FBufferDef<T> implements FBuffer<T> {
-    private final StorageFactory factory;
-
     private static final String JSON_MAIN = "array";
     private static final String JSON_TYPE = "type";
     private static final String JSON_SIZE = "size";
     private static final String JSON_CAPACITY = "capacity";
+
+    private final TransferFactory factoryExt;
 
     private final int capacity;
 
@@ -26,13 +26,13 @@ public class FBufferDef<T> implements FBuffer<T> {
 
     private int index;
 
-    private FBufferDef(StorageFactory factory, int capacity) {
+    private FBufferDef(TransferFactory factoryExt, int capacity) {
 
         if (capacity < 1) {
             throw new IllegalArgumentException("The capacity must be greater than zero");
         }
 
-        this.factory = factory;
+        this.factoryExt = factoryExt;
 
         this.index = 0;
 
@@ -42,9 +42,9 @@ public class FBufferDef<T> implements FBuffer<T> {
         this.meta = new Object[this.capacity];
     }
 
-    public static <T> FBuffer<T> create(StorageFactory factory, int capacity) {
+    public static <T> FBuffer<T> create(TransferFactory factoryExt, int capacity) {
 
-        return new FBufferDef<>(factory, capacity);
+        return new FBufferDef<>(factoryExt, capacity);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class FBufferDef<T> implements FBuffer<T> {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factory.getFPos3D(
+        return factoryExt.getFPos3D(
                 this.value[0][index], this.value[1][index], this.value[2][index]
         );
     }
@@ -332,7 +332,7 @@ public class FBufferDef<T> implements FBuffer<T> {
             throw new IllegalStateException("The data value must be consistent for all elements");
         }
 
-        FMesh<T> fArrayMesh = FMeshDef.create(this.factory, size());
+        FMesh<T> fArrayMesh = FMeshDef.create(this.factoryExt, size());
 
         double factor = 1d / dataGlobal;
 

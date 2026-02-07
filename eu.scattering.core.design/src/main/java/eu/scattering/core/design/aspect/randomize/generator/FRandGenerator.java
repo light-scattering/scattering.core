@@ -2,12 +2,12 @@ package eu.scattering.core.design.aspect.randomize.generator;
 
 import eu.scattering.core.design.aspect.randomize.generator.core.FRandCore;
 import eu.scattering.core.design.aspect.randomize.generator.module.ModuleFactory;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos2D;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos4D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
-import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos4D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
 
 import java.util.List;
 
