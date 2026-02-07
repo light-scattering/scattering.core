@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
 
 import java.util.function.BiConsumer;

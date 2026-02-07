@@ -1,10 +1,10 @@
 package eu.scattering.core.test.statistics;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.layer.FLayer;
-import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
+import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.utility.type.RoundMethod;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;

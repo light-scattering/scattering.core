@@ -5,9 +5,9 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

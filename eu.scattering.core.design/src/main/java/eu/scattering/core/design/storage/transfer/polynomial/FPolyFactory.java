@@ -1,6 +1,6 @@
 package eu.scattering.core.design.storage.transfer.polynomial;
 
-import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
+import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import org.json.JSONObject;
 
 public interface FPolyFactory {

@@ -12,8 +12,8 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

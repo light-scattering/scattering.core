@@ -3,8 +3,8 @@ package eu.scattering.core.test.storage;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.storage.Storage;
 import eu.scattering.core.design.storage.cache.FCache;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos4D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

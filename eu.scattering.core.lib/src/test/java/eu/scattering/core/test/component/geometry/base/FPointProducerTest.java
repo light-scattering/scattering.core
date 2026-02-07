@@ -5,9 +5,9 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.functionality.Producer;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.utility.type.Location;
-import eu.scattering.core.impl.FactoryDef;
+import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -513,8 +513,8 @@ public class FPointProducerTest {
     void facadeCustomRuleFunction() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FPoint> producerA = factoryA.getFPointProducer((factory) -> {
             double x = factoryA.getFRand().nextDouble();
@@ -546,8 +546,8 @@ public class FPointProducerTest {
     void facadeCustomRuleBiFunction() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FPoint> producerA = factoryA.getFPointProducer((factory, random) -> {
             double x = random.getFRand().nextDouble();
@@ -579,8 +579,8 @@ public class FPointProducerTest {
     void facadeDistribution() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         FDist3D distA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
         FDist3D distB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
@@ -602,8 +602,8 @@ public class FPointProducerTest {
     void facadeRange() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         FPairPos3D range = factory.getFPairPos3D(-1, -1, -1, 1, 1, 1);
 
@@ -624,8 +624,8 @@ public class FPointProducerTest {
     void facadeInSphere() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FPoint> producerA = factoryA.getFPointProducer(10, Location.IN_SPHERE);
         Producer<FPoint> producerB = factoryB.getFPointProducer()
@@ -644,8 +644,8 @@ public class FPointProducerTest {
     void facadeOnSphere() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FPoint> producerA = factoryA.getFPointProducer(10, Location.ON_SPHERE);
         Producer<FPoint> producerB = factoryB.getFPointProducer()
@@ -664,8 +664,8 @@ public class FPointProducerTest {
     void facadeInSphericalShell() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FPoint> producerA = factoryA.getFPointProducer(0.01, 0.02);
         Producer<FPoint> producerB = factoryB.getFPointProducer()

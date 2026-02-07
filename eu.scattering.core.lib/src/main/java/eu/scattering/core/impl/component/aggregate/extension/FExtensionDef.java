@@ -4,7 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.storage.buffer.FBuffer;
-import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import org.json.JSONObject;
 
 public class FExtensionDef implements FExtension {

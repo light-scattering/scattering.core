@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.type.Dimension;
-import eu.scattering.core.impl.FactoryDef;
+import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -154,12 +154,12 @@ public class FModelPCBallisticTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelA = factoryA.getFModelContext().pc().ballistic(fAggregateA);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelB = factoryB.getFModelContext().pc().ballistic(fAggregateB);
@@ -304,12 +304,12 @@ public class FModelPCBallisticTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelA = factoryA.getFModelContext().pc().ballistic(Dimension.D2, fAggregateA);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelB = factoryB.getFModelContext().pc().ballistic(Dimension.D2, fAggregateB);

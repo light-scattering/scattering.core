@@ -9,7 +9,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.utility.type.Dimension;
-import eu.scattering.core.impl.FactoryDef;
+import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -163,13 +163,13 @@ public class FModelCCDLCAShellTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCC fModelA = factoryA.getFModelContext().cc().dlca(fAggregateA);
             fModelA.setSymmetry(false);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCC fModelB = factoryB.getFModelContext().cc().dlca(fAggregateB);
@@ -331,13 +331,13 @@ public class FModelCCDLCAShellTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCC fModelA = factoryA.getFModelContext().cc().dlca(Dimension.D2, fAggregateA);
             fModelA.setSymmetry(false);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCC fModelB = factoryB.getFModelContext().cc().dlca(Dimension.D2, fAggregateB);

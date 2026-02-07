@@ -2,8 +2,8 @@ package eu.scattering.core.impl.statistics.construct.plot.utils;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
+import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.utility.type.RoundMethod;
 
 import java.util.ArrayList;

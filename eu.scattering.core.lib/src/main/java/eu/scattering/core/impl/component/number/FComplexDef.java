@@ -2,7 +2,7 @@ package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -3,7 +3,7 @@ package eu.scattering.core.impl.aspect.randomize.module;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.joint.FDist3DJoint;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 public class FDist3DJointDef implements FDist3DJoint {
     private final TransferFactory factoryExt;

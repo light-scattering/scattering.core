@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer
 import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.functionality.Producer;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.impl.FactoryDef;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
+import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -934,8 +934,8 @@ public class FSphereProducerTest {
     void facadeCustomRuleFunction() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer((factory) -> {
             double x = factoryA.getFRand().nextDouble();
@@ -969,8 +969,8 @@ public class FSphereProducerTest {
     void facadeCustomRuleBiFunction() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer((factory, random) -> {
             double x = random.getFRand().nextDouble();
@@ -1004,8 +1004,8 @@ public class FSphereProducerTest {
     void facadeFixedRadius() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(5);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
@@ -1024,8 +1024,8 @@ public class FSphereProducerTest {
     void facadeDistRadius() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         FDist1D distA = factoryA.getFRand().getFDist1DUniform(1, 2);
         FDist1D distB = factoryB.getFRand().getFDist1DUniform(1, 2);
@@ -1047,8 +1047,8 @@ public class FSphereProducerTest {
     void facadeCenterFixedRadius() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
         FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
@@ -1073,8 +1073,8 @@ public class FSphereProducerTest {
     void facadeCenterDistRadius() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
         FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
@@ -1102,8 +1102,8 @@ public class FSphereProducerTest {
     void facadeDistCenterFixedRadius() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
         FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
@@ -1125,8 +1125,8 @@ public class FSphereProducerTest {
     void facadeDistCenterDistRadius() {
         long seed = 123;
 
-        ScatFactory factoryA = FactoryDef.create(seed);
-        ScatFactory factoryB = FactoryDef.create(seed);
+        ScatFactory factoryA = ScatFactoryDef.create(seed);
+        ScatFactory factoryB = ScatFactoryDef.create(seed);
 
         FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
         FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);

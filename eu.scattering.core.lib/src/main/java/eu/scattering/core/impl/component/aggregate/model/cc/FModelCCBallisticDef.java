@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCC
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.storage.buffer.FBuffer;
-import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.utility.type.Center;
 import eu.scattering.core.design.utility.type.Dimension;
 

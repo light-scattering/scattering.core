@@ -2,6 +2,7 @@ package eu.scattering.core.impl.aspect.rotate;
 
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
+import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
@@ -9,10 +10,9 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.transfer.complex.FRotQt;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 import java.util.Collection;
 
@@ -114,7 +114,7 @@ public class FRotAspectDef implements FRotAspect {
 
         in.set(x, y, z);
 
-        FRotQt qt = core.getRotQt(axis, angle);
+        FRotQt qt = core.getRRotQt(axis, angle);
 
         return rotQt(in, qt);
     }
@@ -133,21 +133,21 @@ public class FRotAspectDef implements FRotAspect {
 
     @Override
     public FPoint rotQtAround(FPoint in, double x, double y, double z, double angle) {
-        FRotQt qt = core.getRotQt(x, y, z, angle);
+        FRotQt qt = core.getRRotQt(x, y, z, angle);
 
         return rotQt(in, qt);
     }
 
     @Override
     public FPoint rotQtAround(FPoint in, FPoint ref, double angle) {
-        FRotQt qt = core.getRotQt(ref.toFPos3D(), angle);
+        FRotQt qt = core.getRRotQt(ref.toFPos3D(), angle);
 
         return rotQt(in, qt);
     }
 
     @Override
     public FPoint rotQtAround(FPoint in, FPos3D ref, double angle) {
-        FRotQt qt = core.getRotQt(ref, angle);
+        FRotQt qt = core.getRRotQt(ref, angle);
 
         return rotQt(in, qt);
     }
@@ -572,7 +572,7 @@ public class FRotAspectDef implements FRotAspect {
 
         in.moveBaseToCenter();
 
-        rot(in, core.getRotQt(hX - bX, hY - bY, hZ - bZ, angle));
+        rot(in, core.getRRotQt(hX - bX, hY - bY, hZ - bZ, angle));
 
         in.moveBase(memoBX, memoBY, memoBZ);
 
@@ -665,7 +665,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRotQt(ref.toFPairPos3D(), angle);
+        FRotQt qt = core.getRRotQt(ref.toFPairPos3D(), angle);
 
         rot(in, qt);
     }
@@ -687,7 +687,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
         rot(in, qt);
     }
@@ -710,7 +710,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
         for (FPoint p : in.toFPoints()) {
             if (ref.isProjectable(p)) {
@@ -741,7 +741,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
         for (FPoint p : in.toFPoints()) {
             if (ref.isProjectable(p)) {

@@ -2,7 +2,7 @@ package eu.scattering.core.impl.helper;
 
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 public class FTrigHelperDef implements FTrigHelper {
     private final TransferFactory factoryExt;

@@ -2,8 +2,8 @@ package eu.scattering.core.design.storage.buffer;
 
 import eu.scattering.core.design.storage.Storage;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.storage.buffer.utils.FBufferConsumer;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.buffer.util.FBufferConsumer;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 import java.util.function.BiFunction;
 

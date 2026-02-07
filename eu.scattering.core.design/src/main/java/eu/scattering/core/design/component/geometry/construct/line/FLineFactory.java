@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.construct.line;
 
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.Construct;

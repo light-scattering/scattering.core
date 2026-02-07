@@ -3,7 +3,7 @@ package eu.scattering.core.impl.aspect.randomize.module;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.custom.FDist2DCustom;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 
 import java.util.function.BiConsumer;
 

@@ -7,8 +7,8 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.storage.buffer.FBuffer;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.MassCenter;
 import eu.scattering.core.design.utility.type.RadiusOfGyration;
 

@@ -5,7 +5,7 @@ import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.rlca.FModelCCRLCA;
 import eu.scattering.core.design.storage.buffer.FBuffer;
-import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.utility.type.Dimension;
 
 import java.util.ArrayList;

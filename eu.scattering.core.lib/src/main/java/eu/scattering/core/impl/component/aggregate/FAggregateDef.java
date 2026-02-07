@@ -11,11 +11,10 @@ import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.transfer.complex.FBufferData;
-
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.utility.type.*;
 import eu.scattering.core.impl.component.aggregate.extension.FExtensionDef;
 import org.json.JSONObject;

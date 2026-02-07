@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.utility.type.Dimension;
-import eu.scattering.core.impl.FactoryDef;
+import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -163,13 +163,13 @@ public class FModelPCDLACoreTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCDLA fModelA = factoryA.getFModelContext().pc().dla(fAggregateA);
             fModelA.setInternalSpawn(true);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCDLA fModelB = factoryB.getFModelContext().pc().dla(fAggregateB);
@@ -342,13 +342,13 @@ public class FModelPCDLACoreTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCDLA fModelA = factoryA.getFModelContext().pc().dla(Dimension.D2, fAggregateA);
             fModelA.setInternalSpawn(true);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCDLA fModelB = factoryB.getFModelContext().pc().dla(Dimension.D2, fAggregateB);

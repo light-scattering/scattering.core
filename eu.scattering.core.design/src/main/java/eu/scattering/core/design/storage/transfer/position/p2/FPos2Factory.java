@@ -1,13 +1,13 @@
 package eu.scattering.core.design.storage.transfer.position.p2;
 
-import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos2DI;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos3DI;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos4DI;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.*;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.*;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.integer.FPairPos2DI;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.integer.FPairPos3DI;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.integer.FPairPos4DI;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.integer.FPos2DI;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.integer.FPos3DI;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.integer.FPos4DI;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.*;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.*;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos2DI;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos3DI;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos4DI;
 import org.json.JSONObject;
 
 public interface FPos2Factory {

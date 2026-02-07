@@ -9,11 +9,11 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos2D;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos4D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos4D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.MassCenter;
 
 import java.util.ArrayList;

@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTu
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.type.Center;
 import eu.scattering.core.design.utility.type.Dimension;
-import eu.scattering.core.impl.FactoryDef;
+import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -161,13 +161,13 @@ public class FModelPCTunableTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCTunable fModelA = factoryA.getFModelContext().pc().tunable(fAggregateA, 1.8, 1.6);
             fModelA.setEarlyStageCorrection(true);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCTunable fModelB = factoryB.getFModelContext().pc().tunable(fAggregateB, 1.8, 1.6);
@@ -363,13 +363,13 @@ public class FModelPCTunableTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = FactoryDef.create(123);
+            ScatFactory factoryA = ScatFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCTunable fModelA = factoryA.getFModelContext().pc().tunable(Dimension.D2, fAggregateA, 1.6, 1.4);
             fModelA.setEarlyStageCorrection(true);
 
-            ScatFactory factoryB = FactoryDef.create(123);
+            ScatFactory factoryB = ScatFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelPCTunable fModelB = factoryB.getFModelContext().pc().tunable(Dimension.D2, fAggregateB, 1.6, 1.4);

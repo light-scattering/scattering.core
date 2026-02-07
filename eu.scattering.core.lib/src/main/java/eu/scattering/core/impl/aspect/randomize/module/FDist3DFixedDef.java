@@ -2,7 +2,7 @@ package eu.scattering.core.impl.aspect.randomize.module;
 
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.fixed.FDist3DFixed;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 public class FDist3DFixedDef implements FDist3DFixed {
     private final TransferFactory factoryExt;

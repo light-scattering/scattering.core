@@ -1,10 +1,10 @@
 package eu.scattering.core.test.component.aggregate.aspect;
 
+import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.transfer.complex.FRotQt;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -192,7 +192,7 @@ public class FAggregateRotateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(List.of(fSphereA, fSphereB));
 
-        FRotQt qt = factory.getFRot().getRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
+        FRotQt qt = factory.getFRot().getRRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
 
         FAggregate results = rot.rotQt(fAggregate, qt);
 

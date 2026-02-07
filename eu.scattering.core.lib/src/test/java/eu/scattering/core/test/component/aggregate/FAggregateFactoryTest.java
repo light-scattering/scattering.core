@@ -1,7 +1,7 @@
 package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.utility.type.OverlapFactor;
 import org.junit.jupiter.api.*;
 

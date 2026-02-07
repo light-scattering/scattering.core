@@ -1,8 +1,8 @@
 package eu.scattering.core.design.component.geometry.shape;
 
-import eu.scattering.core.design.utility.annotation.Fragment;
-import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.storage.layer.FLayer;
 
 import java.util.List;

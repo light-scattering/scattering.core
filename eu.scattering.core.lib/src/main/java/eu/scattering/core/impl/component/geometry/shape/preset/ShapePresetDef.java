@@ -7,10 +7,10 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
 
@@ -42,7 +42,7 @@ public abstract class ShapePresetDef implements Shape {
         this.factory = factory;
 
         for (int i = 0 ; i < LAYER_LIMIT ; i++) {
-            metaData.add(FBufferData.create(this.factory, "", i));
+            metaData.add(factory.getFBufferData(this.factory, "", i));
         }
     }
 

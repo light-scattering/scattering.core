@@ -3,8 +3,8 @@ package eu.scattering.core.impl.aspect.randomize.module;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.uniform.FDist3DUniform;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 public class FDist3DUniformDef implements FDist3DUniform {
     private final TransferFactory factoryExt;

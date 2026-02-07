@@ -6,9 +6,10 @@ import eu.scattering.core.design.aspect.randomize.FRandAspectFactory;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGeneratorFactory;
 import eu.scattering.core.design.aspect.rotate.FRotAspectFactory;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGeneratorFactory;
+import eu.scattering.core.design.aspect.rotate.transfer.FRotTransferFactory;
 
 public interface AspectFactory extends FRandGeneratorFactory, FRandAspectFactory,
-        FRotGeneratorFactory, FRotAspectFactory,
+        FRotGeneratorFactory, FRotTransferFactory, FRotAspectFactory,
         FProtoAspectFactory,
         FExportAspectFactory {
 }

@@ -1,11 +1,11 @@
 package eu.scattering.core.test.component.geometry.base.aspect;
 
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
+import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.storage.transfer.position.p2.variants.FPairPos3D;
-import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.transfer.complex.FRotQt;
+import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.base.support.FVectorTestHelper;
 import org.junit.jupiter.api.Assertions;
@@ -1217,7 +1217,7 @@ public class FVectorRotateTest {
 
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FRotQt qt = fRot.getRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
+        FRotQt qt = fRot.getRRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
 
         FVector results = rot.rotQt(fVector, qt);
 

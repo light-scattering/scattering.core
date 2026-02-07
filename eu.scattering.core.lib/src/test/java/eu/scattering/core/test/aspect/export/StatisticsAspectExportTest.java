@@ -4,7 +4,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
-import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
 import org.junit.jupiter.api.*;
