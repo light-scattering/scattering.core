@@ -1,35 +1,36 @@
 package eu.scattering.core.impl.aspect.randomize.module;
 
 import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.fixed.FDist2DFixed;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 
 public class FDist2DFixedDef implements FDist2DFixed {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private final double x, y;
 
-    private FDist2DFixedDef(double x, double y) {
+    private FDist2DFixedDef(StorageFactory factory, double x, double y) {
+
+        this.factory = factory;
 
         this.x = x;
         this.y = y;
     }
 
-    public static FDist2DFixed get(double x, double y) {
+    public static FDist2DFixed get(StorageFactory factory, double x, double y) {
 
-        return new FDist2DFixedDef(x, y);
+        return new FDist2DFixedDef(factory, x, y);
     }
 
-    public static FDist2DFixed get(FPos2D val) {
+    public static FDist2DFixed get(StorageFactory factory, FPos2D val) {
 
-        return new FDist2DFixedDef(val.getD0(), val.getD1());
+        return new FDist2DFixedDef(factory, val.getD0(), val.getD1());
     }
 
     @Override
     public FPos2D produce() {
 
-        return factoryExt.getFPos2D(this.x, this.y);
+        return factory.getFPos2D(this.x, this.y);
     }
 
     @Override

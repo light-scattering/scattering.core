@@ -1,7 +1,7 @@
 package eu.scattering.core.test.component.number.aspect;
 
 import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.transfer.primitive.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos2D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;

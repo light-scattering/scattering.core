@@ -3,11 +3,10 @@ package eu.scattering.core.impl.component.geometry.base;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FPointDef implements FPoint {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "point";
@@ -32,14 +31,15 @@ public class FPointDef implements FPoint {
 
     private double oX, oY, oZ;
 
-    private FPointDef(FPointFactory factorySelf) {
+    private FPointDef(StorageFactory factory, FPointFactory factorySelf) {
 
+        this.factory = factory;
         this.factorySelf = factorySelf;
     }
 
-    public static FPoint create(FPointFactory factorySelf) {
+    public static FPoint create(StorageFactory factory, FPointFactory factorySelf) {
 
-        return new FPointDef(factorySelf);
+        return new FPointDef(factory, factorySelf);
     }
 
     protected static boolean isParsable(String tag) {
@@ -237,7 +237,7 @@ public class FPointDef implements FPoint {
     @Override
     public FPos3D toFPos3D() {
 
-        return factoryExt.getFPos3D(getX(), getY(), getZ());
+        return factory.getFPos3D(getX(), getY(), getZ());
     }
 
     @Override

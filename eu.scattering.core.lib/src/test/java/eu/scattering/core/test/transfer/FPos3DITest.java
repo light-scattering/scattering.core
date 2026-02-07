@@ -1,17 +1,15 @@
 package eu.scattering.core.test.transfer;
 
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static eu.scattering.core.test.Config.factory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Timeout(1)
 @DisplayName("FPos3DI")
 public class FPos3DITest {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")
@@ -70,20 +68,6 @@ public class FPos3DITest {
             var dtoCopy = factory.getFPos3DI(jsonOrigin);
 
             assertEquals(dtoOrigin, dtoCopy, "The parsed JSON object is erroneous");
-        }
-
-        @Test
-        @DisplayName("To double")
-        void parseToDouble() {
-            var dtoOrigin = factory.getFPos3DI(1, 2, 3);
-            var dtoTarget = dtoOrigin.toDouble();
-
-            Assertions.assertAll("Check values",
-                    () -> assertEquals(dtoOrigin.getD0(), dtoTarget.getD0(), "The D0 value is incorrect"),
-                    () -> assertEquals(dtoOrigin.getD1(), dtoTarget.getD1(), "The D1 value is incorrect"),
-                    () -> assertEquals(dtoOrigin.getD2(), dtoTarget.getD2(), "The D2 value is incorrect"),
-                    () -> assertTrue(dtoTarget instanceof FPos3D, "The type of the target object is erroneous")
-            );
         }
     }
 

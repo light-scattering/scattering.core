@@ -2,11 +2,11 @@ package eu.scattering.core.design.storage.mesh;
 
 import eu.scattering.core.design.storage.Storage;
 import eu.scattering.core.design.storage.mesh.utils.FMeshConsumer;
-import eu.scattering.core.design.transfer.primitive.FPos3DI;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3DI;
 
 import java.util.function.BiFunction;
 
-public interface FMesh<T> extends Storage<FMesh<T>> {
+public interface FMesh<T> extends Storage {
 
     double getData();
     void setData(double data);

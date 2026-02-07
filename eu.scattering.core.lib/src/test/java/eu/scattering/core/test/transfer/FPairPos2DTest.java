@@ -1,17 +1,15 @@
 package eu.scattering.core.test.transfer;
 
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
+import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Timeout(1)
 @DisplayName("FPairPos2D")
 public class FPairPos2DTest {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

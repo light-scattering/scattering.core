@@ -1,36 +1,37 @@
 package eu.scattering.core.impl.aspect.randomize.module;
 
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.fixed.FDist3DFixed;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 
 public class FDist3DFixedDef implements FDist3DFixed {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private final double x, y, z;
 
-    private FDist3DFixedDef(double x, double y, double z) {
+    private FDist3DFixedDef(StorageFactory factory, double x, double y, double z) {
+
+        this.factory = factory;
 
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public static FDist3DFixed get(double x, double y, double z) {
+    public static FDist3DFixed get(StorageFactory factory, double x, double y, double z) {
 
-        return new FDist3DFixedDef(x, y, z);
+        return new FDist3DFixedDef(factory, x, y, z);
     }
 
-    public static FDist3DFixed get(FPos3D val) {
+    public static FDist3DFixed get(StorageFactory factory, FPos3D val) {
 
-        return new FDist3DFixedDef(val.getD0(), val.getD1(), val.getD2());
+        return new FDist3DFixedDef(factory, val.getD0(), val.getD1(), val.getD2());
     }
 
     @Override
     public FPos3D produce() {
 
-        return factoryExt.getFPos3D(this.x, this.y, this.z);
+        return factory.getFPos3D(this.x, this.y, this.z);
     }
 
     @Override

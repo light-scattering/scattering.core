@@ -1,10 +1,9 @@
 package eu.scattering.core.impl.storage;
 
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos3DI;
+import eu.scattering.core.design.storage.StorageFactory;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.mesh.utils.FMeshConsumer;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3DI;
 import org.json.JSONObject;
 
 import java.util.HashSet;
@@ -14,7 +13,7 @@ import java.util.function.BiFunction;
 public class FMeshDef<T> implements FMesh<T> {
     private static final int DEF_CAPACITY = 1_000_000;
 
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private static final String JSON_MAIN = "array";
     private static final String JSON_TYPE = "type";
@@ -30,28 +29,29 @@ public class FMeshDef<T> implements FMesh<T> {
 
     private double data;
 
-    private FMeshDef() {
+    private FMeshDef(StorageFactory factory) {
 
-        this(DEF_CAPACITY);
+        this(factory, DEF_CAPACITY);
     }
 
-    private FMeshDef(int capacity) {
+    private FMeshDef(StorageFactory factory, int capacity) {
         this.index = 0;
 
+        this.factory = factory;
         this.capacity = capacity;
 
         this.value = new int[3][this.capacity];
         this.meta = new Object[this.capacity];
     }
 
-    public static <T> FMesh<T> create() {
+    public static <T> FMesh<T> create(StorageFactory factory) {
 
-        return new FMeshDef<>();
+        return new FMeshDef<>(factory);
     }
 
-    public static <T> FMesh<T> create(int capacity) {
+    public static <T> FMesh<T> create(StorageFactory factory, int capacity) {
 
-        return new FMeshDef<>(capacity);
+        return new FMeshDef<>(factory, capacity);
     }
 
     @Override

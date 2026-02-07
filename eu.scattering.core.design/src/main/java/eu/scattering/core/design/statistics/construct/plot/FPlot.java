@@ -1,5 +1,6 @@
 package eu.scattering.core.design.statistics.construct.plot;
 
+import eu.scattering.core.design.storage.polynomial.variant.FPoly;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
@@ -8,7 +9,6 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.utility.type.RoundMethod;
 
 import java.util.function.BiConsumer;

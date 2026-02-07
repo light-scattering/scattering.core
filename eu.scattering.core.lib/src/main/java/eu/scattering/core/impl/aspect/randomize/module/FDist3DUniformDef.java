@@ -2,18 +2,19 @@ package eu.scattering.core.impl.aspect.randomize.module;
 
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.uniform.FDist3DUniform;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 
 public class FDist3DUniformDef implements FDist3DUniform {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private final FRandGenerator random;
     private final double x1, x2, y1, y2, z1, z2;
 
-    private FDist3DUniformDef(FRandGenerator random, double x1, double x2, double y1, double y2, double z1, double z2) {
+    private FDist3DUniformDef(StorageFactory factory, FRandGenerator random, double x1, double x2, double y1, double y2, double z1, double z2) {
+
+        this.factory = factory;
 
         this.random = random;
         this.x1 = x1;
@@ -24,14 +25,14 @@ public class FDist3DUniformDef implements FDist3DUniform {
         this.z2 = z2;
     }
 
-    public static FDist3DUniform get(FRandGenerator random, double x1, double x2, double y1, double y2, double z1, double z2) {
+    public static FDist3DUniform get(StorageFactory factory, FRandGenerator random, double x1, double x2, double y1, double y2, double z1, double z2) {
 
-        return new FDist3DUniformDef(random, x1, x2, y1, y2, z1, z2);
+        return new FDist3DUniformDef(factory, random, x1, x2, y1, y2, z1, z2);
     }
 
-    public static FDist3DUniform get(FRandGenerator random, FPairPos3D range) {
+    public static FDist3DUniform get(StorageFactory factory, FRandGenerator random, FPairPos3D range) {
 
-        return new FDist3DUniformDef(random,
+        return new FDist3DUniformDef(factory, random,
                 range.getPosA().getD0(), range.getPosB().getD0(),
                 range.getPosA().getD1(), range.getPosB().getD1(),
                 range.getPosA().getD2(), range.getPosB().getD2()
@@ -41,7 +42,7 @@ public class FDist3DUniformDef implements FDist3DUniform {
     @Override
     public FPos3D produce() {
 
-        return factoryExt.getFPos3D(
+        return factory.getFPos3D(
                 this.random.nextDouble(x1, x2),
                 this.random.nextDouble(y1, y2),
                 this.random.nextDouble(z1, z2)

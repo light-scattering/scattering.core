@@ -1,23 +1,25 @@
 package eu.scattering.core.impl.helper;
 
 import eu.scattering.core.design.helper.transfer.FTransferHelper;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.*;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos4D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
 
 public class FPositionHelperDef implements FTransferHelper {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
-    private static FPositionHelperDef self;
+    private final StorageFactory factory;
 
-    private FPositionHelperDef() { }
+    private FPositionHelperDef(StorageFactory factory) {
 
-    public static FTransferHelper get() {
+        this.factory = factory;
+    }
 
-        if (FPositionHelperDef.self == null) {
-            FPositionHelperDef.self = new FPositionHelperDef();
-        }
+    public static FTransferHelper create(StorageFactory factory) {
 
-        return FPositionHelperDef.self;
+        return new FPositionHelperDef(factory);
     }
 
     @Override

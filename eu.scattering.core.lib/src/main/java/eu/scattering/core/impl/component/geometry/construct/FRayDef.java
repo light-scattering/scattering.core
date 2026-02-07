@@ -7,8 +7,8 @@ import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayHelper;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import org.json.JSONObject;
 

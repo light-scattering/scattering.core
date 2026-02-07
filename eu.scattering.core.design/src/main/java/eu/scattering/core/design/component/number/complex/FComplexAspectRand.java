@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.complex;
 
-import eu.scattering.core.design.transfer.primitive.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos2D;
 
 public interface FComplexAspectRand {
 

@@ -2,31 +2,32 @@ package eu.scattering.core.impl.aspect.randomize.module;
 
 import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.joint.FDist3DJoint;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 
 public class FDist3DJointDef implements FDist3DJoint {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private final FDist1D dX, dY, dZ;
 
-    private FDist3DJointDef(FDist1D dX, FDist1D dY, FDist1D dZ) {
+    private FDist3DJointDef(StorageFactory factory, FDist1D dX, FDist1D dY, FDist1D dZ) {
+
+        this.factory = factory;
 
         this.dX = dX;
         this.dY = dY;
         this.dZ = dZ;
     }
 
-    public static FDist3DJoint get(FDist1D dX, FDist1D dY, FDist1D dZ) {
+    public static FDist3DJoint get(StorageFactory factory, FDist1D dX, FDist1D dY, FDist1D dZ) {
 
-        return new FDist3DJointDef(dX, dY, dZ);
+        return new FDist3DJointDef(factory, dX, dY, dZ);
     }
 
     @Override
     public FPos3D produce() {
 
-        return factoryExt.getFPos3D(
+        return factory.getFPos3D(
                 this.dX.produce(),
                 this.dY.produce(),
                 this.dZ.produce()

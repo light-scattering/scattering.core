@@ -1,6 +1,8 @@
 package eu.scattering.core.impl.statistics.construct.plot;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.storage.polynomial.variant.FPoly;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -8,8 +10,6 @@ import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolat
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.layer.FLayer;
-import eu.scattering.core.design.transfer.primitive.FPoly;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.design.utility.type.RoundMethod;
 import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotInterpolatorDef;
 import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotRegressorDef;

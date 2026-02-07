@@ -1,10 +1,10 @@
 package eu.scattering.core.design.component.number.quaternion;
 
+import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
 import eu.scattering.core.design.utility.annotation.Extension;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.utility.annotation.Terminator;
 import eu.scattering.core.design.component.number.Number;
-import eu.scattering.core.design.transfer.primitive.FPos4D;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

@@ -84,5 +84,9 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.monitor.cc;
     exports eu.scattering.core.design.component.aggregate.extension;
     exports eu.scattering.core.design.storage.box;
-    exports eu.scattering.core.design.storage.box.variants;
+    exports eu.scattering.core.design.storage.box.variant;
+    exports eu.scattering.core.design.storage.transfer.single.variants;
+    exports eu.scattering.core.design.storage.transfer.pair.variants;
+    exports eu.scattering.core.design.storage.polynomial;
+    exports eu.scattering.core.design.storage.polynomial.variant;
 }

@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 
 public interface FPointAspectRand {
 

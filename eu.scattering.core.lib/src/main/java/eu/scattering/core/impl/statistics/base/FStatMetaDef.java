@@ -2,7 +2,7 @@ package eu.scattering.core.impl.statistics.base;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.base.FStatMeta;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 
 public class FStatMetaDef implements FStatMeta {
     private final ScatFactory factory;

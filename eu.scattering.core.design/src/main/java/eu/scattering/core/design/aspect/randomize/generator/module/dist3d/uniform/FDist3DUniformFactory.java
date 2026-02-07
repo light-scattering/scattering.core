@@ -1,6 +1,6 @@
 package eu.scattering.core.design.aspect.randomize.generator.module.dist3d.uniform;
 
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
 
 public interface FDist3DUniformFactory {
 

@@ -1,20 +1,18 @@
 package eu.scattering.core.test.transfer;
 
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos4D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
 import eu.scattering.core.design.transfer.complex.FRotQt;
+import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
+import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Timeout(1)
 @DisplayName("FRotQt")
 public class FRotQtTest {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")
@@ -41,7 +39,7 @@ public class FRotQtTest {
 
             FMatrix3x3D matrix = factory.getFMatrix3x3D(matrixTemplate);
 
-            FRotQt dto = FRotQt.create(qt, offset, matrix);
+            FRotQt dto = FRotQt.create(factory, qt, offset, matrix);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(qt, dto.getQuaternion(), "The quaternion is incorrect"),
@@ -77,11 +75,11 @@ public class FRotQtTest {
 
             FMatrix3x3D matrix = factory.getFMatrix3x3D(matrixTemplate);
 
-            FRotQt dtoOrigin = FRotQt.create(qt, offset, matrix);
+            FRotQt dtoOrigin = FRotQt.create(factory, qt, offset, matrix);
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
-            FRotQt dtoCopy = FRotQt.create(jsonOrigin);
+            FRotQt dtoCopy = FRotQt.create(factory, jsonOrigin);
 
             assertEquals(dtoOrigin, dtoCopy, "The parsed JSON object is erroneous");
         }

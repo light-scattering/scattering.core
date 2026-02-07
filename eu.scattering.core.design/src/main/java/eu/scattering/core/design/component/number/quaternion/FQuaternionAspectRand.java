@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.quaternion;
 
-import eu.scattering.core.design.transfer.primitive.FPairPos4D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos4D;
 
 public interface FQuaternionAspectRand {
 

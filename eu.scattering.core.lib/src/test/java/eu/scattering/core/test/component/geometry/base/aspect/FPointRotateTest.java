@@ -2,8 +2,8 @@ package eu.scattering.core.test.component.geometry.base.aspect;
 
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 import eu.scattering.core.design.transfer.complex.FRotQt;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.base.support.FPointTestHelper;
 import org.junit.jupiter.api.Assertions;

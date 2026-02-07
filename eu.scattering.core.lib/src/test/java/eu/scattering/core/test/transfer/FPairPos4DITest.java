@@ -1,17 +1,15 @@
 package eu.scattering.core.test.transfer;
 
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPairPos4D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static eu.scattering.core.test.Config.factory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Timeout(1)
 @DisplayName("FPairPos4D")
 public class FPairPos4DITest {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")
@@ -50,22 +48,6 @@ public class FPairPos4DITest {
 
             assertEquals(dtoOrigin, dtoCopy,
                     "The parsed JSON object is erroneous");
-        }
-
-        @Test
-        @DisplayName("To double")
-        void parseToDouble() {
-            var dtoOrigin = factory.getFPairPos4DI(factory.getFPos4DI(1, 2, 3, 4), factory.getFPos4DI(5, 6, 7, 8));
-            var dtoTarget = dtoOrigin.toDouble();
-
-            Assertions.assertAll("Check values",
-                    () -> assertEquals(dtoOrigin.getPosA().toDouble(), dtoTarget.getPosA(),
-                            "Position A is incorrect"),
-                    () -> assertEquals(dtoOrigin.getPosB().toDouble(), dtoTarget.getPosB(),
-                            "Position B is incorrect"),
-                    () -> assertTrue(dtoTarget instanceof FPairPos4D,
-                            "The type of the target object is erroneous")
-            );
         }
     }
 

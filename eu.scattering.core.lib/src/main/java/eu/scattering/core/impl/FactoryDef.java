@@ -55,12 +55,15 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
-import eu.scattering.core.design.storage.box.variants.FBoxDouble;
-import eu.scattering.core.design.storage.box.variants.FBoxString;
+import eu.scattering.core.design.storage.box.variant.FBoxDouble;
+import eu.scattering.core.design.storage.box.variant.FBoxString;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.polynomial.variant.FPoly;
+import eu.scattering.core.design.storage.transfer.pair.variants.*;
+import eu.scattering.core.design.storage.transfer.single.variants.*;
 import eu.scattering.core.impl.aspect.export.FExportAspectDef;
 import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
@@ -97,6 +100,7 @@ import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarDef;
 import eu.scattering.core.impl.statistics.construct.plot.FPlotDef;
 import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarMetaDef;
 import eu.scattering.core.impl.storage.*;
+import eu.scattering.core.impl.storage.position.*;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -125,30 +129,30 @@ public final class FactoryDef implements ScatFactory {
     private final FSphereHelper fSphereHelper;
 
     private FactoryDef() {
-        this.fRandGenerator = FRandGeneratorDef.create();
+        this.fRandGenerator = FRandGeneratorDef.create(this);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
     }
 
     private FactoryDef(long seed) {
-        this.fRandGenerator = FRandGeneratorDef.create(seed);
+        this.fRandGenerator = FRandGeneratorDef.create(this, seed);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
     }
 
     {
         this.fAspectExport = FExportAspectDef.get(this);
 
+        this.fRotGenerator = FRotProcessorDef.create(this);
+
         this.fAspectProto = FProtoAspectDef.get();
-        this.fAspectRot = FRotAspectDef.create(FRotProcessorDef.get());
+        this.fAspectRot = FRotAspectDef.create(this.fRotGenerator );
 
-        this.fRotGenerator = FRotProcessorDef.get();
-
-        this.fTrigHelper = FTrigHelperDef.get();
+        this.fTrigHelper = FTrigHelperDef.create(this);
         this.fStatHelper = FStatHelperDef.get();
-        this.fPosHelper = FPositionHelperDef.get();
+        this.fPosHelper = FPositionHelperDef.create(this);
 
         this.fGeometryParser = GeometryParserDef.get(this);
 
-        this.fPointHelper = FPointHelperDef.get();
+        this.fPointHelper = FPointHelperDef.get(this);
         this.fRayHelper = FRayHelperDef.get(this);
         this.fLineHelper = FLineHelperDef.get(this);
         this.fSegmentHelper = FSegmentHelperDef.get(this);
@@ -185,7 +189,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FComplex getFComplex() {
 
-        return FComplexDef.create(this);
+        return FComplexDef.create(this, this);
     }
 
     //--------------------------------------------------
@@ -199,7 +203,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FQuaternion getFQuaternion() {
 
-        return FQuaternionDef.create(this);
+        return FQuaternionDef.create(this, this);
     }
 
     //--------------------------------------------------
@@ -219,7 +223,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FPoint getFPoint() {
 
-        return FPointDef.create(this);
+        return FPointDef.create(this, this);
     }
 
     //--------------------------------------------------
@@ -233,19 +237,19 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FVector getRefFVector(FPoint refBase, FPoint refHead) {
 
-        return FVectorDef.create(this, refBase, refHead);
+        return FVectorDef.create(this, this, refBase, refHead);
     }
 
     @Override
     public FVector getRefFVector(FPoint refHead) {
 
-        return FVectorDef.create(this, getFPoint(), refHead);
+        return FVectorDef.create(this, this, getFPoint(), refHead);
     }
 
     @Override
     public FVector getFVector() {
 
-        return FVectorDef.create(this, getFPoint(), getFPoint());
+        return FVectorDef.create(this, this, getFPoint(), getFPoint());
     }
 
     //--------------------------------------------------
@@ -418,19 +422,19 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public <T extends Geometry> FAssembly<T> getFAssembly(List<? extends T> elements) {
 
-        return FAssemblyDef.create(this, elements);
+        return FAssemblyDef.create(this, this, elements);
     }
 
     @Override
     public <T extends Geometry> FAssembly<T> getFAssembly() {
 
-        return FAssemblyDef.create(this, new ArrayList<>());
+        return FAssemblyDef.create(this, this, new ArrayList<>());
     }
 
     @Override
     public <T extends Geometry> FAssembly<T> getFAssembly(JSONObject json) {
 
-        return FAssemblyDef.create(this, json);
+        return FAssemblyDef.create(this,this, json);
     }
 
     //--------------------------------------------------
@@ -642,19 +646,19 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public <T> FBuffer<T> getFBuffer(int capacity) {
 
-        return FBufferDef.create(capacity);
+        return FBufferDef.create(this, capacity);
     }
 
     @Override
     public <T> FMesh<T> getFMesh() {
 
-        return FMeshDef.create();
+        return FMeshDef.create(this);
     }
 
     @Override
     public <T> FMesh<T> getFMesh(int capacity) {
 
-        return FMeshDef.create(capacity);
+        return FMeshDef.create(this, capacity);
     }
 
     @Override
@@ -719,5 +723,197 @@ public final class FactoryDef implements ScatFactory {
     public FBoxString getFBoxString() {
 
         return FBoxStringDef.create();
+    }
+
+    @Override
+    public FPos2D getFPos2D(double d0, double d1) {
+
+        return FPos2DDef.create(d0, d1);
+    }
+
+    @Override
+    public FPos2D getFPos2D(JSONObject json) {
+
+        return FPos2DDef.create(json);
+    }
+
+    @Override
+    public FPos2DI getFPos2DI(int d0, int d1) {
+
+        return FPos2DIDef.create(d0, d1);
+    }
+
+    @Override
+    public FPos2DI getFPos2DI(JSONObject json) {
+
+        return FPos2DIDef.create(json);
+    }
+
+    @Override
+    public FPos3D getFPos3D(double d0, double d1, double d2) {
+
+        return FPos3DDef.create(d0, d1, d2);
+    }
+
+    @Override
+    public FPos3D getFPos3D(JSONObject json) {
+
+        return FPos3DDef.create(json);
+    }
+
+    @Override
+    public FPos3DI getFPos3DI(int d0, int d1, int d2) {
+
+        return FPos3DIDef.create(d0, d1, d2);
+    }
+
+    @Override
+    public FPos3DI getFPos3DI(JSONObject json) {
+
+        return FPos3DIDef.create(json);
+    }
+
+    @Override
+    public FPos4D getFPos4D(double d0, double d1, double d2, double d3) {
+
+        return FPos4DDef.create(d0, d1, d2, d3);
+    }
+
+    @Override
+    public FPos4D getFPos4D(JSONObject json) {
+
+        return FPos4DDef.create(json);
+    }
+
+    @Override
+    public FPos4DI getFPos4DI(int d0, int d1, int d2, int d3) {
+
+        return FPos4DIDef.create(d0, d1, d2, d3);
+    }
+
+    @Override
+    public FPos4DI getFPos4DI(JSONObject json) {
+
+        return FPos4DIDef.create(json);
+    }
+
+    @Override
+    public FPairPos2D getFPairPos2D(double AD0, double AD1, double BD0, double BD1) {
+
+        return FPairPos2DDef.create(this, AD0, AD1, BD0, BD1);
+    }
+
+    @Override
+    public FPairPos2D getFPairPos2D(FPos2D posA, FPos2D posB) {
+
+        return FPairPos2DDef.create(this, posA, posB);
+    }
+
+    @Override
+    public FPairPos2D getFPairPos2D(JSONObject json) {
+
+        return FPairPos2DDef.create(this, json);
+    }
+
+    @Override
+    public FPairPos2DI getFPairPos2DI(int AD0, int AD1, int BD0, int BD1) {
+
+        return FPairPos2DIDef.create(this, AD0, AD1, BD0, BD1);
+    }
+
+    @Override
+    public FPairPos2DI getFPairPos2DI(FPos2DI posA, FPos2DI posB) {
+
+        return FPairPos2DIDef.create(this, posA, posB);
+    }
+
+    @Override
+    public FPairPos2DI getFPairPos2DI(JSONObject json) {
+
+        return FPairPos2DIDef.create(this, json);
+    }
+
+    @Override
+    public FPairPos3D getFPairPos3D(double AD0, double AD1, double AD2, double BD0, double BD1, double BD2) {
+
+        return FPairPos3DDef.create(this, AD0, AD1, AD2, BD0, BD1, BD2);
+    }
+
+    @Override
+    public FPairPos3D getFPairPos3D(FPos3D posA, FPos3D posB) {
+
+        return FPairPos3DDef.create(this, posA, posB);
+    }
+
+    @Override
+    public FPairPos3D getFPairPos3D(JSONObject json) {
+
+        return FPairPos3DDef.create(this, json);
+    }
+
+    @Override
+    public FPairPos3DI getFPairPos3DI(int AD0, int AD1, int AD2, int BD0, int BD1, int BD2) {
+
+        return FPairPos3DIDef.create(this, AD0, AD1, AD2, BD0, BD1, BD2);
+    }
+
+    @Override
+    public FPairPos3DI getFPairPos3DI(FPos3DI posA, FPos3DI posB) {
+
+        return FPairPos3DIDef.create(this, posA, posB);
+    }
+
+    @Override
+    public FPairPos3DI getFPairPos3DI(JSONObject json) {
+
+        return FPairPos3DIDef.create(this, json);
+    }
+
+    @Override
+    public FPairPos4D getFPairPos4D(double AD0, double AD1, double AD2, double AD3, double BD0, double BD1, double BD2, double BD3) {
+
+        return FPairPos4DDef.create(this, AD0, AD1, AD2, AD3, BD0, BD1, BD2, BD3);
+    }
+
+    @Override
+    public FPairPos4D getFPairPos4D(FPos4D posA, FPos4D posB) {
+
+        return FPairPos4DDef.create(this, posA, posB);
+    }
+
+    @Override
+    public FPairPos4D getFPairPos4D(JSONObject json) {
+
+        return FPairPos4DDef.create(this, json);
+    }
+
+    @Override
+    public FPairPos4DI getFPairPos4DI(int AD0, int AD1, int AD2, int AD3, int BD0, int BD1, int BD2, int BD3) {
+
+        return FPairPos4DIDef.create(this, AD0, AD1, AD2, AD3, BD0, BD1, BD2, BD3);
+    }
+
+    @Override
+    public FPairPos4DI getFPairPos4DI(FPos4DI posA, FPos4DI posB) {
+
+        return FPairPos4DIDef.create(this, posA, posB);
+    }
+
+    @Override
+    public FPairPos4DI getFPairPos4DI(JSONObject json) {
+
+        return FPairPos4DIDef.create(this, json);
+    }
+
+    @Override
+    public FPoly getFPoly(double... core) {
+
+        return FPolyDef.create(core);
+    }
+
+    @Override
+    public FPoly getFPoly(JSONObject json) {
+
+        return FPolyDef.create(json);
     }
 }

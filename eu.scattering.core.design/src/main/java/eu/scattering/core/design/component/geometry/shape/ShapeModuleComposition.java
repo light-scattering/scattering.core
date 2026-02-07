@@ -1,9 +1,9 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.transfer.complex.FBufferData;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.List;
 

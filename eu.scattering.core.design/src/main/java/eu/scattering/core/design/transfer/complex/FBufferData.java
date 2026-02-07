@@ -1,7 +1,7 @@
 package eu.scattering.core.design.transfer.complex;
 
 import eu.scattering.core.design.storage.StorageFactory;
-import eu.scattering.core.design.storage.box.variants.FBoxString;
+import eu.scattering.core.design.storage.box.variant.FBoxString;
 import eu.scattering.core.design.transfer.Transfer;
 import org.json.JSONObject;
 

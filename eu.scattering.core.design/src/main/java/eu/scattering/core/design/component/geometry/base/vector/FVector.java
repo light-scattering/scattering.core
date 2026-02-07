@@ -2,12 +2,12 @@ package eu.scattering.core.design.component.geometry.base.vector;
 
 import eu.scattering.core.design.component.geometry.base.Base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 import eu.scattering.core.design.utility.annotation.Extension;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.utility.annotation.Terminator;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

@@ -1,23 +1,20 @@
 package eu.scattering.core.impl.helper;
 
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 
 public class FTrigHelperDef implements FTrigHelper {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
-    private static FTrigHelperDef self;
+    private final StorageFactory factory;
 
-    private FTrigHelperDef() {}
+    private FTrigHelperDef(StorageFactory factory) {
 
-    public static FTrigHelper get() {
+        this.factory = factory;
+    }
 
-        if (FTrigHelperDef.self == null) {
-            FTrigHelperDef.self = new FTrigHelperDef();
-        }
+    public static FTrigHelper create(StorageFactory factory) {
 
-        return FTrigHelperDef.self;
+        return new FTrigHelperDef(factory);
     }
 
     @Override
@@ -62,7 +59,7 @@ public class FTrigHelperDef implements FTrigHelper {
         var d1 = origin.getD1() - ref.getD1();
         var d2 = origin.getD2() - ref.getD2();
 
-        return factoryExt.getFPos3D(d0, d1, d2);
+        return factory.getFPos3D(d0, d1, d2);
     }
 
     private double getLength(FPos3D ref) {

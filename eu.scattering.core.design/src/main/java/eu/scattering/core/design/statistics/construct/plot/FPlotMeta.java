@@ -1,6 +1,6 @@
 package eu.scattering.core.design.statistics.construct.plot;
 
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 
 public interface FPlotMeta {
 

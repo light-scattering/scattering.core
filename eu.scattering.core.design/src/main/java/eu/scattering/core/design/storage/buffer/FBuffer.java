@@ -1,13 +1,13 @@
 package eu.scattering.core.design.storage.buffer;
 
 import eu.scattering.core.design.storage.Storage;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.buffer.utils.FBufferConsumer;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 
 import java.util.function.BiFunction;
 
-public interface FBuffer<T> extends Storage<FBuffer<T>> {
+public interface FBuffer<T> extends Storage {
 
     void add(double d0, double d1, double d2);
     void add(FPos3D pos);

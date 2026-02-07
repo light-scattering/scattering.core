@@ -1,7 +1,7 @@
 package eu.scattering.core.test.component.number;
 
 import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.number.support.FComplexTestHelper;
 import org.json.JSONObject;

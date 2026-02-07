@@ -1,10 +1,10 @@
 package eu.scattering.core.test.storage;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.storage.Storage;
 import eu.scattering.core.design.storage.cache.FCache;
-import eu.scattering.core.design.transfer.Transfer;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos4D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FCache")
 public class FCacheTest {
-    private boolean multi = true;
+    private final boolean multi = true;
 
     @Nested
     @Tag("Basic")
@@ -52,7 +52,7 @@ public class FCacheTest {
             boolean isReplaced = fCache.put("data", fPos3D);
 
             FPos3D result = fCache.getOptional("data", FPos3D.class).orElseThrow();
-            Transfer resultSuper = fCache.getOptional("data", Transfer.class).orElseThrow();
+            Storage resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.size(),
@@ -77,7 +77,7 @@ public class FCacheTest {
             boolean isReplaced = fCache.put("data", fPos3D);
 
             FPos3D result = fCache.getOptional("data", FPos3D.class).orElseThrow();
-            Transfer resultSuper = fCache.getOptional("data", Transfer.class).orElseThrow();
+            Storage resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.size(),

@@ -1,6 +1,6 @@
 package eu.scattering.core.design.statistics.construct.plotbar;
 
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 
 public interface FPlotBarMeta {
 

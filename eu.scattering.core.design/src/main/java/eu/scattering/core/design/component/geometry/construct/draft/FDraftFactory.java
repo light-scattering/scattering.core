@@ -1,9 +1,9 @@
 package eu.scattering.core.design.component.geometry.construct.draft;
 
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.Construct;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 
 public interface FDraftFactory {
 

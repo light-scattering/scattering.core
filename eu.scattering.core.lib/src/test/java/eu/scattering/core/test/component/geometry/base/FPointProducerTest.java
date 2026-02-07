@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.functionality.Producer;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
 import eu.scattering.core.design.utility.type.Location;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;

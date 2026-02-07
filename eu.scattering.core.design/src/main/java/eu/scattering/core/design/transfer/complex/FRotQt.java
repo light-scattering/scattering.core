@@ -1,11 +1,13 @@
 package eu.scattering.core.design.transfer.complex;
 
+import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
 import eu.scattering.core.design.transfer.Transfer;
 import eu.scattering.core.design.transfer.TransferFactory;
 import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos4D;
 import org.json.JSONObject;
 
 import java.util.Objects;
@@ -30,12 +32,12 @@ public class FRotQt implements Transfer {
         this.matrix = matrix;
     }
 
-    public static FRotQt create(FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
+    public static FRotQt create(StorageFactory factory, FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
 
         return new FRotQt(qt, offset, matrix);
     }
 
-    public static FRotQt create(JSONObject json) {
+    public static FRotQt create(ScatFactory factory, JSONObject json) {
 
         if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
            throw new IllegalArgumentException("The object type is incorrect");

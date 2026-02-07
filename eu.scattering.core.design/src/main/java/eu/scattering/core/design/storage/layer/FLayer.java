@@ -2,7 +2,7 @@ package eu.scattering.core.design.storage.layer;
 
 import eu.scattering.core.design.storage.Storage;
 
-public interface FLayer extends Storage<FLayer>, Iterable<Integer> {
+public interface FLayer extends Storage, Iterable<Integer> {
 
     int get(int layer);
 

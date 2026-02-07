@@ -1,7 +1,7 @@
 package eu.scattering.core.design.storage.box;
 
-import eu.scattering.core.design.storage.box.variants.FBoxDouble;
-import eu.scattering.core.design.storage.box.variants.FBoxString;
+import eu.scattering.core.design.storage.box.variant.FBoxDouble;
+import eu.scattering.core.design.storage.box.variant.FBoxString;
 
 public interface FBoxFactory {
 

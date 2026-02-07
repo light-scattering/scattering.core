@@ -5,7 +5,7 @@ import eu.scattering.core.design.storage.Storage;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface FCache extends Storage<FCache> {
+public interface FCache extends Storage {
 
     <T> boolean put(String key, T value);
     <T> boolean put(Class<T> type, T value);

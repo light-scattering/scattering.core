@@ -2,9 +2,8 @@ package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos4D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,7 +13,7 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FQuaternionDef implements FQuaternion {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "qt";
@@ -28,14 +27,15 @@ public class FQuaternionDef implements FQuaternion {
 
     private double oRe, oI, oJ, oK;
 
-    private FQuaternionDef(FQuaternionFactory factorySelf) {
+    private FQuaternionDef(StorageFactory factory, FQuaternionFactory factorySelf) {
 
+        this.factory = factory;
         this.factorySelf = factorySelf;
     }
 
-    public static FQuaternion create(FQuaternionFactory factorySelf) {
+    public static FQuaternion create(StorageFactory factory, FQuaternionFactory factorySelf) {
 
-        return new FQuaternionDef(factorySelf);
+        return new FQuaternionDef(factory, factorySelf);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FPos4D toFPos4D() {
 
-        return factoryExt.getFPos4D(getRe(), getI(), getJ(), getK());
+        return factory.getFPos4D(getRe(), getI(), getJ(), getK());
     }
 
     @Override

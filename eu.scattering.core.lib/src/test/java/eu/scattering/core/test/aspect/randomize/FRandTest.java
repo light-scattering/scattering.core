@@ -1,10 +1,15 @@
 package eu.scattering.core.test.aspect.randomize;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.transfer.primitive.*;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos2D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos4D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos4D;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.*;
 

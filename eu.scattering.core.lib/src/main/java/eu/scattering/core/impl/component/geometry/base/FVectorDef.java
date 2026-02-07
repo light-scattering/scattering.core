@@ -4,11 +4,10 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.pair.variants.FPairPos3D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,7 +19,7 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FVectorDef implements FVector {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "vector";
@@ -35,12 +34,13 @@ public class FVectorDef implements FVector {
     private FPoint oBase;
     private FPoint oHead;
 
-    private FVectorDef(FVectorFactory factorySelf) {
+    private FVectorDef(StorageFactory factory, FVectorFactory factorySelf) {
 
+        this.factory = factory;
         this.factorySelf = factorySelf;
     }
 
-    public static FVector create(FVectorFactory factorySelf, FPoint refBase, FPoint refHead) {
+    public static FVector create(StorageFactory factory, FVectorFactory factorySelf, FPoint refBase, FPoint refHead) {
 
         if (refBase == null) {
             throw new NullPointerException("The base FPoint cannot be null");
@@ -50,7 +50,7 @@ public class FVectorDef implements FVector {
             throw new NullPointerException("The head FPoint cannot be null");
         }
 
-        var fVector = new FVectorDef(factorySelf);
+        var fVector = new FVectorDef(factory, factorySelf);
 
         fVector.setRefBase(refBase);
         fVector.setRefHead(refHead);
@@ -490,7 +490,7 @@ public class FVectorDef implements FVector {
         FPos3D posA = getRefBase().toFPos3D();
         FPos3D posB = getRefHead().toFPos3D();
 
-        return factoryExt.getFPairPos3D(posA, posB);
+        return factory.getFPairPos3D(posA, posB);
     }
 
     @Override

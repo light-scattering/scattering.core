@@ -3,7 +3,7 @@ package eu.scattering.core.impl.statistics.construct.plot.utils;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 import eu.scattering.core.design.utility.type.RoundMethod;
 
 import java.util.ArrayList;

@@ -2,28 +2,29 @@ package eu.scattering.core.impl.aspect.randomize.module;
 
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.custom.FDist3DCustom;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 
 import java.util.function.BiConsumer;
 
 public class FDist3DManualDef implements FDist3DCustom {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private final BiConsumer<FRandGenerator, Double[]> consumer;
     private final FRandGenerator random;
     private final Double[] arr = new Double[3];
 
-    private FDist3DManualDef(FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
+    private FDist3DManualDef(StorageFactory factory, FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
+
+        this.factory = factory;
 
         this.random = random;
         this.consumer = consumer;
     }
 
-    public static FDist3DCustom get(FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
+    public static FDist3DCustom get(StorageFactory factory, FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
 
-        return new FDist3DManualDef(random, consumer);
+        return new FDist3DManualDef(factory, random, consumer);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class FDist3DManualDef implements FDist3DCustom {
 
         this.consumer.accept(this.random, this.arr);
 
-        return factoryExt.getFPos3D(this.arr[0], this.arr[1], this.arr[2]);
+        return factory.getFPos3D(this.arr[0], this.arr[1], this.arr[2]);
     }
 
     @Override

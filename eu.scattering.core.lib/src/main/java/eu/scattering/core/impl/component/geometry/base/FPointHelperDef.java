@@ -1,20 +1,22 @@
 package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos3D;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FPointHelperDef implements FPointHelper {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
-    private FPointHelperDef() {}
+    private FPointHelperDef(StorageFactory factory) {
 
-    public static FPointHelper get() {
+        this.factory = factory;
+    }
 
-        return new FPointHelperDef();
+    public static FPointHelper get(StorageFactory factory) {
+
+        return new FPointHelperDef(factory);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class FPointHelperDef implements FPointHelper {
 
         double factor = magnitude / getMagnitude(refX, refY, refZ);
 
-        return factoryExt.getFPos3D(refX * factor, refY * factor, refZ * factor);
+        return factory.getFPos3D(refX * factor, refY * factor, refZ * factor);
     }
 
     @Override
@@ -91,7 +93,7 @@ public class FPointHelperDef implements FPointHelper {
         posY = (posY * factor) + y;
         posZ = (posZ * factor) + z;
 
-        return factoryExt.getFPos3D(posX, posY, posZ);
+        return factory.getFPos3D(posX, posY, posZ);
     }
 
     @Override

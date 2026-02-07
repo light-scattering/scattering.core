@@ -2,9 +2,8 @@ package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexFactory;
-import eu.scattering.core.design.transfer.TransferFactory;
-import eu.scattering.core.design.transfer.TransferFactoryConcrete;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.storage.StorageFactory;
+import eu.scattering.core.design.storage.transfer.single.variants.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,7 +13,7 @@ import java.util.function.Function;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FComplexDef implements FComplex {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private final StorageFactory factory;
 
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "cpx";
@@ -28,14 +27,15 @@ public class FComplexDef implements FComplex {
 
     private double oRe, oIm;
 
-    private FComplexDef(FComplexFactory factorySelf) {
+    private FComplexDef(StorageFactory factory, FComplexFactory factorySelf) {
 
+        this.factory = factory;
         this.factorySelf = factorySelf;
     }
 
-    public static FComplex create(FComplexFactory factorySelf) {
+    public static FComplex create(StorageFactory factory, FComplexFactory factorySelf) {
 
-        return new FComplexDef(factorySelf);
+        return new FComplexDef(factory, factorySelf);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FPos2D toFPos2D() {
 
-        return factoryExt.getFPos2D(getRe(), getIm());
+        return factory.getFPos2D(getRe(), getIm());
     }
 
     @Override
