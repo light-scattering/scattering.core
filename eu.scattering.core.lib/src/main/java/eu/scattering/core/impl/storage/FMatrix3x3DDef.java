@@ -1,19 +1,19 @@
-package eu.scattering.core.design.transfer.primitive;
+package eu.scattering.core.impl.storage;
 
-import eu.scattering.core.design.transfer.Transfer;
+import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class FMatrix3x3D implements Transfer {
+public class FMatrix3x3DDef implements FMatrix3x3D {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "matrix3x3D";
     private static final String JSON_VAL = "val";
 
     private final double[][] core;
 
-    private FMatrix3x3D(double[][] core) {
+    private FMatrix3x3DDef(double[][] core) {
 
         if (core == null) {
             throw new NullPointerException("The matrix is null");
@@ -26,12 +26,12 @@ public class FMatrix3x3D implements Transfer {
         this.core = copy(core);
     }
 
-    protected static FMatrix3x3D create(double[][] core) {
+    public static FMatrix3x3DDef create(double[][] core) {
 
-        return new FMatrix3x3D(core);
+        return new FMatrix3x3DDef(core);
     }
 
-    protected static FMatrix3x3D create(JSONObject json) {
+    public static FMatrix3x3DDef create(JSONObject json) {
 
         if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("The object type is incorrect");
@@ -55,42 +55,52 @@ public class FMatrix3x3D implements Transfer {
     }
 
     public double get0x0() {
+
         return this.core[0][0];
     }
 
     public double get0x1() {
+
         return this.core[0][1];
     }
 
     public double get0x2() {
+
         return this.core[0][2];
     }
 
     public double get1x0() {
+
         return this.core[1][0];
     }
 
     public double get1x1() {
+
         return this.core[1][1];
     }
 
     public double get1x2() {
+
         return this.core[1][2];
     }
 
     public double get2x0() {
+
         return this.core[2][0];
     }
 
     public double get2x1() {
+
         return this.core[2][1];
     }
 
     public double get2x2() {
+
         return this.core[2][2];
     }
 
     public double[][] getArray() {
+
         return copy(this.core);
     }
 
@@ -125,7 +135,7 @@ public class FMatrix3x3D implements Transfer {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FMatrix3x3D matrix) {
+        if (object instanceof FMatrix3x3DDef matrix) {
 
             var row0 = get0x0() == matrix.get0x0() && get0x1() == matrix.get0x1() && get0x2() == matrix.get0x2();
             var row1 = get1x0() == matrix.get1x0() && get1x1() == matrix.get1x1() && get1x2() == matrix.get1x2();

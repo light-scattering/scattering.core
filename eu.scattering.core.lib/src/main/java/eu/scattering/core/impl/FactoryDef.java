@@ -61,6 +61,7 @@ import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.polynomial.variants.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos2DI;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.integer.FPos3DI;
@@ -921,5 +922,17 @@ public final class FactoryDef implements ScatFactory {
     public FPoly getFPoly(JSONObject json) {
 
         return FPolyDef.create(json);
+    }
+
+    @Override
+    public FMatrix3x3D getFMatrix3x3D(double[][] origin) {
+
+        return FMatrix3x3DDef.create(origin);
+    }
+
+    @Override
+    public FMatrix3x3D getFMatrix3x3D(JSONObject json) {
+
+        return FMatrix3x3DDef.create(json);
     }
 }

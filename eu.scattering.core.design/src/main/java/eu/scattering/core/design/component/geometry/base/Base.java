@@ -1,10 +1,10 @@
 package eu.scattering.core.design.component.geometry.base;
 
+import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONObject;
 
 public interface Base<T> extends Geometry {

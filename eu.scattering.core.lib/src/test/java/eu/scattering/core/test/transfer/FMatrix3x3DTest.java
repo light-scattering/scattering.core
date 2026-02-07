@@ -1,17 +1,15 @@
 package eu.scattering.core.test.transfer;
 
-import eu.scattering.core.design.transfer.TransferOldFactory;
-import eu.scattering.core.design.transfer.TransferOldFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
+import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Timeout(1)
 @DisplayName("FMatrix3x3D")
 public class FMatrix3x3DTest {
-    private static final TransferOldFactory factory = TransferOldFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

@@ -1,9 +1,9 @@
 package eu.scattering.core.test.transfer;
 
+import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
 import eu.scattering.core.design.transfer.complex.FRotQt;
-import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -39,7 +39,7 @@ public class FRotQtTest {
 
             FMatrix3x3D matrix = factory.getFMatrix3x3D(matrixTemplate);
 
-            FRotQt dto = FRotQt.create(factory, qt, offset, matrix);
+            FRotQt dto = FRotQt.create(qt, offset, matrix);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(qt, dto.getQuaternion(), "The quaternion is incorrect"),
@@ -75,7 +75,7 @@ public class FRotQtTest {
 
             FMatrix3x3D matrix = factory.getFMatrix3x3D(matrixTemplate);
 
-            FRotQt dtoOrigin = FRotQt.create(factory, qt, offset, matrix);
+            FRotQt dtoOrigin = FRotQt.create(qt, offset, matrix);
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 

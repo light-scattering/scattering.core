@@ -59,7 +59,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.storage.mesh;
     exports eu.scattering.core.design.storage.buffer.utils;
     exports eu.scattering.core.design.storage.mesh.utils;
-    exports eu.scattering.core.design.transfer.primitive;
     exports eu.scattering.core.design.transfer.complex;
     exports eu.scattering.core.design.transfer;
     exports eu.scattering.core.design.utility.type;
@@ -92,4 +91,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.storage.transfer.position.p1.variants.integer;
     exports eu.scattering.core.design.storage.transfer.position.p2.variants.integer;
     exports eu.scattering.core.design.storage.transfer;
+    exports eu.scattering.core.design.storage.transfer.matrix.variants;
 }

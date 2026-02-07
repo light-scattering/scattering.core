@@ -1,10 +1,10 @@
 package eu.scattering.core.design.transfer.complex;
 
 import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos4D;
 import eu.scattering.core.design.transfer.Transfer;
-import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONObject;
 
 import java.util.Objects;
@@ -27,7 +27,7 @@ public class FRotQt implements Transfer {
         this.matrix = matrix;
     }
 
-    public static FRotQt create(TransferFactory factoryExt, FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
+    public static FRotQt create(FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
 
         return new FRotQt(qt, offset, matrix);
     }

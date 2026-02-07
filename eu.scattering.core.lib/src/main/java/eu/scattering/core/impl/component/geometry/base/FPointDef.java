@@ -3,9 +3,9 @@ package eu.scattering.core.impl.component.geometry.base;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
+import eu.scattering.core.design.storage.transfer.matrix.variants.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variants.FPos3D;
-import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
