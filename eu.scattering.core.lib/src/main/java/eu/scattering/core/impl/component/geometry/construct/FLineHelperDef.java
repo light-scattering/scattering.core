@@ -19,7 +19,7 @@ public class FLineHelperDef implements FLineHelper {
         this.factory = factory;
     }
 
-    public static FLineHelper get(GeometryFactory factory) {
+    public static FLineHelper create(GeometryFactory factory) {
 
         return new FLineHelperDef(factory);
     }

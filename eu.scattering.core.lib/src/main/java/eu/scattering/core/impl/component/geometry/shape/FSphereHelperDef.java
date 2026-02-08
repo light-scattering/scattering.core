@@ -16,10 +16,12 @@ public class FSphereHelperDef implements FSphereHelper {
         this.fPointHelper = fPointHelper;
     }
 
-    public static FSphereHelper get(FPointHelper fPointHelper) {
+    public static FSphereHelper create(FPointHelper fPointHelper) {
 
         return new FSphereHelperDef(fPointHelper);
     }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public double getVolume(double radius) {

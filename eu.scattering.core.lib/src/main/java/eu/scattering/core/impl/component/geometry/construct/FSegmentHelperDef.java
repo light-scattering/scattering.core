@@ -17,7 +17,7 @@ public class FSegmentHelperDef implements FSegmentHelper {
         this.factory = factory;
     }
 
-    public static FSegmentHelper get(GeometryFactory factory) {
+    public static FSegmentHelper create(GeometryFactory factory) {
 
         return new FSegmentHelperDef(factory);
     }

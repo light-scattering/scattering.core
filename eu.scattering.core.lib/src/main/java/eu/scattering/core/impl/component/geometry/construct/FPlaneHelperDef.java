@@ -20,7 +20,7 @@ public class FPlaneHelperDef implements FPlaneHelper {
         this.factory = factory;
     }
 
-    public static FPlaneHelper get(GeometryFactory factory) {
+    public static FPlaneHelper create(GeometryFactory factory) {
 
         return new FPlaneHelperDef(factory);
     }

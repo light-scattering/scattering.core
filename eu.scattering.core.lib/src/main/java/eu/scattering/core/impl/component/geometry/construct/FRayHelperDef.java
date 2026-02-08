@@ -17,7 +17,7 @@ public class FRayHelperDef implements FRayHelper {
         this.factory = factory;
     }
 
-    public static FRayHelper get(GeometryFactory factory) {
+    public static FRayHelper create(GeometryFactory factory) {
 
         return new FRayHelperDef(factory);
     }

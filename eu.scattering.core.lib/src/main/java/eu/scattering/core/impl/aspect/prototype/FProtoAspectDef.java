@@ -10,17 +10,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class FProtoAspectDef implements FProtoAspect {
-    private static FProtoAspect SELF;
 
     private FProtoAspectDef() {}
 
-    public static FProtoAspect get() {
+    public static FProtoAspect create() {
 
-        if (FProtoAspectDef.SELF == null) {
-            FProtoAspectDef.SELF = new FProtoAspectDef();
-        }
-
-        return FProtoAspectDef.SELF;
+        return new FProtoAspectDef();
     }
 
     //--------------------------------------------------

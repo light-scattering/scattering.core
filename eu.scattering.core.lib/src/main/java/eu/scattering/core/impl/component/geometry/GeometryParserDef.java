@@ -11,9 +11,6 @@ import eu.scattering.core.impl.component.geometry.shape.FSphereParserDef;
 import org.json.JSONObject;
 
 public class GeometryParserDef implements GeometryParser{
-
-    private static GeometryParser self;
-
     private final GeometryParser init;
 
     private GeometryParserDef(GeometryFactory factory) {
@@ -31,13 +28,9 @@ public class GeometryParserDef implements GeometryParser{
         this.init = fAssemblyParser;
     }
 
-    public static GeometryParser get(GeometryFactory factory) {
+    public static GeometryParser create(GeometryFactory factory) {
 
-        if (GeometryParserDef.self == null) {
-            GeometryParserDef.self = new GeometryParserDef(factory);
-        }
-
-        return GeometryParserDef.self;
+        return new GeometryParserDef(factory);
     }
 
     @Override

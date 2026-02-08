@@ -14,10 +14,12 @@ public class FPointHelperDef implements FPointHelper {
         this.factoryExt = factoryExt;
     }
 
-    public static FPointHelper get(TransferFactory factoryExt) {
+    public static FPointHelper create(TransferFactory factoryExt) {
 
         return new FPointHelperDef(factoryExt);
     }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public double getMagnitude(double x, double y, double z) {

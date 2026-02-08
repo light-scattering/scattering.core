@@ -8,8 +8,6 @@ import eu.scattering.core.impl.component.aggregate.FAggregateAspectExportDef;
 import eu.scattering.core.impl.statistics.StatisticsAspectExportDef;
 
 public class FExportAspectDef implements FExportAspect {
-    private static FExportAspect SELF;
-
     private final ScatFactory factory;
 
     private FExportAspectDef(ScatFactory factory) {
@@ -17,13 +15,9 @@ public class FExportAspectDef implements FExportAspect {
         this.factory = factory;
     }
 
-    public static FExportAspect get(ScatFactory factory) {
+    public static FExportAspect create(ScatFactory factory) {
 
-        if (FExportAspectDef.SELF == null) {
-            FExportAspectDef.SELF = new FExportAspectDef(factory);
-        }
-
-        return FExportAspectDef.SELF;
+        return new FExportAspectDef(factory);
     }
 
     //--------------------------------------------------

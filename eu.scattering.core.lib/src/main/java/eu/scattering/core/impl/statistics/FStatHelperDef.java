@@ -3,17 +3,12 @@ package eu.scattering.core.impl.statistics;
 import eu.scattering.core.design.statistics.StatisticsHelper;
 
 public class FStatHelperDef implements StatisticsHelper {
-    private static FStatHelperDef self;
 
     private FStatHelperDef() { }
 
-    public static StatisticsHelper get() {
+    public static StatisticsHelper create() {
 
-        if (FStatHelperDef.self == null) {
-            FStatHelperDef.self = new FStatHelperDef();
-        }
-
-        return FStatHelperDef.self;
+        return new FStatHelperDef();
     }
 
     @Override

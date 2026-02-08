@@ -158,25 +158,25 @@ public final class ScatFactoryDef implements ScatFactory {
     }
 
     {
-        this.fAspectExport = FExportAspectDef.get(this);
+        this.fAspectExport = FExportAspectDef.create(this);
 
         this.fRotGenerator = FRotProcessorDef.create(this);
 
-        this.fAspectProto = FProtoAspectDef.get();
+        this.fAspectProto = FProtoAspectDef.create();
         this.fAspectRot = FRotAspectDef.create(this.fRotGenerator );
 
         this.fTrigHelper = FTrigHelperDef.create(this);
-        this.fStatHelper = FStatHelperDef.get();
+        this.fStatHelper = FStatHelperDef.create();
         this.fPosHelper = TransferHelperDef.create(this);
 
-        this.fGeometryParser = GeometryParserDef.get(this);
+        this.fGeometryParser = GeometryParserDef.create(this);
 
-        this.fPointHelper = FPointHelperDef.get(this);
-        this.fRayHelper = FRayHelperDef.get(this);
-        this.fLineHelper = FLineHelperDef.get(this);
-        this.fSegmentHelper = FSegmentHelperDef.get(this);
-        this.fPlaneHelper = FPlaneHelperDef.get(this);
-        this.fSphereHelper = FSphereHelperDef.get(this.fPointHelper);
+        this.fPointHelper = FPointHelperDef.create(this);
+        this.fRayHelper = FRayHelperDef.create(this);
+        this.fLineHelper = FLineHelperDef.create(this);
+        this.fSegmentHelper = FSegmentHelperDef.create(this);
+        this.fPlaneHelper = FPlaneHelperDef.create(this);
+        this.fSphereHelper = FSphereHelperDef.create(this.fPointHelper);
     }
 
     public static ScatFactory create() {
