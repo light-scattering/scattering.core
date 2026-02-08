@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
-import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.design.mathematics.helper.FTrigHelper;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;

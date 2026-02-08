@@ -1,4 +1,4 @@
-package eu.scattering.core.test.transfer;
+package eu.scattering.core.test.storage.transfer;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;

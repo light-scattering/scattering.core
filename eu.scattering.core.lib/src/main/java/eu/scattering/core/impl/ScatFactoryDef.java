@@ -45,8 +45,8 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.helper.transfer.FTransferHelper;
-import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.design.storage.transfer.TransferHelper;
+import eu.scattering.core.design.mathematics.helper.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.physics.material.data.FMaterialData;
 import eu.scattering.core.design.statistics.StatisticsHelper;
@@ -99,8 +99,8 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
-import eu.scattering.core.impl.helper.FPositionHelperDef;
-import eu.scattering.core.impl.helper.FTrigHelperDef;
+import eu.scattering.core.impl.storage.transfer.TransferHelperDef;
+import eu.scattering.core.impl.mathematics.FTrigHelperDef;
 import eu.scattering.core.impl.physics.FMaterialDataDef;
 import eu.scattering.core.impl.physics.FMaterialDef;
 import eu.scattering.core.impl.statistics.FStatHelperDef;
@@ -137,7 +137,7 @@ public final class ScatFactoryDef implements ScatFactory {
     private final FRotAspect fAspectRot;
 
     private final FTrigHelper fTrigHelper;
-    private final FTransferHelper fPosHelper;
+    private final TransferHelper fPosHelper;
     private final StatisticsHelper fStatHelper;
 
     private final FPointHelper fPointHelper;
@@ -167,7 +167,7 @@ public final class ScatFactoryDef implements ScatFactory {
 
         this.fTrigHelper = FTrigHelperDef.create(this);
         this.fStatHelper = FStatHelperDef.get();
-        this.fPosHelper = FPositionHelperDef.create(this);
+        this.fPosHelper = TransferHelperDef.create(this);
 
         this.fGeometryParser = GeometryParserDef.get(this);
 
@@ -555,7 +555,7 @@ public final class ScatFactoryDef implements ScatFactory {
     }
 
     @Override
-    public FTransferHelper getFTransferHelper() {
+    public TransferHelper getTransferHelper() {
 
         return this.fPosHelper;
     }

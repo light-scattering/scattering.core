@@ -13,7 +13,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.number.quaternion;
     exports eu.scattering.core.design.aspect.rotate;
     exports eu.scattering.core.design.component.geometry.shape;
-    exports eu.scattering.core.design.helper.trigonometry;
     exports eu.scattering.core.design.aspect.randomize;
     exports eu.scattering.core.design.aspect.randomize.generator;
     exports eu.scattering.core.design.aspect.rotate.generator;
@@ -60,7 +59,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.storage.buffer.util;
     exports eu.scattering.core.design.storage.mesh.util;
     exports eu.scattering.core.design.utility.type;
-    exports eu.scattering.core.design.helper.transfer;
     exports eu.scattering.core.design.storage.cache;
     exports eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal;
     exports eu.scattering.core.design.component.aggregate.monitor;
@@ -93,4 +91,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.rotate.transfer;
     exports eu.scattering.core.design.aspect.rotate.transfer.variant;
     exports eu.scattering.core.design.storage.buffer.transfer.variant;
+    exports eu.scattering.core.design.storage.transfer.position;
+    exports eu.scattering.core.design.mathematics.helper;
 }

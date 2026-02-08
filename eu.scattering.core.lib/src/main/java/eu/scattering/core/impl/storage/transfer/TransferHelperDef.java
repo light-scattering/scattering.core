@@ -1,6 +1,6 @@
-package eu.scattering.core.impl.helper;
+package eu.scattering.core.impl.storage.transfer;
 
-import eu.scattering.core.design.helper.transfer.FTransferHelper;
+import eu.scattering.core.design.storage.transfer.TransferHelper;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos2D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
@@ -9,17 +9,17 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos4D;
 
-public class FPositionHelperDef implements FTransferHelper {
+public class TransferHelperDef implements TransferHelper {
     private final TransferFactory factoryExt;
 
-    private FPositionHelperDef(TransferFactory factoryExt) {
+    private TransferHelperDef(TransferFactory factoryExt) {
 
         this.factoryExt = factoryExt;
     }
 
-    public static FTransferHelper create(TransferFactory factoryExt) {
+    public static TransferHelper create(TransferFactory factoryExt) {
 
-        return new FPositionHelperDef(factoryExt);
+        return new TransferHelperDef(factoryExt);
     }
 
     @Override

@@ -1,9 +1,10 @@
 package eu.scattering.core.design.physics.material;
 
+import eu.scattering.core.design.physics.material.data.FMaterialDataFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public interface FMaterialFactory {
+public interface FMaterialFactory extends FMaterialDataFactory {
 
     FMaterial getFMaterial();
 

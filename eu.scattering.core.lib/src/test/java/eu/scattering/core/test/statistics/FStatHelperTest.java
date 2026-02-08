@@ -1,4 +1,4 @@
-package eu.scattering.core.test.helper;
+package eu.scattering.core.test.statistics;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

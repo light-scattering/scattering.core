@@ -1,4 +1,4 @@
-package eu.scattering.core.test.transfer;
+package eu.scattering.core.test.storage.transfer;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -8,18 +8,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Timeout(1)
-@DisplayName("FPos4DI")
-public class FPos4DITest {
+@DisplayName("FPos4D")
+public class FPos4DTest {
 
     @Nested
     @Tag("Basic")
     @DisplayName("Basic")
-    class FPos4DIBasicTest {
+    class FPos4DBasicTest {
 
         @Test
         @DisplayName("Values A")
         void getValuesATest() {
-            var dto = factory.getFPos4DI(1, 2, 3, 4);
+            var dto = factory.getFPos4D(1, 2, 3, 4);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, dto.getD0(), "The D0 value is incorrect"),
@@ -32,7 +32,7 @@ public class FPos4DITest {
         @Test
         @DisplayName("Values B")
         void getValuesBTest() {
-            var dto = factory.getFPos4DI(factory.getFPos3DI(1, 2, 3), 4);
+            var dto = factory.getFPos4D(factory.getFPos3D(1, 2, 3), 4);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, dto.getD0(), "The D0 value is incorrect"),
@@ -45,7 +45,7 @@ public class FPos4DITest {
         @Test
         @DisplayName("Values C")
         void getValuesCTest() {
-            var dto = factory.getFPos4DI(1, factory.getFPos3DI(2, 3, 4));
+            var dto = factory.getFPos4D(1, factory.getFPos3D(2, 3, 4));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, dto.getD0(), "The D0 value is incorrect"),
@@ -58,7 +58,7 @@ public class FPos4DITest {
         @Test
         @DisplayName("Values D")
         void getValuesDTest() {
-            var dto = factory.getFPos4DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
+            var dto = factory.getFPos4D(factory.getFPos2D(1, 2), factory.getFPos2D(3, 4));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, dto.getD0(), "The D0 value is incorrect"),
@@ -71,7 +71,7 @@ public class FPos4DITest {
         @Test
         @DisplayName("Values E")
         void getValuesETest() {
-            var dto = factory.getFPos4DI(factory.getFPos2DI(1, 2), 3, 4);
+            var dto = factory.getFPos4D(factory.getFPos2D(1, 2), 3, 4);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, dto.getD0(), "The D0 value is incorrect"),
@@ -84,7 +84,7 @@ public class FPos4DITest {
         @Test
         @DisplayName("Values F")
         void getValuesFTest() {
-            var dto = factory.getFPos4DI(1, factory.getFPos2DI(2, 3), 4);
+            var dto = factory.getFPos4D(1, factory.getFPos2D(2, 3), 4);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, dto.getD0(), "The D0 value is incorrect"),
@@ -97,7 +97,7 @@ public class FPos4DITest {
         @Test
         @DisplayName("Values G")
         void getValuesGTest() {
-            var dto = factory.getFPos4DI(1, 2, factory.getFPos2DI(3, 4));
+            var dto = factory.getFPos4D(1, 2, factory.getFPos2D(3, 4));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, dto.getD0(), "The D0 value is incorrect"),
@@ -111,16 +111,16 @@ public class FPos4DITest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Advanced")
-    class FPos4DIAdvancedTest {
+    class FPos4DAdvancedTest {
 
         @Test
         @DisplayName("JSON")
         void parseJSONTest() {
-            var dtoOrigin = factory.getFPos4DI(1, 2, 3, 4);
+            var dtoOrigin = factory.getFPos4D(1, 2, 3, 4);
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
-            var dtoCopy = factory.getFPos4DI(jsonOrigin);
+            var dtoCopy = factory.getFPos4D(jsonOrigin);
 
             assertEquals(dtoOrigin, dtoCopy, "The parsed JSON object is erroneous");
         }
@@ -129,14 +129,14 @@ public class FPos4DITest {
     @Nested
     @Tag("Java")
     @DisplayName("Java")
-    class FPos4DIJavaTest {
+    class FPos4DJavaTest {
 
         @Test
         @DisplayName("Hash codes")
         void validateHashCodeTest() {
-            var dto1 = factory.getFPos4DI(1, 2, 3, 4);
-            var dto2a = factory.getFPos4DI(1, 2, 3, 4);
-            var dto2b = factory.getFPos4DI(5, 6, 7, 8);
+            var dto1 = factory.getFPos4D(1, 2, 3, 4);
+            var dto2a = factory.getFPos4D(1, 2, 3, 4);
+            var dto2b = factory.getFPos4D(5, 6, 7, 8);
 
             Assertions.assertAll("Check hash codes",
                     () -> assertEquals(dto1.hashCode(), dto2a.hashCode(), "The hash code should be exact"),
@@ -147,9 +147,9 @@ public class FPos4DITest {
         @Test
         @DisplayName("Equality")
         void validateEqualityTest() {
-            var dto1 = factory.getFPos4DI(1, 2, 3, 4);
-            var dto2a = factory.getFPos4DI(1, 2, 3, 4);
-            var dto2b = factory.getFPos4DI(5, 6, 7, 8);
+            var dto1 = factory.getFPos4D(1, 2, 3, 4);
+            var dto2a = factory.getFPos4D(1, 2, 3, 4);
+            var dto2b = factory.getFPos4D(5, 6, 7, 8);
 
             Assertions.assertAll("Check hash codes",
                     () -> assertEquals(dto1, dto2a, "The objects should be exact"),

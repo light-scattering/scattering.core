@@ -1,6 +1,6 @@
-package eu.scattering.core.test.helper;
+package eu.scattering.core.test.mathematics;
 
-import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.design.mathematics.helper.FTrigHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

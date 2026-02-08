@@ -1,4 +1,4 @@
-package eu.scattering.core.design.helper.trigonometry;
+package eu.scattering.core.design.mathematics.helper;
 
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
