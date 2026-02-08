@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NetGenDef {
+public class ExNetGenDef {
 
     public static void core(FAggregate aggregate, StringBuilder builder) {
         List<String> names = new ArrayList<>();

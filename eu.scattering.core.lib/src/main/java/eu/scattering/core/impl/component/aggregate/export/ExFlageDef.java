@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FlageDef {
+public class ExFlageDef {
 
     public static void core(FAggregate aggregate, StringBuilder builder) {
         builder.append("FLAGE: 1.00\n\n");

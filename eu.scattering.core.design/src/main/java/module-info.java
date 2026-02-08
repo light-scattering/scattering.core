@@ -93,4 +93,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.storage.buffer.transfer.variant;
     exports eu.scattering.core.design.storage.transfer.position;
     exports eu.scattering.core.design.mathematics.helper;
+    exports eu.scattering.core.design.utility.type.preset;
+    exports eu.scattering.core.design.aspect.load;
 }

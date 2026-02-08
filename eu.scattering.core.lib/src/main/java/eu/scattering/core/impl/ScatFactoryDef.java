@@ -2,6 +2,7 @@ package eu.scattering.core.impl;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.export.FExportAspect;
+import eu.scattering.core.design.aspect.load.FLoadAspect;
 import eu.scattering.core.design.aspect.prototype.FProtoAspect;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
@@ -75,6 +76,7 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FP
 import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos3DI;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos4DI;
 import eu.scattering.core.impl.aspect.export.FExportAspectDef;
+import eu.scattering.core.impl.aspect.load.FLoadAspectDef;
 import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandGeneratorDef;
@@ -132,6 +134,7 @@ public final class ScatFactoryDef implements ScatFactory {
     private final FRotGenerator fRotGenerator;
 
     private final FExportAspect fAspectExport;
+    private final FLoadAspect fAspectLoad;
     private final FProtoAspect fAspectProto;
     private final FRandAspect fAspectRand;
     private final FRotAspect fAspectRot;
@@ -159,6 +162,7 @@ public final class ScatFactoryDef implements ScatFactory {
 
     {
         this.fAspectExport = FExportAspectDef.create(this);
+        this.fAspectLoad = FLoadAspectDef.create(this);
 
         this.fRotGenerator = FRotProcessorDef.create(this);
 
@@ -526,6 +530,12 @@ public final class ScatFactoryDef implements ScatFactory {
     public FExportAspect getExportAspect() {
 
         return this.fAspectExport;
+    }
+
+    @Override
+    public FLoadAspect getLoadAspect() {
+
+        return this.fAspectLoad;
     }
 
     @Override

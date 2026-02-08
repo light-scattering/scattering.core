@@ -11,12 +11,14 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.design.utility.type.Dimension;
-import eu.scattering.core.design.utility.type.PovRay;
+import eu.scattering.core.design.utility.type.preset.ExBasic;
+import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Component export")
@@ -49,6 +51,56 @@ public class ComponentAspectExportTest {
     //--------------------------------------------------
 
     @Test
+    @DisplayName("Export JSON")
+    void exportJSON() {
+        int quantity = 10;
+
+        FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
+
+        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
+
+        modelRLA.build();
+
+        String model = factory.getExportAspect().getFAggregateContext().toJSON(fAggregate);
+        String[] modelSplit = model.split("\n");
+
+        FAggregate results = factory.getLoadAspect().getFAggregateContext().fromJSON(model);
+
+        Assertions.assertAll("Validate model",
+                () -> assertEquals(1, modelSplit.length,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(fAggregate.isExact(results))
+        );
+    }
+
+    //--------------------------------------------------
+
+    @Test
+    @DisplayName("Export basic - Multisphere")
+    void exportBasicMultisphere() {
+        int quantity = 10;
+
+        FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
+
+        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
+
+        modelRLA.build();
+
+        String model = factory.getExportAspect().getFAggregateContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+        String[] modelSplit = model.split("\n");
+
+        FAggregate results = factory.getLoadAspect().getFAggregateContext().fromBasic(model, ExBasic.MULTISPHERE);
+
+        Assertions.assertAll("Validate model",
+                () -> assertEquals(quantity, modelSplit.length,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(fAggregate.isExact(results))
+        );
+    }
+
+    //--------------------------------------------------
+
+    @Test
     @DisplayName("Export PovRay RLCA 3D - Plain")
     void exportPovRayRLCA3DPlain() {
         int quantity = 100;
@@ -70,7 +122,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRay.BOX);
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, ExPovRay.BOX);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -103,7 +155,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRay.BOX);
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, ExPovRay.BOX);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -136,7 +188,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRay.RADIUS);
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, ExPovRay.RADIUS);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -148,7 +200,6 @@ public class ComponentAspectExportTest {
     }
 
     //--------------------------------------------------
-
 
     @Test
     @DisplayName("Export NGSolve RLA 3D")

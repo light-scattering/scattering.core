@@ -6,16 +6,16 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.Center;
-import eu.scattering.core.design.utility.type.PovRay;
+import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import eu.scattering.core.design.utility.type.RadiusOfGyration;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PovRayDef {
+public class ExPovRayDef {
     private static final boolean MONOCHROMATIC = false;
 
-    public static void core(FAggregate aggregate, PovRay preset, StringBuilder builder) {
+    public static void core(FAggregate aggregate, ExPovRay preset, StringBuilder builder) {
 
         builder.append("""
 #include "colors.inc"
@@ -52,12 +52,12 @@ background {
         aggregateResized.setCenterAsZero(Center.MASS);
         aggregateResized.setRadiusFrom(Center.ORIGIN, 100);
 
-        if (preset.equals(PovRay.RADIUS)) {
+        if (preset.equals(ExPovRay.RADIUS)) {
             radiusVolume(aggregate, aggregateResized, builder);
             radiusOfGyration(aggregate, aggregateResized, builder);
         }
 
-        if (preset.equals(PovRay.BOX)) {
+        if (preset.equals(ExPovRay.BOX)) {
             boundary(aggregateResized, builder);
         }
 
