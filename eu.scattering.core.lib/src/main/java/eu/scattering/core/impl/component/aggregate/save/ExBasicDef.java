@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.component.aggregate.export;
+package eu.scattering.core.impl.component.aggregate.save;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;

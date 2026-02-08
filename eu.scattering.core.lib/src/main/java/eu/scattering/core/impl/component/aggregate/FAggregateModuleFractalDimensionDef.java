@@ -258,7 +258,7 @@ public class FAggregateModuleFractalDimensionDef {
         FPlotMeta plotConfig = factory.getFPlotMeta()
                 .setAnnotation("Test data");
 
-        String plot = factory.getExportAspect().getStatisticsContext()
+        String plot = factory.getSaveAspect().getStatisticsContext()
                 .toPythonPlotly(plotConfig, data, fit);
 
         return regression.at(1);
@@ -279,7 +279,7 @@ public class FAggregateModuleFractalDimensionDef {
         FPlotMeta plotConfig = factory.getFPlotMeta()
                 .setAnnotation("Test data");
 
-        String plot = factory.getExportAspect().getStatisticsContext()
+        String plot = factory.getSaveAspect().getStatisticsContext()
                 .toPythonPlotly(plotConfig, data, fit);
 
         return 3 + regression.at(1);

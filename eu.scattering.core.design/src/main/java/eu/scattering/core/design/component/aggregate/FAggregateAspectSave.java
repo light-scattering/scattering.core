@@ -3,7 +3,7 @@ package eu.scattering.core.design.component.aggregate;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
 
-public interface FAggregateAspectExport {
+public interface FAggregateAspectSave {
 
     void toJSON(FAggregate aggregate, StringBuilder builder);
 

@@ -1,0 +1,36 @@
+package eu.scattering.core.impl.aspect.save;
+
+import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.save.FSaveAspect;
+import eu.scattering.core.design.component.ComponentAspectSave;
+import eu.scattering.core.design.statistics.StatisticsAspectSave;
+import eu.scattering.core.impl.component.ComponentAspectSaveDef;
+import eu.scattering.core.impl.statistics.StatisticsAspectSaveDef;
+
+public class FSaveAspectDef implements FSaveAspect {
+    private final ScatFactory factory;
+
+    private FSaveAspectDef(ScatFactory factory) {
+
+        this.factory = factory;
+    }
+
+    public static FSaveAspect create(ScatFactory factory) {
+
+        return new FSaveAspectDef(factory);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public StatisticsAspectSave getStatisticsContext() {
+
+        return StatisticsAspectSaveDef.create(this.factory);
+    }
+
+    @Override
+    public ComponentAspectSave getComponentContext() {
+
+        return ComponentAspectSaveDef.create();
+    }
+}

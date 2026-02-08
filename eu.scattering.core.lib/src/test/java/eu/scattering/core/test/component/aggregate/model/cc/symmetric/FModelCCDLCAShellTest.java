@@ -41,7 +41,7 @@ public class FModelCCDLCAShellTest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
 
             assertTrue(json.length() > 0);
             assertTrue(model.length() > 0);
@@ -58,7 +58,7 @@ public class FModelCCDLCAShellTest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
 
             assertTrue(json.length() > 0);
             assertTrue(model.length() > 0);

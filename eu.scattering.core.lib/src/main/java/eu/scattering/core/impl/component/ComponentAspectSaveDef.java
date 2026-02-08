@@ -1,22 +1,22 @@
-package eu.scattering.core.impl.component.aggregate;
+package eu.scattering.core.impl.component;
 
+import eu.scattering.core.design.component.ComponentAspectSave;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.FAggregateAspectExport;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
-import eu.scattering.core.impl.component.aggregate.export.ExBasicDef;
-import eu.scattering.core.impl.component.aggregate.export.ExFlageDef;
-import eu.scattering.core.impl.component.aggregate.export.ExNetGenDef;
-import eu.scattering.core.impl.component.aggregate.export.ExPovRayDef;
+import eu.scattering.core.impl.component.aggregate.save.ExBasicDef;
+import eu.scattering.core.impl.component.aggregate.save.ExFlageDef;
+import eu.scattering.core.impl.component.aggregate.save.ExNetGenDef;
+import eu.scattering.core.impl.component.aggregate.save.ExPovRayDef;
 
-public class FAggregateAspectExportDef implements FAggregateAspectExport {
+public class ComponentAspectSaveDef implements ComponentAspectSave {
 
-    private FAggregateAspectExportDef() {
+    private ComponentAspectSaveDef() {
     }
 
-    public static FAggregateAspectExportDef create() {
+    public static ComponentAspectSaveDef create() {
 
-       return new FAggregateAspectExportDef();
+       return new ComponentAspectSaveDef();
     }
 
     //--------------------------------------------------

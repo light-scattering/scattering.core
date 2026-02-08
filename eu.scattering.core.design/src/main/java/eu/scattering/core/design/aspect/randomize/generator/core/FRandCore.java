@@ -12,11 +12,11 @@ public interface FRandCore {
     double nextDouble();
     double nextDouble(double origin, double bound);
 
-    long nextLong();
-    long nextLong(long origin, long bound);
-
     int nextInteger();
     int nextInteger(int origin, int bound);
+
+    long nextLong();
+    long nextLong(long origin, long bound);
 
     // -------------------------------------------------------------------------------------------------
 

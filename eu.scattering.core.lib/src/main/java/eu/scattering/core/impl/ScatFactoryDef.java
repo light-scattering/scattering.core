@@ -1,7 +1,7 @@
 package eu.scattering.core.impl;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.aspect.export.FExportAspect;
+import eu.scattering.core.design.aspect.save.FSaveAspect;
 import eu.scattering.core.design.aspect.load.FLoadAspect;
 import eu.scattering.core.design.aspect.prototype.FProtoAspect;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
@@ -75,7 +75,7 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.*;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos2DI;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos3DI;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.integer.FPairPos4DI;
-import eu.scattering.core.impl.aspect.export.FExportAspectDef;
+import eu.scattering.core.impl.aspect.save.FSaveAspectDef;
 import eu.scattering.core.impl.aspect.load.FLoadAspectDef;
 import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
@@ -133,7 +133,7 @@ public final class ScatFactoryDef implements ScatFactory {
     private final FRandGenerator fRandGenerator;
     private final FRotGenerator fRotGenerator;
 
-    private final FExportAspect fAspectExport;
+    private final FSaveAspect fAspectExport;
     private final FLoadAspect fAspectLoad;
     private final FProtoAspect fAspectProto;
     private final FRandAspect fAspectRand;
@@ -161,7 +161,7 @@ public final class ScatFactoryDef implements ScatFactory {
     }
 
     {
-        this.fAspectExport = FExportAspectDef.create(this);
+        this.fAspectExport = FSaveAspectDef.create(this);
         this.fAspectLoad = FLoadAspectDef.create(this);
 
         this.fRotGenerator = FRotProcessorDef.create(this);
@@ -527,7 +527,7 @@ public final class ScatFactoryDef implements ScatFactory {
     //--------------------------------------------------
 
     @Override
-    public FExportAspect getExportAspect() {
+    public FSaveAspect getSaveAspect() {
 
         return this.fAspectExport;
     }
