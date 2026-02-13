@@ -4,7 +4,7 @@ import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.Location;
+import eu.scattering.core.design.utility.type.option.Location;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

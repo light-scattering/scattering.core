@@ -16,7 +16,7 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 import java.util.Collection;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FRotAspectDef implements FRotAspect {
     private final FRotGenerator core;

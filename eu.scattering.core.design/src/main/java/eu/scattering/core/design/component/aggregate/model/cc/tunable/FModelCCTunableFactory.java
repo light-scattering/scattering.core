@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.aggregate.model.cc.tunable;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.option.Dimension;
 
 public interface FModelCCTunableFactory {
 

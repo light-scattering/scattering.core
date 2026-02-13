@@ -9,8 +9,8 @@ import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.MassCenter;
-import eu.scattering.core.design.utility.type.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.method.MassCenter;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 public class FAggregateModuleRadiusOfGyrationDef {
     private final ScatFactory factory;
@@ -32,7 +32,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
             case SIMPLE_MONO_10R2, DEDICATED_FILIPPOV -> getRadiusOfGyrationSimpleMono(Correction._10R2);
             case SIMPLE_POLY -> getRadiusOfGyrationSimplePoly(Correction.NONE);
             case SIMPLE_POLY_06R1 -> getRadiusOfGyrationSimplePoly(Correction._06R1);
-            case SIMPLE_POLY_10P2 -> getRadiusOfGyrationSimplePoly(Correction._10R2);
+            case SIMPLE_POLY_10R2 -> getRadiusOfGyrationSimplePoly(Correction._10R2);
             case COMPLEX -> getRadiusOfGyrationComplex();
         };
     }

@@ -5,6 +5,7 @@ import eu.scattering.cli.type.FORMAT_INPUT;
 import eu.scattering.cli.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.impl.ScatConfigDef;
 import eu.scattering.core.impl.ScatFactoryDef;
 import picocli.CommandLine;
 
@@ -20,6 +21,15 @@ public class MeasureCommand implements Callable<Integer> {
     @CommandLine.Option(names = {"-f", "--format"}, defaultValue = "json", description = "Input format")
     private FORMAT_INPUT format;
 
+    @CommandLine.Option(names = {"-e", "--epsilon"}, defaultValue = "1E-4", description = "Tolerance (default: ${DEFAULT-VALUE})")
+    private double epsilon;
+
+    @CommandLine.Option(names = {"-d", "--delta"}, defaultValue = "1E-2", description = "Grid (default: ${DEFAULT-VALUE})")
+    private double delta;
+
+    @CommandLine.Option(names = {"-b", "--buffer"}, defaultValue = "0", description = "Buffer (default: ${DEFAULT-VALUE})")
+    private int buffer;
+
     @CommandLine.Parameters(index = "0", defaultValue = "-", description = "Input file or '-' for stdin")
     private String file;
 
@@ -31,7 +41,19 @@ public class MeasureCommand implements Callable<Integer> {
             FAggregate fAggregate = FAggregateLoad.load(factory, file, format)
                     .orElseThrow(() -> new IllegalArgumentException("The geometry could not be parsed"));
 
-            String results = Measure.measure(fAggregate, metrics);
+            if (epsilon != ScatConfigDef.SHAPE_EPSILON) {
+                fAggregate.setParticleEpsilon(epsilon);
+            }
+
+            if (delta != ScatConfigDef.SHAPE_DELTA) {
+                fAggregate.setParticleDelta(delta);
+            }
+
+            if (buffer > 0) {
+                fAggregate.addFBuffer(buffer);
+            }
+
+            String results = Measure.measure(factory, fAggregate, metrics);
 
             System.out.println(results);
 

@@ -4,8 +4,10 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.save.FSaveAspect;
 import eu.scattering.core.design.component.ComponentAspectSave;
 import eu.scattering.core.design.statistics.StatisticsAspectSave;
+import eu.scattering.core.design.storage.StorageAspectSave;
 import eu.scattering.core.impl.component.ComponentAspectSaveDef;
 import eu.scattering.core.impl.statistics.StatisticsAspectSaveDef;
+import eu.scattering.core.impl.storage.StorageAspectSaveDef;
 
 public class FSaveAspectDef implements FSaveAspect {
     private final ScatFactory factory;
@@ -32,5 +34,11 @@ public class FSaveAspectDef implements FSaveAspect {
     public ComponentAspectSave getComponentContext() {
 
         return ComponentAspectSaveDef.create();
+    }
+
+    @Override
+    public StorageAspectSave getStorageContext() {
+
+        return StorageAspectSaveDef.create();
     }
 }

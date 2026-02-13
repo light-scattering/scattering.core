@@ -5,10 +5,10 @@ import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.utility.type.Center;
-import eu.scattering.core.design.utility.type.Dimension;
-import eu.scattering.core.design.utility.type.MassCenter;
-import eu.scattering.core.design.utility.type.OverlapFactor;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.option.Dimension;
+import eu.scattering.core.design.utility.type.method.MassCenter;
+import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

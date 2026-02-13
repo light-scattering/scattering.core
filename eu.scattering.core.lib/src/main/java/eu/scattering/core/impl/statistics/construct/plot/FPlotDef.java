@@ -10,7 +10,7 @@ import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolato
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotRegressor;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.layer.FLayer;
-import eu.scattering.core.design.utility.type.RoundMethod;
+import eu.scattering.core.design.utility.type.option.RoundMethod;
 import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotInterpolatorDef;
 import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotRegressorDef;
 import org.json.JSONObject;

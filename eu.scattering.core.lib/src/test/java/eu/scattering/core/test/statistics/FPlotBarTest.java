@@ -3,7 +3,7 @@ package eu.scattering.core.test.statistics;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.utility.type.RoundMethod;
+import eu.scattering.core.design.utility.type.option.RoundMethod;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

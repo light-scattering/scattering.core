@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static eu.scattering.core.impl.ConfigDef.SHAPE_DELTA;
-import static eu.scattering.core.impl.ConfigDef.SHAPE_EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.SHAPE_DELTA;
+import static eu.scattering.core.impl.ScatConfigDef.SHAPE_EPSILON;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl;
 
-public class ConfigDef {
+public class ScatConfigDef {
     public final static double EPSILON = 1E-8;
 
     public final static double SHAPE_EPSILON = 1E-4;

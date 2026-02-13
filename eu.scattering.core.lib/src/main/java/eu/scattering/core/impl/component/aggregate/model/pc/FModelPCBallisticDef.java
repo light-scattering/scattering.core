@@ -11,8 +11,8 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.Center;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.option.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;

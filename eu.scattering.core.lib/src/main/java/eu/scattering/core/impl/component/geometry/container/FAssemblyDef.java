@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     private static final String JSON_TYPE = "type";

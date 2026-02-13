@@ -10,7 +10,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.functionality.Producer;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryContextGeometry {
     private final ScatFactory factory;

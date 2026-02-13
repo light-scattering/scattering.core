@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorP
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.utility.type.Center;
+import eu.scattering.core.design.utility.type.variant.Center;
 
 public class FMonitorPCRadiusDef implements FMonitorPCRadius {
     private final Center type;

@@ -9,8 +9,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
-import eu.scattering.core.design.utility.type.Dimension;
-import eu.scattering.core.design.utility.type.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.option.Dimension;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 import java.util.ArrayList;
 import java.util.List;

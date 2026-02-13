@@ -5,7 +5,7 @@ import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.utility.type.RoundMethod;
+import eu.scattering.core.design.utility.type.option.RoundMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

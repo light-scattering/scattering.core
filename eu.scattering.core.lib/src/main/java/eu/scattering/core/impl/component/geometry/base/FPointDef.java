@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FPointDef implements FPoint {
     private static final String JSON_TYPE = "type";

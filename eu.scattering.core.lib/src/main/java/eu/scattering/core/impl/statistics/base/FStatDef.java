@@ -1142,9 +1142,8 @@ public class FStatDef implements FStat {
 
     @Override
     public String toString() {
-        List<String> parsedData = this.data.stream().map(String::valueOf).toList();
 
-        return "[" + String.join(",", parsedData) + "]";
+        return toSimpleJSON().toString();
     }
 
     //--------------------------------------------------

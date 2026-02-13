@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCC
 import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.aggregate.model.cc.rlca.FModelCCRLCA;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.option.Dimension;
 
 public class FModelCCFactoryContextDef implements FModelCCFactoryContext {
     private final ScatFactory factory;

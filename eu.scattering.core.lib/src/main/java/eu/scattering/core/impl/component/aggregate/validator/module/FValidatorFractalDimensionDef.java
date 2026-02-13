@@ -4,7 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorFractalDimension;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.utility.type.FractalDimension;
+import eu.scattering.core.design.utility.type.variant.FractalDimension;
 
 public class FValidatorFractalDimensionDef implements FValidatorFractalDimension {
     private final FractalDimension type;

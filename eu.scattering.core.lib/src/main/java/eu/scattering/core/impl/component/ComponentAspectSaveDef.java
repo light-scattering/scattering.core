@@ -2,6 +2,8 @@ package eu.scattering.core.impl.component;
 
 import eu.scattering.core.design.component.ComponentAspectSave;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import eu.scattering.core.impl.component.aggregate.save.ExBasicDef;
@@ -14,9 +16,23 @@ public class ComponentAspectSaveDef implements ComponentAspectSave {
     private ComponentAspectSaveDef() {
     }
 
-    public static ComponentAspectSaveDef create() {
+    public static ComponentAspectSave create() {
 
        return new ComponentAspectSaveDef();
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public String toCLI(FPoint fPoint) {
+
+        return "[" + fPoint.getX() + "," + fPoint.getY() + "," + fPoint.getZ() + "]";
+    }
+
+    @Override
+    public String toCLI(FVector fVector) {
+
+        return "[" + toCLI(fVector.getRefBase()) + "," + toCLI(fVector.getRefHead()) + "]";
     }
 
     //--------------------------------------------------

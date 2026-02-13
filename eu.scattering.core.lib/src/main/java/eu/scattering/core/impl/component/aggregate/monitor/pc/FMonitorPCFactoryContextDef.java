@@ -4,8 +4,8 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.monitor.pc.FMonitorPCFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadius;
 import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadiusOfGyration;
-import eu.scattering.core.design.utility.type.Center;
-import eu.scattering.core.design.utility.type.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import eu.scattering.core.impl.component.aggregate.monitor.pc.module.FMonitorPCRadiusDef;
 import eu.scattering.core.impl.component.aggregate.monitor.pc.module.FMonitorPCRadiusOfGyrationDef;
 

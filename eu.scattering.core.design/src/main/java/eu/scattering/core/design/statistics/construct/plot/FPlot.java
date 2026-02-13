@@ -9,7 +9,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotRegressor;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.utility.type.RoundMethod;
+import eu.scattering.core.design.utility.type.option.RoundMethod;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;

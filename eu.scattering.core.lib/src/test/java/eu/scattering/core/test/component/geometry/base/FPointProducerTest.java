@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
-import eu.scattering.core.design.utility.type.Location;
+import eu.scattering.core.design.utility.type.option.Location;
 import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;

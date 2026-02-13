@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static eu.scattering.core.impl.ConfigDef.*;
+import static eu.scattering.core.impl.ScatConfigDef.*;
 
 public abstract class ShapePresetDef implements Shape {
     private final static boolean SHIFT_GEOMETRY = true;

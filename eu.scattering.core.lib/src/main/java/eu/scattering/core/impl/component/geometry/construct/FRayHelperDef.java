@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayHelper;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FRayHelperDef implements FRayHelper {
     private final GeometryFactory factory;

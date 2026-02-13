@@ -10,7 +10,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.functionality.Producer;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.option.Dimension;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import org.junit.jupiter.api.Assertions;

@@ -9,14 +9,14 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.FractalDimension;
-import eu.scattering.core.design.utility.type.Length;
-import eu.scattering.core.design.utility.type.MassCenter;
-import eu.scattering.core.design.utility.type.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.variant.FractalDimension;
+import eu.scattering.core.design.utility.type.option.Length;
+import eu.scattering.core.design.utility.type.method.MassCenter;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 import java.util.*;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FAggregateModuleFractalDimensionDef {
     private final ScatFactory factory;

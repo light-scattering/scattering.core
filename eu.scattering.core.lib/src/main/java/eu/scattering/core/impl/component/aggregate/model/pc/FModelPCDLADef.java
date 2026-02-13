@@ -10,7 +10,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.option.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;

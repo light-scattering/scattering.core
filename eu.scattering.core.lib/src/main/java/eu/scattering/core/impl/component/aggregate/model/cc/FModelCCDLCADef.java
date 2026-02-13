@@ -10,8 +10,8 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
-import eu.scattering.core.design.utility.type.Center;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.option.Dimension;
 
 import java.util.ArrayList;
 import java.util.Comparator;

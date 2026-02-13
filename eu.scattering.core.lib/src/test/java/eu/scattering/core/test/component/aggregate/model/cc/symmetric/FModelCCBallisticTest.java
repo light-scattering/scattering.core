@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.option.Dimension;
 import eu.scattering.core.impl.ScatFactoryDef;
 import org.junit.jupiter.api.*;
 

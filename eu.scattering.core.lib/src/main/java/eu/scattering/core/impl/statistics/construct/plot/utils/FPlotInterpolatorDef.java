@@ -4,13 +4,13 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
-import eu.scattering.core.design.utility.type.RoundMethod;
+import eu.scattering.core.design.utility.type.option.RoundMethod;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FPlotInterpolatorDef implements FPlotInterpolator {
     private final ScatFactory factory;

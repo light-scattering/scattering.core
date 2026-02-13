@@ -15,7 +15,14 @@ import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
-import eu.scattering.core.design.utility.type.*;
+import eu.scattering.core.design.utility.type.method.MassCenter;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.method.Surface;
+import eu.scattering.core.design.utility.type.method.Volume;
+import eu.scattering.core.design.utility.type.option.Length;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.variant.FractalDimension;
+import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 import eu.scattering.core.impl.component.aggregate.extension.FExtensionDef;
 import org.json.JSONObject;
 
@@ -98,51 +105,51 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getSurface() {
+    public double getSurface(Surface type) {
 
-        return this.moduleGeometry.getSurface();
+        return this.moduleGeometry.getSurface(type);
     }
 
     @Override
-    public double getSurface(double[] layers) {
+    public double getSurface(double[] layers, Surface type) {
 
-        return this.moduleGeometry.getSurface(layers);
+        return this.moduleGeometry.getSurface(layers, type);
     }
 
     @Override
-    public double getSurfaceRadius() {
+    public double getSurfaceRadius(Surface type) {
 
-        return this.moduleGeometry.getSurfaceRadius();
+        return this.moduleGeometry.getSurfaceRadius(type);
     }
 
     @Override
-    public double getSurfaceRadius(double[] layers) {
+    public double getSurfaceRadius(double[] layers, Surface type) {
 
-        return this.moduleGeometry.getSurfaceRadius(layers);
+        return this.moduleGeometry.getSurfaceRadius(layers, type);
     }
 
     @Override
-    public double getVolume() {
+    public double getVolume(Volume type) {
 
-        return this.moduleGeometry.getVolume();
+        return this.moduleGeometry.getVolume(type);
     }
 
     @Override
-    public double getVolume(double[] layers) {
+    public double getVolume(double[] layers, Volume type) {
 
-        return this.moduleGeometry.getVolume(layers);
+        return this.moduleGeometry.getVolume(layers, type);
     }
 
     @Override
-    public double getVolumeRadius() {
+    public double getVolumeRadius(Volume type) {
 
-        return this.moduleGeometry.getVolumeRadius();
+        return this.moduleGeometry.getVolumeRadius(type);
     }
 
     @Override
-    public double getVolumeRadius(double[] layers) {
+    public double getVolumeRadius(double[] layers, Volume type) {
 
-        return this.moduleGeometry.getVolumeRadius(layers);
+        return this.moduleGeometry.getVolumeRadius(layers, type);
     }
 
     @Override

@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorP
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
-import eu.scattering.core.design.utility.type.Center;
-import eu.scattering.core.design.utility.type.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import org.junit.jupiter.api.*;
 
 import java.util.List;

@@ -14,7 +14,7 @@ import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.Location;
+import eu.scattering.core.design.utility.type.option.Location;
 import eu.scattering.core.test.TestHelper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.scattering.core.impl.ConfigDef.*;
+import static eu.scattering.core.impl.ScatConfigDef.*;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;

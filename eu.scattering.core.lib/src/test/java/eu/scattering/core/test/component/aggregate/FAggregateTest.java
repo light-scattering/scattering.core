@@ -18,7 +18,15 @@ import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.*;
+import eu.scattering.core.design.utility.type.method.MassCenter;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.method.Surface;
+import eu.scattering.core.design.utility.type.method.Volume;
+import eu.scattering.core.design.utility.type.option.Length;
+import eu.scattering.core.design.utility.type.option.Location;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.variant.FractalDimension;
+import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 import eu.scattering.core.predefined.aggregate.F3D_N1000_Mono;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -295,7 +303,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double volActual = fAggregate.getVolume();
+            double volActual = fAggregate.getVolume(Volume.ADAPTIVE);
             double volExpected = 4 * (4  * Math.PI / 3);
 
             double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
@@ -316,7 +324,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double volActual = fAggregate.getVolume();
+            double volActual = fAggregate.getVolume(Volume.ADAPTIVE);
             double volExpected = 50 * (4  * Math.PI / 3);
 
             double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
@@ -339,7 +347,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double volActual = fAggregate.getVolume();
+            double volActual = fAggregate.getVolume(Volume.ADAPTIVE);
             double expected = 1 * (4  * Math.PI / 3);
 
             double relError = factory.getStatisticsHelper().getRelErr(expected, volActual);
@@ -362,7 +370,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double volActual = fAggregate.getVolume();
+            double volActual = fAggregate.getVolume(Volume.ADAPTIVE);
             double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
 
             double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
@@ -385,7 +393,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double volActual = fAggregate.getVolume();
+            double volActual = fAggregate.getVolume(Volume.ADAPTIVE);
             double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
 
             double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
@@ -408,7 +416,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double volActual = fAggregate.getVolume();
+            double volActual = fAggregate.getVolume(Volume.ADAPTIVE);
             double volExpected = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
             double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
@@ -442,7 +450,7 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             double[] volLayers = new double[3];
-            double volActual = fAggregate.getVolume(volLayers);
+            double volActual = fAggregate.getVolume(volLayers, Volume.ADAPTIVE);
 
             double volExpectedLayer0 = 4 * fSphereA.getLayerVolume(0);
             double volExpectedLayer1 = 4 * fSphereA.getLayerVolume(1);
@@ -485,7 +493,7 @@ public class FAggregateTest {
             FSphere fSphereRef = fSphereProd.produce();
 
             double[] volLayers = new double[3];
-            double volActual = fAggregate.getVolume(volLayers);
+            double volActual = fAggregate.getVolume(volLayers, Volume.ADAPTIVE);
 
             double volExpectedLayer0 = quantity * fSphereRef.getLayerVolume(0);
             double volExpectedLayer1 = quantity * fSphereRef.getLayerVolume(1);
@@ -532,7 +540,7 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             double[] volLayers = new double[3];
-            double volActual = fAggregate.getVolume(volLayers);
+            double volActual = fAggregate.getVolume(volLayers, Volume.ADAPTIVE);
 
             double volExpectedLayer0 = fSphereA.getLayerVolume(0);
             double volExpectedLayer1 = fSphereA.getLayerVolume(1);
@@ -579,8 +587,8 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             double[] volLayers = new double[4];
-            double volActualA = fAggregate.getVolume(volLayers);
-            double volActualB = fAggregate.getVolume();
+            double volActualA = fAggregate.getVolume(volLayers, Volume.ADAPTIVE);
+            double volActualB = fAggregate.getVolume(Volume.ADAPTIVE);
 
             double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
@@ -625,7 +633,7 @@ public class FAggregateTest {
 
             double volActualLayer0 = fLayer.get(0) * 0.001;
             double volActualA = fLayer.addSelf() * 0.001;
-            double volActualB = fAggregate.getVolume();
+            double volActualB = fAggregate.getVolume(Volume.ADAPTIVE);
 
             double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
@@ -656,7 +664,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double srfActual = fAggregate.getSurface();
+            double srfActual = fAggregate.getSurface(Surface.ADAPTIVE);
             double srfExpected = 4 * (4  * Math.PI);
 
             double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
@@ -677,7 +685,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double srfActual = fAggregate.getSurface();
+            double srfActual = fAggregate.getSurface(Surface.ADAPTIVE);
             double srfExpected = 50 * (4  * Math.PI);
 
             double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
@@ -700,7 +708,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double srfActual = fAggregate.getSurface();
+            double srfActual = fAggregate.getSurface(Surface.ADAPTIVE);
             double srfExpected = 1 * (4  * Math.PI);
 
             double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
@@ -723,7 +731,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double srfActual = fAggregate.getSurface();
+            double srfActual = fAggregate.getSurface(Surface.ADAPTIVE);
             double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
 
             double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
@@ -746,7 +754,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double srfActual = fAggregate.getSurface();
+            double srfActual = fAggregate.getSurface(Surface.ADAPTIVE);
             double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
 
             double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
@@ -780,7 +788,7 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             double[] srfLayers = new double[3];
-            double srfActual = fAggregate.getSurface(srfLayers);
+            double srfActual = fAggregate.getSurface(srfLayers, Surface.ADAPTIVE);
 
             double srfExpectedLayer0 = 4 * fSphereA.getLayerSurface(0);
             double srfExpectedLayer1 = 4 * fSphereA.getLayerSurface(1);
@@ -823,7 +831,7 @@ public class FAggregateTest {
             FSphere fSphereRef = fSphereProd.produce();
 
             double[] srfLayers = new double[3];
-            double srfActual = fAggregate.getSurface(srfLayers);
+            double srfActual = fAggregate.getSurface(srfLayers, Surface.ADAPTIVE);
 
             double srfExpectedLayer0 = quantity * fSphereRef.getLayerSurface(0);
             double srfExpectedLayer1 = quantity * fSphereRef.getLayerSurface(1);
@@ -870,7 +878,7 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             double[] srfLayers = new double[3];
-            double srfActual = fAggregate.getSurface(srfLayers);
+            double srfActual = fAggregate.getSurface(srfLayers, Surface.ADAPTIVE);
 
             double srfExpectedLayer0 = fSphereA.getLayerSurface(0);
             double srfExpectedLayer1 = fSphereA.getLayerSurface(1);
@@ -917,9 +925,9 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             double[] srfLayers = new double[4];
-            fAggregate.getSurface(srfLayers);
+            fAggregate.getSurface(srfLayers, Surface.ADAPTIVE);
 
-            double srfActualLayer3 = fAggregate.getSurface();
+            double srfActualLayer3 = fAggregate.getSurface(Surface.ADAPTIVE);
             double srfExpectedLayer0 = 2 * factory.getFSphereHelper().getSurface(1) +
                     factory.getFSphereHelper().getSurface(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1);
 
@@ -2455,8 +2463,8 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double rExpected = factory.getFSphereHelper().getVolumeRadius(fAggregate.getVolume());
-            double rActual = fAggregate.getVolumeRadius();
+            double rExpected = factory.getFSphereHelper().getVolumeRadius(fAggregate.getVolume(Volume.ADAPTIVE));
+            double rActual = fAggregate.getVolumeRadius(Volume.ADAPTIVE);
 
             double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
@@ -2480,14 +2488,14 @@ public class FAggregateTest {
             FSphereHelper helper = factory.getFSphereHelper();
 
             double[] layers = new double[3];
-            double volExpected = fAggregate.getVolume(layers);
+            double volExpected = fAggregate.getVolume(layers, Volume.ADAPTIVE);
 
             double rExpectedLayer0 = helper.getVolumeRadius(layers[0]);
             double rExpectedLayer1 = helper.getVolumeRadius(layers[0] + layers[1]);
             double rExpectedLayer2 = helper.getVolumeRadius(layers[0] + layers[1] + layers[2]);
             double rExpected = helper.getVolumeRadius(volExpected);
 
-            double rActual = fAggregate.getVolumeRadius(layers);
+            double rActual = fAggregate.getVolumeRadius(layers, Volume.ADAPTIVE);
 
             double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
             double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);
@@ -2520,10 +2528,10 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double srfExpected = fAggregate.getSurface();
+            double srfExpected = fAggregate.getSurface(Surface.ADAPTIVE);
 
             double rExpected = factory.getFSphereHelper().getSurfaceRadius(srfExpected);
-            double rActual = fAggregate.getSurfaceRadius();
+            double rActual = fAggregate.getSurfaceRadius(Surface.ADAPTIVE);
 
             double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
@@ -2547,14 +2555,14 @@ public class FAggregateTest {
             FSphereHelper helper = factory.getFSphereHelper();
 
             double[] layers = new double[3];
-            double srfExpected = fAggregate.getSurface(layers);
+            double srfExpected = fAggregate.getSurface(layers, Surface.ADAPTIVE);
 
             double rExpectedLayer0 = helper.getSurfaceRadius(layers[0]);
             double rExpectedLayer1 = helper.getSurfaceRadius(layers[1]);
             double rExpectedLayer2 = helper.getSurfaceRadius(layers[2]);
             double rExpected = helper.getSurfaceRadius(srfExpected);
 
-            double rActual = fAggregate.getSurfaceRadius(layers);
+            double rActual = fAggregate.getSurfaceRadius(layers, Surface.ADAPTIVE);
 
             double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
             double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);

@@ -10,9 +10,11 @@ import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.Center;
-import eu.scattering.core.design.utility.type.Length;
-import eu.scattering.core.design.utility.type.MassCenter;
+import eu.scattering.core.design.utility.type.method.Surface;
+import eu.scattering.core.design.utility.type.method.Volume;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.option.Length;
+import eu.scattering.core.design.utility.type.method.MassCenter;
 
 import java.util.*;
 
@@ -35,30 +37,52 @@ public class FAggregateModuleGeometryDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getSurface() {
-        FLayer fLayer = this.factory.getFLayer();
+    protected double getSurface(Surface type) {
+        double surface = 0;
+
+        FLayer fLayer = switch (type) {
+            case ADAPTIVE, COMPLEX -> this.factory.getFLayer();
+            case SIMPLE -> null;
+        };
 
         List<Shape> field = getUniqueShapes();
 
-        double surface = 0;
         for (Shape shape : field) {
 
-            if (shape.overlaps(field) == 0) {
-                surface += shape.getSurfaceAlgebraic();
-            } else {
-                fLayer.reset();
-
-                double surfaceUnit = shape.fillSurfaceLayerOverlap(fLayer, field);
-
-                surface += fLayer.get(0) * surfaceUnit;
-            }
+            surface += switch (type) {
+                case ADAPTIVE -> getParticleSurfaceAdaptive(field, fLayer, shape);
+                case SIMPLE -> getParticleSurfaceSimple(shape);
+                case COMPLEX -> getParticleSurfaceComplex(field, fLayer, shape);
+            };
         }
 
         return surface;
     }
 
-    protected double getSurface(double[] layers) {
-        FLayer fLayer = this.factory.getFLayer();
+    private double getParticleSurfaceAdaptive(List<Shape> field, FLayer fLayer, Shape shape) {
+
+        if (shape.overlaps(field) == 0) {
+            return getParticleSurfaceSimple(shape);
+        }
+
+        return getParticleSurfaceComplex(field, fLayer, shape);
+    }
+
+    private double getParticleSurfaceSimple(Shape shape) {
+
+        return shape.getSurfaceAlgebraic();
+    }
+
+    private double getParticleSurfaceComplex(List<Shape> field, FLayer fLayer, Shape shape) {
+
+        fLayer.reset();
+
+        double surfaceUnit = shape.fillSurfaceLayerOverlap(fLayer, field);
+
+        return fLayer.get(0) * surfaceUnit;
+    }
+
+    protected double getSurface(double[] layers, Surface type) {
         double surface = 0;
 
         Arrays.fill(layers, 0);
@@ -67,18 +91,10 @@ public class FAggregateModuleGeometryDef {
 
         for (Shape shape : field) {
 
-            if (shape.overlaps(field) == 0) {
-                for (int i = 0 ; i < shape.getLayerCount() ; i++) {
-                    layers[i] += shape.getLayerSurface(i);
-                }
-            } else {
-                fLayer.reset();
-
-                double surfaceUnit = shape.fillSurfaceLayer(fLayer, field);
-
-                for (int i = 0 ; i < shape.getLayerCount() ; i++) {
-                    layers[i] += fLayer.get(i) * surfaceUnit;
-                }
+            switch (type) {
+                case ADAPTIVE -> getParticleSurfaceAdaptive(field, shape, layers);
+                case SIMPLE -> getParticleSurfaceSimple(shape, layers);
+                case COMPLEX -> getParticleSurfaceComplex(field, shape, layers);
             }
         }
 
@@ -89,13 +105,39 @@ public class FAggregateModuleGeometryDef {
         return surface;
     }
 
-    protected double getSurfaceRadius() {
+    private void getParticleSurfaceAdaptive(List<Shape> field, Shape shape, double[] layers) {
 
-        return this.factory.getFSphereHelper().getSurfaceRadius(getSurface());
+        if (shape.overlaps(field) == 0) {
+            getParticleSurfaceSimple(shape, layers);
+        } else {
+            getParticleSurfaceComplex(field, shape, layers);
+        }
     }
 
-    protected double getSurfaceRadius(double[] layers) {
-        double resSurface = getSurface(layers);
+    private void getParticleSurfaceSimple(Shape shape, double[] layers) {
+
+        for (int i = 0 ; i < shape.getLayerCount() ; i++) {
+            layers[i] += shape.getLayerSurface(i);
+        }
+    }
+
+    private void getParticleSurfaceComplex(List<Shape> field, Shape shape, double[] layers) {
+        FLayer fLayer = this.factory.getFLayer();
+
+        double surfaceUnit = shape.fillSurfaceLayer(fLayer, field);
+
+        for (int i = 0 ; i < shape.getLayerCount() ; i++) {
+            layers[i] += fLayer.get(i) * surfaceUnit;
+        }
+    }
+
+    protected double getSurfaceRadius(Surface type) {
+
+        return this.factory.getFSphereHelper().getSurfaceRadius(getSurface(type));
+    }
+
+    protected double getSurfaceRadius(double[] layers, Surface type) {
+        double resSurface = getSurface(layers, type);
 
         int i = 0;
         for (; i < layers.length ; i++) {
@@ -119,9 +161,13 @@ public class FAggregateModuleGeometryDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getVolume() {
-        FLayer fLayer = this.factory.getFLayer();
+    protected double getVolume(Volume type) {
         double volume = 0;
+
+        FLayer fLayer = switch (type) {
+            case ADAPTIVE, COMPLEX -> this.factory.getFLayer();
+            case SIMPLE -> null;
+        };
 
         Queue<Shape> queue = new LinkedList<>(this.aggregate.getRefParticles().asList());
 
@@ -129,15 +175,11 @@ public class FAggregateModuleGeometryDef {
 
         for (Shape shape : this.aggregate) {
 
-            if (shape.overlaps(queue) == 0) {
-                volume += shape.getVolumeAlgebraic();
-            } else {
-                fLayer.reset();
-
-                double volumeUnit = shape.fillVolumeLayerOverlap(fLayer, queue);
-
-                volume += fLayer.get() * volumeUnit;
-            }
+            volume += switch (type) {
+                case ADAPTIVE -> getParticleVolumeAdaptive(queue, fLayer, shape);
+                case SIMPLE -> getParticleVolumeSimple(shape);
+                case COMPLEX -> getParticleVolumeComplex(queue, fLayer, shape);
+            };
 
             queue.poll();
         }
@@ -145,13 +187,41 @@ public class FAggregateModuleGeometryDef {
         return volume;
     }
 
-    protected double getVolume(double[] layers) {
+    private double getParticleVolumeAdaptive(Queue<Shape> queue, FLayer fLayer, Shape shape) {
+
+        if (shape.overlaps(queue) == 0) {
+            return getParticleVolumeSimple(shape);
+        }
+
+        return getParticleVolumeComplex(queue, fLayer, shape);
+    }
+
+    private double getParticleVolumeSimple(Shape shape) {
+
+        return shape.getVolumeAlgebraic();
+    }
+
+    private double getParticleVolumeComplex(Queue<Shape> queue, FLayer fLayer, Shape shape) {
+
+        fLayer.reset();
+
+        double volumeUnit = shape.fillVolumeLayerOverlap(fLayer, queue);
+
+        return fLayer.get() * volumeUnit;
+    }
+
+    protected double getVolume(double[] layers, Volume type) {
         double volume = 0;
 
         Arrays.fill(layers, 0);
 
         for (Shape shape : this.aggregate) {
-            getVolumeMethod(shape, layers);
+
+            switch (type) {
+                case ADAPTIVE -> getParticleVolumeAdaptive(shape, layers);
+                case SIMPLE -> getParticleVolumeSimple(shape, layers);
+                case COMPLEX -> getParticleVolumeComplex(shape, layers);
+            }
         }
 
         for (double layer : layers) {
@@ -161,42 +231,23 @@ public class FAggregateModuleGeometryDef {
         return volume;
     }
 
-    protected double getVolumeRadius() {
+    private void getParticleVolumeAdaptive(Shape shape, double[] volume) {
 
-        return this.factory.getFSphereHelper().getVolumeRadius(getVolume());
-    }
-
-    protected double getVolumeRadius(double[] layers) {
-        double volume = 0;
-
-        double resVolume = getVolume(layers);
-
-        int i = 0;
-        for (; i < layers.length ; i++) {
-            volume += layers[i];
-            layers[i] = this.factory.getFSphereHelper().getVolumeRadius(volume);
-        }
-
-        return factory.getFSphereHelper().getVolumeRadius(resVolume);
-    }
-
-    private void getVolumeMethod(Shape shape, double[] volume) {
-
-        if (shape.overlaps(this.aggregate.getRefParticles()) != 0) {
-            getVolumeMethodApproximate(shape, volume);
+        if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
+            getParticleVolumeSimple(shape, volume);
         } else {
-            getVolumeMethodPrecise(shape, volume);
+            getParticleVolumeComplex(shape, volume);
         }
     }
 
-    private void getVolumeMethodPrecise(Shape shape, double[] volume) {
+    private void getParticleVolumeSimple(Shape shape, double[] volume) {
 
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
             volume[i] += shape.getLayerVolume(i);
         }
     }
 
-    private void getVolumeMethodApproximate(Shape shape, double[] volume) {
+    private void getParticleVolumeComplex(Shape shape, double[] volume) {
         FLayer fLayer = this.factory.getFLayer();
 
         shape.fillVolumeLayer(fLayer, this.aggregate.getRefParticles().asList());
@@ -205,6 +256,25 @@ public class FAggregateModuleGeometryDef {
         for (int i = 0; i < fLayer.size() ; i++) {
             volume[i] += fLayer.get(i) * volUnit;
         }
+    }
+
+    protected double getVolumeRadius(Volume type) {
+
+        return this.factory.getFSphereHelper().getVolumeRadius(getVolume(type));
+    }
+
+    protected double getVolumeRadius(double[] layers, Volume type) {
+        double volume = 0;
+
+        double resVolume = getVolume(layers, type);
+
+        int i = 0;
+        for (; i < layers.length ; i++) {
+            volume += layers[i];
+            layers[i] = this.factory.getFSphereHelper().getVolumeRadius(volume);
+        }
+
+        return factory.getFSphereHelper().getVolumeRadius(resVolume);
     }
 
     // -------------------------------------------------------------------------------------------------

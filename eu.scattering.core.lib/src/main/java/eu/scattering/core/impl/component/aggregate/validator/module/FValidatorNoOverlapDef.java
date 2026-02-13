@@ -2,9 +2,9 @@ package eu.scattering.core.impl.component.aggregate.validator.module;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorNoOverlap;
-import eu.scattering.core.design.utility.type.OverlapFactor;
+import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FValidatorNoOverlapDef implements FValidatorNoOverlap {
 

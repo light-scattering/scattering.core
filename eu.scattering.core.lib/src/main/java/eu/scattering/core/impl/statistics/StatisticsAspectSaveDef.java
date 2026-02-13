@@ -25,6 +25,15 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         return new StatisticsAspectSaveDef(factory);
     }
 
+    // -------------------------------------------------------------------------------------------------
+    
+    @Override
+    public String toCLI(FStat stat) {
+        List<String> data = stat.getRefCore().stream().map(String::valueOf).toList();
+
+        return "[" + String.join(",", data) + "]";
+    }
+
     @Override
     public String toPythonPlotlyHistogram(FStatMeta config, FStat... stat) {
 
@@ -84,6 +93,17 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public String toCLI(FPlot plot) {
+        List<String> data = new ArrayList<>(plot.size());
+
+        for (int i = 0 ; i < plot.size() ; i++) {
+            data.add("[" + plot.getX(i) + "," + plot.getY(i) + "]");
+        }
+
+        return "[" + String.join(",", data) + "]";
+    }
 
     @Override
     public String toPythonPlotly(FPlotMeta config, FPlot... plot) {

@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.aggregate.validator.module;
 
-import eu.scattering.core.design.utility.type.FractalDimension;
+import eu.scattering.core.design.utility.type.variant.FractalDimension;
 
 public interface FValidatorFractalDimensionFactory {
 

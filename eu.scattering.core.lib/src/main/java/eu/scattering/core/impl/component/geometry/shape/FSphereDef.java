@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
 public class FSphereDef extends ShapePresetDef implements FSphere {
     private static final String JSON_TYPE = "type";

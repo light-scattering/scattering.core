@@ -5,9 +5,10 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.Center;
+import eu.scattering.core.design.utility.type.method.Volume;
+import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
-import eu.scattering.core.design.utility.type.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,8 +66,8 @@ background {
     }
 
     private static void radiusVolume(FAggregate aggregate, FAggregate aggregateParsed, StringBuilder builder) {
-        double radius = aggregate.getVolumeRadius();
-        double radiusParsed = aggregateParsed.getVolumeRadius();
+        double radius = aggregate.getVolumeRadius(Volume.ADAPTIVE);
+        double radiusParsed = aggregateParsed.getVolumeRadius(Volume.ADAPTIVE);
 
         builder.append("// Volume radius - ").append(radius).append("\n");
         builder.append("sphere {\n");

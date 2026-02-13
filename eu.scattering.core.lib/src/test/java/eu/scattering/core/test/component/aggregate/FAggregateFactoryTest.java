@@ -2,10 +2,10 @@ package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
-import eu.scattering.core.design.utility.type.OverlapFactor;
+import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 import org.junit.jupiter.api.*;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;

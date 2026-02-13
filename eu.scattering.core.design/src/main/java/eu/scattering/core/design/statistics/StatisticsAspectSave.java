@@ -1,8 +1,8 @@
 package eu.scattering.core.design.statistics;
 
-import eu.scattering.core.design.statistics.base.FStatAspectExport;
-import eu.scattering.core.design.statistics.construct.plot.FPlotAspectExport;
-import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarAspectExport;
+import eu.scattering.core.design.statistics.base.FStatAspectSave;
+import eu.scattering.core.design.statistics.construct.plot.FPlotAspectSave;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarAspectSave;
 
-public interface StatisticsAspectSave extends FStatAspectExport, FPlotAspectExport, FPlotBarAspectExport {
+public interface StatisticsAspectSave extends FStatAspectSave, FPlotAspectSave, FPlotBarAspectSave {
 }

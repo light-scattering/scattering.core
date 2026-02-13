@@ -9,7 +9,7 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos2D
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos4D;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 import static eu.scattering.core.test.Config.factory;
 
 public class TestHelper {

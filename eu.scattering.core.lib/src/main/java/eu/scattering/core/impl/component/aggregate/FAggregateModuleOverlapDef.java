@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.OverlapFactor;
+import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTu
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.utility.type.Dimension;
+import eu.scattering.core.design.utility.type.option.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;

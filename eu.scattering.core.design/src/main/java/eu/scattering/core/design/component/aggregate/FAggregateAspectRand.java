@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.utility.type.MassCenter;
+import eu.scattering.core.design.utility.type.method.MassCenter;
 
 public interface FAggregateAspectRand {
 

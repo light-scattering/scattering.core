@@ -4,7 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorFractalDimension;
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorNoOverlap;
-import eu.scattering.core.design.utility.type.FractalDimension;
+import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import eu.scattering.core.impl.component.aggregate.validator.module.FValidatorFractalDimensionDef;
 import eu.scattering.core.impl.component.aggregate.validator.module.FValidatorNoOverlapDef;
 

@@ -58,7 +58,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.storage.mesh;
     exports eu.scattering.core.design.storage.buffer.util;
     exports eu.scattering.core.design.storage.mesh.util;
-    exports eu.scattering.core.design.utility.type;
     exports eu.scattering.core.design.storage.cache;
     exports eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal;
     exports eu.scattering.core.design.component.aggregate.monitor;
@@ -95,4 +94,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.mathematics.helper;
     exports eu.scattering.core.design.utility.type.preset;
     exports eu.scattering.core.design.aspect.load;
+    exports eu.scattering.core.design.utility.type.method;
+    exports eu.scattering.core.design.utility.type.variant;
+    exports eu.scattering.core.design.utility.type.option;
 }

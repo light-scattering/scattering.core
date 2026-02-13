@@ -6,7 +6,7 @@ import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.utility.type.RoundMethod;
+import eu.scattering.core.design.utility.type.option.RoundMethod;
 
 import java.util.List;
 import java.util.function.BiFunction;

@@ -16,7 +16,14 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.utility.type.*;
+import eu.scattering.core.design.utility.type.method.MassCenter;
+import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.method.Surface;
+import eu.scattering.core.design.utility.type.method.Volume;
+import eu.scattering.core.design.utility.type.option.Length;
+import eu.scattering.core.design.utility.type.variant.Center;
+import eu.scattering.core.design.utility.type.variant.FractalDimension;
+import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 
 import java.util.function.BiConsumer;
 
@@ -24,17 +31,17 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     int size();
 
-    double getSurface();
-    double getSurface(double[] layers);
+    double getSurface(Surface type);
+    double getSurface(double[] layers, Surface type);
 
-    double getSurfaceRadius();
-    double getSurfaceRadius(double[] layers);
+    double getSurfaceRadius(Surface type);
+    double getSurfaceRadius(double[] layers, Surface type);
 
-    double getVolume();
-    double getVolume(double[] layers);
+    double getVolume(Volume type);
+    double getVolume(double[] layers, Volume type);
 
-    double getVolumeRadius();
-    double getVolumeRadius(double[] layers);
+    double getVolumeRadius(Volume type);
+    double getVolumeRadius(double[] layers, Volume type);
 
     FMesh<FBufferData> getVolumeMesh();
 

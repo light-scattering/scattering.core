@@ -1,6 +1,8 @@
 package eu.scattering.core.design.statistics.construct.plot;
 
-public interface FPlotAspectExport {
+public interface FPlotAspectSave {
+
+    String toCLI(FPlot plot);
 
     String toPythonPlotly(FPlotMeta config, FPlot... plot);
 
