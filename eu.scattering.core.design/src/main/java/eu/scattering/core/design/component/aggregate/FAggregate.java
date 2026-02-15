@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
@@ -99,6 +100,8 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     void setPositionAsZero(FPoint center);
     void setPositionAsZero(FPos3D center);
+
+//    FMatrix3x3D getGyrationTensor()
 
     //--------------------------------------------------
 

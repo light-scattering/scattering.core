@@ -24,7 +24,7 @@ public interface FSphereHelper {
 
     double getRadiusOfGyration(double r);
 
-    boolean intersectsCube(Shape shape, double cSqX, double cSqY, double cSqZ, double size);
+    boolean intersectsCube(Shape shape, double minX, double minY, double minZ, double size);
 
     void getSpherePoints(double radius, int count, TriConsumer<Double, Double, Double> consumer);
     void getCirclePoints(double radius, int count, BiConsumer<Double, Double> consumer);

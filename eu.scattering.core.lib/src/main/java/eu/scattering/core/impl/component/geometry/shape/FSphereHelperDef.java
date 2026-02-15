@@ -106,28 +106,19 @@ public class FSphereHelperDef implements FSphereHelper {
     }
 
     @Override
-    public boolean intersectsCube(Shape shape, double cSqX, double cSqY, double cSqZ, double size) {
+    public boolean intersectsCube(Shape shape, double minX, double minY, double minZ, double size) {
 
         if (size <= 0) {
             throw new IllegalArgumentException("The box size must be greater than zero");
         }
 
-        double sHalf = size * 0.5;
-
         double x = shape.getCenterX();
         double y = shape.getCenterY();
         double z = shape.getCenterZ();
 
-        double xMin = cSqX - sHalf;
-        double xMax = cSqX + sHalf;
-        double yMin = cSqY - sHalf;
-        double yMax = cSqY + sHalf;
-        double zMin = cSqZ - sHalf;
-        double zMax = cSqZ + sHalf;
-
-        double pX = Math.max(xMin, Math.min(x, xMax));
-        double pY = Math.max(yMin, Math.min(y, yMax));
-        double pZ = Math.max(zMin, Math.min(z, zMax));
+        double pX = Math.max(minX, Math.min(x, minX + size));
+        double pY = Math.max(minY, Math.min(y, minY + size));
+        double pZ = Math.max(minZ, Math.min(z, minZ + size));
 
         double dX = pX - x;
         double dY = pY - y;
