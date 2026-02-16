@@ -1217,7 +1217,7 @@ public class FVectorRotateTest {
 
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FRotQt qt = fRot.getRRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
+        FRotQt qt = fRot.getRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
 
         FVector results = rot.rotQt(fVector, qt);
 

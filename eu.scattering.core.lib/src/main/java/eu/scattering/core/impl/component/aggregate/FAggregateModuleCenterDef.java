@@ -8,9 +8,14 @@ import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
+import eu.scattering.core.design.utility.type.method.GyrationTensor;
 import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.method.MassCenter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FAggregateModuleCenterDef {
     private final ScatFactory factory;
@@ -28,7 +33,7 @@ public class FAggregateModuleCenterDef {
 
         switch (type) {
             case ORIGIN -> in.set(0, 0, 0);
-            case MASS -> getMassCenter(in, MassCenter.ADAPTIVE);
+            case MASS -> getMassCenter(in, null, MassCenter.ADAPTIVE);
             case SPATIAL -> getSpatialCenter(in);
             case SPHERICAL -> getSphericalCenter(in, 100);
         }
@@ -68,72 +73,96 @@ public class FAggregateModuleCenterDef {
         return center.toFPos3D();
     }
 
-    protected void getMassCenter(FPoint in, MassCenter type) {
+    protected void getMassCenter(FPoint in, List<Double> massData, MassCenter type) {
 
         switch (type) {
-            case SIMPLE_MONO -> getMassCenterMethodSimpleMono(in);
-            case SIMPLE_POLY -> getMassCenterMethodSimplePoly(in);
-            case COMPLEX -> getMassCenterMethodComplex(in);
-            case ADAPTIVE -> getMassCenterMethodAdaptive(in);
+            case SIMPLE_MONO -> getMassCenterMethodSimpleMono(in, massData);
+            case SIMPLE_POLY -> getMassCenterMethodSimplePoly(in, massData);
+            case COMPLEX -> getMassCenterMethodComplex(in, massData);
+            case ADAPTIVE -> getMassCenterMethodAdaptive(in, massData);
         }
     }
 
-    protected FPos3D getMassCenter(MassCenter type) {
+    protected FPos3D getMassCenter(List<Double> massData, MassCenter type) {
         FPoint center = this.factory.getFPoint();
 
-        getMassCenter(center, type);
+        getMassCenter(center, massData, type);
 
         return center.toFPos3D();
     }
 
-    private void getMassCenterMethodSimpleMono(FPoint in) {
+    private void getMassCenterMethodSimpleMono(FPoint in, List<Double> massData) {
         double radius = this.aggregate.getFStatParticleRadius().mean();
 
-        double volume = 0;
+        double mass = 0;
 
         in.set(0, 0, 0);
 
         for (Shape shape : this.aggregate) {
-            volume += getMassCenterMethodSimpleMonoStep(in, shape, radius);
+            double massFragment = getMassCenterMethodSimpleMonoStep(in, shape, radius);
+
+            mass += massFragment;
+
+            if (massData != null) {
+                massData.add(massFragment);
+            }
         }
 
-        in.divFactor(volume);
+        in.divFactor(mass);
     }
 
-    private void getMassCenterMethodSimplePoly(FPoint in) {
-        double volume = 0;
+    private void getMassCenterMethodSimplePoly(FPoint in, List<Double> massData) {
+        double mass = 0;
 
         in.set(0, 0, 0);
 
         for (Shape shape : this.aggregate) {
-            volume += getMassCenterMethodSimplePolyStep(in, shape);
+            double massFragment = getMassCenterMethodSimplePolyStep(in, shape);
+
+            mass += massFragment;
+
+            if (massData != null) {
+                massData.add(massFragment);
+            }
         }
 
-        in.divFactor(volume);
+        in.divFactor(mass);
     }
 
-    private void getMassCenterMethodAdaptive(FPoint in) {
-        double volume = 0;
+    private void getMassCenterMethodAdaptive(FPoint in, List<Double> massData) {
+        double mass = 0;
 
         in.set(0, 0, 0);
 
         for (Shape shape : this.aggregate) {
-            volume += getMassCenterMethodAdaptiveStep(in, shape);
+            double massFragment = getMassCenterMethodAdaptiveStep(in, shape);
+
+            mass += massFragment;
+
+            if (massData != null) {
+                massData.add(massFragment);
+            }
         }
 
-        in.divFactor(volume);
+        in.divFactor(mass);
     }
 
-    private void getMassCenterMethodComplex(FPoint in) {
-        double volume = 0;
+    private void getMassCenterMethodComplex(FPoint in, List<Double> massData) {
+        double mass = 0;
 
         in.set(0, 0, 0);
 
         for (Shape shape : this.aggregate) {
-            volume += getMassCenterMethodComplexStep(in, shape);
+            double massFragment = getMassCenterMethodComplexStep(in, shape);
+
+            mass += massFragment;
+
+            if (massData != null) {
+                massData.add(massFragment);
+            }
         }
 
-        in.divFactor(volume);
+        in.divFactor(mass);
     }
 
     private double getMassCenterMethodSimpleMonoStep(FPoint center, Shape shape, double radius) {
@@ -323,7 +352,7 @@ public class FAggregateModuleCenterDef {
     protected void setMassCenterAsZero(MassCenter type) {
         FPoint center = this.factory.getFPoint();
 
-        getMassCenter(center, type);
+        getMassCenter(center, null, type);
 
         setPositionAsZero(center);
     }
@@ -361,7 +390,7 @@ public class FAggregateModuleCenterDef {
 
     protected void setMassCenter(double x, double y, double z, MassCenter type) {
 
-        this.aggregate.getRefParticles().translate(getMassCenter(type), x, y, z);
+        this.aggregate.getRefParticles().translate(getMassCenter(null, type), x, y, z);
     }
 
     protected void setMassCenter(FPoint position, MassCenter type) {
@@ -403,4 +432,154 @@ public class FAggregateModuleCenterDef {
 
         setSphericalCenter(position.getD0(), position.getD1(), position.getD2(), steps);
     }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected FMatrix3x3D getGyrationTensor(GyrationTensor type) {
+        double[][] tensor = new double[3][3];
+
+        List<Double> massData = new ArrayList<>(this.aggregate.size());
+
+        MassCenter massCenterType = switch (type) {
+            case ADAPTIVE -> MassCenter.ADAPTIVE;
+            case SIMPLE_MONO -> MassCenter.SIMPLE_MONO;
+            case SIMPLE_POLY -> MassCenter.SIMPLE_POLY;
+            case COMPLEX -> MassCenter.COMPLEX;
+        };
+
+        FPos3D massCenter = getMassCenter(massData, massCenterType);
+
+        for (int i = 0 ; i < this.aggregate.size() ; i++) {
+            Shape particle = this.aggregate.getRefParticles().asList().get(i);
+            double mass = massData.get(i);
+
+            double dx = particle.getCenterX() - massCenter.getD0();
+            double dy = particle.getCenterY() - massCenter.getD1();
+            double dz = particle.getCenterZ() - massCenter.getD2();
+
+            tensor[0][0] += mass * dx * dx;
+            tensor[0][1] += mass * dx * dy;
+            tensor[0][2] += mass * dx * dz;
+
+            tensor[1][1] += mass * dy * dy;
+            tensor[1][2] += mass * dy * dz;
+
+            tensor[2][2] += mass * dz * dz;
+        }
+
+        tensor[1][0] = tensor[0][1];
+        tensor[2][0] = tensor[0][2];
+        tensor[2][1] = tensor[1][2];
+
+        return this.factory.getFMatrix3x3D(tensor);
+    }
+
+    protected FMatrix3x3D getEigenvectors(FMatrix3x3D tensor) {
+        int iterations = 5;
+
+        double[][] a = tensor.getArray();
+
+        double[][] identity = new double[3][3];
+        identity[0][0] = identity[1][1] = identity[2][2] = 1.0;
+
+        for (int i = 0; i < iterations; i++) {
+            rotate(a, identity, 0, 1);
+            rotate(a, identity, 0, 2);
+            rotate(a, identity, 1, 2);
+        }
+
+        return process(identity, a);
+    }
+
+    private void rotate(double[][] a, double[][] v, int p, int q) {
+
+        if (Math.abs(a[p][q]) < 1e-12) {
+            return;
+        }
+
+        double theta = 0.5 * (a[q][q] - a[p][p]) / a[p][q];
+        double t = 1.0 / (Math.abs(theta) + Math.sqrt(theta*theta + 1.0));
+
+        if (theta < 0) {
+            t = -t;
+        }
+
+        double c = 1.0 / Math.sqrt(t*t + 1.0);
+        double s = t * c;
+        double tau = s / (1.0 + c);
+
+        double app = a[p][p];
+        double aqq = a[q][q];
+        double apq = a[p][q];
+
+        a[p][p] = app - t * apq;
+        a[q][q] = aqq + t * apq;
+        a[p][q] = a[q][p] = 0.0;
+
+        for (int i = 0; i < 3; i++) {
+            double vip = v[i][p];
+            double viq = v[i][q];
+
+            if (i != p && i != q) {
+                double aip = a[i][p];
+                double aiq = a[i][q];
+
+                a[i][p] = a[p][i] = aip - s * (aiq + tau * aip);
+                a[i][q] = a[q][i] = aiq + s * (aip - tau * aiq);
+            }
+
+            v[i][p] = c * vip - s * viq;
+            v[i][q] = s * vip + c * viq;
+        }
+    }
+
+    private FMatrix3x3D process(double[][] identity, double[][] a) {
+
+        FPos3D e1 = this.factory.getFPos3D(identity[0][0], identity[1][0], identity[2][0]);
+        FPos3D e2 = this.factory.getFPos3D(identity[0][1], identity[1][1], identity[2][1]);
+        FPos3D e3 = this.factory.getFPos3D(identity[0][2], identity[1][2], identity[2][2]);
+
+        double l1 = a[0][0];
+        double l2 = a[1][1];
+        double l3 = a[2][2];
+
+        FPos3D[] eigenvectors = new FPos3D[] {e1, e2, e3};
+        double[] eigenvalues = new double[] {l1, l2, l3};
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2 - i; j++) {
+                if (eigenvalues[j] < eigenvalues[j + 1]) {
+                    FPos3D tmpVector = eigenvectors[j];
+                    double tmpValue = eigenvalues[j];
+
+                    eigenvalues[j] = eigenvalues[j + 1];
+                    eigenvalues[j + 1] = tmpValue;
+
+                    eigenvectors[j] = eigenvectors[j + 1];
+                    eigenvectors[j + 1] = tmpVector;
+                }
+            }
+        }
+
+        double[][] results = new double[3][];
+
+        results[0] = new double[] {eigenvectors[0].getD0(), eigenvectors[1].getD0(), eigenvectors[2].getD0()};
+        results[1] = new double[] {eigenvectors[0].getD1(), eigenvectors[1].getD1(), eigenvectors[2].getD1()};
+        results[2] = new double[] {eigenvectors[0].getD2(), eigenvectors[1].getD2(), eigenvectors[2].getD2()};
+
+        return this.factory.getFMatrix3x3D(results);
+    }
+
+    protected FMatrix3x3D getRotationPCA() {
+        FMatrix3x3D eigenvectors = getEigenvectors(getGyrationTensor(GyrationTensor.SIMPLE_POLY));
+
+        double[][] results = new double[3][];
+
+        results[0] = new double[] { eigenvectors.get0x0(), eigenvectors.get1x0(), eigenvectors.get2x0() };
+        results[1] = new double[] { eigenvectors.get0x1(), eigenvectors.get1x1(), eigenvectors.get2x1() };
+        results[2] = new double[] { eigenvectors.get0x2(), eigenvectors.get1x2(), eigenvectors.get2x2() };
+
+        return this.factory.getFMatrix3x3D(results);
+    }
+
 }

@@ -114,7 +114,7 @@ public class FRotAspectDef implements FRotAspect {
 
         in.set(x, y, z);
 
-        FRotQt qt = core.getRRotQt(axis, angle);
+        FRotQt qt = core.getRotQt(axis, angle);
 
         return rotQt(in, qt);
     }
@@ -133,21 +133,21 @@ public class FRotAspectDef implements FRotAspect {
 
     @Override
     public FPoint rotQtAround(FPoint in, double x, double y, double z, double angle) {
-        FRotQt qt = core.getRRotQt(x, y, z, angle);
+        FRotQt qt = core.getRotQt(x, y, z, angle);
 
         return rotQt(in, qt);
     }
 
     @Override
     public FPoint rotQtAround(FPoint in, FPoint ref, double angle) {
-        FRotQt qt = core.getRRotQt(ref.toFPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.toFPos3D(), angle);
 
         return rotQt(in, qt);
     }
 
     @Override
     public FPoint rotQtAround(FPoint in, FPos3D ref, double angle) {
-        FRotQt qt = core.getRRotQt(ref, angle);
+        FRotQt qt = core.getRotQt(ref, angle);
 
         return rotQt(in, qt);
     }
@@ -572,7 +572,7 @@ public class FRotAspectDef implements FRotAspect {
 
         in.moveBaseToCenter();
 
-        rot(in, core.getRRotQt(hX - bX, hY - bY, hZ - bZ, angle));
+        rot(in, core.getRotQt(hX - bX, hY - bY, hZ - bZ, angle));
 
         in.moveBase(memoBX, memoBY, memoBZ);
 
@@ -665,7 +665,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRRotQt(ref.toFPairPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.toFPairPos3D(), angle);
 
         rot(in, qt);
     }
@@ -687,7 +687,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
         rot(in, qt);
     }
@@ -710,7 +710,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
         for (FPoint p : in.toFPoints()) {
             if (ref.isProjectable(p)) {
@@ -741,7 +741,7 @@ public class FRotAspectDef implements FRotAspect {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotQt qt = core.getRRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
         for (FPoint p : in.toFPoints()) {
             if (ref.isProjectable(p)) {

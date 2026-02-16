@@ -13,12 +13,10 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
-import eu.scattering.core.design.utility.type.method.MassCenter;
-import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
-import eu.scattering.core.design.utility.type.method.Surface;
-import eu.scattering.core.design.utility.type.method.Volume;
+import eu.scattering.core.design.utility.type.method.*;
 import eu.scattering.core.design.utility.type.option.Length;
 import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
@@ -253,7 +251,7 @@ public class FAggregateDef implements FAggregate {
     @Override
     public FPoint getMassCenter(FPoint in, MassCenter type) {
 
-        this.moduleCenter.getMassCenter(in, type);
+        this.moduleCenter.getMassCenter(in, null, type);
 
         return in;
     }
@@ -261,7 +259,7 @@ public class FAggregateDef implements FAggregate {
     @Override
     public FPos3D getMassCenter(MassCenter type) {
 
-        return this.moduleCenter.getMassCenter(type);
+        return this.moduleCenter.getMassCenter(null, type);
     }
 
     @Override
@@ -302,6 +300,24 @@ public class FAggregateDef implements FAggregate {
     public void setPositionAsZero(FPos3D center) {
 
         this.moduleCenter.setPositionAsZero(center);
+    }
+
+    @Override
+    public FMatrix3x3D getGyrationTensor(GyrationTensor type) {
+
+        return this.moduleCenter.getGyrationTensor(type);
+    }
+
+    @Override
+    public FMatrix3x3D getEigenvectors(FMatrix3x3D tensor) {
+
+        return this.moduleCenter.getEigenvectors(tensor);
+    }
+
+    @Override
+    public FMatrix3x3D getRotationPCA() {
+
+        return this.moduleCenter.getRotationPCA();
     }
 
     @Override
@@ -413,15 +429,27 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot getBoxCoverageFunction(boolean log) {
+    public double getFractalDimensionBox(double window, double factor, int offset, boolean start, boolean shift, boolean pca) {
 
-        return this.moduleFractalDimension.getBoxCoverageFunction(log);
+        return this.moduleFractalDimension.getFractalDimensionBox(window, factor, offset, start, shift, pca);
     }
 
     @Override
-    public FPlot getDensityCorrelationFunction(boolean log) {
+    public double getFractalDimensionCorrelation(double window, double factor) {
 
-        return this.moduleFractalDimension.getDensityCorrelationFunction(log);
+        return this.moduleFractalDimension.getFractalDimensionCorrelation(window, factor);
+    }
+
+    @Override
+    public FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift, boolean pca) {
+
+        return this.moduleFractalDimension.getBoxCoverageFunction(factor, offset, start, shift, pca);
+    }
+
+    @Override
+    public FPlot getDensityCorrelationFunction(double factor) {
+
+        return this.moduleFractalDimension.getDensityCorrelationFunction(factor);
     }
 
     @Override
@@ -596,6 +624,24 @@ public class FAggregateDef implements FAggregate {
     public double project(FAggregate arg, FVector dir, double distLimit) {
 
         return this.moduleSupport.project(arg, dir, distLimit);
+    }
+
+    @Override
+    public void shiftBoundaryToZero() {
+
+        this.moduleSupport.shiftBoundaryToZero();
+    }
+
+    @Override
+    public void rotate(FMatrix3x3D matrix) {
+
+        this.moduleSupport.rotate(matrix);
+    }
+
+    @Override
+    public void pca() {
+
+        this.moduleSupport.pca();
     }
 
     @Override

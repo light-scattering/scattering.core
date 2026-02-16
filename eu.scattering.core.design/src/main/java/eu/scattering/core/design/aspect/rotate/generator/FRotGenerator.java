@@ -6,10 +6,10 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 public interface FRotGenerator {
 
-    FRotQt getRRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
-    FRotQt getRRotQt(FPairPos3D axis, double angle);
-    FRotQt getRRotQt(double x, double y, double z, double angle);
-    FRotQt getRRotQt(FPos3D axis, double angle);
+    FRotQt getRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FRotQt getRotQt(FPairPos3D axis, double angle);
+    FRotQt getRotQt(double x, double y, double z, double angle);
+    FRotQt getRotQt(FPos3D axis, double angle);
 
     double getAngle(FRotQt core);
     FPairPos3D getAxis(FRotQt core);

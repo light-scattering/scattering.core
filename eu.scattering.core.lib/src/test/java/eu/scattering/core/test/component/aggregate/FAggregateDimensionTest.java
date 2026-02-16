@@ -16,7 +16,7 @@ import static eu.scattering.core.test.Config.factory;
 @DisplayName("FAggregate dimension")
 @Disabled
 public class FAggregateDimensionTest {
-    private final int repetitions = 10;
+    private final int repetitions = 25;
     private final int size = 1000;
 
     @Test
@@ -109,8 +109,8 @@ public class FAggregateDimensionTest {
         fModel.build();
 
         powerLaw.add(fMonitor.getPowerLawDimension());
-        boxCountingOptimized.add(fAggregate.getFractalDimension(FractalDimension.BOX));
-        boxCountingBrute.add(fAggregate.getFractalDimension(FractalDimension.BOX_BRUTE_FORCE));
-//        densityCorrelation.add(fAggregate.getFractalDimension(FractalDimension.CORRELATION));
+        boxCountingOptimized.add(fAggregate.getFractalDimensionBox(0.9, 1.3, 5, false, false, true));
+        boxCountingBrute.add(fAggregate.getFractalDimension(FractalDimension.BOX_FAST_BRUTE_FORCE));
+        densityCorrelation.add(fAggregate.getFractalDimensionCorrelation(0.9, 1.1));
     }
 }

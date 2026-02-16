@@ -24,9 +24,9 @@ public class FRotProcessorDef implements FRotGenerator {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FRotQt getRRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
+    public FRotQt getRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
-        return getRRotQt(factory.getFPairPos3D(
+        return getRotQt(factory.getFPairPos3D(
                 factory.getFPos3D(bX, bY, bZ),
                 factory.getFPos3D(hX, hY, hZ)),
                 angle
@@ -34,9 +34,9 @@ public class FRotProcessorDef implements FRotGenerator {
     }
 
     @Override
-    public FRotQt getRRotQt(double x, double y, double z, double angle) {
+    public FRotQt getRotQt(double x, double y, double z, double angle) {
 
-        return getRRotQt(factory.getFPairPos3D(
+        return getRotQt(factory.getFPairPos3D(
                 factory.getFPos3D(0, 0, 0),
                 factory.getFPos3D(x, y, z)),
                 angle
@@ -44,13 +44,13 @@ public class FRotProcessorDef implements FRotGenerator {
     }
 
     @Override
-    public FRotQt getRRotQt(FPos3D axis, double angle) {
+    public FRotQt getRotQt(FPos3D axis, double angle) {
 
-        return getRRotQt(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
+        return getRotQt(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
     }
 
     @Override
-    public FRotQt getRRotQt(FPairPos3D axis, double angle) {
+    public FRotQt getRotQt(FPairPos3D axis, double angle) {
         FPos4D quaternion = getQuaternion(axis, angle);
         FPos3D offset = getOffset(axis);
         FMatrix3x3D matrix = getMatrix(quaternion);

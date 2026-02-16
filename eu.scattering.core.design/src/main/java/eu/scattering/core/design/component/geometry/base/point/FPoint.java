@@ -1,5 +1,6 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.annotation.Extension;
@@ -133,6 +134,8 @@ public interface FPoint extends Base<FPoint> {
     FPoint rotRgAround(double x, double y, double z, double angle);
     FPoint rotRgAround(FPoint ref, double angle);
     FPoint rotRgAround(FPos3D ref, double angle);
+
+    FPoint rotate(FMatrix3x3D matrix);
 
     //--------------------------------------------------
 

@@ -13,6 +13,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import org.json.JSONObject;
@@ -865,6 +866,14 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         cmp.setRef(this);
 
         in.sort(cmp);
+    }
+
+    @Override
+    public Shape rotate(FMatrix3x3D matrix) {
+
+        getRefCenter().rotate(matrix);
+
+        return this;
     }
 
     //--- Module - Dimension

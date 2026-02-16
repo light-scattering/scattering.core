@@ -17,10 +17,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.utility.type.method.MassCenter;
-import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
-import eu.scattering.core.design.utility.type.method.Surface;
-import eu.scattering.core.design.utility.type.method.Volume;
+import eu.scattering.core.design.utility.type.method.*;
 import eu.scattering.core.design.utility.type.option.Length;
 import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
@@ -101,7 +98,10 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void setPositionAsZero(FPoint center);
     void setPositionAsZero(FPos3D center);
 
-//    FMatrix3x3D getGyrationTensor()
+    FMatrix3x3D getGyrationTensor(GyrationTensor type);
+    FMatrix3x3D getEigenvectors(FMatrix3x3D tensor);
+
+    FMatrix3x3D getRotationPCA();
 
     //--------------------------------------------------
 
@@ -111,8 +111,11 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     double getFractalDimension(FractalDimension type);
 
-    FPlot getBoxCoverageFunction(boolean log);
-    FPlot getDensityCorrelationFunction(boolean log);
+    double getFractalDimensionBox(double window, double factor, int offset, boolean start, boolean shift, boolean pca);
+    double getFractalDimensionCorrelation(double window, double factor);
+
+    FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift,  boolean pca);
+    FPlot getDensityCorrelationFunction(double factor);
 
     //--------------------------------------------------
 
@@ -165,6 +168,12 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     double project(FAggregate arg, FVector dir);
     double project(FAggregate arg, FVector dir, double distLimit);
+
+    void shiftBoundaryToZero();
+
+    void rotate(FMatrix3x3D matrix);
+
+    void pca();
 
     @Modificator
     boolean addRefParticle(Shape particle);

@@ -220,7 +220,7 @@ public class Measure {
 
     private static String getDfBox(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BOX));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BOX_FAST));
     }
 
     private static String getDfCor(FAggregate aggregate) {
@@ -538,12 +538,12 @@ public class Measure {
     private static String getBoxCoverageFunction(ScatFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getBoxCoverageFunction(true));
+                .toCLI(aggregate.getBoxCoverageFunction(1.3, 3, false, false, false));
     }
 
     private static String getDensityCorrelationFunction(ScatFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getDensityCorrelationFunction(true));
+                .toCLI(aggregate.getDensityCorrelationFunction(1.1));
     }
 }

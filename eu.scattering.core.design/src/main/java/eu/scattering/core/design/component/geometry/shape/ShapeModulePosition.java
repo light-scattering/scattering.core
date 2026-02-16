@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
@@ -45,6 +46,8 @@ public interface ShapeModulePosition {
     void sortByDistSpace(List<? extends Shape> in);
 
     Shape scalePosition(double factor);
+
+    Shape rotate(FMatrix3x3D matrix);
 
     //--------------------------------------------------
 

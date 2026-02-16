@@ -192,7 +192,7 @@ public class FAggregateRotateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(List.of(fSphereA, fSphereB));
 
-        FRotQt qt = factory.getFRot().getRRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
+        FRotQt qt = factory.getFRot().getRotQt(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
 
         FAggregate results = rot.rotQt(fAggregate, qt);
 

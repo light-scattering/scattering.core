@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.variant.Center;
@@ -195,5 +196,23 @@ public class FAggregateModuleSupportDef {
 
             queue.poll();
         }
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected void shiftBoundaryToZero() {
+        FPos3D boundary = this.aggregate.getBoundary().getPosA();
+
+        this.aggregate.forEach(e -> e.translate(-boundary.getD0(), -boundary.getD1(), -boundary.getD2()));
+    }
+
+    protected void rotate(FMatrix3x3D matrix) {
+
+        this.aggregate.forEach(e -> e.rotate(matrix));
+    }
+
+    protected void pca() {
+
+        this.aggregate.rotate(this.aggregate.getRotationPCA());
     }
 }

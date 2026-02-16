@@ -31,37 +31,53 @@ public class FAggregateModuleFractalDimensionDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected FPlot getBoxCoverageFunction(boolean log) {
+    protected FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift,  boolean pca) {
 
-        return getBoxCoverageFunctionOptimized(log);
-    }
+        if (factor <= 1) {
+            throw new IllegalArgumentException("The factor value must be greater then one");
+        }
 
-    private FPlot getBoxCoverageFunctionOptimized(boolean log) {
+        if (offset < 1) {
+            throw new IllegalArgumentException("The offset value must be greater then zero");
+        }
+
         FPlot results = this.factory.getFPlot();
+
+        FAggregate reference = this.aggregate.copy(false);
+
+        if (shift) {
+            reference.shiftBoundaryToZero();
+        }
+
+        if (pca) {
+            reference.pca();
+        }
 
         FAggregate replica = this.aggregate.copy(false);
 
-        FPos3D boundary = this.aggregate.getBoundary().getPosA();
         double radius = this.aggregate.getFStatParticleRadius().mean();
-//        double factor = 1 / 1.3;
-        double factor = 0.5;
+        double scaleFactor = 1 / factor;
+
+        List<FPos3D> offsets = getOffsetValues(offset);
 
         double cutoffInner = radius * 2;
         double cutoffOuter = this.aggregate.getLength(Length.MAX);
 
-        results.add(cutoffOuter, 1); // Remove
+        if (start) {
+            results.add(cutoffOuter, 1);
+        }
 
-        double size = log ? cutoffOuter * factor : cutoffOuter - radius;
-        while (size >= cutoffInner) {
-            getBoxCoverageFunctionOptimizedStep(replica, boundary, results, size);
+        double box = cutoffOuter * scaleFactor;
+        while (box >= cutoffInner) {
+            getBoxCoverageFunctionStep(reference, replica, offsets, results, box);
 
-            size = log ? size * factor : size - radius;
+            box = box * scaleFactor;
         }
 
         return results;
     }
 
-    private FPlot getBoxCoverageFunctionOptimizedBruteForce(boolean log) {
+    protected FPlot getBoxCoverageFunctionBruteForce() {
         FPlot results = this.factory.getFPlot();
 
         double radius = this.aggregate.getFStatParticleRadius().mean();
@@ -70,32 +86,31 @@ public class FAggregateModuleFractalDimensionDef {
         double cutoffInner = radius * 2;
         double cutoffOuter = this.aggregate.getLength(Length.MAX);
 
-        double size = log ? cutoffOuter * factor : cutoffOuter - radius;
+        double size = cutoffOuter * factor;
         while (size >= cutoffInner) {
             getBoxCoverageFunctionBruteForceStep(results, size);
 
-            size = log ? size * factor : size - radius;
+            size = size * factor;
         }
 
         return results;
     }
 
-    private void getBoxCoverageFunctionOptimizedStep(FAggregate replica, FPos3D boundary, FPlot data, double step) {
+    private void getBoxCoverageFunctionStep(FAggregate reference, FAggregate replica, List<FPos3D> offsets, FPlot results, double box) {
         FSphereHelper sphereHelper = this.factory.getFSphereHelper();
         int sumMin = Integer.MAX_VALUE;
-        double scale = 1 / step;
+        double scale = 1 / box;
 
-        for (FPos3D offset : shift(1, 1)) {
+        for (FPos3D offset : offsets) {
 
             for (int i = 0 ; i < this.aggregate.size() ; i++) {
-                replica.getRefParticles().asList().get(i).setCenter(this.aggregate.getRefParticles().asList().get(i).getRefCenter());
-                replica.getRefParticles().asList().get(i).setRadius(this.aggregate.getRefParticles().asList().get(i).getRadius());
+                replica.getRefParticles().asList().get(i).setCenter(reference.getRefParticles().asList().get(i).getRefCenter());
+                replica.getRefParticles().asList().get(i).setRadius(reference.getRefParticles().asList().get(i).getRadius());
             }
 
             Queue<Shape> particles = new LinkedList<>(replica.getRefParticles().asList());
-            particles.forEach(e -> e.translate(-boundary.getD0(), -boundary.getD1(), -boundary.getD2())); // Remove
             particles.forEach(e -> e.scalePosition(scale).scaleSize(scale));
-//            particles.forEach(e -> e.translate(offset));
+            particles.forEach(e -> e.translate(offset));
 
             List<Shape> neighbours = new ArrayList<>(particles.size());
 
@@ -143,23 +158,7 @@ public class FAggregateModuleFractalDimensionDef {
             }
         }
 
-        data.add(step, sumMin);
-    }
-
-    private List<FPos3D> shift(int count, double step) {
-        List<FPos3D> results = new ArrayList<>(count * count * count);
-
-        double shift = step / count;
-
-        for (int i = 0 ; i < count ; i++) {
-            for (int j = 0 ; j < count ; j++) {
-                for (int k = 0 ; k < count ; k++) {
-                    results.add(this.factory.getFPos3D(i * shift, j * shift, k * shift));
-                }
-            }
-        }
-
-        return results;
+        results.add(box, sumMin);
     }
 
     private void getBoxCoverageFunctionBruteForceStep(FPlot data, double step) {
@@ -203,22 +202,38 @@ public class FAggregateModuleFractalDimensionDef {
         data.add(step, sum);
     }
 
-    // -------------------------------------------------------------------------------------------------
+    private List<FPos3D> getOffsetValues(int count) {
+        List<FPos3D> results = new ArrayList<>(count * count * count);
 
-    protected FPlot getDensityCorrelationFunction(boolean log) {
+        double shift = (double) 1 / count;
 
-        return getCoreDensityCorrelationFunction(Double.POSITIVE_INFINITY, log);
+        for (int i = 0 ; i < count ; i++) {
+            for (int j = 0 ; j < count ; j++) {
+                for (int k = 0 ; k < count ; k++) {
+                    results.add(this.factory.getFPos3D(i * shift, j * shift, k * shift));
+                }
+            }
+        }
+
+        return results;
     }
 
-    private FPlot getCoreDensityCorrelationFunction(double rangeFactor, boolean log) {
+    // -------------------------------------------------------------------------------------------------
+
+    protected FPlot getDensityCorrelationFunction(double factor) {
+
+        return getCoreDensityCorrelationFunction(factor, Double.POSITIVE_INFINITY);
+    }
+
+    private FPlot getCoreDensityCorrelationFunction(double factor, double exclusion) {
         FPlot results = this.factory.getFPlot();
 
-        FStat distances = getCorePairDistance(rangeFactor);
+        FStat distances = getCorePairDistance(exclusion);
 
         double min = distances.min();
         double delta = min * 0.5;
 
-        setDistance(results, distances, min, delta, log);
+        setDistance(results, distances, factor, min, delta);
         setDensity(results, delta);
 
         results.filter((x, y) -> x > 0 && y > 0);
@@ -226,13 +241,13 @@ public class FAggregateModuleFractalDimensionDef {
         return results;
     }
 
-    private FStat getCorePairDistance(double rangeFactor) {
+    private FStat getCorePairDistance(double exclusion) {
         FStat results = this.factory.getFStat();
 
         FPos3D center = this.aggregate.getMassCenter(MassCenter.SIMPLE_POLY);
 
         double cutoff = this.aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
-        double range = cutoff * rangeFactor;
+        double range = cutoff * exclusion;
 
         List<Shape> internal = new ArrayList<>();
         List<Shape> external = new ArrayList<>();
@@ -294,13 +309,13 @@ public class FAggregateModuleFractalDimensionDef {
         }
     }
 
-    private void setDistance(FPlot results, FStat distances, double min, double delta, boolean log) {
+    private void setDistance(FPlot results, FStat distances, double factor, double start, double delta) {
         double max = distances.max() - delta;
 
-        double step = min;
+        double step = start;
         while (step <= max) {
             results.add(step, 0);
-            step = log ? step * 1.1 : step + delta;
+            step = step * factor;
         }
 
         for (double distance : distances) {
@@ -330,26 +345,54 @@ public class FAggregateModuleFractalDimensionDef {
 
     // -------------------------------------------------------------------------------------------------
 
+    protected double getFractalDimensionBox(double window, double scale, int offset, boolean start, boolean shift,  boolean pca) {
+
+        return getBoxCoverageAnalyze(getBoxCoverageFunction(scale, offset, start, shift, pca), window);
+    }
+
+    protected double getFractalDimensionCorrelation(double window, double factor) {
+
+        return getCoreDensityCorrelationAnalyze(getCoreDensityCorrelationFunction(factor, 0.5), window);
+    }
+
     protected double getFractalDimension(FractalDimension type) {
 
         return switch (type) {
-            case BOX -> getBoxCoverageAnalyze(
-                    getBoxCoverageFunctionOptimized(true));
-            case BOX_BRUTE_FORCE -> getBoxCoverageAnalyze(
-                    getBoxCoverageFunctionOptimizedBruteForce(true));
+            case BOX_FAST -> getBoxCoverageAnalyze(
+                    getBoxCoverageFunction(2, 1, true, true, false),
+                    1
+            );
+            case BOX_FAST_BRUTE_FORCE -> getBoxCoverageAnalyze(
+                    getBoxCoverageFunctionBruteForce(),
+                    1
+            );
+            case BOX_ADVANCED_1 -> getBoxCoverageAnalyze(
+                    getBoxCoverageFunction(1.3, 3, false, false, true),
+                    0.9
+            );
+            case BOX_ADVANCED_2 -> getBoxCoverageAnalyze(
+                    getBoxCoverageFunction(1.3, 5, false, false, true),
+                    0.9
+            );
             case CORRELATION -> getCoreDensityCorrelationAnalyze(
-                    getCoreDensityCorrelationFunction(0.5, true));
+                    getCoreDensityCorrelationFunction(1.1, 0.5),
+                    0.9
+            );
         };
     }
 
-    private double getBoxCoverageAnalyze(FPlot data) {
+    private double getBoxCoverageAnalyze(FPlot data, double window) {
+
+        if (window <= 0 || window > 1) {
+            throw new IllegalArgumentException("The window must be in range 0-1");
+        }
+
         data.mutateY((x, y) -> Math.log(y));
         data.mutateX((x, y) -> Math.log(1 / x));
 
         data.filter((x, y) -> y > 0);
 
-//        FPoly regression = data.reg().fitSlope((int) (data.size() * 0.9));
-        FPoly regression = data.reg().poly(1);
+        FPoly regression = window == 1 ? data.reg().poly(1) : data.reg().fitSlope((int) (data.size() * window));
 
         FPlot fit = data.copy();
         fit.setY(regression);
@@ -363,14 +406,18 @@ public class FAggregateModuleFractalDimensionDef {
         return regression.at(1);
     }
 
-    private double getCoreDensityCorrelationAnalyze(FPlot data) {
+    private double getCoreDensityCorrelationAnalyze(FPlot data, double window) {
+
+        if (window <= 0 || window > 1) {
+            throw new IllegalArgumentException("The window must be in range 0-1");
+        }
 
         data.mutate((a, b) -> {
             a.ln();
             b.ln();
         });
 
-        FPoly regression = data.reg().fitSlope((int) (data.size() * 0.9));
+        FPoly regression = window == 1 ? data.reg().poly(1) : data.reg().fitSlope((int) (data.size() * window));
 
         FPlot fit = data.copy();
         fit.setY(regression);

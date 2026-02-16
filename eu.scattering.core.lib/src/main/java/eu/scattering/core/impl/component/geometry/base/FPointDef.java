@@ -1133,6 +1133,17 @@ public class FPointDef implements FPoint {
         return rotRgAround(ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
+    @Override
+    public FPoint rotate(FMatrix3x3D matrix) {
+        double x = (matrix.get0x0() * getX()) + (matrix.get0x1() * getY()) + (matrix.get0x2() * getZ());
+        double y = (matrix.get1x0() * getX()) + (matrix.get1x1() * getY()) + (matrix.get1x2() * getZ());
+        double z = (matrix.get2x0() * getX()) + (matrix.get2x1() * getY()) + (matrix.get2x2() * getZ());
+
+        set(x, y, z);
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override

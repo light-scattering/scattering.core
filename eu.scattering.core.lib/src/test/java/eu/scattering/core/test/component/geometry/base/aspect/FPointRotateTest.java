@@ -671,7 +671,7 @@ public class FPointRotateTest {
 
         FPoint fPoint = factory.getFPoint(1, 1, 0);
 
-        FRotQt qt = fRot.getRRotQt(factory.getFPos3D(0, 2, 0), Math.PI * 0.5);
+        FRotQt qt = fRot.getRotQt(factory.getFPos3D(0, 2, 0), Math.PI * 0.5);
 
         FPoint results = rot.rotQt(fPoint, qt);
 
