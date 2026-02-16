@@ -14,9 +14,9 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 
 @DisplayName("FAggregate dimension")
-@Disabled
+//@Disabled
 public class FAggregateDimensionTest {
-    private final int repetitions = 25;
+    private final int repetitions = 10;
     private final int size = 1000;
 
     @Test

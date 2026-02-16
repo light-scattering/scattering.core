@@ -23,6 +23,7 @@ import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public interface FAggregate extends Component, Iterable<Shape> {
@@ -98,14 +99,14 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void setPositionAsZero(FPoint center);
     void setPositionAsZero(FPos3D center);
 
-    FMatrix3x3D getGyrationTensor(GyrationTensor type);
-    FMatrix3x3D getEigenvectors(FMatrix3x3D tensor);
-
-    FMatrix3x3D getRotationPCA();
+    @Fragment
+    FPos3D getMassCenter(MassCenter type, List<Double> massFragments, List<FPos3D> centerFragments);
 
     //--------------------------------------------------
 
     double getRadiusOfGyration(RadiusOfGyration type);
+
+    FMatrix3x3D getGyrationTensor(GyrationTensor type);
 
     //--------------------------------------------------
 
@@ -113,6 +114,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     double getFractalDimensionBox(double window, double factor, int offset, boolean start, boolean shift, boolean pca);
     double getFractalDimensionCorrelation(double window, double factor);
+//    double getFractalDimensionSand(double window, double factor);
 
     FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift,  boolean pca);
     FPlot getDensityCorrelationFunction(double factor);

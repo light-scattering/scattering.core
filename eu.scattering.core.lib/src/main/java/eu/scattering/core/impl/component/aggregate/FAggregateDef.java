@@ -39,7 +39,7 @@ public class FAggregateDef implements FAggregate {
     private final ScatFactory factory;
     private final FAssembly<Shape> particles;
 
-    private final FAggregateModuleRadiusOfGyrationDef moduleRadiusOfGyration;
+    private final FAggregateModuleGyrationDef moduleGyration;
     private final FAggregateModuleFractalDimensionDef moduleFractalDimension;
     private final FAggregateModuleCenterDef moduleCenter;
     private final FAggregateModuleOverlapDef moduleOverlap;
@@ -54,7 +54,7 @@ public class FAggregateDef implements FAggregate {
         this.factory = factory;
         this.particles = refParticles;
 
-        this.moduleRadiusOfGyration = new FAggregateModuleRadiusOfGyrationDef(this.factory, this);
+        this.moduleGyration = new FAggregateModuleGyrationDef(this.factory, this);
         this.moduleFractalDimension = new FAggregateModuleFractalDimensionDef(this.factory, this);
         this.moduleCenter = new FAggregateModuleCenterDef(this.factory, this);
         this.moduleOverlap = new FAggregateModuleOverlapDef(this.factory, this);
@@ -249,9 +249,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public FPos3D getMassCenter(MassCenter type, List<Double> massFragments, List<FPos3D> centerFragments) {
+
+        return this.moduleCenter.getMassCenter(type, massFragments, centerFragments);
+    }
+
+    @Override
     public FPoint getMassCenter(FPoint in, MassCenter type) {
 
-        this.moduleCenter.getMassCenter(in, null, type);
+        this.moduleCenter.getMassCenter(in, type, null, null);
 
         return in;
     }
@@ -259,7 +265,7 @@ public class FAggregateDef implements FAggregate {
     @Override
     public FPos3D getMassCenter(MassCenter type) {
 
-        return this.moduleCenter.getMassCenter(null, type);
+        return this.moduleCenter.getMassCenter(type, null, null);
     }
 
     @Override
@@ -300,24 +306,6 @@ public class FAggregateDef implements FAggregate {
     public void setPositionAsZero(FPos3D center) {
 
         this.moduleCenter.setPositionAsZero(center);
-    }
-
-    @Override
-    public FMatrix3x3D getGyrationTensor(GyrationTensor type) {
-
-        return this.moduleCenter.getGyrationTensor(type);
-    }
-
-    @Override
-    public FMatrix3x3D getEigenvectors(FMatrix3x3D tensor) {
-
-        return this.moduleCenter.getEigenvectors(tensor);
-    }
-
-    @Override
-    public FMatrix3x3D getRotationPCA() {
-
-        return this.moduleCenter.getRotationPCA();
     }
 
     @Override
@@ -419,7 +407,13 @@ public class FAggregateDef implements FAggregate {
     @Override
     public double getRadiusOfGyration(RadiusOfGyration type) {
 
-        return this.moduleRadiusOfGyration.getRadiusOfGyration(type);
+        return this.moduleGyration.getRadiusOfGyration(type);
+    }
+
+    @Override
+    public FMatrix3x3D getGyrationTensor(GyrationTensor type) {
+
+        return this.moduleGyration.getGyrationTensor(type);
     }
 
     @Override

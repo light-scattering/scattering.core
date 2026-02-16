@@ -8,15 +8,20 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
+import eu.scattering.core.design.utility.type.method.GyrationTensor;
 import eu.scattering.core.design.utility.type.method.MassCenter;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
-public class FAggregateModuleRadiusOfGyrationDef {
+import java.util.ArrayList;
+import java.util.List;
+
+public class FAggregateModuleGyrationDef {
     private final ScatFactory factory;
     private final FAggregate aggregate;
 
-    protected FAggregateModuleRadiusOfGyrationDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleGyrationDef(ScatFactory factory, FAggregate aggregate) {
 
         this.factory = factory;
         this.aggregate = aggregate;
@@ -202,6 +207,48 @@ public class FAggregateModuleRadiusOfGyrationDef {
         }
 
         throw new IllegalStateException("Unknown RoG correction");
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected FMatrix3x3D getGyrationTensor(GyrationTensor type) {
+        double[][] tensor = new double[3][3];
+
+        List<Double> massFragments = new ArrayList<>(this.aggregate.size());
+        List<FPos3D> massCenters = new ArrayList<>(this.aggregate.size());
+
+        MassCenter massCenterType = switch (type) {
+            case ADAPTIVE -> MassCenter.ADAPTIVE;
+            case SIMPLE_MONO -> MassCenter.SIMPLE_MONO;
+            case SIMPLE_POLY -> MassCenter.SIMPLE_POLY;
+            case COMPLEX -> MassCenter.COMPLEX;
+        };
+
+        FPos3D massCenter = this.aggregate.getMassCenter(massCenterType, massFragments, massCenters);
+
+        for (int i = 0 ; i < this.aggregate.size() ; i++) {
+            double massFragment = massFragments.get(i);
+            FPos3D centerFragment = massCenters.get(i);
+
+            double dx = centerFragment.getD0() - massCenter.getD0();
+            double dy = centerFragment.getD1() - massCenter.getD1();
+            double dz = centerFragment.getD2() - massCenter.getD2();
+
+            tensor[0][0] += massFragment * dx * dx;
+            tensor[0][1] += massFragment * dx * dy;
+            tensor[0][2] += massFragment * dx * dz;
+
+            tensor[1][1] += massFragment * dy * dy;
+            tensor[1][2] += massFragment * dy * dz;
+
+            tensor[2][2] += massFragment * dz * dz;
+        }
+
+        tensor[1][0] = tensor[0][1];
+        tensor[2][0] = tensor[0][2];
+        tensor[2][1] = tensor[1][2];
+
+        return this.factory.getFMatrix3x3D(tensor);
     }
 
     // -------------------------------------------------------------------------------------------------
