@@ -132,4 +132,10 @@ public class FPointHelperDef implements FPointHelper {
 
         return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
     }
+
+    @Override
+    public double getDistanceP2(FPos3D posA, FPos3D posB) {
+
+        return getDistanceP2(posA.getD0(), posA.getD1(), posA.getD2(), posB.getD0(), posB.getD1(), posB.getD2());
+    }
 }

@@ -27,4 +27,6 @@ public interface FPointHelper {
     double getMagnitudeP2(double x, double y, double z);
     @Fragment
     double getDistanceP2(double aX, double aY, double aZ, double bX, double bY, double bZ);
+    @Fragment
+    double getDistanceP2(FPos3D posA, FPos3D posB);
 }

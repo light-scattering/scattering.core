@@ -70,13 +70,19 @@ public class FAggregateModuleCenterDef {
         return center.toFPos3D();
     }
 
+    protected void getMassCenter(FPoint in, MassCenter type) {
+
+        getMassCenter(in, type, null, null);
+    }
+
     protected void getMassCenter(FPoint in, MassCenter type, List<Double> massFragments, List<FPos3D> centerFragments) {
+        Meta meta = new Meta(massFragments, centerFragments);
 
         switch (type) {
-            case SIMPLE_MONO -> getMassCenterMethodSimpleMono(in, massFragments, centerFragments);
-            case SIMPLE_POLY -> getMassCenterMethodSimplePoly(in, massFragments, centerFragments);
-            case COMPLEX -> getMassCenterMethodComplex(in, massFragments, centerFragments);
-            case ADAPTIVE -> getMassCenterMethodAdaptive(in, massFragments, centerFragments);
+            case SIMPLE_MONO -> getMassCenterMethodSimpleMono(in, meta);
+            case SIMPLE_POLY -> getMassCenterMethodSimplePoly(in, meta);
+            case COMPLEX -> getMassCenterMethodComplex(in, meta);
+            case ADAPTIVE -> getMassCenterMethodAdaptive(in, meta);
         }
     }
 
@@ -88,7 +94,7 @@ public class FAggregateModuleCenterDef {
         return center.toFPos3D();
     }
 
-    private void getMassCenterMethodSimpleMono(FPoint center, List<Double> massFragments, List<FPos3D> centerFragments) {
+    private void getMassCenterMethodSimpleMono(FPoint center, Meta meta) {
         double radius = this.aggregate.getFStatParticleRadius().mean();
 
         double mass = 0;
@@ -103,19 +109,19 @@ public class FAggregateModuleCenterDef {
 
             mass += massFragment;
 
-            if (massFragments != null) {
-                massFragments.add(massFragment);
+            if (meta.massFragments() != null) {
+                meta.massFragments().add(massFragment);
             }
 
-            if (centerFragments != null) {
-                centerFragments.add(centerFragment.divFactor(massFragment).toFPos3D());
+            if (meta.centerFragments() != null) {
+                meta.centerFragments().add(centerFragment.divFactor(massFragment).toFPos3D());
             }
         }
 
         center.divFactor(mass);
     }
 
-    private void getMassCenterMethodSimplePoly(FPoint center, List<Double> massFragments, List<FPos3D> centerFragments) {
+    private void getMassCenterMethodSimplePoly(FPoint center, Meta meta) {
         double mass = 0;
         FPoint centerFragment = this.factory.getFPoint();
 
@@ -128,19 +134,19 @@ public class FAggregateModuleCenterDef {
 
             mass += massFragment;
 
-            if (massFragments != null) {
-                massFragments.add(massFragment);
+            if (meta.massFragments() != null) {
+                meta.massFragments().add(massFragment);
             }
 
-            if (centerFragments != null) {
-                centerFragments.add(centerFragment.divFactor(massFragment).toFPos3D());
+            if (meta.centerFragments() != null) {
+                meta.centerFragments().add(centerFragment.divFactor(massFragment).toFPos3D());
             }
         }
 
         center.divFactor(mass);
     }
 
-    private void getMassCenterMethodAdaptive(FPoint center, List<Double> massFragments, List<FPos3D> centerFragments) {
+    private void getMassCenterMethodAdaptive(FPoint center, Meta meta) {
         double mass = 0;
         FPoint centerFragment = this.factory.getFPoint();
 
@@ -153,19 +159,19 @@ public class FAggregateModuleCenterDef {
 
             mass += massFragment;
 
-            if (massFragments != null) {
-                massFragments.add(massFragment);
+            if (meta.massFragments() != null) {
+                meta.massFragments().add(massFragment);
             }
 
-            if (centerFragments != null) {
-                centerFragments.add(centerFragment.divFactor(massFragment).toFPos3D());
+            if (meta.centerFragments() != null) {
+                meta.centerFragments().add(centerFragment.divFactor(massFragment).toFPos3D());
             }
         }
 
         center.divFactor(mass);
     }
 
-    private void getMassCenterMethodComplex(FPoint center, List<Double> massFragments, List<FPos3D> centerFragments) {
+    private void getMassCenterMethodComplex(FPoint center, Meta meta) {
         double mass = 0;
         FPoint centerFragment = this.factory.getFPoint();
 
@@ -178,12 +184,12 @@ public class FAggregateModuleCenterDef {
 
             mass += massFragment;
 
-            if (massFragments != null) {
-                massFragments.add(massFragment);
+            if (meta.massFragments() != null) {
+                meta.massFragments().add(massFragment);
             }
 
-            if (centerFragments != null) {
-                centerFragments.add(centerFragment.divFactor(massFragment).toFPos3D());
+            if (meta.centerFragments() != null) {
+                meta.centerFragments().add(centerFragment.divFactor(massFragment).toFPos3D());
             }
         }
 
@@ -469,4 +475,8 @@ public class FAggregateModuleCenterDef {
 
         setSphericalCenter(position.getD0(), position.getD1(), position.getD2(), steps);
     }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private record Meta(List<Double> massFragments, List<FPos3D> centerFragments) {}
 }

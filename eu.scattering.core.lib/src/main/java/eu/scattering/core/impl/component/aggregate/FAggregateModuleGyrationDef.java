@@ -31,37 +31,47 @@ public class FAggregateModuleGyrationDef {
 
     protected double getRadiusOfGyration(RadiusOfGyration type) {
 
+        return getRadiusOfGyration(type, null, null, null);
+    }
+
+    protected double getRadiusOfGyration(RadiusOfGyration type, FPoint massCenter, List<Double> massFragments, List<FPos3D> centerFragments) {
+        Meta meta = new Meta(massCenter, massFragments, centerFragments);
+
         return switch (type) {
-            case SIMPLE_MONO -> getRadiusOfGyrationSimpleMono(Correction.NONE);
-            case SIMPLE_MONO_06R1 -> getRadiusOfGyrationSimpleMono(Correction._06R1);
-            case SIMPLE_MONO_10R2, DEDICATED_FILIPPOV -> getRadiusOfGyrationSimpleMono(Correction._10R2);
-            case SIMPLE_POLY -> getRadiusOfGyrationSimplePoly(Correction.NONE);
-            case SIMPLE_POLY_06R1 -> getRadiusOfGyrationSimplePoly(Correction._06R1);
-            case SIMPLE_POLY_10R2 -> getRadiusOfGyrationSimplePoly(Correction._10R2);
-            case COMPLEX -> getRadiusOfGyrationComplex();
+            case SIMPLE_MONO -> getRadiusOfGyrationSimpleMono(Correction.NONE, meta);
+            case SIMPLE_MONO_06R1 -> getRadiusOfGyrationSimpleMono(Correction._06R1, meta);
+            case SIMPLE_MONO_10R2, DEDICATED_FILIPPOV -> getRadiusOfGyrationSimpleMono(Correction._10R2, meta);
+            case SIMPLE_POLY -> getRadiusOfGyrationSimplePoly(Correction.NONE, meta);
+            case SIMPLE_POLY_06R1 -> getRadiusOfGyrationSimplePoly(Correction._06R1, meta);
+            case SIMPLE_POLY_10R2 -> getRadiusOfGyrationSimplePoly(Correction._10R2, meta);
+            case COMPLEX -> getRadiusOfGyrationComplex(meta);
         };
     }
 
-    private double getRadiusOfGyrationSimpleMono(Correction type) {
+    private double getRadiusOfGyrationSimpleMono(Correction type, Meta meta) {
         FComplex data = this.factory.getFComplex();
         double radius = this.aggregate.getFStatParticleRadius().mean();
 
-        getRadiusOfGyrationSimpleMonoPrecise(data, radius);
+        getRadiusOfGyrationSimpleMonoPrecise(data, radius, meta);
 
         return correction(data, type, radius);
     }
 
-    private void getRadiusOfGyrationSimpleMonoPrecise(FComplex data, double radius) {
+    private void getRadiusOfGyrationSimpleMonoPrecise(FComplex data, double radius, Meta meta) {
 
         if (this.aggregate.getRefFExtension().getRefFMaterial() == null) {
-            getRadiusOfGyrationSimpleMonoPreciseMath(data);
+            getRadiusOfGyrationSimpleMonoPreciseMath(data, meta);
         } else {
-            getRadiusOfGyrationSimpleMonoPrecisePhys(data, radius);
+            getRadiusOfGyrationSimpleMonoPrecisePhys(data, radius, meta);
         }
     }
 
-    private void getRadiusOfGyrationSimpleMonoPreciseMath(FComplex data) {
-        FPos3D center = this.aggregate.getMassCenter(MassCenter.SIMPLE_MONO);
+    private void getRadiusOfGyrationSimpleMonoPreciseMath(FComplex data, Meta meta) {
+        FPos3D center = this.aggregate.getMassCenter(MassCenter.SIMPLE_MONO, meta.massFragments(), meta.centerFragments());
+
+        if (meta.massCenter() != null) {
+            meta.massCenter().set(center);
+        }
 
         for (Shape shape : this.aggregate) {
             data.setRe(data.getRe() + shape.getDistCenterP2(center));
@@ -70,9 +80,13 @@ public class FAggregateModuleGyrationDef {
         data.setIm(this.aggregate.size());
     }
 
-    private void getRadiusOfGyrationSimpleMonoPrecisePhys(FComplex data, double radius) {
+    private void getRadiusOfGyrationSimpleMonoPrecisePhys(FComplex data, double radius, Meta meta) {
         FMaterial material = this.aggregate.getRefFExtension().getRefFMaterial();
-        FPos3D center = this.aggregate.getMassCenter(MassCenter.SIMPLE_MONO);
+        FPos3D center = this.aggregate.getMassCenter(MassCenter.SIMPLE_MONO, meta.massFragments(), meta.centerFragments());
+
+        if (meta.massCenter() != null) {
+            meta.massCenter().set(center);
+        }
 
         for (Shape shape : this.aggregate) {
             double mass = getParticleMassMono(shape, radius, material);
@@ -82,9 +96,15 @@ public class FAggregateModuleGyrationDef {
         }
     }
 
-    private double getRadiusOfGyrationSimplePoly(Correction type) {
+    private double getRadiusOfGyrationSimplePoly(Correction type, Meta meta) {
         FComplex data = this.factory.getFComplex();
-        FPoint center = this.aggregate.getMassCenter(this.factory.getFPoint(), MassCenter.SIMPLE_POLY);
+
+        FPos3D centerFixed = this.aggregate.getMassCenter(MassCenter.SIMPLE_POLY, meta.massFragments(), meta.centerFragments());
+        FPoint center = this.factory.getFPoint(centerFixed);
+
+        if (meta.massCenter() != null) {
+            meta.massCenter().set(center);
+        }
 
         for (Shape shape : this.aggregate) {
             getRadiusOfGyrationSimplePolyPrecise(data, center, shape);
@@ -118,9 +138,15 @@ public class FAggregateModuleGyrationDef {
         data.setIm(data.getIm() + mass);
     }
 
-    private double getRadiusOfGyrationComplex() {
+    private double getRadiusOfGyrationComplex(Meta meta) {
         FComplex data = this.factory.getFComplex();
-        FPoint center = this.aggregate.getMassCenter(this.factory.getFPoint(), MassCenter.COMPLEX);
+
+        FPos3D centerFixed = this.aggregate.getMassCenter(MassCenter.COMPLEX, meta.massFragments(), meta.centerFragments());
+        FPoint center = this.factory.getFPoint(centerFixed);
+
+        if (meta.massCenter() != null) {
+            meta.massCenter().set(center);
+        }
 
         for (Shape shape : this.aggregate) {
             getRadiusOfGyrationComplexApprox(data, center, shape);
@@ -277,4 +303,6 @@ public class FAggregateModuleGyrationDef {
     private enum Correction {
         NONE, _06R1, _10R2,
     }
+
+    private record Meta(FPoint massCenter, List<Double> massFragments, List<FPos3D> centerFragments) {}
 }

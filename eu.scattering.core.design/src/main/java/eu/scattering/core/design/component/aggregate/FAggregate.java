@@ -104,17 +104,20 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     //--------------------------------------------------
 
+    FMatrix3x3D getGyrationTensor(GyrationTensor type);
+
     double getRadiusOfGyration(RadiusOfGyration type);
 
-    FMatrix3x3D getGyrationTensor(GyrationTensor type);
+    @Fragment
+    double getRadiusOfGyration(RadiusOfGyration type, FPoint massCenter, List<Double> massFragments, List<FPos3D> centerFragments);
 
     //--------------------------------------------------
 
     double getFractalDimension(FractalDimension type);
 
-    double getFractalDimensionBox(double window, double factor, int offset, boolean start, boolean shift, boolean pca);
-    double getFractalDimensionCorrelation(double window, double factor);
-//    double getFractalDimensionSand(double window, double factor);
+    double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
+    double getFractalDimensionBoxCounting(double window, double stepFactor, int offset, boolean start, boolean shift, boolean pca);
+    double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
 
     FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift,  boolean pca);
     FPlot getDensityCorrelationFunction(double factor);

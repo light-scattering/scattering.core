@@ -249,17 +249,17 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPos3D getMassCenter(MassCenter type, List<Double> massFragments, List<FPos3D> centerFragments) {
+    public FPoint getMassCenter(FPoint in, MassCenter type) {
 
-        return this.moduleCenter.getMassCenter(type, massFragments, centerFragments);
+        this.moduleCenter.getMassCenter(in, type);
+
+        return in;
     }
 
     @Override
-    public FPoint getMassCenter(FPoint in, MassCenter type) {
+    public FPos3D getMassCenter(MassCenter type, List<Double> massFragments, List<FPos3D> centerFragments) {
 
-        this.moduleCenter.getMassCenter(in, type, null, null);
-
-        return in;
+        return this.moduleCenter.getMassCenter(type, massFragments, centerFragments);
     }
 
     @Override
@@ -417,33 +417,45 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public double getRadiusOfGyration(RadiusOfGyration type, FPoint massCenter, List<Double> massFragments, List<FPos3D> centerFragments) {
+
+        return this.moduleGyration.getRadiusOfGyration(type, massCenter, massFragments, centerFragments);
+    }
+
+    @Override
     public double getFractalDimension(FractalDimension type) {
 
         return this.moduleFractalDimension.getFractalDimension(type);
     }
 
     @Override
-    public double getFractalDimensionBox(double window, double factor, int offset, boolean start, boolean shift, boolean pca) {
+    public double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
 
-        return this.moduleFractalDimension.getFractalDimensionBox(window, factor, offset, start, shift, pca);
+        return this.moduleFractalDimension.getFractalDimensionMassRadius(window, method, stepFactor, rangeLimit);
     }
 
     @Override
-    public double getFractalDimensionCorrelation(double window, double factor) {
+    public double getFractalDimensionBoxCounting(double window, double stepFactor, int offset, boolean start, boolean shift, boolean pca) {
 
-        return this.moduleFractalDimension.getFractalDimensionCorrelation(window, factor);
+        return this.moduleFractalDimension.getFractalDimensionBoxCounting(window, stepFactor, offset, start, shift, pca);
     }
 
     @Override
-    public FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift, boolean pca) {
+    public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
 
-        return this.moduleFractalDimension.getBoxCoverageFunction(factor, offset, start, shift, pca);
+        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit);
     }
 
     @Override
-    public FPlot getDensityCorrelationFunction(double factor) {
+    public FPlot getBoxCoverageFunction(double stepFactor, int offset, boolean start, boolean shift, boolean pca) {
 
-        return this.moduleFractalDimension.getDensityCorrelationFunction(factor);
+        return this.moduleFractalDimension.getBoxCoverageFunction(stepFactor, offset, start, shift, pca);
+    }
+
+    @Override
+    public FPlot getDensityCorrelationFunction(double stepFactor) {
+
+        return this.moduleFractalDimension.getDensityCorrelationFunction(stepFactor);
     }
 
     @Override
