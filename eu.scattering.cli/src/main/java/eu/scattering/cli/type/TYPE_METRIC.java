@@ -4,8 +4,9 @@ public enum TYPE_METRIC {
     Np,
     Rp, Rp__avg, Rp__std, Rp__max, Rp__min,
     Rg_mono, Rg_mono_06R1, Rg_mono_10R2, Rg_poly, Rg_poly_06R1, Rg_poly_10R2, Rg_mesh, RG_filippov,
-    Df_box,
-    Df_density,
+    Df_box, Df_box_brute_force,  Df_box_adv_1, Df_box_adv_2,
+    Df_density, Df_density_full,
+    Df_mass, Df_mass_full,
     //--------------------
     Length_x,
     Length_y,
