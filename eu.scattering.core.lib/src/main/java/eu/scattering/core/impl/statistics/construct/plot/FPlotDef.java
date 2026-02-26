@@ -1,0 +1,656 @@
+package eu.scattering.core.impl.statistics.construct.plot;
+
+import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
+import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
+import eu.scattering.core.design.utility.lambda.TriConsumer;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plot.util.FPlotRegressor;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
+import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.utility.type.option.RoundMethod;
+import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotInterpolatorDef;
+import eu.scattering.core.impl.statistics.construct.plot.utils.FPlotRegressorDef;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+
+public class FPlotDef implements FPlot {
+    private static final String JSON_TYPE = "type";
+    private static final String JSON_MAIN = "plot";
+    private static final String JSON_DATA_X = "dataX";
+    private static final String JSON_DATA_Y = "dataY";
+
+    private final ScatFactory factory;
+
+    private final FStat dataX;
+    private final FStat dataY;
+
+    private final FPlotInterpolator interpolator;
+    private final FPlotRegressor regressor;
+
+    private String name = "";
+
+    private FPlotDef(ScatFactory factory, FStat dataX, FStat dataY) {
+
+        this.factory = factory;
+
+        this.dataX = dataX == null ? factory.getFStat() : dataX;
+        this.dataY = dataY == null ? factory.getFStat() : dataY;
+
+        if (this.dataX.size() != this.dataY.size()) {
+            throw new IllegalArgumentException("The data is corrupted");
+        }
+
+        this.interpolator = FPlotInterpolatorDef.create(factory, this);
+        this.regressor = FPlotRegressorDef.create(factory, this);
+    }
+
+    public static FPlot create(ScatFactory factory) {
+
+        return new FPlotDef(factory, null, null);
+    }
+
+    public static FPlot create(ScatFactory factory, FStat dataX, FStat dataY) {
+
+        return new FPlotDef(factory, dataX, dataY);
+    }
+
+    public static FPlot create(ScatFactory factory, FLayer fLayer) {
+        FPlotDef fPlot = new FPlotDef(factory, null, null);
+
+        for (int i = 0 ; i < fLayer.size() ; i++) {
+            fPlot.dataX.add(i);
+            fPlot.dataY.add(fLayer.get(i));
+        }
+
+        return fPlot;
+    }
+
+    public static FPlot create(ScatFactory factory, JSONObject json) {
+        FStat dataX = factory.getFStat(json.getJSONObject(JSON_DATA_X));
+        FStat dataY = factory.getFStat(json.getJSONObject(JSON_DATA_Y));
+
+        return new FPlotDef(factory, dataX, dataY);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FPlot add(double x) {
+
+        if (position(x) >= 0) {
+            throw new IllegalStateException("The x value already exists");
+        }
+
+        getRefCoreX().add(x);
+        getRefCoreY().add(0);
+
+        return this;
+    }
+
+    @Override
+    public FPlot add(BiFunction<Double, Double, Double> collision, double x) {
+        int position = position(x);
+
+        if (position < 0) {
+            getRefCoreX().add(x);
+            getRefCoreY().add(0);
+        } else {
+            getRefCoreY().set(position, collision.apply(getRefCoreY().get(position), 0d));
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot add(double x, double y) {
+
+        if (position(x) >= 0) {
+            throw new IllegalStateException("The x value already exists");
+        }
+
+        getRefCoreX().add(x);
+        getRefCoreY().add(y);
+
+        return this;
+    }
+
+    @Override
+    public FPlot add(BiFunction<Double, Double, Double> collision, double x, double y) {
+        int position = position(x);
+
+        if (position < 0) {
+            getRefCoreX().add(x);
+            getRefCoreY().add(y);
+        } else {
+            getRefCoreY().set(position, collision.apply(getRefCoreY().get(position), y));
+        }
+
+        return this;
+    }
+
+    @Override
+    public double getX(int index) {
+
+        return getRefCoreX().get(index);
+    }
+
+    @Override
+    public FPlot setX(int index, double x) {
+
+        getRefCoreX().set(index, x);
+
+        return this;
+    }
+
+    @Override
+    public double getY(int index) {
+
+        return getRefCoreY().get(index);
+    }
+
+    @Override
+    public FPlot setY(int index, double y) {
+
+        getRefCoreY().set(index, y);
+
+        return this;
+    }
+
+    @Override
+    public int getIndexX(RoundMethod type, double x) {
+
+        return switch (type) {
+            case CLOSEST -> getIndexXRound(x);
+            case FLOOR -> getIndexXFloor(x);
+            case CEIL -> getIndexXCeil(x);
+        };
+    }
+
+    @Override
+    public int getIndexY(RoundMethod type, double y) {
+
+        return switch (type) {
+            case CLOSEST -> getIndexYRound(y);
+            case FLOOR -> getIndexYFloor(y);
+            case CEIL -> getIndexYCeil(y);
+        };
+    }
+
+    @Override
+    public double integrate() {
+
+        if (size() < 1) {
+            throw new IllegalArgumentException("The number of elements must be greater then one");
+        }
+
+        double area = 0;
+        for (int i = 0 ; i < size() - 1 ; i++) {
+            double avgY = (Math.abs(getY(i)) + Math.abs(getY(i + 1))) * 0.5;
+            double stepX = getX(i + 1) - getX(i);
+
+            area += (stepX * avgY);
+        }
+
+        return area;
+    }
+
+    @Override
+    public int filter(BiFunction<Double, Double, Boolean> filter) {
+        int oldSize = size();
+
+        List<Double> fStatX = new ArrayList<>();
+        List<Double> fStatY = new ArrayList<>();
+
+        for (int i = 0 ; i < size() ; i++) {
+            if (filter.apply(getX(i), getY(i))) {
+                fStatX.add(getX(i));
+                fStatY.add(getY(i));
+            }
+        }
+
+        getRefCoreX().clear();
+        getRefCoreX().getRefCore().addAll(fStatX);
+        getRefCoreY().clear();
+        getRefCoreY().getRefCore().addAll(fStatY);
+
+        return oldSize - size();
+    }
+
+    @Override
+    public FPlot setY(FPoly est) {
+
+        mutateY((x, y) -> est.value(x));
+
+        return this;
+    }
+
+    @Override
+    public FPlot mutate(Consumer<FStat> consumer) {
+
+        consumer.accept(getRefCoreX());
+        consumer.accept(getRefCoreY());
+
+        if (getRefCoreX().size() != getRefCoreY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot mutate(BiConsumer<FStat, FStat> consumer) {
+
+        consumer.accept(getRefCoreX(), getRefCoreY());
+
+        if (getRefCoreX().size() != getRefCoreY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot mutateX(BiFunction<Double, Double, Double> function) {
+
+        for (int i = 0 ; i < size() ; i++) {
+            setX(i, function.apply(getX(i), getY(i)));
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot mutateX(Consumer<FStat> consumer) {
+
+        consumer.accept(getRefCoreX());
+
+        if (getRefCoreX().size() != getRefCoreY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot mutateY(BiFunction<Double, Double, Double> function) {
+
+        for (int i = 0 ; i < size() ; i++) {
+            setY(i, function.apply(getX(i), getY(i)));
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot mutateY(Consumer<FStat> consumer) {
+
+        consumer.accept(getRefCoreY());
+
+        if (getRefCoreX().size() != getRefCoreY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot sortX(boolean ascending) {
+        List<FPos2D> data = new ArrayList<>(size());
+
+        forEach((x, y, index) -> data.add(factory.getFPos2D(x, y)));
+
+        if (ascending) {
+            sortAscX(data);
+        } else {
+            sortDscX(data);
+        }
+
+        for (int i = 0 ; i < size() ; i++) {
+            FPos2D item = data.get(i);
+            setX(i, item.getD0());
+            setY(i, item.getD1());
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot sortY(boolean ascending) {
+        List<FPos2D> data = new ArrayList<>(size());
+
+        forEach((x, y, index) -> data.add(factory.getFPos2D(x, y)));
+
+        if (ascending) {
+            sortAscY(data);
+        } else {
+            sortDscY(data);
+        }
+
+        for (int i = 0 ; i < size() ; i++) {
+            FPos2D item = data.get(i);
+            setX(i, item.getD0());
+            setY(i, item.getD1());
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot swapXY() {
+        double swap;
+
+        for (int i = 0 ; i < size() ; i++) {
+            swap = getX(i);
+            setX(i, getY(i));
+            setY(i, swap);
+        }
+
+        return this;
+    }
+
+    @Override
+    public FPlot forEach(TriConsumer<Double, Double, Integer> consumer) {
+        Iterator<Double> iteratorX = getRefCoreX().iterator();
+        Iterator<Double> iteratorY = getRefCoreY().iterator();
+
+        for (int i = 0; i < getRefCoreX().size() ; i++) {
+            consumer.accept(iteratorX.next(), iteratorY.next(), i);
+        }
+
+        return this;
+    }
+
+    @Override
+    public double[][] toArray() {
+        double [][] values = new double[2][size()];
+
+        forEach((x, y, i) -> {
+            values[0][i] = x;
+            values[1][i] = y;
+        });
+
+        return values;
+    }
+
+    @Override
+    public FPlotBar toFPlotBar() {
+        FPlotBar fPlotBar = factory.getFPlotBar();
+
+        forEach((x, y, index) -> fPlotBar.add(x, y));
+
+        return fPlotBar;
+    }
+
+    @Override
+    public FPlotRegressor reg() {
+
+        return this.regressor;
+    }
+
+    @Override
+    public FPlotInterpolator apx() {
+
+        return this.interpolator;
+    }
+
+    @Override
+    public FStat getRefCoreX() {
+
+        return this.dataX;
+    }
+
+    @Override
+    public FStat getRefCoreY() {
+
+        return this.dataY;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private int getIndexXRound(double x) {
+        double valueMin = Double.POSITIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getX(i);
+
+            double abs = Math.abs(x - value);
+            if (abs < valueMin) {
+                valueMin = abs;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexYRound(double y) {
+        double valueMin = Double.POSITIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getY(i);
+
+            double abs = Math.abs(y - value);
+            if (abs < valueMin) {
+                valueMin = abs;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexXCeil(double x) {
+        double valueMax = Double.POSITIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getX(i);
+
+            if (value < valueMax && value >= x) {
+                valueMax = value;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexYCeil(double y) {
+        double valueMax = Double.POSITIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getY(i);
+
+            if (value < valueMax && value >= y) {
+                valueMax = value;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexXFloor(double x) {
+        double valueMin = Double.NEGATIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getX(i);
+
+            if (value > valueMin && value <= x) {
+                valueMin = value;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexYFloor(double y) {
+        double valueMin = Double.NEGATIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getY(i);
+
+            if (value > valueMin && value <= y) {
+                valueMin = value;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int position(double x) {
+
+        for (int i = 0 ; i < size() ; i++) {
+            if (getX(i) == x) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private void sortAscX(List<FPos2D> data) {
+
+        data.sort((a, b) -> a.getD0() - b.getD0() > 0 ? 1 : a.getD0() == b.getD0() ? 0 : -1);
+    }
+
+    private void sortDscX(List<FPos2D> data) {
+
+        data.sort((a, b) -> a.getD0() - b.getD0() < 0 ? 1 : a.getD0() == b.getD0() ? 0 : -1);
+    }
+
+    private void sortAscY(List<FPos2D> data) {
+
+        data.sort((a, b) -> a.getD1() - b.getD1() > 0 ? 1 : a.getD1() == b.getD1() ? 0 : -1);
+    }
+
+    private void sortDscY(List<FPos2D> data) {
+
+        data.sort((a, b) -> a.getD1() - b.getD1() < 0 ? 1 : a.getD1() == b.getD1() ? 0 : -1);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public int size() {
+
+        return getRefCoreX().size();
+    }
+
+    @Override
+    public void clear() {
+
+        getRefCoreX().clear();
+        getRefCoreY().clear();
+    }
+
+    @Override
+    public FPlot copy() {
+        FPlot fPlot = factory.getFPlot();
+
+        forEach((x, y, index) -> fPlot.add(x, y));
+
+        return fPlot;
+    }
+
+    @Override
+    public boolean isEqual(FPlot fPlot) {
+
+        return isEqualData(fPlot);
+    }
+
+    @Override
+    public boolean isEqualWithNaN(FPlot fPlot) {
+
+        return isEqualDataWithNaN(fPlot);
+    }
+
+    @Override
+    public boolean isEqualData(FPlot fPlot) {
+
+        if (this.size() != fPlot.size()) {
+            return false;
+        }
+
+        return this.getRefCoreX().isEqualData(fPlot.getRefCoreX()) && this.getRefCoreY().isEqualData(fPlot.getRefCoreY());
+    }
+
+    @Override
+    public boolean isEqualDataWithNaN(FPlot fPlot) {
+
+        if (this.size() != fPlot.size()) {
+            return false;
+        }
+
+        return this.getRefCoreX().isEqualDataWithNaN(fPlot.getRefCoreX()) && this.getRefCoreY().isEqualDataWithNaN(fPlot.getRefCoreY());
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_DATA_X, getRefCoreX().toJSON());
+        json.put(JSON_DATA_Y, getRefCoreY().toJSON());
+
+        return json;
+    }
+
+    @Override
+    public JSONObject toSimpleJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_DATA_X, getRefCoreX().toSimpleJSON());
+
+        return json;
+    }
+
+    @Override
+    public String toString() {
+
+        return toSimpleJSON().toString();
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public String getName() {
+
+        return this.name;
+    }
+
+    @Override
+    public FPlot setName(String name) {
+
+        this.name = name;
+
+        return this;
+    }
+
+    @Override
+    public FPlot removeNaN() {
+
+        filter((x, y) -> !Double.isNaN(x) && !Double.isNaN(y));
+
+        return this;
+    }
+}
+
+// https://paulbourke.net/miscellaneous/interpolation/

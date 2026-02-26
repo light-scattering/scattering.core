@@ -1,2 +1,5 @@
-rootProject.name = 'core'
+rootProject.name = 'scattering.core'
+include 'eu.scattering.core.design'
+include 'eu.scattering.core.lib'
+include 'eu.scattering.cli'
 

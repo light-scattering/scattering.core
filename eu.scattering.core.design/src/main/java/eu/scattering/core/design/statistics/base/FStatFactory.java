@@ -1,0 +1,36 @@
+package eu.scattering.core.design.statistics.base;
+
+import eu.scattering.core.design.utility.annotation.Modificator;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+
+public interface FStatFactory {
+
+    FStat getFStat();
+
+    FStat getFStat(double... data);
+
+    @Modificator
+    FStat getRefFStat(List<Double> refData);
+
+    //--------------------------------------------------
+
+    FStat getFStat(JSONObject json);
+
+    //--------------------------------------------------
+
+    FStatMeta getFStatMeta();
+
+    //--------------------------------------------------
+
+    default FStat getFStat(String text) {
+
+        try {
+            return getFStat(new JSONObject(text));
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Invalid json format");
+        }
+    }
+}
