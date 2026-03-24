@@ -139,14 +139,26 @@ public class FAggregateModuleFractalDimensionDef {
 
         List<FPos3D> offsets = getOffsetValues(offset);
 
+        //-----
+
+//        double cutoffInner = radius * 2;
+//        double cutoffOuter = this.aggregate.getLength(Length.MAX);
+//
+//        if (start) {
+//            results.add(cutoffOuter, 1);
+//        }
+//
+//        double box = cutoffOuter * scaleFactor;
+
+        //-----
+
         double cutoffInner = radius * 2;
-        double cutoffOuter = this.aggregate.getLength(Length.MAX);
+        double cutoffOuter = this.aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
 
-        if (start) {
-            results.add(cutoffOuter, 1);
-        }
+        double box = cutoffOuter;
 
-        double box = cutoffOuter * scaleFactor;
+        //-----
+
         while (box >= cutoffInner) {
             getBoxCoverageFunctionStep(reference, replica, offsets, results, box);
 
@@ -437,7 +449,7 @@ public class FAggregateModuleFractalDimensionDef {
                     1
             );
             case BOX_ADVANCED_1 -> getBoxCountingAnalyze(
-                    getBoxCoverageFunction(1.3, 3, false, false, true),
+                    getBoxCoverageFunction(1.3, 3, false, false, false),
                     0.9
             );
             case BOX_ADVANCED_2 -> getBoxCountingAnalyze(

@@ -3630,14 +3630,14 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get box dimension - Sphere")
             void getBoxDimensionSphereGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().fullCircle(10);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullSphere(10);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(50, 1);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX_FAST);
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX_FAST);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BOX_FAST);
 
-                assertEquals(2, dim1d, 0.10);
-                assertEquals(3, dim2d, 0.25);
+                assertEquals(2, dim2d, 0.10);
+                assertEquals(3, dim3d, 0.25);
             }
         }
 
@@ -3718,8 +3718,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Sphere")
             void getDensityDimensionSphereGeometry() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullCircle(12);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().fullSphere(12);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(50, 1);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
@@ -3806,8 +3806,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Sphere")
             void getMassDimensionSphereGeometry() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullCircle(12);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().fullSphere(12);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(50, 1);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MASS);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MASS);

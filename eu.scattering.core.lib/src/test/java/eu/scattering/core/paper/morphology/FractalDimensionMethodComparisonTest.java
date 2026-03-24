@@ -1,4 +1,4 @@
-package eu.scattering.core.test.component.aggregate;
+package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
@@ -13,14 +13,14 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-@DisplayName("FAggregate dimension")
-@Disabled
-public class FAggregateDimensionTest {
-    private final int repetitions = 100;
-    private final int size = 2500;
+//@Disabled
+@DisplayName("Paper - Morphology (Df variation)")
+public class FractalDimensionMethodComparisonTest {
+    private final int repetitions = 10;
+    private final int size = 3000;
 
     @Test
-    @Tag("Visual")
+    @Tag("Comparison")
     @DisplayName("Dimension 1.4")
     void df14() {
         Container container = new Container();
@@ -28,7 +28,7 @@ public class FAggregateDimensionTest {
         for (int i = 0 ; i < repetitions ; i++) {
             try {
                 System.out.println("Iteration: " + i);
-                measure(container, 1.4, 1.8);
+                measure(container, 1.4, 1.5);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -38,7 +38,7 @@ public class FAggregateDimensionTest {
     }
 
     @Test
-    @Tag("Visual")
+    @Tag("Comparison")
     @DisplayName("Dimension 1.8")
     void df18() {
         Container container = new Container();
@@ -46,7 +46,7 @@ public class FAggregateDimensionTest {
         for (int i = 0 ; i < repetitions ; i++) {
             try {
                 System.out.println("Iteration: " + i);
-                measure(container, 1.8, 1.6);
+                measure(container, 1.8, 1.3);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -56,7 +56,7 @@ public class FAggregateDimensionTest {
     }
 
     @Test
-    @Tag("Visual")
+    @Tag("Comparison")
     @DisplayName("Dimension 2.2")
     void df22() {
         Container container = new Container();
@@ -64,7 +64,7 @@ public class FAggregateDimensionTest {
         for (int i = 0 ; i < repetitions ; i++) {
             try {
                 System.out.println("Iteration: " + i);
-                measure(container, 2.2, 1.4);
+                measure(container, 2.2, 0.8);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
