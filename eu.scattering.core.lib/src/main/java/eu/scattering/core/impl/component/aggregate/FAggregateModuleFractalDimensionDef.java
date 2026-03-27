@@ -57,7 +57,9 @@ public class FAggregateModuleFractalDimensionDef {
 
         FStat particles = this.aggregate.getFStatParticleRadius();
 
-        double step = particles.min();
+        double min = particles.mean() * 2;
+
+        double step = min * stepFactor;
         while (step <= limit) {
             results.add(step * step, 0);
             step = step * stepFactor;
@@ -124,40 +126,29 @@ public class FAggregateModuleFractalDimensionDef {
 
         FAggregate reference = this.aggregate.copy(false);
 
-        if (shift) {
-            reference.shiftBoundaryToZero();
-        }
-
         if (pca) {
             reference.pca();
         }
 
-        FAggregate replica = this.aggregate.copy(false);
+        if (shift) {
+            reference.shiftBoundaryToZero();
+        }
 
-        double radius = this.aggregate.getFStatParticleRadius().mean();
+        FAggregate replica = reference.copy(false);
+
+        double radius = reference.getFStatParticleRadius().mean();
         double scaleFactor = 1 / stepFactor;
 
         List<FPos3D> offsets = getOffsetValues(offset);
 
-        //-----
-
-//        double cutoffInner = radius * 2;
-//        double cutoffOuter = this.aggregate.getLength(Length.MAX);
-//
-//        if (start) {
-//            results.add(cutoffOuter, 1);
-//        }
-//
-//        double box = cutoffOuter * scaleFactor;
-
-        //-----
-
         double cutoffInner = radius * 2;
-        double cutoffOuter = this.aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
+        double cutoffOuter = reference.getLength(Length.MAX);
 
-        double box = cutoffOuter;
+        if (start) {
+            results.add(cutoffOuter, 1);
+        }
 
-        //-----
+        double box = cutoffOuter * scaleFactor;
 
         while (box >= cutoffInner) {
             getBoxCoverageFunctionStep(reference, replica, offsets, results, box);
@@ -171,15 +162,17 @@ public class FAggregateModuleFractalDimensionDef {
     protected FPlot getBoxCoverageFunctionBruteForce() {
         FPlot results = this.factory.getFPlot();
 
-        double radius = this.aggregate.getFStatParticleRadius().mean();
+        FAggregate reference = this.aggregate.copy(false);
+
+        double radius = reference.getFStatParticleRadius().mean();
         double factor = 0.5;
 
         double cutoffInner = radius * 2;
-        double cutoffOuter = this.aggregate.getLength(Length.MAX);
+        double cutoffOuter = reference.getLength(Length.MAX);
 
         double size = cutoffOuter * factor;
         while (size >= cutoffInner) {
-            getBoxCoverageFunctionBruteForceStep(results, size);
+            getBoxCoverageFunctionBruteForceStep(reference, results, size);
 
             size = size * factor;
         }
@@ -194,7 +187,7 @@ public class FAggregateModuleFractalDimensionDef {
 
         for (FPos3D offset : offsets) {
 
-            for (int i = 0 ; i < this.aggregate.size() ; i++) {
+            for (int i = 0 ; i < reference.size() ; i++) {
                 replica.getRefParticles().asList().get(i).setCenter(reference.getRefParticles().asList().get(i).getRefCenter());
                 replica.getRefParticles().asList().get(i).setRadius(reference.getRefParticles().asList().get(i).getRadius());
             }
@@ -252,9 +245,9 @@ public class FAggregateModuleFractalDimensionDef {
         results.add(box, sumMin);
     }
 
-    private void getBoxCoverageFunctionBruteForceStep(FPlot data, double step) {
+    private void getBoxCoverageFunctionBruteForceStep(FAggregate reference, FPlot data, double step) {
         FSphereHelper sphereHelper = this.factory.getFSphereHelper();
-        FPairPos3D boundary = this.aggregate.getBoundary();
+        FPairPos3D boundary = reference.getBoundary();
 
         double minX = boundary.getPosA().getD0();
         double minY = boundary.getPosA().getD1();
@@ -279,7 +272,7 @@ public class FAggregateModuleFractalDimensionDef {
                 for (int k = 0; k < sizeZ; k++) {
                     double z = minZ + (k * step);
 
-                    for (Shape particle : this.aggregate) {
+                    for (Shape particle : reference) {
                         if (sphereHelper.intersectsCube(particle, x, y, z, step)) {
                             sum++;
 
@@ -366,9 +359,9 @@ public class FAggregateModuleFractalDimensionDef {
         for (Shape particle : particles) {
             double distance = particle.getDistCenterP2(center);
 
-            if (distance < rangeP2) {
+            if (distance <= rangeP2) {
                 internal.add(particle);
-            } else if (distance < cutoffP2) {
+            } else if (distance <= cutoffP2) {
                 external.add(particle);
             }
         }
@@ -441,7 +434,7 @@ public class FAggregateModuleFractalDimensionDef {
 
         return switch (type) {
             case BOX_FAST -> getBoxCountingAnalyze(
-                    getBoxCoverageFunction(2, 1, true, true, false),
+                    getBoxCoverageFunction(2, 1, false, true, false),
                     1
             );
             case BOX_FAST_BRUTE_FORCE -> getBoxCountingAnalyze(
@@ -449,7 +442,7 @@ public class FAggregateModuleFractalDimensionDef {
                     1
             );
             case BOX_ADVANCED_1 -> getBoxCountingAnalyze(
-                    getBoxCoverageFunction(1.3, 3, false, false, false),
+                    getBoxCoverageFunction(2, 3, false, false, false),
                     0.9
             );
             case BOX_ADVANCED_2 -> getBoxCountingAnalyze(
@@ -465,8 +458,8 @@ public class FAggregateModuleFractalDimensionDef {
                     0.9
             );
             case MASS -> getMassRadiusAnalyze(
-                    getMassRadiusFunction(RadiusOfGyration.SIMPLE_POLY, 1.05, true),
-                    0.8
+                    getMassRadiusFunction(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
+                    0.9
             );
             case MASS_FULL -> getMassRadiusAnalyze(
                     getMassRadiusFunction(RadiusOfGyration.SIMPLE_POLY, 1.05, false),

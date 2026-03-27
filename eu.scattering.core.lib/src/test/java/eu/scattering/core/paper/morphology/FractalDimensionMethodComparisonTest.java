@@ -16,8 +16,8 @@ import static eu.scattering.core.test.Config.factory;
 //@Disabled
 @DisplayName("Paper - Morphology (Df variation)")
 public class FractalDimensionMethodComparisonTest {
-    private final int repetitions = 10;
-    private final int size = 3000;
+    private final int repetitions = 100;
+    private final int size = 1000;
 
     @Test
     @Tag("Comparison")
@@ -27,7 +27,7 @@ public class FractalDimensionMethodComparisonTest {
 
         for (int i = 0 ; i < repetitions ; i++) {
             try {
-                System.out.println("Iteration: " + i);
+//                System.out.println("Iteration: " + i);
                 measure(container, 1.4, 1.5);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -45,7 +45,7 @@ public class FractalDimensionMethodComparisonTest {
 
         for (int i = 0 ; i < repetitions ; i++) {
             try {
-                System.out.println("Iteration: " + i);
+//                System.out.println("Iteration: " + i);
                 measure(container, 1.8, 1.3);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -63,7 +63,7 @@ public class FractalDimensionMethodComparisonTest {
 
         for (int i = 0 ; i < repetitions ; i++) {
             try {
-                System.out.println("Iteration: " + i);
+//                System.out.println("Iteration: " + i);
                 measure(container, 2.2, 0.8);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -109,22 +109,22 @@ public class FractalDimensionMethodComparisonTest {
 
         public void update(FAggregate aggregate, FMonitorCCRadiusOfGyration monitor) {
             powerLaw.add(monitor.getPowerLawDimension());
-            boxCounting.add(aggregate.getFractalDimension(FractalDimension.BOX_ADVANCED_1));
-            boxCountingBruteForce.add(aggregate.getFractalDimension(FractalDimension.BOX_FAST_BRUTE_FORCE));
+//            boxCounting.add(aggregate.getFractalDimension(FractalDimension.BOX_ADVANCED_1));
+//            boxCountingBruteForce.add(aggregate.getFractalDimension(FractalDimension.BOX_FAST_BRUTE_FORCE));
             density.add(aggregate.getFractalDimension(FractalDimension.CORRELATION));
-            densityFull.add(aggregate.getFractalDimension(FractalDimension.CORRELATION_FULL));
+//            densityFull.add(aggregate.getFractalDimension(FractalDimension.CORRELATION_FULL));
             mass.add(aggregate.getFractalDimension(FractalDimension.MASS));
-            massFull.add(aggregate.getFractalDimension(FractalDimension.MASS_FULL));
+//            massFull.add(aggregate.getFractalDimension(FractalDimension.MASS_FULL));
         }
 
         public void show() {
             System.out.println("Power law:      " + powerLaw.mean() + "," + powerLaw.std(true));
-            System.out.println("Box counting O: " + boxCounting.mean() + "," + boxCounting.std(true));
-            System.out.println("Box counting B: " + boxCountingBruteForce.mean() + "," + boxCountingBruteForce.std(true));
+//            System.out.println("Box counting O: " + boxCounting.mean() + "," + boxCounting.std(true));
+//            System.out.println("Box counting B: " + boxCountingBruteForce.mean() + "," + boxCountingBruteForce.std(true));
             System.out.println("Density:        " + density.mean() + "," + density.std(true));
-            System.out.println("Density (full): " + densityFull.mean() + "," + densityFull.std(true));
+//            System.out.println("Density (full): " + densityFull.mean() + "," + densityFull.std(true));
             System.out.println("Mass:           " + mass.mean() + "," + mass.std(true));
-            System.out.println("Mass (full):    " + massFull.mean() + "," + massFull.std(true));
+//            System.out.println("Mass (full):    " + massFull.mean() + "," + massFull.std(true));
         }
     }
 }
