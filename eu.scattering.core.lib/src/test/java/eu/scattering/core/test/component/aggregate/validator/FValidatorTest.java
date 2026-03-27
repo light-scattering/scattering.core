@@ -108,7 +108,7 @@ public class FValidatorTest {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BOX_FAST, 2.5, 0.3);
+            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BC_SIMPLIFIED, 2.5, 0.3);
 
             fModel.addCompletionValidator(fValidator);
             fModel.build();
@@ -126,7 +126,7 @@ public class FValidatorTest {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BOX_FAST, 2.2, 0.3);
+            FValidatorFractalDimension fValidator = factory.getFValidatorContext().fractalDimension(FractalDimension.BC_SIMPLIFIED, 2.2, 0.3);
 
             fModel.addCompletionValidator(fValidator);
             fModel.build();

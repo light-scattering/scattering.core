@@ -149,11 +149,10 @@ public class FAggregateModuleFractalDimensionDef {
         }
 
         double box = cutoffOuter * scaleFactor;
-
         while (box >= cutoffInner) {
             getBoxCoverageFunctionStep(reference, replica, offsets, results, box);
 
-            box = box * scaleFactor;
+            box *= scaleFactor;
         }
 
         return results;
@@ -165,16 +164,16 @@ public class FAggregateModuleFractalDimensionDef {
         FAggregate reference = this.aggregate.copy(false);
 
         double radius = reference.getFStatParticleRadius().mean();
-        double factor = 0.5;
+        double scaleFactor = 0.5;
 
         double cutoffInner = radius * 2;
         double cutoffOuter = reference.getLength(Length.MAX);
 
-        double size = cutoffOuter * factor;
-        while (size >= cutoffInner) {
-            getBoxCoverageFunctionBruteForceStep(reference, results, size);
+        double box = cutoffOuter * scaleFactor;
+        while (box >= cutoffInner) {
+            getBoxCoverageFunctionBruteForceStep(reference, results, box);
 
-            size = size * factor;
+            box = box * scaleFactor;
         }
 
         return results;
@@ -354,7 +353,7 @@ public class FAggregateModuleFractalDimensionDef {
         }
 
         double rangeP2 = range * range;
-        double cutoffP2 = rangeP2 * rangeP2;
+        double cutoffP2 = (range * 2) * (range * 2);
 
         for (Shape particle : particles) {
             double distance = particle.getDistCenterP2(center);
@@ -433,20 +432,16 @@ public class FAggregateModuleFractalDimensionDef {
     protected double getFractalDimension(FractalDimension type) {
 
         return switch (type) {
-            case BOX_FAST -> getBoxCountingAnalyze(
-                    getBoxCoverageFunction(2, 1, false, true, false),
-                    1
-            );
-            case BOX_FAST_BRUTE_FORCE -> getBoxCountingAnalyze(
+            case BC_REFERENCE -> getBoxCountingAnalyze(
                     getBoxCoverageFunctionBruteForce(),
                     1
             );
-            case BOX_ADVANCED_1 -> getBoxCountingAnalyze(
-                    getBoxCoverageFunction(2, 3, false, false, false),
-                    0.9
+            case BC_SIMPLIFIED -> getBoxCountingAnalyze(
+                    getBoxCoverageFunction(2, 1, false, true, false),
+                    1
             );
-            case BOX_ADVANCED_2 -> getBoxCountingAnalyze(
-                    getBoxCoverageFunction(1.3, 5, false, false, true),
+            case BC_OPTIMIZED -> getBoxCountingAnalyze(
+                    getBoxCoverageFunction(2, 3, false, false, false),
                     0.9
             );
             case CORRELATION -> getDensityCorrelationAnalyze(
@@ -462,8 +457,8 @@ public class FAggregateModuleFractalDimensionDef {
                     0.9
             );
             case MASS_FULL -> getMassRadiusAnalyze(
-                    getMassRadiusFunction(RadiusOfGyration.SIMPLE_POLY, 1.05, false),
-                    0.8
+                    getMassRadiusFunction(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
+                    0.9
             );
         };
     }
@@ -558,6 +553,8 @@ public class FAggregateModuleFractalDimensionDef {
         if (window <= 0 || window > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
         }
+
+        data.filter((x, y) -> y > 0);
 
         data.mutate((a, b) -> {
             a.ln();

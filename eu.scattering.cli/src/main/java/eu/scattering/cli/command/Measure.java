@@ -226,22 +226,22 @@ public class Measure {
 
     private static String getDfBoxFast(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BOX_FAST));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED));
     }
 
     private static String getDfBoxFastBruteForce(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BOX_FAST_BRUTE_FORCE));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_REFERENCE));
     }
 
     private static String getDfBoxAdv1(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BOX_ADVANCED_1));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED));
     }
 
     private static String getDfBoxAdv2(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BOX_ADVANCED_2));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED));
     }
 
     private static String getDfCorrelation(FAggregate aggregate) {
