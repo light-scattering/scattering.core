@@ -2826,7 +2826,7 @@ public class FAggregateTest {
         void getBoxCoverageFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot results = fAggregate.getBoxCoverageFunction(2, 1, true, true, false);
+            FPlot results = fAggregate.getBoxCoverageFunction(2, 1, true, false);
 
             assertTrue(results.size() >= 5);
             assertTrue(results.getY(0) < results.getY(1));

@@ -116,10 +116,10 @@ public interface FAggregate extends Component, Iterable<Shape> {
     double getFractalDimension(FractalDimension type);
 
     double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
-    double getFractalDimensionBoxCounting(double window, double stepFactor, int offset, boolean start, boolean shift, boolean pca);
+    double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca);
     double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
 
-    FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift,  boolean pca);
+    FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca);
     FPlot getDensityCorrelationFunction(double factor);
 
     //--------------------------------------------------

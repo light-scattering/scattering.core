@@ -112,8 +112,9 @@ public class FAggregateModuleFractalDimensionDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected FPlot getBoxCoverageFunction(double stepFactor, int offset, boolean start, boolean shift,  boolean pca) {
-        return this.bc.getResultsOptimized(stepFactor, offset, start, shift, pca);
+    protected FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca) {
+
+        return this.bc.getResultsOptimized(step, shift, reposition, pca);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -252,11 +253,11 @@ public class FAggregateModuleFractalDimensionDef {
                     1
             );
             case BC_SIMPLIFIED -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 1, false, true, false),
+                    this.bc.getResultsOptimized(2, 1, true, false),
                     1
             );
             case BC_OPTIMIZED -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 3, false, false, false),
+                    this.bc.getResultsOptimized(2, 3, false, false),
                     0.9
             );
             case CORRELATION -> getDensityCorrelationAnalyze(
@@ -283,9 +284,9 @@ public class FAggregateModuleFractalDimensionDef {
         return getMassRadiusAnalyze(getMassRadiusFunction(method, stepFactor, rangeLimit), window);
     }
 
-    protected double getFractalDimensionBoxCounting(double window, double stepFactor, int offset, boolean start, boolean shift, boolean pca) {
+    protected double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {
 
-        return this.bc.analyze(this.bc.getResultsOptimized(stepFactor, offset, start, shift, pca), window);
+        return this.bc.analyze(this.bc.getResultsOptimized(step, shift, reposition, pca), window);
     }
 
     protected double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {

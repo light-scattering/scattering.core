@@ -435,9 +435,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getFractalDimensionBoxCounting(double window, double stepFactor, int offset, boolean start, boolean shift, boolean pca) {
+    public double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {
 
-        return this.moduleFractalDimension.getFractalDimensionBoxCounting(window, stepFactor, offset, start, shift, pca);
+        return this.moduleFractalDimension.getFractalDimensionBoxCounting(window, step, shift, reposition, pca);
     }
 
     @Override
@@ -447,9 +447,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot getBoxCoverageFunction(double stepFactor, int offset, boolean start, boolean shift, boolean pca) {
+    public FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca) {
 
-        return this.moduleFractalDimension.getBoxCoverageFunction(stepFactor, offset, start, shift, pca);
+        return this.moduleFractalDimension.getBoxCoverageFunction(step, shift, reposition, pca);
     }
 
     @Override

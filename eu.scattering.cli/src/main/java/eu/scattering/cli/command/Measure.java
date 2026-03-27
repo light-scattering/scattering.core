@@ -574,7 +574,7 @@ public class Measure {
     private static String getBoxCoverageFunction(ScatFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getBoxCoverageFunction(1.3, 3, false, false, false));
+                .toCLI(aggregate.getBoxCoverageFunction(1.3, 3, false, false));
     }
 
     private static String getDensityCorrelationFunction(ScatFactory factory, FAggregate aggregate) {

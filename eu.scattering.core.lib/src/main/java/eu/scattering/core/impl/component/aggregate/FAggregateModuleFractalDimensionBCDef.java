@@ -31,7 +31,7 @@ public class FAggregateModuleFractalDimensionBCDef {
         this.sphereHelper = this.factory.getFSphereHelper();
     }
 
-    protected FPlot getResultsOptimized(double step, int shift, boolean start, boolean reposition, boolean pca) {
+    protected FPlot getResultsOptimized(double step, int shift, boolean reposition, boolean pca) {
 
         if (step <= 1) {
             throw new IllegalArgumentException("The step factor value must be greater then one");
@@ -61,10 +61,6 @@ public class FAggregateModuleFractalDimensionBCDef {
 
         double cutoffInner = radius * 2;
         double cutoffOuter = reference.getLength(Length.MAX);
-
-        if (start) {
-            results.add(cutoffOuter, 1);
-        }
 
         double box = cutoffOuter * scaleFactor;
         while (box >= cutoffInner) {
