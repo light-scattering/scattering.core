@@ -48,29 +48,29 @@ public class FAggregateModuleFractalDimensionDCDef {
         return results;
     }
 
-    protected double analyze(FPlot data, double window) {
+    protected double analyze(FPlot results, double window) {
 
         if (window <= 0 || window > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
         }
 
-        data.filter((x, y) -> y > 0);
+        results.filter((x, y) -> y > 0);
 
-        data.mutate((a, b) -> {
+        results.mutate((a, b) -> {
             a.ln();
             b.ln();
         });
 
-        FPoly regression = window == 1 ? data.reg().poly(1) : data.reg().fitSlope((int) (data.size() * window));
+        FPoly regression = window == 1 ? results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * window));
 
-        FPlot fit = data.copy();
+        FPlot fit = results.copy();
         fit.setY(regression);
 
         FPlotMeta plotConfig = factory.getFPlotMeta()
                 .setAnnotation("Test data");
 
         String plot = factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(plotConfig, data, fit);
+                .toPythonPlotly(plotConfig, results, fit);
 
         return 3 + regression.at(1);
     }
