@@ -24,13 +24,13 @@ public class FStatHelperDef implements StatisticsHelper {
     }
 
     @Override
-    public double getRelErr(double base, double ref) {
+    public double getRelErr(double base, double val) {
 
-        if (base == ref) {
+        if (base == val) {
             return 0;
         }
 
-        return Math.abs((base - ref) / base);
+        return Math.abs((base - val) / base);
     }
 
     @Override
