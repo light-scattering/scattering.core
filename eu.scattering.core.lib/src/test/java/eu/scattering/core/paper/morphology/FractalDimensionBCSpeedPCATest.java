@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-@Disabled
-@DisplayName("Paper - Morphology (BC Optimization speed)")
-public class FractalDimensionBCOptimizationSpeedTest {
-    private final int size = 2500;
+//@Disabled
+@DisplayName("Paper - Morphology (BC PCA speed)")
+public class FractalDimensionBCSpeedPCATest {
+    private final int size = 1000;
     private final int repetitions = 10;
 
     @Test
@@ -60,7 +60,7 @@ public class FractalDimensionBCOptimizationSpeedTest {
         private final int size, repetitions;
 
         private final FStat timeRaw = factory.getFStat();
-        private final FStat timeOptimized = factory.getFStat();
+        private final FStat timePCA = factory.getFStat();
         private final FStat dfError = factory.getFStat();
 
         public Container(double df, double kf, int size, int repetitions) {
@@ -103,32 +103,36 @@ public class FractalDimensionBCOptimizationSpeedTest {
         }
 
         public void update(FAggregate aggregate) {
-            long timeRefCheck = System.currentTimeMillis();
+            long timeRefCheckA = System.currentTimeMillis();
             double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_REFERENCE);
             long timeRawCheck = System.currentTimeMillis();
-            double dfOptimized = aggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED);
-            long timeOptimizedCheck = System.currentTimeMillis();
 
-            long timeRaw = timeRawCheck - timeRefCheck;
-            long timeOptimized = timeOptimizedCheck - timeRawCheck;
+            aggregate.pca();
+
+            long timeRefCheckB = System.currentTimeMillis();
+            double dfPCA = aggregate.getFractalDimension(FractalDimension.BC_REFERENCE);
+            long timePCACheck = System.currentTimeMillis();
+
+            long timeRaw = timeRawCheck - timeRefCheckA;
+            long timeOptimized = timePCACheck - timeRefCheckB;
 
             this.timeRaw.add(timeRaw);
-            this.timeOptimized.add(timeOptimized);
+            this.timePCA.add(timeOptimized);
 
-            double dfError = 100 * Math.abs((dfRaw - dfOptimized) / dfRaw);
+            double dfError = 100 * Math.abs((dfRaw - dfPCA) / dfRaw);
 
             this.dfError.add(dfError);
         }
 
         public void show() {
             double timeRaw = this.timeRaw.mean();
-            double timeOptimized = this.timeOptimized.mean();
+            double timeOptimized = this.timePCA.mean();
 
             double timeGain = timeRaw / timeOptimized;
 
             System.out.println();
             System.out.printf("Time raw [ms]:       %1.6f, %1.6f\n", timeRaw, this.timeRaw.std(true));
-            System.out.printf("Time optimized [ms]: %1.6f, %1.6f\n", timeOptimized, this.timeOptimized.std(true));
+            System.out.printf("Time PCA [ms]:       %1.6f, %1.6f\n", timeOptimized, this.timePCA.std(true));
             System.out.printf("Time gain:           %1.6f\n", timeGain);
             System.out.printf("Dimension error:     %1.6f\n", dfError.mean());
         }
