@@ -71,6 +71,24 @@ public interface FPlot extends Statistics<FPlot> {
     String getName();
     FPlot setName(String name);
 
+    boolean getMarkersShow();
+    FPlot setMarkersShow(boolean show);
+
+    int getMarkersSize();
+    FPlot setMarkersSize(int size);
+
+    String getMarkersColor();
+    FPlot setMarkersColor(String color);
+
+    boolean getLinesShow();
+    FPlot setLinesShow(boolean show);
+
+    int getLinesWidth();
+    FPlot setLinesWidth(int width);
+
+    String getLinesColor();
+    FPlot setLinesColor(String color);
+
     // -------------------------------------------------------------------------------------------------
 
     @Fragment

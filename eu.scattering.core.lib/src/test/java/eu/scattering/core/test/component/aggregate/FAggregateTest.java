@@ -3598,7 +3598,7 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get box dimension - Basic geometry")
             void getBoxDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(29);
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(23, 23);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(17, 17, 17);
 
@@ -3628,7 +3628,7 @@ public class FAggregateTest {
             @DisplayName("Get box dimension - Sphere")
             void getBoxDimensionSphereGeometry() {
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(30, 1);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BC_SIMPLIFIED);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BC_SIMPLIFIED);

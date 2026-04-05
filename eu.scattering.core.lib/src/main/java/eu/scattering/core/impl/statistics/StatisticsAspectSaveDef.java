@@ -127,6 +127,15 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             List<String> y = new ArrayList<>();
             String name = plot[i].getName().isEmpty() ? "data " + i : plot[i].getName();
 
+            boolean lines = plot[i].getLinesShow();
+            boolean markers = plot[i].getMarkersShow();
+
+            if (!lines && !markers) {
+                throw new IllegalArgumentException("Invalid plot mode");
+            }
+
+            String mode = lines && markers ? "lines+markers" : lines ? "lines" : "markers";
+
             for (int j = 0; j < plot[i].size() ; j++) {
                 x.add("" + plot[i].getX(j));
                 y.add("" + plot[i].getY(j));
@@ -139,7 +148,10 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("    y=[").append(String.join(",", y)).append("],\n");
             builder.append("    name='").append(name).append("',\n");
             builder.append("    hovertemplate='").append(nameX).append(" = %{x}<br>").append(nameY).append(" = %{y}<extra></extra>',\n");
-            builder.append("    mode='lines+markers', line_shape='linear'\n");
+            builder.append("    mode='").append(mode).append("',\n");
+            builder.append("    line_shape='linear',\n");
+            builder.append("    line=dict(color='").append(plot[i].getLinesColor()).append("', width=").append(plot[i].getLinesWidth()).append("),\n");
+            builder.append("    marker=dict(color='").append(plot[i].getMarkersColor()).append("', size=").append(plot[i].getMarkersSize()).append(")\n");
             builder.append("  )\n");
             builder.append(")\n");
         }
@@ -148,6 +160,8 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
 
         builder.append("fig.update_layout(\n");
         builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
+        builder.append("  plot_bgcolor='rgba(0,0,0,0)',\n");
+        builder.append("  paper_bgcolor='rgba(0,0,0,0)',\n");
         builder.append("  title=dict(text='").append(namePlot).append("'),\n");
         builder.append("  xaxis_title='").append(nameX).append("',\n");
         if (config.getRangeX() != null) {
@@ -158,6 +172,9 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("  yaxis_range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
         builder.append(")\n\n");
+
+        builder.append("fig.update_xaxes(showline=True, linewidth=1, linecolor='black', gridcolor='lightgray')\n");
+        builder.append("fig.update_yaxes(showline=True, linewidth=1, linecolor='black', gridcolor='lightgray')\n\n");
 
         builder.append("fig.add_annotation(\n");
         builder.append("  text='").append(nameAnnotation).append("',\n");

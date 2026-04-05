@@ -100,7 +100,7 @@ public class FAggregateModuleFractalDimensionBCDef {
         }
 
         results.mutateY((x, y) -> Math.log(y));
-        results.mutateX((x, y) -> Math.log(1 / x));
+        results.mutateX((x, y) -> Math.log(x));
 
         results.filter((x, y) -> y > 0);
 
@@ -110,12 +110,19 @@ public class FAggregateModuleFractalDimensionBCDef {
         fit.setY(regression);
 
         FPlotMeta plotConfig = factory.getFPlotMeta()
-                .setAnnotation("Test data");
+//                .setRangeX(-5, 0)
+//                .setRangeY(0, 10)
+                .setName("Box-Counting Dimension")
+                .setNameX("$\\\\ln \\\\delta$")
+                .setNameY("$\\\\ln N_{\\\\delta}$");
+
+        fit.setName("Regression").setLinesColor("gray").setLinesWidth(2).setLinesShow(true).setMarkersShow(false);
+        results.setName("Measurement").setMarkersColor("black").setMarkersSize(5).setLinesShow(false).setMarkersShow(true);
 
         String plot = factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(plotConfig, results, fit);
+                .toPythonPlotly(plotConfig, fit, results);
 
-        return regression.at(1);
+        return -regression.at(1);
     }
 
     private void stepOptimized(FAggregate reference, FAggregate replica, List<FPos3D> shifts, FPlot results, double boxLength) {

@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 
 @Disabled
-@DisplayName("Paper - Morphology (BC Optimization speed)")
-public class FractalDimensionBCSpeedOptimizationTest {
+@DisplayName("Paper - Morphology (BC implementation speed)")
+public class FractalDimensionBCSpeedImplTest {
     private final int size = 2500;
     private final int repetitions = 10;
 

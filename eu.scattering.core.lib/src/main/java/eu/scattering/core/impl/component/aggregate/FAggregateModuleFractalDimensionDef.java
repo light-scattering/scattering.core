@@ -46,7 +46,7 @@ public class FAggregateModuleFractalDimensionDef {
                     1
             );
             case BC_OPTIMIZED -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 3, false, false),
+                    this.bc.getResultsOptimized(2, 3, false, true),
                     0.9
             );
             case CORRELATION -> this.dc.analyze(

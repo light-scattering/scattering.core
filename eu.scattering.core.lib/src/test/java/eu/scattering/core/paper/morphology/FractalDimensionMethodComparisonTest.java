@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-@Disabled
+//@Disabled
 @DisplayName("Paper - Morphology (Df method)")
 public class FractalDimensionMethodComparisonTest {
     private final int size = 1000;
