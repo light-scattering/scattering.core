@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
@@ -80,7 +80,7 @@ public class FAggregateModuleFractalDimensionMRDef {
         FPlot fit = results.copy();
         fit.setY(regression);
 
-        FPlotMeta plotConfig = factory.getFPlotMeta()
+        FPlotMetaGlobal plotConfig = factory.getFPlotMetaGlobal()
                 .setAnnotation("Test data");
 
         String plot = factory.getSaveAspect().getStatisticsContext()

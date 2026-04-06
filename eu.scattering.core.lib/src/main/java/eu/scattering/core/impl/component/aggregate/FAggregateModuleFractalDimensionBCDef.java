@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
@@ -109,18 +110,19 @@ public class FAggregateModuleFractalDimensionBCDef {
         FPlot fit = results.copy();
         fit.setY(regression);
 
-        FPlotMeta plotConfig = factory.getFPlotMeta()
-//                .setRangeX(-5, 0)
-//                .setRangeY(0, 10)
+        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
                 .setName("Box-Counting Dimension")
                 .setNameX("$\\\\ln \\\\delta$")
                 .setNameY("$\\\\ln N_{\\\\delta}$");
 
-        fit.setName("Regression").setLinesColor("gray").setLinesWidth(2).setLinesShow(true).setMarkersShow(false);
-        results.setName("Measurement").setMarkersColor("black").setMarkersSize(5).setLinesShow(false).setMarkersShow(true);
+        FPlotMeta metaPlotFit = factory.getFPlotMeta().setLinesColor("lightgray").setLinesWidth(2).setLinesShow(true).setMarkersShow(false);
+        FPlotMeta metaPlotResults = factory.getFPlotMeta().setMarkersColor("black").setMarkersSize(5).setLinesShow(false).setMarkersShow(true);
+
+        fit.setName("Approximation").setRefMeta(metaPlotFit);
+        results.setName("Measurements").setRefMeta(metaPlotResults);
 
         String plot = factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(plotConfig, fit, results);
+                .toPythonPlotly(metaGlobal, fit, results);
 
         return -regression.at(1);
     }

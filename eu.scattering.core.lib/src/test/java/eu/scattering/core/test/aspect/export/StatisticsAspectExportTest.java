@@ -3,7 +3,7 @@ package eu.scattering.core.test.aspect.export;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
@@ -68,7 +68,7 @@ public class StatisticsAspectExportTest {
     @DisplayName("Plotly FPlot linear")
     void plotlyFPlotLinear() {
         FPlot fPlot = factory.getFPlot();
-        FPlotMeta fPlotMeta = factory.getFPlotMeta();
+        FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
         fPlotMeta.setName("Name");
         fPlotMeta.setAnnotation("Annotation");
@@ -135,7 +135,7 @@ public class StatisticsAspectExportTest {
     @Test
     @DisplayName("Plotly FPlot histogram")
     void plotlyFPlotHistogram() {
-        FPlotMeta fPlotMeta = factory.getFPlotMeta();
+        FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
         fPlotMeta.setName("Test");
         fPlotMeta.setAnnotation("Annotation");
@@ -296,9 +296,9 @@ public class StatisticsAspectExportTest {
         @Test
         @DisplayName("FPlot meta config")
         void validateFPlotMetaConfig() {
-            FPlotMeta fPlotMeta = factory.getFPlotMeta();
+            FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
-            FPlotMeta results = fPlotMeta
+            FPlotMetaGlobal results = fPlotMeta
                     .setName("a")
                     .setNameX("b")
                     .setNameY("c")

@@ -6,6 +6,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
 
@@ -106,14 +107,15 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
     }
 
     @Override
-    public String toPythonPlotly(FPlotMeta config, FPlot... plot) {
+    public String toPythonPlotly(FPlotMetaGlobal config, FPlot... plot) {
 
         if (config == null) {
-            config = this.factory.getFPlotMeta();
+            config = this.factory.getFPlotMetaGlobal();
         }
 
+        int fontSize = config.getFontSize();
+
         StringBuilder builder = new StringBuilder();
-        String nameAnnotation = config.getAnnotation().isEmpty() ? "" : config.getAnnotation();
         String namePlot = config.getName().isEmpty() ? "" : config.getName();
         String nameX = config.getNameX().isEmpty() ? "x" : config.getNameX();
         String nameY = config.getNameY().isEmpty() ? "y" : config.getNameY();
@@ -123,12 +125,14 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         builder.append("fig = go.Figure()\n");
 
         for (int i = 0 ; i < plot.length ; i++) {
+            FPlotMeta meta = plot[i].getRefMeta();
+
             List<String> x = new ArrayList<>();
             List<String> y = new ArrayList<>();
             String name = plot[i].getName().isEmpty() ? "data " + i : plot[i].getName();
 
-            boolean lines = plot[i].getLinesShow();
-            boolean markers = plot[i].getMarkersShow();
+            boolean lines = meta.getLinesShow();
+            boolean markers = meta.getMarkersShow();
 
             if (!lines && !markers) {
                 throw new IllegalArgumentException("Invalid plot mode");
@@ -147,11 +151,11 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("    x=[").append(String.join(",", x)).append("],\n");
             builder.append("    y=[").append(String.join(",", y)).append("],\n");
             builder.append("    name='").append(name).append("',\n");
-            builder.append("    hovertemplate='").append(nameX).append(" = %{x}<br>").append(nameY).append(" = %{y}<extra></extra>',\n");
+            builder.append("    hovertemplate='").append("x").append(" = %{x}<br>").append("y").append(" = %{y}<extra></extra>',\n");
             builder.append("    mode='").append(mode).append("',\n");
             builder.append("    line_shape='linear',\n");
-            builder.append("    line=dict(color='").append(plot[i].getLinesColor()).append("', width=").append(plot[i].getLinesWidth()).append("),\n");
-            builder.append("    marker=dict(color='").append(plot[i].getMarkersColor()).append("', size=").append(plot[i].getMarkersSize()).append(")\n");
+            builder.append("    line=dict(color='").append(meta.getLinesColor()).append("', width=").append(meta.getLinesWidth()).append("),\n");
+            builder.append("    marker=dict(color='").append(meta.getMarkersColor()).append("', size=").append(meta.getMarkersSize()).append(")\n");
             builder.append("  )\n");
             builder.append(")\n");
         }
@@ -160,26 +164,44 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
 
         builder.append("fig.update_layout(\n");
         builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
-        builder.append("  plot_bgcolor='rgba(0,0,0,0)',\n");
         builder.append("  paper_bgcolor='rgba(0,0,0,0)',\n");
-        builder.append("  title=dict(text='").append(namePlot).append("'),\n");
-        builder.append("  xaxis_title='").append(nameX).append("',\n");
+        builder.append("  plot_bgcolor='rgba(0,0,0,0)',\n");
+        if (!namePlot.isEmpty()) {
+            builder.append("  title=dict(\n");
+            builder.append("    text='").append(namePlot).append("',\n");
+            builder.append("    font=dict(size=").append((int) (fontSize * 1.5)).append("),\n");
+            builder.append("    xanchor='center',\n");
+            builder.append("    x=0.5,\n");
+            builder.append("  ),\n");
+        }
+        builder.append("  xaxis=dict(\n");
+        builder.append("    title=dict(text='").append(nameX).append("', font=dict(size=").append(fontSize).append(")),\n");
+        builder.append("    tickfont=dict(size=").append(fontSize).append("),\n");
         if (config.getRangeX() != null) {
-            builder.append("  xaxis_range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
+            builder.append("    range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
         }
-        builder.append("  yaxis_title='").append(nameY).append("',\n");
+        builder.append("  ),\n");
+        builder.append("  yaxis=dict(\n");
+        builder.append("    title=dict(text='").append(nameY).append("', font=dict(size=").append(fontSize).append(")),\n");
+        builder.append("    tickfont=dict(size=").append(fontSize).append("),\n");
         if (config.getRangeY() != null) {
-            builder.append("  yaxis_range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
+            builder.append("    range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
+        builder.append("  ),\n");
+        builder.append("  legend=dict(\n");
+        builder.append("    font=dict(size=").append(fontSize).append("),\n");
+        builder.append("    xanchor='right',\n");
+        builder.append("    x=0.95,\n");
+        builder.append("    yanchor='top',\n");
+        builder.append("    y=0.95,\n");
+        builder.append("    bgcolor='rgba(255, 255, 255, 0.8)',\n");
+        builder.append("    bordercolor='black',\n");
+        builder.append("    borderwidth=1\n");
+        builder.append("  ),\n");
         builder.append(")\n\n");
 
-        builder.append("fig.update_xaxes(showline=True, linewidth=1, linecolor='black', gridcolor='lightgray')\n");
-        builder.append("fig.update_yaxes(showline=True, linewidth=1, linecolor='black', gridcolor='lightgray')\n\n");
-
-        builder.append("fig.add_annotation(\n");
-        builder.append("  text='").append(nameAnnotation).append("',\n");
-        builder.append("  x=0.5, y=-0.15, xref='paper', yref='paper', showarrow=False, align='center'\n");
-        builder.append(")\n\n");
+        builder.append("fig.update_xaxes(showline=True, linewidth=1, linecolor='black', gridcolor='rgba(230, 230, 230, 0.8)')\n");
+        builder.append("fig.update_yaxes(showline=True, linewidth=1, linecolor='black', gridcolor='rgba(230, 230, 230, 0.8)')\n\n");
 
         builder.append("fig.show()");
 
@@ -187,10 +209,10 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
     }
 
     @Override
-    public String toPythonPlotlyHistogram(FPlotMeta config, FPlot... plot) {
+    public String toPythonPlotlyHistogram(FPlotMetaGlobal config, FPlot... plot) {
 
         if (config == null) {
-            config = this.factory.getFPlotMeta();
+            config = this.factory.getFPlotMetaGlobal();
         }
 
         StringBuilder builder = new StringBuilder();

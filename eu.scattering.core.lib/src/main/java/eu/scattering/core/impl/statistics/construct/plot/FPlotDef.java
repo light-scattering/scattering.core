@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.statistics.construct.plot;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
@@ -38,13 +39,7 @@ public class FPlotDef implements FPlot {
 
     private String name = "";
 
-    private boolean markersShow = true;
-    private int size = 4;
-    private String markersColor = "black";
-
-    private boolean linesShow = true;
-    private int linesWidth = 2;
-    private String linesColor = "black";
+    private FPlotMeta meta;
 
     private FPlotDef(ScatFactory factory, FStat dataX, FStat dataY) {
 
@@ -411,6 +406,28 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
+    public FPlotMeta getRefMeta() {
+
+        if (this.meta == null) {
+            this.meta = this.factory.getFPlotMeta();
+        }
+
+        return this.meta;
+    }
+
+    @Override
+    public FPlot setRefMeta(FPlotMeta meta) {
+
+        if (meta == null) {
+            throw new IllegalArgumentException("The meta data cannot be null");
+        }
+
+        this.meta = meta;
+
+        return this;
+    }
+
+    @Override
     public FStat getRefCoreX() {
 
         return this.dataX;
@@ -652,97 +669,7 @@ public class FPlotDef implements FPlot {
         return this;
     }
 
-    @Override
-    public boolean getMarkersShow() {
-
-        return this.markersShow;
-    }
-
-    @Override
-    public FPlot setMarkersShow(boolean show) {
-
-        this.markersShow = show;
-
-        return this;
-    }
-
-    @Override
-    public int getMarkersSize() {
-
-        return this.size;
-    }
-
-    @Override
-    public FPlot setMarkersSize(int size) {
-
-        if (size < 1) {
-            throw new IllegalArgumentException("The marker size must be greater than zero");
-        }
-
-        this.size = size;
-
-        return this;
-    }
-
-    @Override
-    public String getMarkersColor() {
-
-        return this.markersColor;
-    }
-
-    @Override
-    public FPlot setMarkersColor(String color) {
-
-        this.markersColor = color;
-
-        return this;
-    }
-
-    @Override
-    public boolean getLinesShow() {
-
-        return this.linesShow;
-    }
-
-    @Override
-    public FPlot setLinesShow(boolean show) {
-
-        this.linesShow = show;
-
-        return this;
-    }
-
-    @Override
-    public int getLinesWidth() {
-
-        return this.linesWidth;
-    }
-
-    @Override
-    public FPlot setLinesWidth(int width) {
-
-        if (width < 1) {
-            throw new IllegalArgumentException("The line width must be greater than zero");
-        }
-
-        this.linesWidth = width;
-
-        return this;
-    }
-
-    @Override
-    public String getLinesColor() {
-
-        return this.linesColor;
-    }
-
-    @Override
-    public FPlot setLinesColor(String color) {
-
-        this.linesColor = color;
-
-        return this;
-    }
+    //--------------------------------------------------
 
     @Override
     public FPlot removeNaN() {

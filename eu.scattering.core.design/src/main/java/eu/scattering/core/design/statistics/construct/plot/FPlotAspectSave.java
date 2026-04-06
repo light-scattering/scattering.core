@@ -4,9 +4,9 @@ public interface FPlotAspectSave {
 
     String toCLI(FPlot plot);
 
-    String toPythonPlotly(FPlotMeta config, FPlot... plot);
+    String toPythonPlotly(FPlotMetaGlobal config, FPlot... plot);
 
-    String toPythonPlotlyHistogram(FPlotMeta config, FPlot... plot);
+    String toPythonPlotlyHistogram(FPlotMetaGlobal config, FPlot... plot);
 
     //--------------------------------------------------
 
