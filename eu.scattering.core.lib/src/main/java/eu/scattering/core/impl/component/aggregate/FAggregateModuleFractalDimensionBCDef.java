@@ -12,10 +12,7 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.utility.type.option.Length;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
 
@@ -110,21 +107,24 @@ public class FAggregateModuleFractalDimensionBCDef {
         FPlot fit = results.copy();
         fit.setY(regression);
 
+        double dim = -regression.at(1);
+
         FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
-                .setName("Box-Counting Dimension")
                 .setNameX("$\\\\ln \\\\delta$")
                 .setNameY("$\\\\ln N_{\\\\delta}$");
 
-        FPlotMeta metaPlotFit = factory.getFPlotMeta().setLinesColor("lightgray").setLinesWidth(2).setLinesShow(true).setMarkersShow(false);
+        FPlotMeta metaPlotFit = factory.getFPlotMeta().setLinesColor("gray").setLinesWidth(2).setLinesShow(true).setMarkersShow(false);
         FPlotMeta metaPlotResults = factory.getFPlotMeta().setMarkersColor("black").setMarkersSize(5).setLinesShow(false).setMarkersShow(true);
 
-        fit.setName("Approximation").setRefMeta(metaPlotFit);
-        results.setName("Measurements").setRefMeta(metaPlotResults);
+        String dimString = String.format(Locale.US, "%.2f", dim);
+
+        fit.setName("Linear fit (D<sub>BC</sub> \u2248 " + dimString + ")").setRefMeta(metaPlotFit);
+        results.setName("Raw box counts").setRefMeta(metaPlotResults);
 
         String plot = factory.getSaveAspect().getStatisticsContext()
                 .toPythonPlotly(metaGlobal, fit, results);
 
-        return -regression.at(1);
+        return dim;
     }
 
     private void stepOptimized(FAggregate reference, FAggregate replica, List<FPos3D> shifts, FPlot results, double boxLength) {

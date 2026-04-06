@@ -155,7 +155,7 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("    mode='").append(mode).append("',\n");
             builder.append("    line_shape='linear',\n");
             builder.append("    line=dict(color='").append(meta.getLinesColor()).append("', width=").append(meta.getLinesWidth()).append("),\n");
-            builder.append("    marker=dict(color='").append(meta.getMarkersColor()).append("', size=").append(meta.getMarkersSize()).append(")\n");
+            builder.append("    marker=dict(color='").append(meta.getMarkersColor()).append("', size=").append(meta.getMarkersSize()).append(", symbol='circle-open')\n");
             builder.append("  )\n");
             builder.append(")\n");
         }
@@ -173,6 +173,11 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("    xanchor='center',\n");
             builder.append("    x=0.5,\n");
             builder.append("  ),\n");
+            builder.append("  margin=dict(r=40),\n");
+        }
+        else {
+            builder.append("  title=None,\n");
+            builder.append("  margin=dict(t=20, r=40),\n");
         }
         builder.append("  xaxis=dict(\n");
         builder.append("    title=dict(text='").append(nameX).append("', font=dict(size=").append(fontSize).append(")),\n");
@@ -200,8 +205,17 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         builder.append("  ),\n");
         builder.append(")\n\n");
 
-        builder.append("fig.update_xaxes(showline=True, linewidth=1, linecolor='black', gridcolor='rgba(230, 230, 230, 0.8)')\n");
-        builder.append("fig.update_yaxes(showline=True, linewidth=1, linecolor='black', gridcolor='rgba(230, 230, 230, 0.8)')\n\n");
+        builder.append("fig.update_xaxes(");
+        builder.append("  showline=True, linewidth=1, linecolor='black',\n");
+        builder.append("  ticks='outside', tickwidth=1, tickcolor='black', ticklen=6,\n");
+        builder.append("  gridcolor='rgba(230, 230, 230, 0.8)', griddash='dot'\n");
+        builder.append(")\n");
+
+        builder.append("fig.update_yaxes(");
+        builder.append("  showline=True, linewidth=1, linecolor='black',\n");
+        builder.append("  ticks='outside', tickwidth=1, tickcolor='black', ticklen=6,\n");
+        builder.append("  gridcolor='rgba(230, 230, 230, 0.8)', griddash='dot'\n");
+        builder.append(")\n");
 
         builder.append("fig.show()");
 
