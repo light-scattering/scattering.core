@@ -71,7 +71,6 @@ public class StatisticsAspectExportTest {
         FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
         fPlotMeta.setName("Name");
-        fPlotMeta.setAnnotation("Annotation");
         fPlotMeta.setNameX("X");
         fPlotMeta.setNameY("Y");
         fPlotMeta.setRangeX(-5, 5);
@@ -138,7 +137,6 @@ public class StatisticsAspectExportTest {
         FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
         fPlotMeta.setName("Test");
-        fPlotMeta.setAnnotation("Annotation");
         fPlotMeta.setNameX("X");
         fPlotMeta.setNameY("Y");
         fPlotMeta.setRangeX(-10, 10);
@@ -302,7 +300,6 @@ public class StatisticsAspectExportTest {
                     .setName("a")
                     .setNameX("b")
                     .setNameY("c")
-                    .setAnnotation("d")
                     .setRangeX(1, 2)
                     .setRangeY(3, 4);
 
@@ -310,7 +307,6 @@ public class StatisticsAspectExportTest {
             assertEquals("a", fPlotMeta.getName());
             assertEquals("b", fPlotMeta.getNameX());
             assertEquals("c", fPlotMeta.getNameY());
-            assertEquals("d", fPlotMeta.getAnnotation());
             assertEquals(1, fPlotMeta.getRangeX().getD0());
             assertEquals(2, fPlotMeta.getRangeX().getD1());
             assertEquals(3, fPlotMeta.getRangeY().getD0());

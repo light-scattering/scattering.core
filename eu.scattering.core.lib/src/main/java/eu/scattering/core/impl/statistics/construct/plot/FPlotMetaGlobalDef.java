@@ -12,7 +12,6 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     private String name = "";
     private String nameX = "";
     private String nameY = "";
-    private String annotation = "";
     private FPos2D rangeX = null;
     private FPos2D rangeY = null;
 
@@ -82,20 +81,6 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     public FPlotMetaGlobal setNameY(String nameY) {
 
         this.nameY = nameY;
-
-        return this;
-    }
-
-    @Override
-    public String getAnnotation() {
-
-        return this.annotation;
-    }
-
-    @Override
-    public FPlotMetaGlobal setAnnotation(String annotation) {
-
-        this.annotation = annotation;
 
         return this;
     }

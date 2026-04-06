@@ -216,7 +216,6 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         }
 
         StringBuilder builder = new StringBuilder();
-        String nameAnnotation = config.getAnnotation().isEmpty() ? "" : config.getAnnotation();
         String namePlot = config.getName().isEmpty() ? "" : config.getName();
         String nameX = config.getNameX().isEmpty() ? "" : config.getNameX();
         String nameY = config.getNameY().isEmpty() ? "" : config.getNameY();
@@ -264,11 +263,6 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         if (config.getRangeY() != null) {
             builder.append("  yaxis_range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
-        builder.append(")\n\n");
-
-        builder.append("fig.add_annotation(\n");
-        builder.append("  text='").append(nameAnnotation).append("',\n");
-        builder.append("  x=0.5, y=-0.15, xref='paper', yref='paper', showarrow=False, align='center'\n");
         builder.append(")\n\n");
 
         builder.append("fig.show()");

@@ -21,7 +21,4 @@ public interface FPlotMetaGlobal {
 
     FPos2D getRangeY();
     FPlotMetaGlobal setRangeY(double min, double max);
-
-    String getAnnotation();
-    FPlotMetaGlobal setAnnotation(String annotation);
 }

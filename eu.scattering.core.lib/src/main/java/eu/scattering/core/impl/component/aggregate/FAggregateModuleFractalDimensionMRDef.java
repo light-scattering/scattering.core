@@ -80,8 +80,7 @@ public class FAggregateModuleFractalDimensionMRDef {
         FPlot fit = results.copy();
         fit.setY(regression);
 
-        FPlotMetaGlobal plotConfig = factory.getFPlotMetaGlobal()
-                .setAnnotation("Test data");
+        FPlotMetaGlobal plotConfig = factory.getFPlotMetaGlobal();
 
         String plot = factory.getSaveAspect().getStatisticsContext()
                 .toPythonPlotly(plotConfig, results, fit);

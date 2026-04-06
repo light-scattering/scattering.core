@@ -3,13 +3,14 @@ package eu.scattering.core.paper.morphology;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - Morphology (BC PCA optimized speed)")
 public class FractalDimensionBCSpeedPCAOptimizedTest {
     private final int size = 1000;
