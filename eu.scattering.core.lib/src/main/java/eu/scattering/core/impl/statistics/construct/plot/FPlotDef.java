@@ -189,10 +189,36 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
+    public double r2(FPoly model) {
+
+        if (size() < 1) {
+            throw new IllegalArgumentException("The number of elements must be greater than zero");
+        }
+
+        double realMeanY = getRefCoreY().mean();
+
+        double ssTotal = 0;
+        double ssResidual = 0;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double predictedY = model.value(getX(i));
+
+            ssTotal += Math.pow(getY(i) - realMeanY, 2);
+            ssResidual += Math.pow(getY(i) - predictedY, 2);
+        }
+
+        if (ssTotal == 0) {
+            return 1;
+        }
+
+        return 1.0 - (ssResidual / ssTotal);
+    }
+
+    @Override
     public double integrate() {
 
         if (size() < 1) {
-            throw new IllegalArgumentException("The number of elements must be greater then one");
+            throw new IllegalArgumentException("The number of elements must be greater than zero");
         }
 
         double area = 0;

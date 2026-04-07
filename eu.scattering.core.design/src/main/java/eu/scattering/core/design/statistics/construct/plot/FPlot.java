@@ -33,6 +33,7 @@ public interface FPlot extends Statistics<FPlot> {
     int getIndexX(RoundMethod type, double x);
     int getIndexY(RoundMethod type, double y);
 
+    double r2(FPoly model);
     double integrate();
 
     // -------------------------------------------------------------------------------------------------

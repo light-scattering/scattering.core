@@ -756,6 +756,122 @@ public class FPlotTest {
         }
 
         @Test
+        @DisplayName("Coefficient of determination - P0 flat")
+        void getR2P0Flat() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(1, 5);
+            fPlot.add(2, 5);
+            fPlot.add(3, 5);
+
+            FPoly fPoly = factory.getFPoly(5);
+
+            double r2 = fPlot.r2(fPoly);
+
+            assertEquals(1, r2, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Coefficient of determination - P0 mean")
+        void getR2P0Mean() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(1, 2);
+            fPlot.add(2, 4);
+            fPlot.add(3, 6);
+
+            FPoly fPoly = factory.getFPoly(4);
+
+            double r2 = fPlot.r2(fPoly);
+
+            assertEquals(0, r2, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Coefficient of determination - P1 manual")
+        void getR2P1Manual() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(1, 2.1);
+            fPlot.add(2, 3.9);
+            fPlot.add(3, 8.2);
+
+            FPoly fPoly = factory.getFPoly(0, 2);
+
+            double r2 = fPlot.r2(fPoly);
+
+            assertEquals(0.7526, r2, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Coefficient of determination - P1 correct")
+        void getR2P1Correct() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-5, -3);
+            fPlot.add(0, 2);
+            fPlot.add(2, 4);
+            fPlot.add(10, 12);
+
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            double r2 = fPlot.r2(fPoly);
+
+            assertEquals(1, r2, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Coefficient of determination - P1 mirrored")
+        void getR2P1Mirrored() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-5, 3);
+            fPlot.add(0, -2);
+            fPlot.add(2, -4);
+            fPlot.add(10, -12);
+
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            double r2 = fPlot.r2(fPoly);
+
+            assertTrue(r2 < 0);
+        }
+
+        @Test
+        @DisplayName("Coefficient of determination - P2 correct")
+        void getR2P2Correct() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-5, 27);
+            fPlot.add(0, 2);
+            fPlot.add(2, 6);
+            fPlot.add(10, 102);
+
+            FPoly fPoly = factory.getFPoly(2, 0, 1);
+
+            double r2 = fPlot.r2(fPoly);
+
+            assertEquals(1, r2, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Coefficient of determination - P2 mirrored")
+        void getR2P2Mirrored() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-5, -27);
+            fPlot.add(0, -2);
+            fPlot.add(2, -6);
+            fPlot.add(10, -102);
+
+            FPoly fPoly = factory.getFPoly(2, 0, 1);
+
+            double r2 = fPlot.r2(fPoly);
+
+            assertTrue(r2 < 0);
+        }
+
+        @Test
         @DisplayName("Filter X")
         void filterX() {
             FPlot fPlot = factory.getFPlot();
