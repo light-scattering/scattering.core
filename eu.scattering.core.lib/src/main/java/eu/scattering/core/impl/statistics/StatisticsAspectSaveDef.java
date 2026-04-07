@@ -205,6 +205,16 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         builder.append("  ),\n");
         builder.append(")\n\n");
 
+        if (!config.getAnnotation().isEmpty()) {
+            builder.append("fig.add_annotation(\n");
+            builder.append("  text='").append(config.getAnnotation()).append("',\n");
+            builder.append("  x=0.05, y=0.05, xref='paper', yref='paper',\n");
+            builder.append("  showarrow=False,\n");
+            builder.append("  xanchor='left', yanchor='bottom',\n");
+            builder.append("  font=dict(size=").append(fontSize).append("),\n");
+            builder.append(")\n\n");
+        }
+
         builder.append("fig.update_xaxes(");
         builder.append("  showline=True, linewidth=1, linecolor='black',\n");
         builder.append("  ticks='outside', tickwidth=1, tickcolor='black', ticklen=6,\n");

@@ -104,27 +104,48 @@ public class FAggregateModuleFractalDimensionBCDef {
 
         FPoly regression = window == 1 ? results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * window));
 
-        FPlot fit = results.copy();
-        fit.setY(regression);
+        FPlot approximation = results.copy();
+        approximation.setY(regression);
 
         double dim = -regression.at(1);
 
+        String plot = plot(results, approximation, regression, dim);
+
+        return dim;
+    }
+
+    private String plot(FPlot results, FPlot approximation, FPoly regression, double dim) {
+        double r2 = results.r2(regression);
+
+        String dimFormat = String.format(Locale.US, "%.2f", dim);
+        String r2Format = String.format(Locale.US, "%.4f", r2);
+
         FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
+                .setAnnotation("R<sup>2</sup> \u2248 " + r2Format)
+                .setFontSize(18)
                 .setNameX("$\\\\ln \\\\delta$")
                 .setNameY("$\\\\ln N_{\\\\delta}$");
 
-        FPlotMeta metaPlotFit = factory.getFPlotMeta().setLinesColor("gray").setLinesWidth(2).setLinesShow(true).setMarkersShow(false);
-        FPlotMeta metaPlotResults = factory.getFPlotMeta().setMarkersColor("black").setMarkersSize(5).setLinesShow(false).setMarkersShow(true);
+        FPlotMeta metaPlotFit = factory.getFPlotMeta()
+                .setLinesColor("gray")
+                .setLinesWidth(2)
+                .setLinesShow(true)
+                .setMarkersShow(false);
 
-        String dimString = String.format(Locale.US, "%.2f", dim);
+        FPlotMeta metaPlotResults = factory.getFPlotMeta()
+                .setMarkersColor("black")
+                .setMarkersSize(5)
+                .setLinesShow(false)
+                .setMarkersShow(true);
 
-        fit.setName("Linear fit (D<sub>BC</sub> \u2248 " + dimString + ")").setRefMeta(metaPlotFit);
-        results.setName("Raw box counts").setRefMeta(metaPlotResults);
+        approximation.setName("Linear fit (D<sub>BC</sub> \u2248 " + dimFormat + ")")
+                .setRefMeta(metaPlotFit);
 
-        String plot = factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(metaGlobal, fit, results);
+        results.setName("Raw box counts")
+                .setRefMeta(metaPlotResults);
 
-        return dim;
+        return  factory.getSaveAspect().getStatisticsContext()
+                .toPythonPlotly(metaGlobal, approximation, results);
     }
 
     private void stepOptimized(FAggregate reference, FAggregate replica, List<FPos3D> shifts, FPlot results, double boxLength) {

@@ -10,6 +10,9 @@ public interface FPlotMetaGlobal {
     String getName();
     FPlotMetaGlobal setName(String name);
 
+    String getAnnotation();
+    FPlotMetaGlobal setAnnotation(String annotation);
+
     String getNameX();
     FPlotMetaGlobal setNameX(String nameX);
 

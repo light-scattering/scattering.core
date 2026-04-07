@@ -1952,3 +1952,4 @@ public class FPlotTest {
 }
 
 //  https://www.statskingdom.com/linear-regression-calculator.html
+//  https://www.easymathtools.com/tools/r-squared-calculator/

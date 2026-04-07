@@ -15,6 +15,8 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     private FPos2D rangeX = null;
     private FPos2D rangeY = null;
 
+    private String annotation = "";
+
     private FPlotMetaGlobalDef(ScatFactory factory) {
 
         this.factory = factory;
@@ -53,6 +55,20 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     public FPlotMetaGlobal setName(String name) {
 
         this.name = name;
+
+        return this;
+    }
+
+    @Override
+    public String getAnnotation() {
+
+        return this.annotation;
+    }
+
+    @Override
+    public FPlotMetaGlobal setAnnotation(String annotation) {
+
+        this.annotation = annotation;
 
         return this;
     }
