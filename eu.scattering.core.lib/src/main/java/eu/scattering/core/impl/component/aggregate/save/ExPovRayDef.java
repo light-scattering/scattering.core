@@ -19,8 +19,8 @@ public class ExPovRayDef {
     public static void core(FAggregate aggregate, ExPovRay preset, StringBuilder builder) {
 
         boolean shadow = switch (preset) {
-            case FREE, RADIUS -> false;
-            case BOUNDARY, BOX_COUNTING -> true;
+            case FREE, RADIUS, BOX_COUNTING -> false;
+            case BOUNDARY -> true;
         };
 
         boolean monochromatic = switch (preset) {
