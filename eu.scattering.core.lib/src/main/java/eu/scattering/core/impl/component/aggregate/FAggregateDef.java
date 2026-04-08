@@ -13,6 +13,7 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
@@ -425,7 +426,13 @@ public class FAggregateDef implements FAggregate {
     @Override
     public double getFractalDimension(FractalDimension type) {
 
-        return this.moduleFractalDimension.getFractalDimension(type);
+        return this.moduleFractalDimension.getFractalDimension(type, null);
+    }
+
+    @Override
+    public double getFractalDimension(FractalDimension type, FBoxString plot) {
+
+        return this.moduleFractalDimension.getFractalDimension(type, plot);
     }
 
     @Override

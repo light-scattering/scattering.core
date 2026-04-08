@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
@@ -114,6 +115,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
     //--------------------------------------------------
 
     double getFractalDimension(FractalDimension type);
+    double getFractalDimension(FractalDimension type, FBoxString plot);
 
     double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
     double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca);

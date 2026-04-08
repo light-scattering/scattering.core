@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.aggregate;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
@@ -34,20 +35,20 @@ public class FAggregateModuleFractalDimensionDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getFractalDimension(FractalDimension type) {
+    protected double getFractalDimension(FractalDimension type, FBoxString plot) {
 
         return switch (type) {
             case BC_REFERENCE -> this.bc.analyze(
                     this.bc.getResultsBruteForce(),
-                    1
+                    1, plot
             );
             case BC_SIMPLIFIED -> this.bc.analyze(
                     this.bc.getResultsOptimized(2, 1, true, false),
-                    1
+                    1, plot
             );
             case BC_OPTIMIZED -> this.bc.analyze(
                     this.bc.getResultsOptimized(2, 3, false, true),
-                    0.9
+                    0.9, plot
             );
             case CORRELATION -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
@@ -75,7 +76,7 @@ public class FAggregateModuleFractalDimensionDef {
 
     protected double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {
 
-        return this.bc.analyze(this.bc.getResultsOptimized(step, shift, reposition, pca), window);
+        return this.bc.analyze(this.bc.getResultsOptimized(step, shift, reposition, pca), window, null);
     }
 
     protected double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {

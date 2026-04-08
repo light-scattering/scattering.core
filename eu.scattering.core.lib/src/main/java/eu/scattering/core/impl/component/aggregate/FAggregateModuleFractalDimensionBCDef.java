@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
@@ -91,7 +92,7 @@ public class FAggregateModuleFractalDimensionBCDef {
         return results;
     }
 
-    protected double analyze(FPlot results, double window) {
+    protected double analyze(FPlot results, double window, FBoxString plot) {
 
         if (window <= 0 || window > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
@@ -109,7 +110,9 @@ public class FAggregateModuleFractalDimensionBCDef {
 
         double dim = -regression.at(1);
 
-        String plot = plot(results, approximation, regression, dim);
+        if (plot != null) {
+            plot.setValue(plot(results, approximation, regression, dim));
+        }
 
         return dim;
     }
