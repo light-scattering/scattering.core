@@ -122,7 +122,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOX);
+        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -155,7 +155,7 @@ public class ComponentAspectExportTest {
 
         fModel.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOX);
+        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",

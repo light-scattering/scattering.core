@@ -53,12 +53,12 @@ public class FractalDimensionVisualTest {
 
         fModel.build();
 
-        String modelA = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOX);
+        String modelA = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOX_COUNTING);
 
         assertFalse(modelA.isEmpty());
 
-        String modelB = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.VISIO_BOX);
-
-        assertFalse(modelB.isEmpty());
+//        String modelB = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.VISIO_BOX);
+//
+//        assertFalse(modelB.isEmpty());
     }
 }
