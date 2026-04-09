@@ -338,10 +338,8 @@ public class ExPovRayDef {
                         color rgbt <0.3, 0.3, 0.3, 0>
                     }
                     finish {
-                        ambient     0.2
-                        diffuse     0.8
-                        phong       0.1
-                        phong_size  3
+                        ambient     1.0
+                        diffuse     0.0
                     }
                 }
     
@@ -405,7 +403,7 @@ public class ExPovRayDef {
     private static void boundaryVisioSingleZ(double x, double y, double z, double length, StringBuilder builder) {
 
         builder.append("cylinder {\n");
-        builder.append("    <0, 0, 0> <0, 0, ").append(length).append("> 0.2\n");
+        builder.append("    <0, 0, 0> <0, 0, ").append(length).append("> 0.3\n");
         builder.append("    translate <").append(x).append(", ").append(y).append(", ").append(z).append(">\n");
 
         boundaryVisioFinish(builder);
@@ -419,10 +417,8 @@ public class ExPovRayDef {
                     color rgbt <0.8, 0.8, 0.8 ,0>
                 }
                 finish {
-                    ambient     0.2
-                    diffuse     0.8
-                    phong       0.1
-                    phong_size  3
+                    ambient 1.0
+                    diffuse 0.0
                 }
             }
             
