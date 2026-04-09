@@ -2,7 +2,6 @@ package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import org.junit.jupiter.api.Disabled;
@@ -35,11 +34,15 @@ public class FractalDimensionBCVisualTest {
 
         fAggregate.setSphericalCenterAsZero(1000);
 
-        FPairPos3D boundary = fAggregate.getBoundary();
         FPos3D length = fAggregate.getLength();
         double radius = fAggregate.getRadiusFrom(0, 0, 0);
         double diameter = fAggregate.getDiameter();
         double magnitude = diameter / r;
+
+        assertTrue(length.getD0() > 0 && length.getD1() > 0 && length.getD2() > 0);
+        assertTrue(radius > 0);
+        assertTrue(diameter > 0);
+        assertTrue(magnitude > 0);
 
         String modelA = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
