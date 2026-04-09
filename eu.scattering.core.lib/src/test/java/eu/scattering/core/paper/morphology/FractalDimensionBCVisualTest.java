@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+//@Disabled
 @DisplayName("Paper - BC Visual")
 public class FractalDimensionBCVisualTest {
 
