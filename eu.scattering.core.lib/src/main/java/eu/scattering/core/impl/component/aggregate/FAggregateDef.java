@@ -176,6 +176,12 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public double getDiameter() {
+
+        return this.moduleGeometry.getDiameter();
+    }
+
+    @Override
     public double getRadiusFrom(double x, double y, double z) {
 
         return this.moduleGeometry.getRadiusFrom(x, y, z);

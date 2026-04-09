@@ -1661,6 +1661,16 @@ public class FAggregateTest {
         }
 
         @Test
+        @DisplayName("Get diameter")
+        void getDiameter() {
+            FAggregate fAggregate = factory.getFAggregateContext().geometry().d1(10);
+
+            double diameter = fAggregate.getDiameter();
+
+            assertEquals(20, diameter, 1E-4);
+        }
+
+        @Test
         @DisplayName("Get mass center - Point contact")
         void getMassCenterPointContact() {
             double delta = 0.1;
