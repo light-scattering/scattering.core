@@ -62,7 +62,7 @@ public class FAggregateModuleFractalDimensionBCDef {
         double cutoffOuter = reference.getLength(Length.MAX);
 
         double box = cutoffOuter * scaleFactor;
-        while (box >= cutoffInner) {
+        while (box > cutoffInner) {
             stepOptimized(reference, replica, shifts, results, box);
 
             box *= scaleFactor;
@@ -83,7 +83,7 @@ public class FAggregateModuleFractalDimensionBCDef {
         double cutoffOuter = reference.getLength(Length.MAX);
 
         double box = cutoffOuter * scaleFactor;
-        while (box >= cutoffInner) {
+        while (box > cutoffInner) {
             stepBruteForce(reference, results, box);
 
             box = box * scaleFactor;

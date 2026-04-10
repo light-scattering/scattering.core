@@ -3,6 +3,8 @@
 .gradle
 **/build/
 
+**.bkp
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
