@@ -34,7 +34,7 @@ public class ExPovRayDef {
                #include "transforms.inc"
                
                #declare Cam_Rot = <25, 35, 0>;
-               #declare Zoom = 250;
+               #declare Zoom = 350;
                
                light_source {
                    <0, 1000, 0>

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+//@Disabled
 @DisplayName("Paper - BC Visual")
 public class FractalDimensionBCVisualTest {
 
@@ -23,7 +23,7 @@ public class FractalDimensionBCVisualTest {
         int size = 10000;
         double r = 1;
         double df = 1.8;
-        double kf = 1.6;
+        double kf = 1.3;
 
         var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
 
@@ -37,7 +37,7 @@ public class FractalDimensionBCVisualTest {
         FPos3D length = fAggregate.getLength();
         double radius = fAggregate.getRadiusFrom(0, 0, 0);
         double diameter = fAggregate.getDiameter();
-        double magnitude = diameter / r;
+        double magnitude = radius / r;
 
         assertTrue(length.getD0() > 0 && length.getD1() > 0 && length.getD2() > 0);
         assertTrue(radius > 0);
