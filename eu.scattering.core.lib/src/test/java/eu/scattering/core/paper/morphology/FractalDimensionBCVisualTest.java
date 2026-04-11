@@ -2,6 +2,7 @@ package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
+import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import org.junit.jupiter.api.Disabled;
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - BC Visual")
 public class FractalDimensionBCVisualTest {
 
@@ -51,6 +52,10 @@ public class FractalDimensionBCVisualTest {
         String modelB = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOX_COUNTING);
 
         assertFalse(modelB.isEmpty());
+
+        String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+
+        assertFalse(geometry.isEmpty());
 
         FBoxString plot = factory.getFBoxString();
         double results = fAggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED, plot);

@@ -124,24 +124,25 @@ public class FAggregateModuleFractalDimensionBCDef {
         String r2Format = String.format(Locale.US, "%.4f", r2);
 
         FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
-                .setAnnotation("R<sup>2</sup> \u2248 " + r2Format)
-                .setFontSize(18)
-                .setNameX("$\\\\ln \\\\delta$")
-                .setNameY("$\\\\ln N_{\\\\delta}$");
+                .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
+                .setFontSize(32)
+                .setNameX("ln δ")
+                .setNameY("ln N<sub>δ</sub>");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
-                .setLinesColor("gray")
-                .setLinesWidth(2)
+                .setLinesColor("black")
+                .setLinesWidth(4)
                 .setLinesShow(true)
                 .setMarkersShow(false);
 
         FPlotMeta metaPlotResults = factory.getFPlotMeta()
                 .setMarkersColor("black")
-                .setMarkersSize(5)
+                .setLinesWidth(4)
+                .setMarkersSize(14)
                 .setLinesShow(false)
                 .setMarkersShow(true);
 
-        approximation.setName("Linear fit (D<sub>BC</sub> \u2248 " + dimFormat + ")")
+        approximation.setName("Linear fit (D<sub>BC</sub> ≈ " + dimFormat + ")")
                 .setRefMeta(metaPlotFit);
 
         results.setName("Raw box counts")

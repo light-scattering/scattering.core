@@ -154,8 +154,19 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("    hovertemplate='").append("x").append(" = %{x}<br>").append("y").append(" = %{y}<extra></extra>',\n");
             builder.append("    mode='").append(mode).append("',\n");
             builder.append("    line_shape='linear',\n");
-            builder.append("    line=dict(color='").append(meta.getLinesColor()).append("', width=").append(meta.getLinesWidth()).append("),\n");
-            builder.append("    marker=dict(color='").append(meta.getMarkersColor()).append("', size=").append(meta.getMarkersSize()).append(", symbol='circle-open')\n");
+            builder.append("    line=dict(\n");
+            builder.append("      color='").append(meta.getLinesColor()).append("',\n");
+            builder.append("      width=").append(meta.getLinesWidth()).append(",\n");
+            builder.append("    ),\n");
+            builder.append("    marker=dict(\n");
+            builder.append("      color='").append(meta.getMarkersColor()).append("',\n");
+            builder.append("      size=").append(meta.getMarkersSize()).append(",\n");
+            builder.append("      symbol='circle-open',\n");
+            builder.append("      line=dict(\n");
+            builder.append("        color='").append(meta.getMarkersColor()).append("',\n");
+            builder.append("        width=").append(meta.getLinesWidth()).append(",\n");
+            builder.append("      ),\n");
+            builder.append("    ),\n");
             builder.append("  )\n");
             builder.append(")\n");
         }
@@ -201,7 +212,7 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         builder.append("    y=0.95,\n");
         builder.append("    bgcolor='rgba(255, 255, 255, 0.8)',\n");
         builder.append("    bordercolor='black',\n");
-        builder.append("    borderwidth=1\n");
+        builder.append("    borderwidth=2\n");
         builder.append("  ),\n");
         builder.append(")\n\n");
 
@@ -216,15 +227,15 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         }
 
         builder.append("fig.update_xaxes(");
-        builder.append("  showline=True, linewidth=1, linecolor='black',\n");
-        builder.append("  ticks='outside', tickwidth=1, tickcolor='black', ticklen=6,\n");
-        builder.append("  gridcolor='rgba(230, 230, 230, 0.8)', griddash='dot'\n");
+        builder.append("  showline=True, linewidth=2, linecolor='black',\n");
+        builder.append("  ticks='outside', tickwidth=2, tickcolor='black', ticklen=6,\n");
+        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)', griddash='dot', gridwidth=2\n");
         builder.append(")\n");
 
         builder.append("fig.update_yaxes(");
-        builder.append("  showline=True, linewidth=1, linecolor='black',\n");
-        builder.append("  ticks='outside', tickwidth=1, tickcolor='black', ticklen=6,\n");
-        builder.append("  gridcolor='rgba(230, 230, 230, 0.8)', griddash='dot'\n");
+        builder.append("  showline=True, linewidth=2, linecolor='black',\n");
+        builder.append("  ticks='outside', tickwidth=2, tickcolor='black', ticklen=6,\n");
+        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)', griddash='dot', gridwidth=2\n");
         builder.append(")\n");
 
         builder.append("fig.show()");

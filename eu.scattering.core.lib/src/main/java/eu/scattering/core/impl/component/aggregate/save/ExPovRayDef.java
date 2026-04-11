@@ -414,7 +414,7 @@ public class ExPovRayDef {
         builder.append("""
                 no_shadow
                 pigment {
-                    color rgbt <0.8, 0.8, 0.8 ,0>
+                    color rgbt <0.2, 0.2, 0.2 ,0>
                 }
                 finish {
                     ambient 1.0
