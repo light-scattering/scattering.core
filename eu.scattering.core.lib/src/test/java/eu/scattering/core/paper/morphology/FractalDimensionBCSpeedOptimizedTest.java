@@ -12,9 +12,9 @@ import static eu.scattering.core.test.Config.factory;
 
 @Disabled
 @DisplayName("Paper - Morphology (BC implementation speed)")
-public class FractalDimensionBCSpeedImplTest {
+public class FractalDimensionBCSpeedOptimizedTest {
     private final int size = 2500;
-    private final int repetitions = 10;
+    private final int repetitions = 100;
 
     @Test
     @Tag("Comparison")

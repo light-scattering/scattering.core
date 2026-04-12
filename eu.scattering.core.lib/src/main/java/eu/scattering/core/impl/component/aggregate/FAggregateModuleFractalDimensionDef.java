@@ -66,6 +66,17 @@ public class FAggregateModuleFractalDimensionDef {
                     this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
                     0.9
             );
+
+            // -------------------------------------------------------------------------------------------------
+
+            case BC_MANUSCRIPT_ORIGIN -> this.bc.analyze(
+                    this.bc.getResultsOptimized(2, 1, false, false),
+                    0.9, plot
+            );
+            case BC_MANUSCRIPT_SHIFT -> this.bc.analyze(
+                    this.bc.getResultsOptimized(2, 3, false, false),
+                    0.9, plot
+            );
         };
     }
 
