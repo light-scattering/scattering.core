@@ -231,7 +231,7 @@ public class Measure {
 
     private static String getDfBoxFastBruteForce(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_REFERENCE));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_BRUTE_FORCE));
     }
 
     private static String getDfBoxAdv1(FAggregate aggregate) {

@@ -104,13 +104,13 @@ public class FractalDimensionBCSpeedPCARawTest {
 
         public void update(FAggregate aggregate) {
             long timeRefCheckA = System.currentTimeMillis();
-            double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_REFERENCE);
+            double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_BRUTE_FORCE);
             long timeRawCheck = System.currentTimeMillis();
 
             aggregate.pca();
 
             long timeRefCheckB = System.currentTimeMillis();
-            double dfPCA = aggregate.getFractalDimension(FractalDimension.BC_REFERENCE);
+            double dfPCA = aggregate.getFractalDimension(FractalDimension.BC_BRUTE_FORCE);
             long timePCACheck = System.currentTimeMillis();
 
             long timeRaw = timeRawCheck - timeRefCheckA;

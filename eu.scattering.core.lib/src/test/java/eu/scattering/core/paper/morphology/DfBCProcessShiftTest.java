@@ -33,7 +33,7 @@ public class DfBCProcessShiftTest {
             fModel.build();
 
             FBoxString plotA = factory.getFBoxString();
-            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_ORIGIN, plotA);
+            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_BASE, plotA);
             assertFalse(plotA.getValue().isEmpty());
 
             FBoxString plotB = factory.getFBoxString();
@@ -55,7 +55,7 @@ public class DfBCProcessShiftTest {
             fModel.build();
 
             FBoxString plotA = factory.getFBoxString();
-            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_ORIGIN, plotA);
+            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_BASE, plotA);
             assertFalse(plotA.getValue().isEmpty());
 
             FBoxString plotB = factory.getFBoxString();
@@ -77,7 +77,7 @@ public class DfBCProcessShiftTest {
             fModel.build();
 
             FBoxString plotA = factory.getFBoxString();
-            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_ORIGIN, plotA);
+            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_BASE, plotA);
             assertFalse(plotA.getValue().isEmpty());
 
             FBoxString plotB = factory.getFBoxString();
@@ -180,7 +180,7 @@ public class DfBCProcessShiftTest {
             }
 
             public void update(FAggregate aggregate) {
-                double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_ORIGIN);
+                double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_BASE);
                 double dfShift = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT);
 
                 double dfError = 100 * Math.abs((dfRaw - dfShift) / dfRaw);

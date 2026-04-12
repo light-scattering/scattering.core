@@ -38,7 +38,7 @@ public class FAggregateModuleFractalDimensionDef {
     protected double getFractalDimension(FractalDimension type, FBoxString plot) {
 
         return switch (type) {
-            case BC_REFERENCE -> this.bc.analyze(
+            case BC_BRUTE_FORCE -> this.bc.analyze(
                     this.bc.getResultsBruteForce(),
                     1, plot
             );
@@ -69,16 +69,20 @@ public class FAggregateModuleFractalDimensionDef {
 
             // -------------------------------------------------------------------------------------------------
 
-            case BC_MANUSCRIPT_ORIGIN -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 1, false, false),
-                    0.9, plot
-            );
-            case BC_MANUSCRIPT_SHIFT -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 3, false, false),
+            case BC_MANUSCRIPT_BASE -> this.bc.analyze(
+                    this.bc.getResultsOptimized(2.00, 1, false, false),
                     0.9, plot
             );
             case BC_MANUSCRIPT_PCA -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 1, false, true),
+                    this.bc.getResultsOptimized(2.00, 1, false, true),
+                    0.9, plot
+            );
+            case BC_MANUSCRIPT_SHIFT -> this.bc.analyze(
+                    this.bc.getResultsOptimized(2.00, 3, false, false),
+                    0.9, plot
+            );
+            case BC_MANUSCRIPT_SHIFT_FACTOR -> this.bc.analyze(
+                    this.bc.getResultsOptimized(1.25, 3, false, false),
                     0.9, plot
             );
         };

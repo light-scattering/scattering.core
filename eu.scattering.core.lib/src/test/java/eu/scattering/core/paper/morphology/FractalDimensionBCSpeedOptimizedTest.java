@@ -104,7 +104,7 @@ public class FractalDimensionBCSpeedOptimizedTest {
 
         public void update(FAggregate aggregate) {
             long timeRefCheck = System.currentTimeMillis();
-            double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_REFERENCE);
+            double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_BRUTE_FORCE);
             long timeRawCheck = System.currentTimeMillis();
             double dfOptimized = aggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED);
             long timeOptimizedCheck = System.currentTimeMillis();
