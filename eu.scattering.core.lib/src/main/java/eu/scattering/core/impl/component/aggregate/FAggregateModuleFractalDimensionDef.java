@@ -77,6 +77,10 @@ public class FAggregateModuleFractalDimensionDef {
                     this.bc.getResultsOptimized(2, 3, false, false),
                     0.9, plot
             );
+            case BC_MANUSCRIPT_PCA -> this.bc.analyze(
+                    this.bc.getResultsOptimized(2, 1, false, true),
+                    0.9, plot
+            );
         };
     }
 

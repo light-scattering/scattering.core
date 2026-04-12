@@ -2,20 +2,16 @@ package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-//@Disabled
-@DisplayName("Paper - Morphology (BC implementation speed)")
-public class FractalDimensionBCShiftTest {
+@Disabled
+@DisplayName("Paper - Morphology (BC pre-processing shift)")
+public class DfBCProcessShiftTest {
 
     @Nested
     @Tag("Visual")
