@@ -4,16 +4,13 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 //@Disabled
-@DisplayName("Paper - Morphology (BC pre-processing factor)")
+@DisplayName("Paper - Morphology (BC pre-processing shift factor)")
 public class DfBCProcessShiftFactorTest {
 
     @Nested
@@ -93,7 +90,7 @@ public class DfBCProcessShiftFactorTest {
     @Tag("Comparison")
     @DisplayName("Comparison - Factor")
     class ComparisonTest {
-        private final int size = 2500;
+        private final int size = 10000;
         private final int repetitions = 10;
 
         @Test
@@ -140,7 +137,7 @@ public class DfBCProcessShiftFactorTest {
             private final int size, repetitions;
 
             private final FStat dfRaw = factory.getFStat();
-            private final FStat dfShift = factory.getFStat();
+            private final FStat dfFactor = factory.getFStat();
             private final FStat dfError = factory.getFStat();
 
             public Container(double df, double kf, int size, int repetitions) {
@@ -184,20 +181,20 @@ public class DfBCProcessShiftFactorTest {
 
             public void update(FAggregate aggregate) {
                 double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT);
-                double dfShift = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_FACTOR);
+                double dfFactor = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_FACTOR);
 
-                double dfError = 100 * Math.abs((dfRaw - dfShift) / dfRaw);
+                double dfError = 100 * ((dfFactor - dfRaw) / dfRaw);
 
                 this.dfRaw.add(dfRaw);
-                this.dfShift.add(dfShift);
+                this.dfFactor.add(dfFactor);
                 this.dfError.add(dfError);
             }
 
             public void show() {
                 System.out.println();
                 System.out.printf("Dimension shift:     %1.6f, %1.6f\n", dfRaw.mean(), dfRaw.std(true));
-                System.out.printf("Dimension factor:    %1.6f, %1.6f\n", dfShift.mean(), dfShift.std(true));
-                System.out.printf("Dimension error:     %1.6f\n", dfError.mean());
+                System.out.printf("Dimension factor:    %1.6f, %1.6f\n", dfFactor.mean(), dfFactor.std(true));
+                System.out.printf("Dimension error:     %1.6f, %1.6f\n", dfError.mean(), dfError.std(true));
             }
         }
     }

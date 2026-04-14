@@ -90,7 +90,7 @@ public class DfBCProcessShiftTest {
     @Tag("Comparison")
     @DisplayName("Comparison - Shift")
     class ComparisonTest {
-        private final int size = 2500;
+        private final int size = 10000;
         private final int repetitions = 10;
 
         @Test
@@ -183,7 +183,7 @@ public class DfBCProcessShiftTest {
                 double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_BASE);
                 double dfShift = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT);
 
-                double dfError = 100 * Math.abs((dfRaw - dfShift) / dfRaw);
+                double dfError = 100 * ((dfShift - dfRaw) / dfRaw);
 
                 this.dfRaw.add(dfRaw);
                 this.dfShift.add(dfShift);
@@ -194,7 +194,7 @@ public class DfBCProcessShiftTest {
                 System.out.println();
                 System.out.printf("Dimension raw:       %1.6f, %1.6f\n", dfRaw.mean(), dfRaw.std(true));
                 System.out.printf("Dimension shift:     %1.6f, %1.6f\n", dfShift.mean(), dfShift.std(true));
-                System.out.printf("Dimension error:     %1.6f\n", dfError.mean());
+                System.out.printf("Dimension error:     %1.6f, %1.6f\n", dfError.mean(), dfError.std(true));
             }
         }
     }

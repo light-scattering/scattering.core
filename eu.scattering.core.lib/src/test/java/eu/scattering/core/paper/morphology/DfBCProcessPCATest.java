@@ -90,8 +90,8 @@ public class DfBCProcessPCATest {
     @Tag("Comparison")
     @DisplayName("Comparison - PCA")
     class ComparisonTest {
-        private final int size = 2500;
-        private final int repetitions = 10;
+        private final int size = 1000;
+        private final int repetitions = 100;
 
         @Test
         @Tag("Comparison")
@@ -137,7 +137,7 @@ public class DfBCProcessPCATest {
             private final int size, repetitions;
 
             private final FStat dfRaw = factory.getFStat();
-            private final FStat dfShift = factory.getFStat();
+            private final FStat dfPca = factory.getFStat();
             private final FStat dfError = factory.getFStat();
 
             public Container(double df, double kf, int size, int repetitions) {
@@ -181,20 +181,20 @@ public class DfBCProcessPCATest {
 
             public void update(FAggregate aggregate) {
                 double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_BASE);
-                double dfShift = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_PCA);
+                double dfPca = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_PCA);
 
-                double dfError = 100 * Math.abs((dfRaw - dfShift) / dfRaw);
+                double dfError = 100 * ((dfPca - dfRaw) / dfRaw);
 
                 this.dfRaw.add(dfRaw);
-                this.dfShift.add(dfShift);
+                this.dfPca.add(dfPca);
                 this.dfError.add(dfError);
             }
 
             public void show() {
                 System.out.println();
                 System.out.printf("Dimension raw:       %1.6f, %1.6f\n", dfRaw.mean(), dfRaw.std(true));
-                System.out.printf("Dimension PCA:       %1.6f, %1.6f\n", dfShift.mean(), dfShift.std(true));
-                System.out.printf("Dimension error:     %1.6f\n", dfError.mean());
+                System.out.printf("Dimension PCA:       %1.6f, %1.6f\n", dfPca.mean(), dfPca.std(true));
+                System.out.printf("Dimension error:     %1.6f, %1.6f\n", dfError.mean(), dfError.std(true));
             }
         }
     }
