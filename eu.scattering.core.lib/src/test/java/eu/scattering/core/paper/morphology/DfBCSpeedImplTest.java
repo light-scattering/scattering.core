@@ -12,8 +12,8 @@ import static eu.scattering.core.test.Config.factory;
 
 @Disabled
 @DisplayName("Paper - Morphology (BC implementation speed)")
-public class FractalDimensionBCSpeedOptimizedTest {
-    private final int size = 2500;
+public class DfBCSpeedImplTest {
+    private final int size = 1000;
     private final int repetitions = 100;
 
     @Test
@@ -61,6 +61,7 @@ public class FractalDimensionBCSpeedOptimizedTest {
 
         private final FStat timeRaw = factory.getFStat();
         private final FStat timeOptimized = factory.getFStat();
+        private final FStat timeGain = factory.getFStat();
         private final FStat dfError = factory.getFStat();
 
         public Container(double df, double kf, int size, int repetitions) {
@@ -114,8 +115,9 @@ public class FractalDimensionBCSpeedOptimizedTest {
 
             this.timeRaw.add(timeRaw);
             this.timeOptimized.add(timeOptimized);
+            this.timeGain.add((double) timeRaw / timeOptimized);
 
-            double dfError = 100 * Math.abs((dfRaw - dfOptimized) / dfRaw);
+            double dfError = 100 * (dfOptimized - dfRaw) / dfRaw;
 
             this.dfError.add(dfError);
         }
@@ -124,12 +126,13 @@ public class FractalDimensionBCSpeedOptimizedTest {
             double timeRaw = this.timeRaw.mean();
             double timeOptimized = this.timeOptimized.mean();
 
-            double timeGain = timeRaw / timeOptimized;
+            double timeGainGroup = timeRaw / timeOptimized;
 
             System.out.println();
             System.out.printf("Time raw [ms]:       %1.6f, %1.6f\n", timeRaw, this.timeRaw.std(true));
             System.out.printf("Time optimized [ms]: %1.6f, %1.6f\n", timeOptimized, this.timeOptimized.std(true));
-            System.out.printf("Time gain:           %1.6f\n", timeGain);
+            System.out.printf("Time gain (single):  %1.6f, %1.6f\n", timeGain.mean(), this.timeGain.std(true));
+            System.out.printf("Time gain (group):   %1.6f\n", timeGainGroup);
             System.out.printf("Dimension error:     %1.6f\n", dfError.mean());
         }
     }

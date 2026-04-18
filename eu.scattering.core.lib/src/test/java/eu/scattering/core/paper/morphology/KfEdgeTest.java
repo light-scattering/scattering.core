@@ -2,6 +2,7 @@ package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,9 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 @DisplayName("Paper - Morphology (Kf edge)")
-public class FractalPrefactorEdgeTest {
+public class KfEdgeTest {
 
     @Test
     @Tag("Theory")

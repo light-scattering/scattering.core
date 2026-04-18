@@ -5,5 +5,9 @@ public enum FractalDimension {
     CORRELATION, CORRELATION_FULL,
     MASS, MASS_FULL,
     // -------------------------------------------------------------------------------------------------
-    BC_MANUSCRIPT_BASE, BC_MANUSCRIPT_PCA, BC_MANUSCRIPT_SHIFT, BC_MANUSCRIPT_SHIFT_FACTOR
+    BC_MANUSCRIPT_BASE,
+    BC_MANUSCRIPT_PCA,
+    BC_MANUSCRIPT_SHIFT,
+    BC_MANUSCRIPT_SHIFT_PCA, BC_MANUSCRIPT_SHIFT_FACTOR,
+    BC_MANUSCRIPT_SHIFT_PCA_FACTOR
 }

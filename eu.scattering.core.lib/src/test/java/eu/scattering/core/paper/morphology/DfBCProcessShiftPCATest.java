@@ -9,9 +9,9 @@ import org.junit.jupiter.api.*;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@Disabled
-@DisplayName("Paper - Morphology (BC pre-processing shift factor)")
-public class DfBCProcessShiftFactorTest {
+//@Disabled
+@DisplayName("Paper - Morphology (BC pre-processing shift PCA)")
+public class DfBCProcessShiftPCATest {
 
     @Nested
     @Tag("Visual")
@@ -37,7 +37,7 @@ public class DfBCProcessShiftFactorTest {
             assertFalse(plotA.getValue().isEmpty());
 
             FBoxString plotB = factory.getFBoxString();
-            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_FACTOR, plotB);
+            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA, plotB);
             assertFalse(plotB.getValue().isEmpty());
         }
 
@@ -59,7 +59,7 @@ public class DfBCProcessShiftFactorTest {
             assertFalse(plotA.getValue().isEmpty());
 
             FBoxString plotB = factory.getFBoxString();
-            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_FACTOR, plotB);
+            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA, plotB);
             assertFalse(plotB.getValue().isEmpty());
         }
 
@@ -81,7 +81,7 @@ public class DfBCProcessShiftFactorTest {
             assertFalse(plotA.getValue().isEmpty());
 
             FBoxString plotB = factory.getFBoxString();
-            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_FACTOR, plotB);
+            fAggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA, plotB);
             assertFalse(plotB.getValue().isEmpty());
         }
     }
@@ -137,7 +137,7 @@ public class DfBCProcessShiftFactorTest {
             private final int size, repetitions;
 
             private final FStat dfRaw = factory.getFStat();
-            private final FStat dfFactor = factory.getFStat();
+            private final FStat dfPca = factory.getFStat();
             private final FStat dfError = factory.getFStat();
 
             public Container(double df, double kf, int size, int repetitions) {
@@ -181,19 +181,19 @@ public class DfBCProcessShiftFactorTest {
 
             public void update(FAggregate aggregate) {
                 double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT);
-                double dfFactor = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_FACTOR);
+                double dfPca = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA);
 
-                double dfError = 100 * ((dfFactor - dfRaw) / dfRaw);
+                double dfError = 100 * ((dfPca - dfRaw) / dfRaw);
 
                 this.dfRaw.add(dfRaw);
-                this.dfFactor.add(dfFactor);
+                this.dfPca.add(dfPca);
                 this.dfError.add(dfError);
             }
 
             public void show() {
                 System.out.println();
                 System.out.printf("Dimension shift:     %1.6f, %1.6f\n", dfRaw.mean(), dfRaw.std(true));
-                System.out.printf("Dimension factor:    %1.6f, %1.6f\n", dfFactor.mean(), dfFactor.std(true));
+                System.out.printf("Dimension pca:       %1.6f, %1.6f\n", dfPca.mean(), dfPca.std(true));
                 System.out.printf("Dimension error:     %1.6f, %1.6f\n", dfError.mean(), dfError.std(true));
             }
         }
