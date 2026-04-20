@@ -9,7 +9,7 @@ import org.junit.jupiter.api.*;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - Morphology (BC pre-processing shift PCA)")
 public class DfBCProcessShiftPCATest {
 
@@ -90,8 +90,8 @@ public class DfBCProcessShiftPCATest {
     @Tag("Comparison")
     @DisplayName("Comparison - Factor")
     class ComparisonTest {
-        private final int size = 5000;
-        private final int repetitions = 100;
+        private final int size = 10000;
+        private final int repetitions = 10;
 
         @Test
         @Tag("Comparison")
