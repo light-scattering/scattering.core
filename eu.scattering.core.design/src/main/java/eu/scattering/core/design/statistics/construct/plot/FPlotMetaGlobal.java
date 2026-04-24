@@ -24,4 +24,12 @@ public interface FPlotMetaGlobal {
 
     FPos2D getRangeY();
     FPlotMetaGlobal setRangeY(double min, double max);
+
+    Position getPositionLegend();
+    FPlotMetaGlobal setPositionLegend(Position position);
+
+    Position getPositionAnnotation();
+    FPlotMetaGlobal setPositionAnnotation(Position position);
+
+    enum Position { LEFT, RIGHT }
 }

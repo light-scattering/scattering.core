@@ -17,6 +17,9 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
 
     private String annotation = "";
 
+    private Position positionLegend = Position.RIGHT;
+    private Position positionAnnotation = Position.LEFT;
+
     private FPlotMetaGlobalDef(ScatFactory factory) {
 
         this.factory = factory;
@@ -125,6 +128,34 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     public FPlotMetaGlobal setRangeY(double min, double max) {
 
         this.rangeY = factory.getFPos2D(min, max);
+
+        return this;
+    }
+
+    @Override
+    public Position getPositionLegend() {
+
+        return this.positionLegend;
+    }
+
+    @Override
+    public FPlotMetaGlobal setPositionLegend(Position position) {
+
+        this.positionLegend = position;
+
+        return this;
+    }
+
+    @Override
+    public Position getPositionAnnotation() {
+
+        return this.positionAnnotation;
+    }
+
+    @Override
+    public FPlotMetaGlobal setPositionAnnotation(Position position) {
+
+        this.positionAnnotation = position;
 
         return this;
     }

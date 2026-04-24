@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled
 @DisplayName("Paper - BC Visual")
-public class FractalDimensionBCVisualTest {
+public class VisioBCTest {
 
     @Test
     @Tag("Visual")

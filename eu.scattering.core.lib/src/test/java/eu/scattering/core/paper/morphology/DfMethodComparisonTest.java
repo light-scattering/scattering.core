@@ -14,9 +14,9 @@ import static eu.scattering.core.test.Config.factory;
 
 @Disabled
 @DisplayName("Paper - Morphology (Df method)")
-public class FractalDimensionMethodComparisonTest {
-    private final int size = 1000;
-    private final int repetitions = 10;
+public class DfMethodComparisonTest {
+    private final int size = 10000;
+    private final int repetitions = 100;
 
     @Test
     @Tag("Comparison")
@@ -62,7 +62,6 @@ public class FractalDimensionMethodComparisonTest {
         private final int size, repetitions;
 
         private final FStat pl = factory.getFStat();
-        private final FStat bcRaw = factory.getFStat();
         private final FStat bcOptimized = factory.getFStat();
         private final FStat dcLimited = factory.getFStat();
         private final FStat dcFull = factory.getFStat();
@@ -70,7 +69,6 @@ public class FractalDimensionMethodComparisonTest {
         private final FStat mrFull = factory.getFStat();
 
         private final boolean runPl = true;
-        private final  boolean runBcRaw = false;
         private final boolean runBcOptimized = true;
         private final boolean runDcLimited = true;
         private final boolean runDcFull = false;
@@ -122,8 +120,7 @@ public class FractalDimensionMethodComparisonTest {
         public void update(FAggregate aggregate, FMonitorCCRadiusOfGyration monitor) {
 
             if (runPl)          pl.add(monitor.getPowerLawDimension());
-            if (runBcOptimized) bcOptimized.add(aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED));
-            if (runBcRaw)       bcRaw.add(aggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED));
+            if (runBcOptimized) bcOptimized.add(aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA));
             if (runDcLimited)   dcLimited.add(aggregate.getFractalDimension(FractalDimension.CORRELATION));
             if (runDcFull)      dcFull.add(aggregate.getFractalDimension(FractalDimension.CORRELATION_FULL));
             if (runMrLimited)   mrLimited.add(aggregate.getFractalDimension(FractalDimension.MASS));
@@ -135,7 +132,6 @@ public class FractalDimensionMethodComparisonTest {
             System.out.println();
             if (runPl)          System.out.printf("Power law:      %1.6f, %1.6f\n", pl.mean(), pl.std(true));
             if (runBcOptimized) System.out.printf("Box counting O: %1.6f, %1.6f\n", bcOptimized.mean(), bcOptimized.std(true));
-            if (runBcRaw)       System.out.printf("Box counting R: %1.6f, %1.6f\n", bcRaw.mean(), bcRaw.std(true));
             if (runDcLimited)   System.out.printf("Density:        %1.6f, %1.6f\n", dcLimited.mean(), dcLimited.std(true));
             if (runDcFull)      System.out.printf("Density (full): %1.6f, %1.6f\n", dcFull.mean(), dcFull.std(true));
             if (runMrLimited)   System.out.printf("Mass:           %1.6f, %1.6f\n", mrLimited.mean(), mrLimited.std(true));

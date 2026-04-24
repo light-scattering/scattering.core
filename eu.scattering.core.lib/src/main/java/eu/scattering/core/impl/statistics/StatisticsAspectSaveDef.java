@@ -206,8 +206,13 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         builder.append("  ),\n");
         builder.append("  legend=dict(\n");
         builder.append("    font=dict(size=").append(fontSize).append("),\n");
-        builder.append("    xanchor='right',\n");
-        builder.append("    x=0.95,\n");
+        if (config.getPositionLegend().equals(FPlotMetaGlobal.Position.RIGHT)) {
+            builder.append("    xanchor='right',\n");
+            builder.append("    x=0.95,\n");
+        } else {
+            builder.append("    xanchor='left',\n");
+            builder.append("    x=0.05,\n");
+        }
         builder.append("    yanchor='top',\n");
         builder.append("    y=0.95,\n");
         builder.append("    bgcolor='rgba(255, 255, 255, 0.8)',\n");
@@ -219,9 +224,18 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         if (!config.getAnnotation().isEmpty()) {
             builder.append("fig.add_annotation(\n");
             builder.append("  text='").append(config.getAnnotation()).append("',\n");
-            builder.append("  x=0.05, y=0.05, xref='paper', yref='paper',\n");
+            builder.append("  xref='paper',\n");
+            builder.append("  yref='paper',\n");
             builder.append("  showarrow=False,\n");
-            builder.append("  xanchor='left', yanchor='bottom',\n");
+            if (config.getPositionAnnotation().equals(FPlotMetaGlobal.Position.RIGHT)) {
+                builder.append("  xanchor='right',\n");
+                builder.append("  x=0.95, \n");
+            } else {
+                builder.append("  xanchor='left',\n");
+                builder.append("  x=0.05, \n");
+            }
+            builder.append("  yanchor='bottom',\n");
+            builder.append("  y=0.05,\n");
             builder.append("  font=dict(size=").append(fontSize).append("),\n");
             builder.append(")\n\n");
         }

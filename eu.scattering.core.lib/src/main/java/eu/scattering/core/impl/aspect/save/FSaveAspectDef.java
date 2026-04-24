@@ -33,7 +33,7 @@ public class FSaveAspectDef implements FSaveAspect {
     @Override
     public ComponentAspectSave getComponentContext() {
 
-        return ComponentAspectSaveDef.create();
+        return ComponentAspectSaveDef.create(this.factory);
     }
 
     @Override
