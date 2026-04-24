@@ -20,6 +20,7 @@ import eu.scattering.core.impl.component.aggregate.save.ExNetGenDef;
 import eu.scattering.core.impl.component.aggregate.save.ExPovRayDef;
 
 import java.util.Locale;
+import java.util.function.Function;
 
 public class ComponentAspectSaveDef implements ComponentAspectSave {
     private final ScatFactory factory;
@@ -88,8 +89,18 @@ public class ComponentAspectSaveDef implements ComponentAspectSave {
     }
 
     @Override
+    public String toChart(FMonitorCCRadiusOfGyration monitor, Function<FStat, Double> function) {
+
+        return toChartFPlot(monitor.getRefFPlotBar().toFPlot(function));
+    }
+
+    @Override
     public String toChart(FMonitorPCRadiusOfGyration monitor) {
-        FPlot results = monitor.getRefFPlot();
+
+        return toChartFPlot(monitor.getRefFPlot());
+    }
+
+    private String toChartFPlot(FPlot results) {
 
         results.swapXY();
         results.mutateX(FStat::ln);

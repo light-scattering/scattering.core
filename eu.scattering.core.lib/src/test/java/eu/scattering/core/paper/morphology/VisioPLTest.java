@@ -1,19 +1,13 @@
 package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
-import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
-import eu.scattering.core.design.utility.type.preset.ExBasic;
-import eu.scattering.core.design.utility.type.preset.ExPovRay;
-import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class VisioPLTest {
 
@@ -36,7 +30,7 @@ public class VisioPLTest {
 
         fModel.build();
 
-        String plot = fMonitor.getFPlotVisual(FStat::mean);
+        String plot = factory.getSaveAspect().getComponentContext().toChart(fMonitor, FStat::mean);
 
         assertFalse(plot.isEmpty());
 
