@@ -6,7 +6,7 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
@@ -208,7 +208,7 @@ public class StatisticsAspectExportTest {
     @Test
     @DisplayName("Plotly FPlotBar")
     void plotlyFPlotBar() {
-        FPlotBarMeta fPlotBarMeta = factory.getFPlotBarMeta();
+        FPlotBarMetaGlobal fPlotBarMeta = factory.getFPlotBarMetaGlobal();
 
         fPlotBarMeta.setName("Test");
         fPlotBarMeta.setAnnotation("Annotation");
@@ -316,9 +316,9 @@ public class StatisticsAspectExportTest {
         @Test
         @DisplayName("FPlotBar meta config")
         void validateFPlotBarMetaConfig() {
-            FPlotBarMeta fPlotBarMeta = factory.getFPlotBarMeta();
+            FPlotBarMetaGlobal fPlotBarMeta = factory.getFPlotBarMetaGlobal();
 
-            FPlotBarMeta results = fPlotBarMeta
+            FPlotBarMetaGlobal results = fPlotBarMeta
                     .setName("a")
                     .setNameX("b")
                     .setNameY("c")

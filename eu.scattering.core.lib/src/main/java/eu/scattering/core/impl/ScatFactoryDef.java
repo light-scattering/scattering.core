@@ -57,7 +57,7 @@ import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import eu.scattering.core.design.storage.StorageFactory;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
@@ -601,7 +601,7 @@ public final class ScatFactoryDef implements ScatFactory {
     }
 
     @Override
-    public FPlotBarMeta getFPlotBarMeta() {
+    public FPlotBarMetaGlobal getFPlotBarMetaGlobal() {
 
         return FPlotBarMetaDef.create(this);
     }

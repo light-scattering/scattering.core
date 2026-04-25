@@ -30,10 +30,10 @@ public class VisioPLTest {
 
         fModel.build();
 
-        String plot = factory.getSaveAspect().getComponentContext().toChart(fMonitor, FStat::mean);
-
-        assertFalse(plot.isEmpty());
+        String plotPC = factory.getSaveAspect().getComponentContext().toChart(fMonitor, FStat::mean);
 
 
+
+        assertFalse(plotPC.isEmpty());
     }
 }

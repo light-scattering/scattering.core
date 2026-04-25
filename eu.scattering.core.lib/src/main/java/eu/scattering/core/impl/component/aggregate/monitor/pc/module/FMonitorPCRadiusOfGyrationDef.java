@@ -71,7 +71,10 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
     private FPlot getResults() {
         FPlot results = this.fPlot.copy();
 
+//        double rp = results.getRefCoreX().mean();
+
         results.swapXY();
+
         results.mutateX(FStat::ln);
         results.mutateY(FStat::ln);
 

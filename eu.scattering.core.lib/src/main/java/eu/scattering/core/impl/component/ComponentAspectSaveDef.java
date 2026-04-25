@@ -11,6 +11,8 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
@@ -85,7 +87,28 @@ public class ComponentAspectSaveDef implements ComponentAspectSave {
 
     @Override
     public String toChart(FMonitorCCRadiusOfGyration monitor) {
-        return "";
+
+        FPlotBar res = monitor.getRefFPlotBar().copy();
+
+        res.mutateX(FStat::ln);
+        res.mutateY((statY) -> statY.forEach(FStat::ln));
+
+        res.setName("average");
+
+        FPlotBarMetaGlobal metaGlobal = factory.getFPlotBarMetaGlobal()
+                .setPositionLegend(FPlotBarMetaGlobal.Position.LEFT)
+                .setFontSize(32)
+                .setNameX("ln N<sub>p</sub>")
+                .setNameY("ln R<sub>g</sub>")
+                .setCoreLineColor("black")
+                .setCoreLineWidth(4)
+                .setRangeLineColor("darkgray")
+                .setRangeLineWidth(3)
+                .setRangeShow(true)
+                .setErrorShow(false);
+
+        return  factory.getSaveAspect().getStatisticsContext()
+                .toPythonPlotly(metaGlobal, res);
     }
 
     @Override
@@ -119,8 +142,8 @@ public class ComponentAspectSaveDef implements ComponentAspectSave {
                 .setPositionAnnotation(FPlotMetaGlobal.Position.RIGHT)
                 .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
                 .setFontSize(32)
-                .setNameX("ln N<sub>p</sub>")
-                .setNameY("ln R<sub>g</sub>");
+                .setNameX("ln R<sub>g</sub>")
+                .setNameY("ln N<sub>p</sub>");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
                 .setLinesColor("black")
@@ -138,7 +161,7 @@ public class ComponentAspectSaveDef implements ComponentAspectSave {
         approximation.setName("Linear fit (D<sub>PL</sub> ≈ " + dimFormat + ")")
                 .setRefMeta(metaPlotFit);
 
-        results.setName("Raw data")
+        results.setName("Averaged data")
                 .setRefMeta(metaPlotResults);
 
         return  factory.getSaveAspect().getStatisticsContext()

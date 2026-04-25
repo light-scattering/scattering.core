@@ -2,7 +2,7 @@ package eu.scattering.core.design.statistics.construct.plotbar;
 
 public interface FPlotBarAspectSave {
 
-    String toPythonPlotly(FPlotBarMeta config, FPlotBar plotBar);
+    String toPythonPlotly(FPlotBarMetaGlobal config, FPlotBar plotBar);
 
     //--------------------------------------------------
 

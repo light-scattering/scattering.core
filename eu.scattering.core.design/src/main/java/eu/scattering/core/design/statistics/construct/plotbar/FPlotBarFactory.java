@@ -20,7 +20,7 @@ public interface FPlotBarFactory {
 
     //--------------------------------------------------
 
-    FPlotBarMeta getFPlotBarMeta();
+    FPlotBarMetaGlobal getFPlotBarMetaGlobal();
 
     //--------------------------------------------------
 
