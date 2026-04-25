@@ -19,7 +19,7 @@ public class VisioBCTest {
 
     @Test
     @Tag("Visual")
-    @DisplayName("BC box")
+    @DisplayName("BC - Image")
     void visio() {
         int size = 10000;
         double r = 1;

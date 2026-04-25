@@ -2,6 +2,9 @@ package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
+import eu.scattering.core.design.utility.type.preset.ExBasic;
+import eu.scattering.core.design.utility.type.preset.ExPovRay;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -9,11 +12,13 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@Disabled
+@DisplayName("Paper - PL Visual")
 public class VisioPLTest {
 
     @Test
     @Tag("Visual")
-    @DisplayName("BC box")
+    @DisplayName("PL - Image")
     void visio() {
         int size = 10000;
         double r = 1;
@@ -30,10 +35,16 @@ public class VisioPLTest {
 
         fModel.build();
 
-        String plotPC = factory.getSaveAspect().getComponentContext().toChart(fMonitor, FStat::mean);
+        String plot = factory.getSaveAspect().getComponentContext().toChart(fMonitor, FStat::mean);
 
+        assertFalse(plot.isEmpty());
 
+        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
-        assertFalse(plotPC.isEmpty());
+        assertFalse(model.isEmpty());
+
+        String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+
+        assertFalse(geometry.isEmpty());
     }
 }
