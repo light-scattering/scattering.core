@@ -19,13 +19,13 @@ public class ExPovRayDef {
     public static void core(FAggregate aggregate, ExPovRay preset, StringBuilder builder) {
 
         boolean shadow = switch (preset) {
-            case FREE, RADIUS, BOX_COUNTING -> false;
+            case FREE, BOX_COUNTING, RADIUS, REFERENCE -> false;
             case BOUNDARY -> true;
         };
 
         boolean monochromatic = switch (preset) {
             case FREE, BOUNDARY, BOX_COUNTING -> false;
-            case RADIUS -> true;
+            case RADIUS, REFERENCE -> true;
         };
 
         builder.append("""
@@ -144,6 +144,12 @@ public class ExPovRayDef {
             radiusOfGyration(aggregate, aggregateResized, builder);
         }
 
+        if (preset.equals(ExPovRay.REFERENCE)) {
+            centerOfMass(builder);
+            radiusReference(aggregate, aggregateResized, builder);
+            radiusOfGyration(aggregate, aggregateResized, builder);
+        }
+
         if (preset.equals(ExPovRay.BOUNDARY)) {
             boundary(aggregateResized, builder);
         }
@@ -179,6 +185,47 @@ public class ExPovRayDef {
         double radiusParsed = aggregateParsed.getVolumeRadius(Volume.ADAPTIVE);
 
         builder.append("// Volume radius - ").append(radius).append("\n");
+        builder.append("torus {\n");
+        builder.append("    ").append(radiusParsed).append(", 0.25\n");
+        builder.append("""
+            rotate x * 90
+            translate <0, 0, -200>
+            rotate Cam_Rot
+            no_shadow
+            pigment {
+                color rgb <0, 0, 0>
+            }
+            finish {
+                ambient 1.0
+                diffuse 0.0
+            }
+        }
+        
+        """);
+
+        builder.append("union {\n");
+        builder.append("    cylinder { <0, 0, 0>, <").append(radiusParsed - 5.0).append(", 0, 0>, 0.25 }\n");
+        builder.append("    cone { <").append(radiusParsed - 5.0).append(", 0, 0>, 2.0, <").append(radiusParsed).append(", 0, 0>, 0.0 }\n");
+        builder.append("""
+            pigment { color rgb <0, 0, 0> }
+            finish {
+                ambient 1.0
+                diffuse 0.0
+            }
+            rotate z * 135
+            translate <0, 0, -200>
+            rotate Cam_Rot
+            no_shadow
+        }
+        
+        """);
+    }
+
+    private static void radiusReference(FAggregate aggregate, FAggregate aggregateParsed, StringBuilder builder) {
+        double radius = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1) * 0.5;
+        double radiusParsed = aggregateParsed.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1) * 0.5;
+
+        builder.append("// Reference radius - ").append(radius).append("\n");
         builder.append("torus {\n");
         builder.append("    ").append(radiusParsed).append(", 0.25\n");
         builder.append("""
