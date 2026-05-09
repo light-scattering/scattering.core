@@ -51,12 +51,12 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         int refs = getCorePairDistance(results, massCenter.toFPos3D(), min, max, delta, range);
 
-        trimResults(results, max.getValue(), delta);
+        limitResults(results, max.getValue(), delta);
 
-        setDensity(results, delta);
+        processDensity(results, delta);
+
         normalize(results, refs);
-
-        results.filter((x, y) -> x > 0 && y > 0);
+        sanitize(results);
 
         return results;
     }
@@ -97,8 +97,8 @@ public class FAggregateModuleFractalDimensionDCDef {
         FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
                 .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
                 .setFontSize(32)
-                .setNameX("ln δ")
-                .setNameY("ln N<sub>δ</sub>");
+                .setNameX("ln ρ")
+                .setNameY("ln C(ρ)");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
                 .setLinesColor("black")
@@ -113,10 +113,10 @@ public class FAggregateModuleFractalDimensionDCDef {
                 .setLinesShow(false)
                 .setMarkersShow(true);
 
-        approximation.setName("Linear fit (D<sub>BC</sub> ≈ " + dimFormat + ")")
+        approximation.setName("Linear fit (D<sub>DC</sub> ≈ " + dimFormat + ")")
                 .setRefMeta(metaPlotFit);
 
-        results.setName("Raw box counts")
+        results.setName("Density correlation")
                 .setRefMeta(metaPlotResults);
 
         return  factory.getSaveAspect().getStatisticsContext()
@@ -214,7 +214,7 @@ public class FAggregateModuleFractalDimensionDCDef {
         }
     }
 
-    private void trimResults(FPlot results, double max, double delta) {
+    private void limitResults(FPlot results, double max, double delta) {
         double cutoff = max - delta;
 
         results.filter((x, y) -> x <= cutoff);
@@ -234,19 +234,19 @@ public class FAggregateModuleFractalDimensionDCDef {
         }
     }
 
-    private void setDensity(FPlot results, double delta) {
+    private void processDensity(FPlot results, double delta) {
         FSphereHelper helper = this.factory.getFSphereHelper();
 
-        for (int i = 0 ; i < results.size() ; i++) {
-            double element = results.getX(i);
-            double volume = helper.getVolumeRing(element - delta, element + delta);
-
-            results.setY(i, results.getY(i) / volume);
-        }
+        results.mutateY((x, y) -> y / helper.getVolumeRing(x - delta, x + delta));
     }
 
     private void normalize(FPlot results, int refs) {
 
         results.mutateY((x, y) -> y / refs);
+    }
+
+    private void sanitize(FPlot results) {
+
+        results.filter((x, y) -> x > 0 && y > 0);
     }
 }
