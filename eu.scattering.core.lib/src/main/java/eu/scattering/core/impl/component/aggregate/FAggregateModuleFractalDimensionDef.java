@@ -52,11 +52,11 @@ public class FAggregateModuleFractalDimensionDef {
             );
             case CORRELATION -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
-                    0.9
+                    0.9, plot
             );
             case CORRELATION_FULL -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
-                    0.9
+                    0.9, plot
             );
             case MASS -> this.mr.analyze(
                     this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
@@ -108,6 +108,6 @@ public class FAggregateModuleFractalDimensionDef {
 
     protected double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
 
-        return this.dc.analyze(this.dc.getResults(method, stepFactor, rangeLimit), window);
+        return this.dc.analyze(this.dc.getResults(method, stepFactor, rangeLimit), window, null);
     }
 }

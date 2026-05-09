@@ -7,7 +7,10 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
@@ -15,7 +18,9 @@ import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
+// TODO - Refactor (limit method parameters).
 public class FAggregateModuleFractalDimensionDCDef {
     private final ScatFactory factory;
     private final FAggregate aggregate;
@@ -34,13 +39,20 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         double range = rangeLimit ? radiusOfGyration * 0.5 : this.aggregate.getRadiusFrom(massCenter) * 2.1;
 
-        FStat distances = getCorePairDistance(massCenter.toFPos3D(), range);
+        FStat particles = this.aggregate.getFStatParticleRadius();
 
-        double min = distances.min();
-        double start = min * step;
-        double delta = min * 0.5;
+        double delta = particles.mean();
+        double start = delta * 2 * step;
 
-        setDistance(results, distances, step, start, delta);
+        initResults(results, range, step, start);
+
+        FBoxDouble min = factory.getFBoxDouble();
+        FBoxDouble max = factory.getFBoxDouble();
+
+        getCorePairDistance(results, massCenter.toFPos3D(), min, max, delta, range);
+
+        trimResults(results, max.getValue(), delta);
+
         setDensity(results, delta);
 
         results.filter((x, y) -> x > 0 && y > 0);
@@ -48,7 +60,7 @@ public class FAggregateModuleFractalDimensionDCDef {
         return results;
     }
 
-    protected double analyze(FPlot results, double window) {
+    protected double analyze(FPlot results, double window, FBoxString plot) {
 
         if (window <= 0 || window > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
@@ -63,29 +75,65 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         FPoly regression = window == 1 ? results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * window));
 
-        FPlot fit = results.copy();
-        fit.setY(regression);
+        FPlot approximation = results.copy();
+        approximation.setY(regression);
 
-        FPlotMetaGlobal plotConfig = factory.getFPlotMetaGlobal();
+        double dim = 3 + regression.at(1);
 
-        String plot = factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(plotConfig, results, fit);
+        if (plot != null) {
+            plot.setValue(plot(results, approximation, regression, dim));
+        }
 
         return 3 + regression.at(1);
     }
 
-    private FStat getCorePairDistance(FPos3D center, double range) {
-        FStat results = this.factory.getFStat();
+    private String plot(FPlot results, FPlot approximation, FPoly regression, double dim) {
+        double r2 = results.r2(regression);
+
+        String dimFormat = String.format(Locale.US, "%.2f", dim);
+        String r2Format = String.format(Locale.US, "%.4f", r2);
+
+        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
+                .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
+                .setFontSize(32)
+                .setNameX("ln δ")
+                .setNameY("ln N<sub>δ</sub>");
+
+        FPlotMeta metaPlotFit = factory.getFPlotMeta()
+                .setLinesColor("black")
+                .setLinesWidth(4)
+                .setLinesShow(true)
+                .setMarkersShow(false);
+
+        FPlotMeta metaPlotResults = factory.getFPlotMeta()
+                .setMarkersColor("black")
+                .setLinesWidth(4)
+                .setMarkersSize(14)
+                .setLinesShow(false)
+                .setMarkersShow(true);
+
+        approximation.setName("Linear fit (D<sub>BC</sub> ≈ " + dimFormat + ")")
+                .setRefMeta(metaPlotFit);
+
+        results.setName("Raw box counts")
+                .setRefMeta(metaPlotResults);
+
+        return  factory.getSaveAspect().getStatisticsContext()
+                .toPythonPlotly(metaGlobal, approximation, results);
+    }
+
+    private void getCorePairDistance(FPlot results, FPos3D center, FBoxDouble min, FBoxDouble max, double delta, double range) {
+
+        min.setValue(Double.POSITIVE_INFINITY);
+        max.setValue(Double.NEGATIVE_INFINITY);
 
         List<Shape> internal = new ArrayList<>();
         List<Shape> external = new ArrayList<>();
 
         splitByRange(internal, external, center, range);
 
-        addInternalPairDistance(results, internal, range);
-        addExternalPairDistance(results, internal, external, range);
-
-        return results;
+        addInternalPairDistance(results, internal, min, max, delta, range);
+        addExternalPairDistance(results, internal, external, min, max, delta, range);
     }
 
     private void splitByRange(Collection<Shape> internal, Collection<Shape> external, FPos3D center, double range) {
@@ -110,52 +158,75 @@ public class FAggregateModuleFractalDimensionDCDef {
         }
     }
 
-    private void addInternalPairDistance(FStat distances, List<Shape> internal, double range) {
+    private void addInternalPairDistance(FPlot results, List<Shape> internal, FBoxDouble min, FBoxDouble max, double delta, double range) {
 
         for (int i = 0 ; i < internal.size() - 1 ; i++) {
             for (int j = i + 1 ; j < internal.size() ; j++) {
                 double distance = internal.get(i).getDistCenter(internal.get(j));
 
                 if (distance <= range) {
-                    distances.add(distance);
-                    distances.add(distance);
+
+                    setExtremum(distance, min, max);
+
+                    setDistance(results, distance, delta);
+                    setDistance(results, distance, delta);
                 }
             }
         }
     }
 
-    private void addExternalPairDistance(FStat distances, List<Shape> internal, List<Shape> external, double range) {
+    private void addExternalPairDistance(FPlot results, List<Shape> internal, List<Shape> external, FBoxDouble min, FBoxDouble max, double delta, double range) {
 
         for (Shape inner : internal) {
             for (Shape outer : external) {
                 double distance = inner.getDistCenter(outer);
 
                 if (distance <= range) {
-                    distances.add(distance);
+
+                    setExtremum(distance, min, max);
+
+                    setDistance(results, distance, delta);
                 }
             }
         }
     }
 
-    private void setDistance(FPlot results, FStat distances, double factor, double start, double delta) {
-        double max = distances.max() - delta;
+    private void setExtremum(double distance, FBoxDouble min, FBoxDouble max) {
 
+        if (distance < min.getValue()) {
+            min.setValue(distance);
+        }
+
+        if (distance > max.getValue()) {
+            max.setValue(distance);
+        }
+    }
+
+    private void initResults(FPlot results, double range, double factor, double start) {
         double step = start;
-        while (step <= max) {
+
+        while (step <= range) {
             results.add(step, 0);
             step = step * factor;
         }
+    }
 
-        for (double distance : distances) {
-            for (int i = 0 ; i < results.size() ; i++) {
+    private void trimResults(FPlot results, double max, double delta) {
+        double cutoff = max - delta;
 
-                if (Math.abs(distance - results.getX(i)) < delta) {
-                    results.setY(i, results.getY(i) + 1);
-                }
+        results.filter((x, y) -> x <= cutoff);
+    }
 
-                if (distance + delta < results.getX(i)) {
-                    break;
-                }
+    private void setDistance(FPlot results, double distance, double delta) {
+
+        for (int i = 0 ; i < results.size() ; i++) {
+
+            if (Math.abs(distance - results.getX(i)) < delta) {
+                results.setY(i, results.getY(i) + 1);
+            }
+
+            if (distance + delta < results.getX(i)) {
+                break;
             }
         }
     }
