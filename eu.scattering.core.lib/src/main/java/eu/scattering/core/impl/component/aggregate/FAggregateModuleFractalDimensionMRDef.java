@@ -6,13 +6,16 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class FAggregateModuleFractalDimensionMRDef {
     private final ScatFactory factory;
@@ -44,7 +47,7 @@ public class FAggregateModuleFractalDimensionMRDef {
         return results;
     }
 
-    protected double analyze(FPlot results, double window) {
+    protected double analyze(FPlot results, double window, FBoxString plot) {
 
         if (window <= 0 || window > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
@@ -77,15 +80,53 @@ public class FAggregateModuleFractalDimensionMRDef {
 
         FPoly regression = window == 1 ? results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * window));
 
-        FPlot fit = results.copy();
-        fit.setY(regression);
+        FPlot approximation = results.copy();
+        approximation.setY(regression);
 
-        FPlotMetaGlobal plotConfig = factory.getFPlotMetaGlobal();
+        double dim = regression.at(1);
 
-        String plot = factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(plotConfig, results, fit);
+        if (plot != null) {
+            plot.setValue(plot(results, approximation, regression, dim));
+        }
 
-        return regression.at(1);
+        return dim;
+    }
+
+    private String plot(FPlot results, FPlot approximation, FPoly regression, double dim) {
+        double r2 = results.r2(regression);
+
+        String dimFormat = String.format(Locale.US, "%.2f", dim);
+        String r2Format = String.format(Locale.US, "%.4f", r2);
+
+        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
+                .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
+                .setPositionAnnotation(FPlotMetaGlobal.Position.RIGHT)
+                .setPositionLegend(FPlotMetaGlobal.Position.LEFT)
+                .setFontSize(32)
+                .setNameX("ln ρ")
+                .setNameY("ln M(ρ)");
+
+        FPlotMeta metaPlotFit = factory.getFPlotMeta()
+                .setLinesColor("black")
+                .setLinesWidth(4)
+                .setLinesShow(true)
+                .setMarkersShow(false);
+
+        FPlotMeta metaPlotResults = factory.getFPlotMeta()
+                .setMarkersColor("black")
+                .setLinesWidth(4)
+                .setMarkersSize(14)
+                .setLinesShow(false)
+                .setMarkersShow(true);
+
+        approximation.setName("Linear fit (D<sub>MR</sub> ≈ " + dimFormat + ")")
+                .setRefMeta(metaPlotFit);
+
+        results.setName("Mass")
+                .setRefMeta(metaPlotResults);
+
+        return  factory.getSaveAspect().getStatisticsContext()
+                .toPythonPlotly(metaGlobal, approximation, results);
     }
 
     private FPlot getData(double step, double range) {
@@ -145,5 +186,4 @@ public class FAggregateModuleFractalDimensionMRDef {
 
         return count;
     }
-
 }

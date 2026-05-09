@@ -60,11 +60,11 @@ public class FAggregateModuleFractalDimensionDef {
             );
             case MASS -> this.mr.analyze(
                     this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
-                    0.9
+                    0.9, plot
             );
             case MASS_FULL -> this.mr.analyze(
                     this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
-                    0.9
+                    0.9, plot
             );
 
             // -------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ public class FAggregateModuleFractalDimensionDef {
 
     protected double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
 
-        return this.mr.analyze(this.mr.getResults(method, stepFactor, rangeLimit), window);
+        return this.mr.analyze(this.mr.getResults(method, stepFactor, rangeLimit), window, null);
     }
 
     protected double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {

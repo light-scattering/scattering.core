@@ -85,7 +85,7 @@ public class FAggregateModuleFractalDimensionDCDef {
             plot.setValue(plot(results, approximation, regression, dim));
         }
 
-        return 3 + regression.at(1);
+        return dim;
     }
 
     private String plot(FPlot results, FPlot approximation, FPoly regression, double dim) {
