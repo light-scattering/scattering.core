@@ -49,11 +49,12 @@ public class FAggregateModuleFractalDimensionDCDef {
         FBoxDouble min = factory.getFBoxDouble();
         FBoxDouble max = factory.getFBoxDouble();
 
-        getCorePairDistance(results, massCenter.toFPos3D(), min, max, delta, range);
+        int refs = getCorePairDistance(results, massCenter.toFPos3D(), min, max, delta, range);
 
         trimResults(results, max.getValue(), delta);
 
         setDensity(results, delta);
+        normalize(results, refs);
 
         results.filter((x, y) -> x > 0 && y > 0);
 
@@ -122,7 +123,7 @@ public class FAggregateModuleFractalDimensionDCDef {
                 .toPythonPlotly(metaGlobal, approximation, results);
     }
 
-    private void getCorePairDistance(FPlot results, FPos3D center, FBoxDouble min, FBoxDouble max, double delta, double range) {
+    private int getCorePairDistance(FPlot results, FPos3D center, FBoxDouble min, FBoxDouble max, double delta, double range) {
 
         min.setValue(Double.POSITIVE_INFINITY);
         max.setValue(Double.NEGATIVE_INFINITY);
@@ -134,6 +135,8 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         addInternalPairDistance(results, internal, min, max, delta, range);
         addExternalPairDistance(results, internal, external, min, max, delta, range);
+
+        return internal.size();
     }
 
     private void splitByRange(Collection<Shape> internal, Collection<Shape> external, FPos3D center, double range) {
@@ -240,5 +243,10 @@ public class FAggregateModuleFractalDimensionDCDef {
 
             results.setY(i, results.getY(i) / volume);
         }
+    }
+
+    private void normalize(FPlot results, int refs) {
+
+        results.mutateY((x, y) -> y / refs);
     }
 }
