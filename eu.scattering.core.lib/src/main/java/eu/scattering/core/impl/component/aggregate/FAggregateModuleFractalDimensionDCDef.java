@@ -171,8 +171,7 @@ public class FAggregateModuleFractalDimensionDCDef {
 
                     setExtremum(distance, min, max);
 
-                    setDistance(results, distance, delta);
-                    setDistance(results, distance, delta);
+                    setDistance(results, distance, delta, 2);
                 }
             }
         }
@@ -188,7 +187,7 @@ public class FAggregateModuleFractalDimensionDCDef {
 
                     setExtremum(distance, min, max);
 
-                    setDistance(results, distance, delta);
+                    setDistance(results, distance, delta, 1);
                 }
             }
         }
@@ -220,12 +219,12 @@ public class FAggregateModuleFractalDimensionDCDef {
         results.filter((x, y) -> x <= cutoff);
     }
 
-    private void setDistance(FPlot results, double distance, double delta) {
+    private void setDistance(FPlot results, double distance, double delta, int quantity) {
 
         for (int i = 0 ; i < results.size() ; i++) {
 
             if (Math.abs(distance - results.getX(i)) < delta) {
-                results.setY(i, results.getY(i) + 1);
+                results.setY(i, results.getY(i) + quantity);
             }
 
             if (distance + delta < results.getX(i)) {

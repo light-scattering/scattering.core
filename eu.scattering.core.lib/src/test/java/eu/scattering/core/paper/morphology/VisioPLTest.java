@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - PL Visual")
 public class VisioPLTest {
 

@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - Morphology (Df method)")
 public class DfMethodComparisonTest {
     private final int size = 10000;
-    private final int repetitions = 10;
+    private final int repetitions = 100;
 
     @Test
     @Tag("Comparison")
@@ -67,6 +67,12 @@ public class DfMethodComparisonTest {
         private final FStat dcFull = factory.getFStat();
         private final FStat mrLimited = factory.getFStat();
         private final FStat mrFull = factory.getFStat();
+
+        private final FStat bcOptimizedTime = factory.getFStat();
+        private final FStat dcLimitedTime = factory.getFStat();
+        private final FStat dcFullTime = factory.getFStat();
+        private final FStat mrLimitedTime = factory.getFStat();
+        private final FStat mrFullTime = factory.getFStat();
 
         private final boolean runPl = true;
         private final boolean runBcOptimized = true;
@@ -119,23 +125,52 @@ public class DfMethodComparisonTest {
 
         public void update(FAggregate aggregate, FMonitorCCRadiusOfGyration monitor) {
 
-//            if (runPl)          pl.add(monitor.getPowerLawDimension());
-//            if (runBcOptimized) bcOptimized.add(aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA));
-            if (runDcLimited)   dcLimited.add(aggregate.getFractalDimension(FractalDimension.CORRELATION));
-//            if (runDcFull)      dcFull.add(aggregate.getFractalDimension(FractalDimension.CORRELATION_FULL));
-//            if (runMrLimited)   mrLimited.add(aggregate.getFractalDimension(FractalDimension.MASS));
-//            if (runMrFull)      mrFull.add(aggregate.getFractalDimension(FractalDimension.MASS_FULL));
+            if (runPl) {
+                pl.add(monitor.getPowerLawDimension());
+            }
+            if (runBcOptimized) {
+                long time = System.currentTimeMillis();
+                bcOptimized.add(aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA));
+                bcOptimizedTime.add(System.currentTimeMillis() - time);
+            }
+            if (runDcLimited) {
+                long time = System.currentTimeMillis();
+                dcLimited.add(aggregate.getFractalDimension(FractalDimension.CORRELATION));
+                dcLimitedTime.add(System.currentTimeMillis() - time);
+            }
+            if (runDcFull) {
+                long time = System.currentTimeMillis();
+                dcFull.add(aggregate.getFractalDimension(FractalDimension.CORRELATION_FULL));
+                dcFullTime.add(System.currentTimeMillis() - time);
+            }
+            if (runMrLimited) {
+                long time = System.currentTimeMillis();
+                mrLimited.add(aggregate.getFractalDimension(FractalDimension.MASS));
+                mrLimitedTime.add(System.currentTimeMillis() - time);
+            }
+            if (runMrFull) {
+                long time = System.currentTimeMillis();
+                mrFull.add(aggregate.getFractalDimension(FractalDimension.MASS_FULL));
+                mrFullTime.add(System.currentTimeMillis() - time);
+            }
         }
 
         public void show() {
 
             System.out.println();
-//            if (runPl)          System.out.printf("Power law:      %1.6f, %1.6f\n", pl.mean(), pl.std(true));
-//            if (runBcOptimized) System.out.printf("Box counting O: %1.6f, %1.6f\n", bcOptimized.mean(), bcOptimized.std(true));
-            if (runDcLimited)   System.out.printf("Density:        %1.6f, %1.6f\n", dcLimited.mean(), dcLimited.std(true));
-//            if (runDcFull)      System.out.printf("Density (full): %1.6f, %1.6f\n", dcFull.mean(), dcFull.std(true));
-//            if (runMrLimited)   System.out.printf("Mass:           %1.6f, %1.6f\n", mrLimited.mean(), mrLimited.std(true));
-//            if (runMrFull)      System.out.printf("Mass (full):    %1.6f, %1.6f\n", mrFull.mean(), mrFull.std(true));
+            if (runPl)          System.out.printf("Power law:      %1.6f, %1.6f\n%s\n",
+                    pl.mean(), pl.std(true), pl.toJSON());
+            if (runBcOptimized) System.out.printf("Box counting O: %1.6f, %1.6f, %1.6f, %1.6f\n%s\n",
+                    bcOptimized.mean(), bcOptimized.std(true), bcOptimizedTime.mean(), bcOptimizedTime.std(true), bcOptimized.toJSON());
+            if (runDcLimited)   System.out.printf("Density:        %1.6f, %1.6f, %1.6f, %1.6f\n%s\n",
+                    dcLimited.mean(), dcLimited.std(true), dcLimitedTime.mean(), dcLimitedTime.std(true), dcLimited.toJSON());
+            if (runDcFull)      System.out.printf("Density (full): %1.6f, %1.6f, %1.6f, %1.6f\n%s\n",
+                    dcFull.mean(), dcFull.std(true), dcFullTime.mean(), dcFullTime.std(true), dcFull.toJSON());
+            if (runMrLimited)   System.out.printf("Mass:           %1.6f, %1.6f, %1.6f, %1.6f\n%s\n",
+                    mrLimited.mean(), mrLimited.std(true), mrLimitedTime.mean(), mrLimitedTime.std(true), mrLimited.toJSON());
+            if (runMrFull)      System.out.printf("Mass (full):    %1.6f, %1.6f, %1.6f, %1.6f\n%s\n",
+                    mrFull.mean(), mrFull.std(true), mrFullTime.mean(), mrFullTime.std(true), mrFull.toJSON());
+            System.out.println();
         }
     }
 }

@@ -1,8 +1,10 @@
 package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
+import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -11,7 +13,7 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - MR Visual")
 public class VisioMRTest {
 
@@ -31,19 +33,25 @@ public class VisioMRTest {
 
         fModel.build();
 
+        fAggregate.pca();
+
+        String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+
+        assertFalse(geometry.isEmpty());
+
         String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.REFERENCE);
 
         assertFalse(model.isEmpty());
 
         FBoxString plotFull = factory.getFBoxString();
 
-        double dimFull = fAggregate.getFractalDimension(FractalDimension.MASS, plotFull);
+        double dimFull = fAggregate.getFractalDimension(FractalDimension.MASS_FULL, plotFull);
 
         assertTrue(dimFull > 0);
 
         FBoxString plotReduced = factory.getFBoxString();
 
-        double dimReduced = fAggregate.getFractalDimension(FractalDimension.MASS_FULL, plotReduced);
+        double dimReduced = fAggregate.getFractalDimension(FractalDimension.MASS, plotReduced);
 
         assertTrue(dimReduced > 0);
     }
