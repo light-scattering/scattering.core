@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
 @DisplayName("Paper - Morphology (magnitude)")
-public class DfMagnitudeTest {
+public class DfBCMagnitudeTest {
 
     @Test
     @Tag("Comparison")

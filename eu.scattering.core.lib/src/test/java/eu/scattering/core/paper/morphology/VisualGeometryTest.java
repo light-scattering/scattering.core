@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
 @DisplayName("Paper - Geometry")
-public class VisioGeometryTest {
+public class VisualGeometryTest {
 
     @Test
     @Tag("Visual")

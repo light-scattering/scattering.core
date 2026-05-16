@@ -16,7 +16,7 @@ import static eu.scattering.core.test.Config.factory;
 
 @Disabled
 @DisplayName("Paper - Morphology (PCA volume reduction)")
-public class VolumeReductionTest {
+public class DfBCVolumeReductionPCATest {
     private final int repetitions = 1000;
     private final int size = 1000;
 

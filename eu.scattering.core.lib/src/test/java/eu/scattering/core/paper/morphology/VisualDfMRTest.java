@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
 @DisplayName("Paper - MR Visual")
-public class VisioMRTest {
+public class VisualDfMRTest {
 
     @Test
     @Tag("Visual")

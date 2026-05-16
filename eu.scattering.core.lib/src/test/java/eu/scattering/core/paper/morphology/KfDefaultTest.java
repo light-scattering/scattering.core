@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled
 @DisplayName("Paper - Morphology (Kf edge)")
-public class KfEdgeTest {
+public class KfDefaultTest {
 
     @Test
     @Tag("Theory")

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
 @DisplayName("Paper - Morphology")
-public class VisioMorphologyTest {
+public class VisualMorphologyTest {
 
     @Test
     @Tag("Visual")

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @Disabled
 @DisplayName("Paper - PL Visual")
-public class VisioPLTest {
+public class VisualDfPLTest {
 
     @Test
     @Tag("Visual")

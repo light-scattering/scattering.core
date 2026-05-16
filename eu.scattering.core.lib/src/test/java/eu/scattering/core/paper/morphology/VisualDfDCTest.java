@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
 @DisplayName("Paper - DC Visual")
-public class VisioDCTest {
+public class VisualDfDCTest {
 
     @Test
     @Tag("Visual")
