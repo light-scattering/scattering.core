@@ -97,4 +97,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.utility.type.method;
     exports eu.scattering.core.design.utility.type.variant;
     exports eu.scattering.core.design.utility.type.option;
+    exports eu.scattering.core.design.component.aggregate.meta.dc;
 }

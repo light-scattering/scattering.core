@@ -56,6 +56,8 @@ public interface FPlot extends Statistics<FPlot> {
 
     FPlot swapXY();
 
+    FPlot derivate();
+
     // -------------------------------------------------------------------------------------------------
 
     FPlot forEach(TriConsumer<Double, Double, Integer> consumer);

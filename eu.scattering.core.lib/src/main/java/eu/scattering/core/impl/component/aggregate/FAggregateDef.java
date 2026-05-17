@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.aggregate;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
+import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -456,7 +457,13 @@ public class FAggregateDef implements FAggregate {
     @Override
     public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
 
-        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit);
+        return getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, null);
+    }
+
+    @Override
+    public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
+
+        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, meta);
     }
 
     @Override

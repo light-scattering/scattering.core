@@ -1,5 +1,6 @@
 package eu.scattering.core.design.component.aggregate;
 
+import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
@@ -121,7 +122,9 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
     double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca);
+
     double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
+    double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta);
 
     FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca);
     FPlot getDensityCorrelationFunction(double factor);

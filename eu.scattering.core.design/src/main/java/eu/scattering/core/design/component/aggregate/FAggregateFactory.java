@@ -1,5 +1,6 @@
 package eu.scattering.core.design.component.aggregate;
 
+import eu.scattering.core.design.component.aggregate.meta.FMetaFactory;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.aggregate.model.FModelFactory;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactory;
@@ -11,7 +12,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public interface FAggregateFactory extends FModelFactory, FMonitorFactory, FValidatorFactory {
+public interface FAggregateFactory extends FModelFactory, FMonitorFactory, FValidatorFactory, FMetaFactory {
 
     FAggregate getFAggregate();
 

@@ -2,6 +2,7 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
@@ -52,11 +53,11 @@ public class FAggregateModuleFractalDimensionDef {
             );
             case CORRELATION -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
-                    0.9, plot
+                    0.9
             );
             case CORRELATION_FULL -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
-                    0.9, plot
+                    0.9
             );
             case MASS -> this.mr.analyze(
                     this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
@@ -106,8 +107,8 @@ public class FAggregateModuleFractalDimensionDef {
         return this.bc.analyze(this.bc.getResultsOptimized(step, shift, reposition, pca), window, null);
     }
 
-    protected double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    protected double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
 
-        return this.dc.analyze(this.dc.getResults(method, stepFactor, rangeLimit), window, null);
+        return this.dc.analyze(this.dc.getResults(method, stepFactor, rangeLimit, meta), window, meta);
     }
 }

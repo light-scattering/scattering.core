@@ -387,6 +387,31 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
+    public FPlot derivate() {
+        int size = size();
+
+        if (size < 2) {
+            throw new IllegalArgumentException("The number of elements must be greater than one");
+        }
+
+        List<Double> results = new ArrayList<>();
+
+        results.add((getY(1) - getY(0)) / (getX(1) - getX(0)));
+
+        for (int i = 1 ; i < size - 1 ; i++) {
+            results.add((getY(i + 1) - getY(i - 1)) / (getX(i + 1) - getX(i - 1)));
+        }
+
+        results.add((getY(size - 1) - getY(size - 2)) / (getX(size - 1) - getX(size - 2)));
+
+        for (int i = 0 ; i < size ; i++) {
+            setY(i, results.get(i));
+        }
+
+        return this;
+    }
+
+    @Override
     public FPlot forEach(TriConsumer<Double, Double, Integer> consumer) {
         Iterator<Double> iteratorX = getRefCoreX().iterator();
         Iterator<Double> iteratorY = getRefCoreY().iterator();

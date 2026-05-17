@@ -2,6 +2,7 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
@@ -10,7 +11,6 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
@@ -31,7 +31,14 @@ public class FAggregateModuleFractalDimensionDCDef {
         this.aggregate = aggregate;
     }
 
-    protected FPlot getResults(RadiusOfGyration method, double step, boolean rangeLimit) {
+    protected FPlot getResults(RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+
+        return getResults(method, stepFactor, rangeLimit, null);
+    }
+
+    protected FPlot getResults(RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
+        long executionTime = System.currentTimeMillis();
+
         FPlot results = this.factory.getFPlot();
         FPoint massCenter = this.factory.getFPoint();
 
@@ -42,26 +49,37 @@ public class FAggregateModuleFractalDimensionDCDef {
         FStat particles = this.aggregate.getFStatParticleRadius();
 
         double delta = particles.mean();
-        double start = delta * 2 * step;
+        double start = delta * 2 * stepFactor;
 
-        initResults(results, range, step, start);
+        initResults(results, range, stepFactor, start);
 
         FBoxDouble min = factory.getFBoxDouble();
         FBoxDouble max = factory.getFBoxDouble();
 
         int refs = getCorePairDistance(results, massCenter.toFPos3D(), min, max, delta, range);
 
-        limitResults(results, max.getValue(), delta);
+//        limitResults(results, max.getValue(), delta);
 
         processDensity(results, delta);
 
         normalize(results, refs);
         sanitize(results);
 
+        if (meta != null) {
+            meta.setExecutionTime(System.currentTimeMillis() - executionTime);
+            meta.setNumberOfRefs(refs);
+            meta.setData(results);
+        }
+
         return results;
     }
 
-    protected double analyze(FPlot results, double window, FBoxString plot) {
+    protected double analyze(FPlot results, double window) {
+
+        return analyze(results, window, null);
+    }
+
+    protected double analyze(FPlot results, double window, FMetaDC meta) {
 
         if (window <= 0 || window > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
@@ -81,14 +99,88 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         double dim = 3 + regression.at(1);
 
-        if (plot != null) {
-            plot.setValue(plot(results, approximation, regression, dim));
+        if (meta != null) {
+            meta.setPlotDerivative(plotDerivative(results));
+            meta.setPlotApproximation(plotApproximation(results, approximation, regression, dim));
         }
 
         return dim;
     }
 
-    private String plot(FPlot results, FPlot approximation, FPoly regression, double dim) {
+    private String plotDerivative(FPlot results) {
+        double range = 0.15;
+
+        FPlot dataRaw = results.copy();
+
+        dataRaw.derivate();
+
+        double median = dataRaw.getRefCoreY().median();
+        double min = median - range;
+        double max = median + range;
+
+        FPlot dataMedian = factory.getFPlot();
+        dataMedian.add(dataRaw.getX(0), median);
+        dataMedian.add(dataRaw.getX(dataRaw.size() - 1), median);
+
+        FPlot dataMin = factory.getFPlot();
+        dataMin.add(dataRaw.getX(0), min);
+        dataMin.add(dataRaw.getX(dataRaw.size() - 1), min);
+
+        FPlot dataMax = factory.getFPlot();
+        dataMax.add(dataRaw.getX(0), max);
+        dataMax.add(dataRaw.getX(dataRaw.size() - 1), max);
+
+        dataMedian.mutateY((x, y) -> median);
+
+        String initialMedianFormat = String.format(Locale.US, "%.2f", median);
+
+        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
+                .setFontSize(32)
+                .setNameX("ln ρ")
+                .setNameY("Local dimension");
+
+        FPlotMeta metaPlotMin = factory.getFPlotMeta()
+                .setLinesColor("lightgray")
+                .setLinesWidth(4)
+                .setLinesShow(true)
+                .setMarkersShow(false);
+
+        FPlotMeta metaPlotMedian = factory.getFPlotMeta()
+                .setLinesColor("black")
+                .setLinesWidth(4)
+                .setLinesShow(true)
+                .setMarkersShow(false);
+
+        FPlotMeta metaPlotMax = factory.getFPlotMeta()
+                .setLinesColor("lightgray")
+                .setLinesWidth(4)
+                .setLinesShow(true)
+                .setMarkersShow(false);
+
+        FPlotMeta metaPlotDerivative = factory.getFPlotMeta()
+                .setMarkersColor("black")
+                .setLinesWidth(4)
+                .setMarkersSize(14)
+                .setLinesShow(false)
+                .setMarkersShow(true);
+
+        dataMin.setName("Min")
+                .setRefMeta(metaPlotMin);
+
+        dataMedian.setName("Median ≈ " + initialMedianFormat)
+                .setRefMeta(metaPlotMedian);
+
+        dataMax.setName("Max")
+                .setRefMeta(metaPlotMax);
+
+        dataRaw.setName("Raw data")
+                .setRefMeta(metaPlotDerivative);
+
+        return  factory.getSaveAspect().getStatisticsContext()
+                .toPythonPlotly(metaGlobal, dataMin, dataMedian, dataMax, dataRaw);
+    }
+
+    private String plotApproximation(FPlot results, FPlot approximation, FPoly regression, double dim) {
         double r2 = results.r2(regression);
 
         String dimFormat = String.format(Locale.US, "%.2f", dim);
