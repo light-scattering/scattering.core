@@ -58,7 +58,7 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         int refs = getCorePairDistance(results, massCenter.toFPos3D(), min, max, delta, range);
 
-//        limitResults(results, max.getValue(), delta);
+        limitResults(results, max.getValue(), delta);
 
         processDensity(results, delta);
 

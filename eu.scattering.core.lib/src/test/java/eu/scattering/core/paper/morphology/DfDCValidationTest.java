@@ -110,7 +110,8 @@ public class DfDCValidationTest {
 
         public void update(FAggregate aggregate) {
             FMetaDC metaReduced = factory.getFMetaDC();
-            double dimLimited = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.SIMPLE_POLY_06R1, 1.25, true, metaReduced);
+            double dimLimited = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.SIMPLE_POLY, 1.1, true, metaReduced);
+
 
 //            FMetaDC metaFull = factory.getFMetaDC();
 //            double dimFull = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.SIMPLE_POLY_06R1, 1.1, false, metaFull);
