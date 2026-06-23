@@ -2,10 +2,8 @@ package eu.scattering.core.paper.morphology;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
-import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadiusOfGyration;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
-import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -13,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - Morphology (Df method)")
 public class DfDCValidationTest {
     private final int size = 5000;
@@ -112,23 +110,14 @@ public class DfDCValidationTest {
             FMetaDC metaReduced = factory.getFMetaDC();
             double dimLimited = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.SIMPLE_POLY, 1.1, true, metaReduced);
 
-
-//            FMetaDC metaFull = factory.getFMetaDC();
-//            double dimFull = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.SIMPLE_POLY_06R1, 1.1, false, metaFull);
-
             dcLimited.add(dimLimited);
-//            dcFull.add(dimFull);
             dcLimitedTime.add(metaReduced.getExecutionTime());
-//            dcFullTime.add(metaFull.getExecutionTime());
         }
 
         public void show() {
             System.out.println();
             System.out.printf("Density:        %1.6f, %1.6f, %1.6f, %1.6f\n%s\n",
                     dcLimited.mean(), dcLimited.std(true), dcLimitedTime.mean(), dcLimitedTime.std(true), dcLimited.toJSON());
-//            System.out.printf("Density (full): %1.6f, %1.6f, %1.6f, %1.6f\n%s\n",
-//                    dcFull.mean(), dcFull.std(true), dcFullTime.mean(), dcFullTime.std(true), dcFull.toJSON());
-
             System.out.println();
         }
     }

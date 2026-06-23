@@ -12,20 +12,18 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-@Disabled
+//@Disabled
 @DisplayName("Paper - Morphology (Df method)")
 public class DfMethodComparisonTest {
-    private final int size = 10000;
-    private final int repetitions = 100;
 
     @Test
     @Tag("Comparison")
-    @DisplayName("Dimension 1.4")
-    void df14() {
+    @DisplayName("Dimension 1.4 - 1000")
+    void df14_1000() {
         double df = 1.4;
         double kf = 1.5;
 
-        Container container = new Container(df, kf, size, repetitions);
+        Container container = new Container(df, kf, 1000, 1000);
 
         container.measure();
         container.show();
@@ -33,12 +31,12 @@ public class DfMethodComparisonTest {
 
     @Test
     @Tag("Comparison")
-    @DisplayName("Dimension 1.8")
-    void df18() {
+    @DisplayName("Dimension 1.8 - 1000")
+    void df18_1000() {
         double df = 1.8;
         double kf = 1.3;
 
-        Container container = new Container(df, kf, size, repetitions);
+        Container container = new Container(df, kf, 1000, 1000);
 
         container.measure();
         container.show();
@@ -46,12 +44,129 @@ public class DfMethodComparisonTest {
 
     @Test
     @Tag("Comparison")
-    @DisplayName("Dimension 2.2")
-    void df22() {
+    @DisplayName("Dimension 2.2 - 1000")
+    void df22_1000() {
         double df = 2.2;
         double kf = 0.8;
 
-        Container container = new Container(df, kf, size, repetitions);
+        Container container = new Container(df, kf, 1000, 1000);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 1.4 - 2500")
+    void df14_2500() {
+        double df = 1.4;
+        double kf = 1.5;
+
+        Container container = new Container(df, kf, 2500, 100);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 1.8 - 2500")
+    void df18_2500() {
+        double df = 1.8;
+        double kf = 1.3;
+
+        Container container = new Container(df, kf, 2500, 1000);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 2.2 - 2500")
+    void df22_2500() {
+        double df = 2.2;
+        double kf = 0.8;
+
+        Container container = new Container(df, kf, 2500, 1000);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 1.4 - 5000")
+    void df14_5000() {
+        double df = 1.4;
+        double kf = 1.5;
+
+        Container container = new Container(df, kf, 5000, 100);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 1.8 - 5000")
+    void df18_5000() {
+        double df = 1.8;
+        double kf = 1.3;
+
+        Container container = new Container(df, kf, 5000, 100);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 2.2 - 5000")
+    void df22_5000() {
+        double df = 2.2;
+        double kf = 0.8;
+
+        Container container = new Container(df, kf, 5000, 100);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 1.4 - 10000")
+    void df14_10000() {
+        double df = 1.4;
+        double kf = 1.5;
+
+        Container container = new Container(df, kf, 10000, 100);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 1.8 - 10000")
+    void df18_10000() {
+        double df = 1.8;
+        double kf = 1.3;
+
+        Container container = new Container(df, kf, 10000, 100);
+
+        container.measure();
+        container.show();
+    }
+
+    @Test
+    @Tag("Comparison")
+    @DisplayName("Dimension 2.2 - 10000")
+    void df22_10000() {
+        double df = 2.2;
+        double kf = 0.8;
+
+        Container container = new Container(df, kf, 10000, 100);
 
         container.measure();
         container.show();
@@ -102,6 +217,8 @@ public class DfMethodComparisonTest {
 
                     System.out.print(".");
                 } catch (Exception e) {
+                    i--;
+
                     System.out.print("X");
                 }
 
@@ -110,10 +227,9 @@ public class DfMethodComparisonTest {
         }
 
         private void measureCore() {
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 0.99);
+            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
 
             var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
-            fModel.setEarlyStageCorrection(true);
 
             var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
             fModel.addStepMonitor(fMonitor);
@@ -124,34 +240,72 @@ public class DfMethodComparisonTest {
         }
 
         public void update(FAggregate aggregate, FMonitorCCRadiusOfGyration monitor) {
+            double resPl;
+
+            double resBc, resDcl, resDcf, resMrl, resMrf;
+            long timeBc, timeDcl, timeDcf, timeMrl, timeMrf;
 
             if (runPl) {
-                pl.add(monitor.getPowerLawDimension());
+                resPl = monitor.getPowerLawDimension();
             }
+
             if (runBcOptimized) {
                 long time = System.currentTimeMillis();
-                bcOptimized.add(aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA));
-                bcOptimizedTime.add(System.currentTimeMillis() - time);
+                resBc = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA);
+                timeBc = System.currentTimeMillis() - time;
             }
+
             if (runDcLimited) {
                 long time = System.currentTimeMillis();
-                dcLimited.add(aggregate.getFractalDimension(FractalDimension.CORRELATION));
-                dcLimitedTime.add(System.currentTimeMillis() - time);
+                resDcl = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.DEDICATED_FILIPPOV, 1.1, true);
+                timeDcl = System.currentTimeMillis() - time;
             }
+
             if (runDcFull) {
                 long time = System.currentTimeMillis();
-                dcFull.add(aggregate.getFractalDimension(FractalDimension.CORRELATION_FULL));
-                dcFullTime.add(System.currentTimeMillis() - time);
+                resDcf = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.DEDICATED_FILIPPOV, 1.1, false);
+                timeDcf = System.currentTimeMillis() - time;
             }
+
             if (runMrLimited) {
                 long time = System.currentTimeMillis();
-                mrLimited.add(aggregate.getFractalDimension(FractalDimension.MASS));
-                mrLimitedTime.add(System.currentTimeMillis() - time);
+                resMrl = aggregate.getFractalDimensionMassRadius(0.9, RadiusOfGyration.DEDICATED_FILIPPOV, 1.1, true);
+                timeMrl = System.currentTimeMillis() - time;
             }
+
             if (runMrFull) {
                 long time = System.currentTimeMillis();
-                mrFull.add(aggregate.getFractalDimension(FractalDimension.MASS_FULL));
-                mrFullTime.add(System.currentTimeMillis() - time);
+                resMrf = aggregate.getFractalDimensionMassRadius(0.9, RadiusOfGyration.DEDICATED_FILIPPOV, 1.1, false);
+                timeMrf = System.currentTimeMillis() - time;
+            }
+
+            if (runPl) {
+                pl.add(resPl);
+            }
+
+            if (runBcOptimized) {
+                bcOptimized.add(resBc);
+                bcOptimizedTime.add(timeBc);
+            }
+
+            if (runDcLimited) {
+                dcLimited.add(resDcl);
+                dcLimitedTime.add(timeDcl);
+            }
+
+            if (runDcFull) {
+                dcFull.add(resDcf);
+                dcFullTime.add(timeDcf);
+            }
+
+            if (runMrLimited) {
+                mrLimited.add(resMrl);
+                mrLimitedTime.add(timeMrl);
+            }
+
+            if (runMrFull) {
+                mrFull.add(resMrf);
+                mrFullTime.add(timeMrf);
             }
         }
 

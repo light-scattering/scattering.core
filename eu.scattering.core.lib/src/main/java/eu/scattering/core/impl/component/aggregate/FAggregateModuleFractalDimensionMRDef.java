@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+// TODO - Refactor (limit method parameters).
 public class FAggregateModuleFractalDimensionMRDef {
     private final ScatFactory factory;
     private final FAggregate aggregate;
@@ -27,7 +28,8 @@ public class FAggregateModuleFractalDimensionMRDef {
         this.aggregate = aggregate;
     }
 
-    protected FPlot getResults(RadiusOfGyration type, double step, boolean rangeLimit) {
+    protected FPlot getResults(RadiusOfGyration type, double stepFactor, boolean rangeLimit) {
+        FPlot results = this.factory.getFPlot();
         FPoint massCenter = this.factory.getFPoint();
 
         List<Double> massFragments = new ArrayList<>(this.aggregate.size());
@@ -37,7 +39,12 @@ public class FAggregateModuleFractalDimensionMRDef {
 
         double range = rangeLimit ? radiusOfGyration * 0.5 : this.aggregate.getRadiusFrom(massCenter) * 2.1;
 
-        FPlot results = getData(step, range);
+        FStat particles = this.aggregate.getFStatParticleRadius();
+
+        double delta = particles.mean();
+        double start = delta * 2 * stepFactor;
+
+        initResults(results, range, stepFactor, start);
 
         int count = setData(results, massCenter.toFPos3D(), massFragments, centerFragments, range);
 
@@ -129,20 +136,19 @@ public class FAggregateModuleFractalDimensionMRDef {
                 .toPythonPlotly(metaGlobal, approximation, results);
     }
 
-    private FPlot getData(double step, double range) {
-        FPlot results = this.factory.getFPlot();
+    private void initResults(FPlot results, double range, double factor, double start) {
+        double step = start;
 
-        FStat particles = this.aggregate.getFStatParticleRadius();
-
-        double min = particles.mean() * 2;
-
-        double distance = min * step;
-        while (distance <= range) {
-            results.add(distance * distance, 0);
-            distance = distance * step;
+        while (step <= range) {
+            results.add(step * step, 0);
+            step = step * factor;
         }
+    }
 
-        return results;
+    private void limitResults(FPlot results, double max, double delta) {
+        double cutoff = max - delta;
+
+        results.filter((x, y) -> x <= cutoff);
     }
 
     private int setData(FPlot results, FPos3D massCenter, List<Double> massFragments, List<FPos3D> centerFragments, double limit) {
