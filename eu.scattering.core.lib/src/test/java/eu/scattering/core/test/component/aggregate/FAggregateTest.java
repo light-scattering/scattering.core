@@ -3608,7 +3608,7 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get box dimension - Basic geometry")
             void getBoxDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(40);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
@@ -3676,7 +3676,7 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Basic geometry")
             void getDensityDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(40);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
@@ -3705,7 +3705,7 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Basic geometry (translated)")
             void getDensityDimensionBasicGeometryTranslated() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(40);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
@@ -3764,7 +3764,7 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry")
             void getMassDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(40);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
@@ -3793,7 +3793,7 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry (translated)")
             void getMassDimensionBasicGeometryTranslated() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(40);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 

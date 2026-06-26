@@ -8,6 +8,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
@@ -46,7 +47,12 @@ public class FAggregateModuleFractalDimensionMRDef {
 
         initResults(results, range, stepFactor, start);
 
-        int count = setData(results, massCenter.toFPos3D(), massFragments, centerFragments, range);
+        FBoxDouble min = factory.getFBoxDouble();
+        FBoxDouble max = factory.getFBoxDouble();
+
+        int count = setData(results, massCenter.toFPos3D(), min, max, massFragments, centerFragments, range);
+
+        limitResults(results, max.getValue());
 
         results.mutateY(a -> a.mutate(b -> b / count));
         results.mutateX(a -> a.mutate(Math::sqrt));
@@ -145,13 +151,12 @@ public class FAggregateModuleFractalDimensionMRDef {
         }
     }
 
-    private void limitResults(FPlot results, double max, double delta) {
-        double cutoff = max - delta;
+    private void limitResults(FPlot results, double max) {
 
-        results.filter((x, y) -> x <= cutoff);
+        results.filter((x, y) -> x <= max);
     }
 
-    private int setData(FPlot results, FPos3D massCenter, List<Double> massFragments, List<FPos3D> centerFragments, double limit) {
+    private int setData(FPlot results, FPos3D massCenter, FBoxDouble min, FBoxDouble max, List<Double> massFragments, List<FPos3D> centerFragments, double limit) {
         int count = 0;
         int size = this.aggregate.size();
         double limitP2 = limit * limit;
@@ -176,6 +181,8 @@ public class FAggregateModuleFractalDimensionMRDef {
                     continue;
                 }
 
+                setExtremum(distP2, min, max);
+
                 for (int k = 0 ; k < results.size() ; k++) {
                     if (distP2 <= results.getX(k)) {
                         results.setY(k, results.getY(k) + massFragments.get(j));
@@ -191,5 +198,16 @@ public class FAggregateModuleFractalDimensionMRDef {
         }
 
         return count;
+    }
+
+    private void setExtremum(double distance, FBoxDouble min, FBoxDouble max) {
+
+        if (distance < min.getValue()) {
+            min.setValue(distance);
+        }
+
+        if (distance > max.getValue()) {
+            max.setValue(distance);
+        }
     }
 }

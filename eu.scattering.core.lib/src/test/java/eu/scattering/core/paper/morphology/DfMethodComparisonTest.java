@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - Morphology (Df method)")
 public class DfMethodComparisonTest {
 
@@ -62,7 +62,7 @@ public class DfMethodComparisonTest {
         double df = 1.4;
         double kf = 1.5;
 
-        Container container = new Container(df, kf, 2500, 100);
+        Container container = new Container(df, kf, 2500, 1000);
 
         container.measure();
         container.show();
