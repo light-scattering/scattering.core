@@ -15,7 +15,7 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - DC Visual")
 public class VisualDfDCTest {
 

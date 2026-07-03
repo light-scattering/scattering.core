@@ -234,7 +234,7 @@ public class FAggregateTest {
             assertTrue(fAggregateB.isExactData(fAggregateA));
 
             fAggregateB.getRefFExtension().getRefFMaterial().setDensity("X", 5);
-            fAggregateB.getRefParticles().asList().get(0).setRadius(2);
+            fAggregateB.getRefParticles().asList().getFirst().setRadius(2);
 
             assertFalse(fAggregateA.isExact(fAggregateB));
             assertFalse(fAggregateB.isExact(fAggregateA));

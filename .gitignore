@@ -1,20 +1,28 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Gradle template
-.gradle
+# --- Gradle ---
+.gradle/
 **/build/
-
-**.bkp
-
-# Ignore Gradle GUI config
+.gradletasknamecache
 gradle-app.setting
 
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
+# Ensure the Gradle Wrapper is strictly kept!
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
 
-# Cache of project
-.gradletasknamecache
+# --- IntelliJ IDEA / JetBrains ---
+.idea/
+*.iml
+*.iws
+out/
 
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
+# --- Java Compiled Files ---
+*.class
+*.log
+*.jar
+*.war
+*.ear
+# (Note: The exception for the gradle-wrapper.jar above prevents it from being ignored by the *.jar rule)
 
-.idea/workspace.xml
+# --- OS Specific / Temp Files ---
+.DS_Store
+Thumbs.db
+**.bkp

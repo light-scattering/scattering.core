@@ -10,6 +10,8 @@ import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration {
+    private final static Approximation approx = Approximation.WINDOW;
+
     private final RadiusOfGyration type;
     private final FPlotBar fPlotBar;
 
@@ -66,6 +68,20 @@ public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration
 
     private FPoly getRegression(FPlot results) {
 
-        return results.reg().fitSlope((int) (results.size() * 0.9));
+        if (approx.equals(Approximation.WINDOW)) {
+            return results.reg().fitSlope((int) (results.size() * 0.9));
+        }
+
+         double threshold = results.getX(results.size() - 1) * 0.3;
+
+         results.filter((x, y) -> x > threshold);
+
+         return results.reg().fitLinear();
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    private enum Approximation {
+        WINDOW, OFFSET
     }
 }

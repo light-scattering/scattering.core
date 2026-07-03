@@ -103,7 +103,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
 
             init();
 
-            while (this.detached.size() != 0) {
+            while (!this.detached.isEmpty()) {
                 if (!buildStep()) {
                     continue generation;
                 }
@@ -151,7 +151,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
     }
 
     private void initParticleB() {
-        Shape particleA = this.attached.asList().get(0);
+        Shape particleA = this.attached.asList().getFirst();
         Shape particleB = this.random.getFRand().getElement(this.detached, false);
 
         int iterations = 0;
@@ -196,7 +196,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
         particle.setCenter(radius, 0, 0).translate(this.center);
         particle.getAttachSphericalCollisions(this.bases, this.attached, this.center);
 
-        if (this.bases.size() == 0) {
+        if (this.bases.isEmpty()) {
             throw new IllegalStateException("The particle cannot be attached to the aggregate");
         }
 
