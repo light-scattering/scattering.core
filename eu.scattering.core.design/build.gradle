@@ -1,3 +1,5 @@
+version '1.0.0'
+
 dependencies {
-    api 'org.json:json:20200518'
+    api 'org.json:json:20231013'
 }
