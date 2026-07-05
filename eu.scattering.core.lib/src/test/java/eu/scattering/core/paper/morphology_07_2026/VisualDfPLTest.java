@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;

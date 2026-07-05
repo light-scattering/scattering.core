@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadiusOfGyration;
@@ -254,6 +254,12 @@ public class DfMethodComparisonTest {
                 resBc = aggregate.getFractalDimension(FractalDimension.BC_MANUSCRIPT_SHIFT_PCA);
                 timeBc = System.currentTimeMillis() - time;
             }
+
+            aggregate.getFractalDimension(FractalDimension.BC_BASELINE);
+            aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED);
+            aggregate.getFractalDimension(FractalDimension.CD_RESTRICTED);
+            aggregate.getFractalDimension(FractalDimension.MR_RESTRICTED);
+
 
             if (runDcLimited) {
                 long time = System.currentTimeMillis();

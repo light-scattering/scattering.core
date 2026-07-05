@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import org.junit.jupiter.api.Disabled;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled
 @DisplayName("Paper - Morphology")

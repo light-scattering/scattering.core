@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.utility.type.option.Length;
 import org.junit.jupiter.api.Disabled;

@@ -226,12 +226,12 @@ public class Measure {
 
     private static String getDfBoxFast(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_BASELINE));
     }
 
     private static String getDfBoxFastBruteForce(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_BRUTE_FORCE));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_RAW));
     }
 
     private static String getDfBoxAdv1(FAggregate aggregate) {
@@ -246,22 +246,22 @@ public class Measure {
 
     private static String getDfCorrelation(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.CORRELATION));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.CD_RESTRICTED));
     }
 
     private static String getDfCorrelationFull(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.CORRELATION_FULL));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.CD_FULL));
     }
 
     private static String getDfMass(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.MASS));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.MR_RESTRICTED));
     }
 
     private static String getDfMassFull(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.MASS_FULL));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.MR_FULL));
     }
 
     private static String getCmAdaptive(ScatFactory factory, FAggregate aggregate) {

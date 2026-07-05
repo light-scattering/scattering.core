@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
@@ -45,13 +45,13 @@ public class VisualDfMRTest {
 
         FBoxString plotFull = factory.getFBoxString();
 
-        double dimFull = fAggregate.getFractalDimension(FractalDimension.MASS_FULL, plotFull);
+        double dimFull = fAggregate.getFractalDimension(FractalDimension.MR_FULL, plotFull);
 
         assertTrue(dimFull > 0);
 
         FBoxString plotReduced = factory.getFBoxString();
 
-        double dimReduced = fAggregate.getFractalDimension(FractalDimension.MASS, plotReduced);
+        double dimReduced = fAggregate.getFractalDimension(FractalDimension.MR_RESTRICTED, plotReduced);
 
         assertTrue(dimReduced > 0);
     }

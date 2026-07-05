@@ -71,7 +71,7 @@ public class FAggregateModuleFractalDimensionBCDef {
         return results;
     }
 
-    protected FPlot getResultsBruteForce() {
+    protected FPlot getResultsRaw() {
         FPlot results = this.factory.getFPlot();
 
         FAggregate reference = this.aggregate.copy(false);

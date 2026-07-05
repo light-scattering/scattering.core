@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
@@ -58,7 +58,7 @@ public class VisualDfBCTest {
         assertFalse(geometry.isEmpty());
 
         FBoxString plot = factory.getFBoxString();
-        double results = fAggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED, plot);
+        double results = fAggregate.getFractalDimension(FractalDimension.BC_BASELINE, plot);
 
         assertTrue(results > 1);
         assertFalse(plot.getValue().isEmpty());

@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.statistics.base.FStat;
@@ -105,9 +105,9 @@ public class DfBCSpeedTest {
 
         public void update(FAggregate aggregate) {
             long timeRefCheck = System.currentTimeMillis();
-            double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_BRUTE_FORCE);
+            double dfRaw = aggregate.getFractalDimension(FractalDimension.BC_RAW);
             long timeRawCheck = System.currentTimeMillis();
-            double dfOptimized = aggregate.getFractalDimension(FractalDimension.BC_SIMPLIFIED);
+            double dfOptimized = aggregate.getFractalDimension(FractalDimension.BC_BASELINE);
             long timeOptimizedCheck = System.currentTimeMillis();
 
             long timeRaw = timeRawCheck - timeRefCheck;

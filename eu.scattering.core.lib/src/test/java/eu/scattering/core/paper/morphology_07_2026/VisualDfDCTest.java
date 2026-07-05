@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology;
+package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
@@ -47,13 +47,13 @@ public class VisualDfDCTest {
 
         FBoxString plotFull = factory.getFBoxString();
 
-        double dimFull = fAggregate.getFractalDimension(FractalDimension.CORRELATION_FULL, plotFull);
+        double dimFull = fAggregate.getFractalDimension(FractalDimension.CD_FULL, plotFull);
 
         assertTrue(dimFull > 0);
 
         FBoxString plotReduced = factory.getFBoxString();
 
-        double dimReduced = fAggregate.getFractalDimension(FractalDimension.CORRELATION, plotReduced);
+        double dimReduced = fAggregate.getFractalDimension(FractalDimension.CD_RESTRICTED, plotReduced);
 
         assertTrue(dimReduced > 0);
     }
