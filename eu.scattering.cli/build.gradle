@@ -2,8 +2,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
-version '1.0.0'
-
 dependencies {
     implementation project(':eu.scattering.core.design')
     implementation project(':eu.scattering.core.lib')
@@ -29,9 +27,11 @@ def gitBranch = providers.exec {
 processResources {
     inputs.property("gitHash", gitHash)
     inputs.property("gitBranch", gitBranch)
+    inputs.property("projectVersion", project.version)
 
     filesMatching('**/version.properties') {
         expand(
+                'projectVersion': project.version,
                 'gitBranch': gitBranch,
                 'gitCommit': gitHash,
                 'buildTime': new Date().format("yyyy-MM-dd HH:mm:ss")

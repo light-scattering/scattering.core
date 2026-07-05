@@ -9,29 +9,18 @@ Scattering Core is a highly optimized Java library designed for the generation a
 
 ## Table of contents
 
-- [Modules](#modules)
 - [Generation algorithms](#generation-algorithms)
 - [Morphological analysis](#morphological-analysis)
 
-## Modules
-
-The project is divided into three decoupled modules:
-
-- **`design`** - The core API containing all public interfaces, defining both the operations and the data structures.
-- **`lib`** - The encapsulated implementation handling all physics, math, and core logic.
-- **`cli`** - The command-line interface, providing a standalone JAR for console and script execution that adheres to the Unix philosophy.
-
 ## Generation algorithms
-
-
 
 All generation and analysis operations begin with the `ScatFactory`, which serves as the core entry point for the library:
 ```java
 var factory = ScatFactoryDef.create();
 ```
 
-To generate a synthetic Cluster-Cluster (CC) aggregate, you must first define its fundamental physical properties. 
-In this step, the primary particles are generated a priori in memory, but they are not yet spatially positioned.
+To generate a synthetic Cluster-Cluster (CC) aggregate, you must first define its fundamental physical properties.
+In this step, the primary particles are pre-allocated in memory, but they are not yet spatially positioned.
 ```java
 int size = 1000;    // Number of primary particles
 double rp = 1.0;    // Particle radius
@@ -54,8 +43,7 @@ fModel.build();
 
 ## Morphological analysis
 
-Once an aggregate is generated (or loaded into memory), you can perform various morphological analyses on it. 
-As with generation, these operations rely on the `ScatFactory` as the core entry point.
+Once an aggregate is generated (or loaded into memory), you can perform various morphological analyses directly through its API.
 
 To extract the fractal dimension, simply pass your preferred analytical method directly to the aggregate object:
 ```java

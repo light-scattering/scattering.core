@@ -1,14 +1,17 @@
 plugins {
-    id 'java'
+    id 'base'
 }
+
+version = '0.1.0'
 
 subprojects {
     apply plugin: 'java-library'
 
-    group 'eu.scattering'
+    group = 'eu.scattering'
+    version = rootProject.version
 
-    sourceCompatibility = 21
-    targetCompatibility = 21
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
 
     java {
         modularity.inferModulePath = true
