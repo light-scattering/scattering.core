@@ -6,6 +6,9 @@ public interface FAggregateFactoryContextGeometry {
     FAggregate d2(int d1, int d2, double radius);
     FAggregate d3(int d1, int d2, int d3, double radius);
 
+    FAggregate d2Hex(double reach, double radius);
+    FAggregate d3Hex(double reach, double radius);
+
     FAggregate fullCircle(int layers, double radius);
     FAggregate fullSphere(int layers, double radius);
 
@@ -24,6 +27,16 @@ public interface FAggregateFactoryContextGeometry {
     default FAggregate d3(int d1, int d2, int d3) {
 
         return d3(d1, d2, d3, 1);
+    }
+
+    default FAggregate d2Hex(double reach) {
+
+        return d2Hex(reach, 1);
+    }
+
+    default FAggregate d3Hex(double reach) {
+
+        return d3Hex(reach, 1);
     }
 
     default FAggregate fullCircle(int layers) {

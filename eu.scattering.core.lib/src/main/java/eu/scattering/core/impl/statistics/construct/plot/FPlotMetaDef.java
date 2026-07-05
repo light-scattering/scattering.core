@@ -1,109 +1,111 @@
 package eu.scattering.core.impl.statistics.construct.plot;
 
-import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
-import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 
 public class FPlotMetaDef implements FPlotMeta {
-    private final ScatFactory factory;
+    private boolean linesShow = true;
+    private int linesWidth = 2;
+    private String linesColor = "black";
 
-    private String name = "";
-    private String nameX = "";
-    private String nameY = "";
-    private String annotation = "";
-    private FPos2D rangeX = null;
-    private FPos2D rangeY = null;
+    private boolean markersShow = true;
+    private int markersSize = 4;
+    private String markersColor = "black";
 
-    private FPlotMetaDef(ScatFactory factory) {
+    private FPlotMetaDef() {}
 
-        this.factory = factory;
-    }
+    public static FPlotMeta create() {
 
-    public static FPlotMeta create(ScatFactory factory) {
-
-        return new FPlotMetaDef(factory);
+        return new FPlotMetaDef();
     }
 
     @Override
-    public String getName() {
+    public boolean getMarkersShow() {
 
-        return this.name;
+        return this.markersShow;
     }
 
     @Override
-    public FPlotMeta setName(String name) {
+    public FPlotMeta setMarkersShow(boolean show) {
 
-        this.name = name;
+        this.markersShow = show;
 
         return this;
     }
 
     @Override
-    public String getNameX() {
+    public int getMarkersSize() {
 
-        return this.nameX;
+        return this.markersSize;
     }
 
     @Override
-    public FPlotMeta setNameX(String nameX) {
+    public FPlotMeta setMarkersSize(int size) {
 
-        this.nameX = nameX;
+        if (size < 1) {
+            throw new IllegalArgumentException("The marker size must be greater than zero");
+        }
+
+        this.markersSize = size;
 
         return this;
     }
 
     @Override
-    public String getNameY() {
+    public String getMarkersColor() {
 
-        return this.nameY;
+        return this.markersColor;
     }
 
     @Override
-    public FPlotMeta setNameY(String nameY) {
+    public FPlotMeta setMarkersColor(String color) {
 
-        this.nameY = nameY;
+        this.markersColor = color;
 
         return this;
     }
 
     @Override
-    public String getAnnotation() {
+    public boolean getLinesShow() {
 
-        return this.annotation;
+        return this.linesShow;
     }
 
     @Override
-    public FPlotMeta setAnnotation(String annotation) {
+    public FPlotMeta setLinesShow(boolean show) {
 
-        this.annotation = annotation;
+        this.linesShow = show;
 
         return this;
     }
 
     @Override
-    public FPos2D getRangeX() {
+    public int getLinesWidth() {
 
-        return this.rangeX;
+        return this.linesWidth;
     }
 
     @Override
-    public FPlotMeta setRangeX(double min, double max) {
+    public FPlotMeta setLinesWidth(int width) {
 
-        this.rangeX = factory.getFPos2D(min, max);
+        if (width < 1) {
+            throw new IllegalArgumentException("The line width must be greater than zero");
+        }
+
+        this.linesWidth = width;
 
         return this;
     }
 
     @Override
-    public FPos2D getRangeY() {
+    public String getLinesColor() {
 
-        return this.rangeY;
+        return this.linesColor;
     }
 
     @Override
-    public FPlotMeta setRangeY(double min, double max) {
+    public FPlotMeta setLinesColor(String color) {
 
-        this.rangeY = factory.getFPos2D(min, max);
+        this.linesColor = color;
 
         return this;
     }

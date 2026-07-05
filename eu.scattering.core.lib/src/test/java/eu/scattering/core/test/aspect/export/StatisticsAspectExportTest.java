@@ -3,10 +3,10 @@ package eu.scattering.core.test.aspect.export;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
@@ -68,10 +68,9 @@ public class StatisticsAspectExportTest {
     @DisplayName("Plotly FPlot linear")
     void plotlyFPlotLinear() {
         FPlot fPlot = factory.getFPlot();
-        FPlotMeta fPlotMeta = factory.getFPlotMeta();
+        FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
         fPlotMeta.setName("Name");
-        fPlotMeta.setAnnotation("Annotation");
         fPlotMeta.setNameX("X");
         fPlotMeta.setNameY("Y");
         fPlotMeta.setRangeX(-5, 5);
@@ -135,10 +134,9 @@ public class StatisticsAspectExportTest {
     @Test
     @DisplayName("Plotly FPlot histogram")
     void plotlyFPlotHistogram() {
-        FPlotMeta fPlotMeta = factory.getFPlotMeta();
+        FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
         fPlotMeta.setName("Test");
-        fPlotMeta.setAnnotation("Annotation");
         fPlotMeta.setNameX("X");
         fPlotMeta.setNameY("Y");
         fPlotMeta.setRangeX(-10, 10);
@@ -210,7 +208,7 @@ public class StatisticsAspectExportTest {
     @Test
     @DisplayName("Plotly FPlotBar")
     void plotlyFPlotBar() {
-        FPlotBarMeta fPlotBarMeta = factory.getFPlotBarMeta();
+        FPlotBarMetaGlobal fPlotBarMeta = factory.getFPlotBarMetaGlobal();
 
         fPlotBarMeta.setName("Test");
         fPlotBarMeta.setAnnotation("Annotation");
@@ -296,13 +294,12 @@ public class StatisticsAspectExportTest {
         @Test
         @DisplayName("FPlot meta config")
         void validateFPlotMetaConfig() {
-            FPlotMeta fPlotMeta = factory.getFPlotMeta();
+            FPlotMetaGlobal fPlotMeta = factory.getFPlotMetaGlobal();
 
-            FPlotMeta results = fPlotMeta
+            FPlotMetaGlobal results = fPlotMeta
                     .setName("a")
                     .setNameX("b")
                     .setNameY("c")
-                    .setAnnotation("d")
                     .setRangeX(1, 2)
                     .setRangeY(3, 4);
 
@@ -310,7 +307,6 @@ public class StatisticsAspectExportTest {
             assertEquals("a", fPlotMeta.getName());
             assertEquals("b", fPlotMeta.getNameX());
             assertEquals("c", fPlotMeta.getNameY());
-            assertEquals("d", fPlotMeta.getAnnotation());
             assertEquals(1, fPlotMeta.getRangeX().getD0());
             assertEquals(2, fPlotMeta.getRangeX().getD1());
             assertEquals(3, fPlotMeta.getRangeY().getD0());
@@ -320,9 +316,9 @@ public class StatisticsAspectExportTest {
         @Test
         @DisplayName("FPlotBar meta config")
         void validateFPlotBarMetaConfig() {
-            FPlotBarMeta fPlotBarMeta = factory.getFPlotBarMeta();
+            FPlotBarMetaGlobal fPlotBarMeta = factory.getFPlotBarMetaGlobal();
 
-            FPlotBarMeta results = fPlotBarMeta
+            FPlotBarMetaGlobal results = fPlotBarMeta
                     .setName("a")
                     .setNameX("b")
                     .setNameY("c")

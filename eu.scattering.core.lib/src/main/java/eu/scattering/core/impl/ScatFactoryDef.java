@@ -11,6 +11,7 @@ import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
+import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactoryContext;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
@@ -46,6 +47,7 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.storage.transfer.TransferHelper;
 import eu.scattering.core.design.mathematics.helper.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
@@ -54,9 +56,9 @@ import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
-import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMeta;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import eu.scattering.core.design.storage.StorageFactory;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
@@ -85,6 +87,7 @@ import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.aspect.rotate.transfer.FRotQtDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
+import eu.scattering.core.impl.component.aggregate.meta.FMetaDCDef;
 import eu.scattering.core.impl.component.aggregate.model.FModelFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.validator.FValidatorFactoryContextDef;
@@ -101,6 +104,7 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
+import eu.scattering.core.impl.statistics.construct.plot.FPlotMetaDef;
 import eu.scattering.core.impl.storage.transfer.TransferHelperDef;
 import eu.scattering.core.impl.mathematics.FTrigHelperDef;
 import eu.scattering.core.impl.physics.FMaterialDataDef;
@@ -108,7 +112,7 @@ import eu.scattering.core.impl.physics.FMaterialDef;
 import eu.scattering.core.impl.statistics.FStatHelperDef;
 import eu.scattering.core.impl.statistics.base.FStatDef;
 import eu.scattering.core.impl.statistics.base.FStatMetaDef;
-import eu.scattering.core.impl.statistics.construct.plot.FPlotMetaDef;
+import eu.scattering.core.impl.statistics.construct.plot.FPlotMetaGlobalDef;
 import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarDef;
 import eu.scattering.core.impl.statistics.construct.plot.FPlotDef;
 import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarMetaDef;
@@ -510,6 +514,12 @@ public final class ScatFactoryDef implements ScatFactory {
         return FValidatorFactoryContextDef.create(this);
     }
 
+    @Override
+    public FMetaDC getFMetaDC() {
+
+        return FMetaDCDef.create();
+    }
+
     //--------------------------------------------------
 
     @Override
@@ -599,7 +609,7 @@ public final class ScatFactoryDef implements ScatFactory {
     }
 
     @Override
-    public FPlotBarMeta getFPlotBarMeta() {
+    public FPlotBarMetaGlobal getFPlotBarMetaGlobal() {
 
         return FPlotBarMetaDef.create(this);
     }
@@ -631,7 +641,13 @@ public final class ScatFactoryDef implements ScatFactory {
     @Override
     public FPlotMeta getFPlotMeta() {
 
-        return FPlotMetaDef.create(this);
+        return FPlotMetaDef.create();
+    }
+
+    @Override
+    public FPlotMetaGlobal getFPlotMetaGlobal() {
+
+        return FPlotMetaGlobalDef.create(this);
     }
 
     @Override

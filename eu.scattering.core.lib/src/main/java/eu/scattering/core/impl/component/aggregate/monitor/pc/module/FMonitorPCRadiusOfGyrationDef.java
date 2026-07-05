@@ -6,9 +6,12 @@ import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorP
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration {
+    private final static Approximation approx = Approximation.WINDOW;
+
     private final RadiusOfGyration type;
     private final FPlot fPlot;
 
@@ -61,12 +64,35 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
 
         this.fPlot.sortX(true);
 
-        FPlot regression = this.fPlot.copy();
+        FPlot results = getResults();
+        FPoly regression = getRegression(results);
 
-        regression.swapXY();
-        regression.mutateX(FStat::ln);
-        regression.mutateY(FStat::ln);
+        return regression.at(1);
+    }
 
-        return regression.reg().fitSlope((int) (regression.size() * 0.9)).at(1);
+    private FPlot getResults() {
+        FPlot results = this.fPlot.copy();
+
+        results.swapXY();
+
+        results.mutateX(FStat::ln);
+        results.mutateY(FStat::ln);
+
+        return results;
+    }
+
+    private FPoly getRegression(FPlot results) {
+
+        if (approx.equals(Approximation.WINDOW)) {
+            return results.reg().fitSlope((int) (results.size() * 0.9));
+        }
+
+        return results.reg().fitLinear((int) (results.size() * 0.3), results.size() - 1);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+
+    private enum Approximation {
+        WINDOW, OFFSET
     }
 }

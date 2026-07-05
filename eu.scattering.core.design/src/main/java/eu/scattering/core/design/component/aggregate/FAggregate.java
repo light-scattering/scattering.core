@@ -1,6 +1,8 @@
 package eu.scattering.core.design.component.aggregate;
 
+import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
@@ -48,6 +50,8 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     FPos3D getLength();
     double getLength(Length type);
+
+    double getDiameter();
 
     double getRadiusFrom(double x, double y, double z);
     double getRadiusFrom(FPoint center);
@@ -114,12 +118,15 @@ public interface FAggregate extends Component, Iterable<Shape> {
     //--------------------------------------------------
 
     double getFractalDimension(FractalDimension type);
+    double getFractalDimension(FractalDimension type, FBoxString plot);
 
     double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
-    double getFractalDimensionBoxCounting(double window, double stepFactor, int offset, boolean start, boolean shift, boolean pca);
-    double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
+    double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca);
 
-    FPlot getBoxCoverageFunction(double factor, int offset, boolean start, boolean shift,  boolean pca);
+    double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
+    double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta);
+
+    FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca);
     FPlot getDensityCorrelationFunction(double factor);
 
     //--------------------------------------------------

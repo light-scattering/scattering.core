@@ -33,6 +33,7 @@ public interface FPlot extends Statistics<FPlot> {
     int getIndexX(RoundMethod type, double x);
     int getIndexY(RoundMethod type, double y);
 
+    double r2(FPoly model);
     double integrate();
 
     // -------------------------------------------------------------------------------------------------
@@ -55,6 +56,8 @@ public interface FPlot extends Statistics<FPlot> {
 
     FPlot swapXY();
 
+    FPlot derivate();
+
     // -------------------------------------------------------------------------------------------------
 
     FPlot forEach(TriConsumer<Double, Double, Integer> consumer);
@@ -75,6 +78,11 @@ public interface FPlot extends Statistics<FPlot> {
 
     @Fragment
     FPlot removeNaN();
+
+    @Modificator
+    FPlotMeta getRefMeta();
+    @Modificator
+    FPlot setRefMeta(FPlotMeta meta);
 
     @Modificator
     FStat getRefCoreX();

@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.aggregate;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
+import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -13,6 +14,7 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
@@ -172,6 +174,12 @@ public class FAggregateDef implements FAggregate {
     public double getLength(Length type) {
 
         return this.moduleGeometry.getLength(type);
+    }
+
+    @Override
+    public double getDiameter() {
+
+        return this.moduleGeometry.getDiameter();
     }
 
     @Override
@@ -425,7 +433,13 @@ public class FAggregateDef implements FAggregate {
     @Override
     public double getFractalDimension(FractalDimension type) {
 
-        return this.moduleFractalDimension.getFractalDimension(type);
+        return this.moduleFractalDimension.getFractalDimension(type, null);
+    }
+
+    @Override
+    public double getFractalDimension(FractalDimension type, FBoxString plot) {
+
+        return this.moduleFractalDimension.getFractalDimension(type, plot);
     }
 
     @Override
@@ -435,21 +449,27 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getFractalDimensionBoxCounting(double window, double stepFactor, int offset, boolean start, boolean shift, boolean pca) {
+    public double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {
 
-        return this.moduleFractalDimension.getFractalDimensionBoxCounting(window, stepFactor, offset, start, shift, pca);
+        return this.moduleFractalDimension.getFractalDimensionBoxCounting(window, step, shift, reposition, pca);
     }
 
     @Override
     public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
 
-        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit);
+        return getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, null);
     }
 
     @Override
-    public FPlot getBoxCoverageFunction(double stepFactor, int offset, boolean start, boolean shift, boolean pca) {
+    public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
 
-        return this.moduleFractalDimension.getBoxCoverageFunction(stepFactor, offset, start, shift, pca);
+        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, meta);
+    }
+
+    @Override
+    public FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca) {
+
+        return this.moduleFractalDimension.getBoxCoverageFunction(step, shift, reposition, pca);
     }
 
     @Override

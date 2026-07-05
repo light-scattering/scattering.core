@@ -1,12 +1,16 @@
 package eu.scattering.core.design.utility.type.variant;
 
 public enum FractalDimension {
-    BOX_FAST,
-    BOX_FAST_BRUTE_FORCE,
-    BOX_ADVANCED_1,
-    BOX_ADVANCED_2,
-    CORRELATION,
-    CORRELATION_FULL,
-    MASS,
-    MASS_FULL
+    BC_RAW, BC_BASELINE, BC_OPTIMIZED,
+    DC_RESTRICTED, DC_FULL,
+    MR_RESTRICTED, MR_FULL,
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Deprecated(forRemoval = true) BC_MANUSCRIPT_BASELINE,
+    @Deprecated(forRemoval = true) BC_MANUSCRIPT_PCA,
+    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT,
+    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT_PCA,
+    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT_FACTOR,
+    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT_PCA_FACTOR
 }

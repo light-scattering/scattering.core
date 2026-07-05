@@ -327,6 +327,28 @@ public class FAggregateModuleGeometryDef {
         };
     }
 
+    protected double getDiameter() {
+        int size = this.aggregate.size();
+        double diameter = Double.NEGATIVE_INFINITY;
+
+        Shape pA, pB;
+        double distance;
+        for (int i = 0 ; i < size ; i++) {
+            pA = this.aggregate.getRefParticles().asList().get(i);
+
+            for (int j = i + 1 ; j < size ; j++) {
+                pB = this.aggregate.getRefParticles().asList().get(j);
+
+                distance = pA.getDistCenter(pB) + pA.getRadius() + pB.getRadius();
+                if (distance > diameter) {
+                    diameter = distance;
+                }
+            }
+        }
+
+        return diameter;
+    }
+
     protected double getRadiusFrom(double x, double y, double z) {
         double maxRadius = -1;
 

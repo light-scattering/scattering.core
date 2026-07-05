@@ -11,9 +11,9 @@ public interface FAggregateAspectSave {
 
     void toFLAGE(FAggregate aggregate, StringBuilder builder);
 
-    void toNGSolve(FAggregate aggregate, StringBuilder builder);
-
     void toPovRay(FAggregate aggregate, ExPovRay preset, StringBuilder builder);
+
+    void toNGSolve(FAggregate aggregate, StringBuilder builder);
 
     //--------------------------------------------------
 
@@ -41,18 +41,18 @@ public interface FAggregateAspectSave {
         return builder.toString();
     }
 
-    default String toNGSolve(FAggregate aggregate) {
-        StringBuilder builder = new StringBuilder();
-
-        toNGSolve(aggregate, builder);
-
-        return builder.toString();
-    }
-
     default String toPovRay(FAggregate aggregate, ExPovRay preset) {
         StringBuilder builder = new StringBuilder();
 
         toPovRay(aggregate, preset, builder);
+
+        return builder.toString();
+    }
+
+    default String toNGSolve(FAggregate aggregate) {
+        StringBuilder builder = new StringBuilder();
+
+        toNGSolve(aggregate, builder);
 
         return builder.toString();
     }

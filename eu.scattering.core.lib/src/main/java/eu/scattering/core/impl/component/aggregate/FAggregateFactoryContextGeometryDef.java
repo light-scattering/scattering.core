@@ -109,6 +109,89 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
     }
 
     @Override
+    public FAggregate d2Hex(double reach, double radius) {
+
+        if (reach < radius) {
+            throw new IllegalArgumentException("The outer radius must must not be smaller than the particle radius");
+        }
+
+        FAggregate aggregate = factory.getFAggregate();
+
+        double reachP2 = reach * reach;
+
+        double spacingCol = 2.0 * radius;
+        double spacingRow = radius * Math.sqrt(3.0);
+
+        int limitY = (int) Math.ceil(reach / spacingRow);
+        int limitX = (int) Math.ceil(reach / spacingCol) + 1;
+
+        for (int j = -limitY; j <= limitY; j++) {
+            double xShift = (j % 2 != 0) ? radius : 0.0;
+
+            for (int i = -limitX; i <= limitX; i++) {
+                double x = (i * spacingCol) + xShift;
+                double y = j * spacingRow;
+
+                double distP2 = x * x + y * y;
+
+                if (distP2 <= reachP2) {
+                    aggregate.addRefParticle(factory.getFSphere(x, y, 0, radius));
+                }
+            }
+        }
+
+        int index = 0;
+        for (Shape shape : aggregate) {
+            shape.setIndex(index++);
+        }
+
+        return aggregate;
+    }
+
+    @Override
+    public FAggregate d3Hex(double reach, double radius) {
+
+        if (reach < radius) {
+            throw new IllegalArgumentException("The outer radius must must not be smaller than the particle radius");
+        }
+
+        FAggregate aggregate = factory.getFAggregate();
+
+        double step = radius * Math.sqrt(2);
+        int limit = (int) Math.ceil(reach / step);
+
+        double reachP2 = reach * reach;
+
+        for (int i = -limit ; i <= limit ; i++) {
+            for (int j = -limit ; j <= limit ; j++) {
+                for (int k = -limit ; k <= limit ; k++) {
+
+                    if ((i + j + k) % 2 != 0) {
+                        continue;
+                    }
+
+                    double x = i * step;
+                    double y = j * step;
+                    double z = k * step;
+
+                    double distP2 = (x * x) + (y * y) + (z * z);
+
+                    if (distP2 <= reachP2) {
+                        aggregate.addRefParticle(factory.getFSphere(x, y, z, radius));
+                    }
+                }
+            }
+        }
+
+        int index = 0;
+        for (Shape shape : aggregate) {
+            shape.setIndex(index++);
+        }
+
+        return aggregate;
+    }
+
+    @Override
     public FAggregate fullCircle(int layers, double radius) {
 
         if (layers < 1) {

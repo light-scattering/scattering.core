@@ -23,6 +23,8 @@ public interface FPlotFactory {
 
     FPlotMeta getFPlotMeta();
 
+    FPlotMetaGlobal getFPlotMetaGlobal();
+
     //--------------------------------------------------
 
     default FPlot getFPlot(String text) {

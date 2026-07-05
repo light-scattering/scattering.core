@@ -1,24 +1,22 @@
 package eu.scattering.core.design.statistics.construct.plot;
 
-import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
-
 public interface FPlotMeta {
 
-    String getName();
-    FPlotMeta setName(String name);
+    boolean getMarkersShow();
+    FPlotMeta setMarkersShow(boolean show);
 
-    String getNameX();
-    FPlotMeta setNameX(String nameX);
+    int getMarkersSize();
+    FPlotMeta setMarkersSize(int size);
 
-    String getNameY();
-    FPlotMeta setNameY(String nameY);
+    String getMarkersColor();
+    FPlotMeta setMarkersColor(String color);
 
-    FPos2D getRangeX();
-    FPlotMeta setRangeX(double min, double max);
+    boolean getLinesShow();
+    FPlotMeta setLinesShow(boolean show);
 
-    FPos2D getRangeY();
-    FPlotMeta setRangeY(double min, double max);
+    int getLinesWidth();
+    FPlotMeta setLinesWidth(int width);
 
-    String getAnnotation();
-    FPlotMeta setAnnotation(String annotation);
+    String getLinesColor();
+    FPlotMeta setLinesColor(String color);
 }

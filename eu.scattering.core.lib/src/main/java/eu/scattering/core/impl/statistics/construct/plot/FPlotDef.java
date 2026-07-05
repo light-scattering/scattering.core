@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.statistics.construct.plot;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
@@ -37,6 +38,8 @@ public class FPlotDef implements FPlot {
     private final FPlotRegressor regressor;
 
     private String name = "";
+
+    private FPlotMeta meta;
 
     private FPlotDef(ScatFactory factory, FStat dataX, FStat dataY) {
 
@@ -186,10 +189,36 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
+    public double r2(FPoly model) {
+
+        if (size() < 1) {
+            throw new IllegalArgumentException("The number of elements must be greater than zero");
+        }
+
+        double realMeanY = getRefCoreY().mean();
+
+        double ssTotal = 0;
+        double ssResidual = 0;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double predictedY = model.value(getX(i));
+
+            ssTotal += Math.pow(getY(i) - realMeanY, 2);
+            ssResidual += Math.pow(getY(i) - predictedY, 2);
+        }
+
+        if (ssTotal == 0) {
+            return 1;
+        }
+
+        return 1.0 - (ssResidual / ssTotal);
+    }
+
+    @Override
     public double integrate() {
 
         if (size() < 1) {
-            throw new IllegalArgumentException("The number of elements must be greater then one");
+            throw new IllegalArgumentException("The number of elements must be greater than zero");
         }
 
         double area = 0;
@@ -358,6 +387,31 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
+    public FPlot derivate() {
+        int size = size();
+
+        if (size < 2) {
+            throw new IllegalArgumentException("The number of elements must be greater than one");
+        }
+
+        List<Double> results = new ArrayList<>();
+
+        results.add((getY(1) - getY(0)) / (getX(1) - getX(0)));
+
+        for (int i = 1 ; i < size - 1 ; i++) {
+            results.add((getY(i + 1) - getY(i - 1)) / (getX(i + 1) - getX(i - 1)));
+        }
+
+        results.add((getY(size - 1) - getY(size - 2)) / (getX(size - 1) - getX(size - 2)));
+
+        for (int i = 0 ; i < size ; i++) {
+            setY(i, results.get(i));
+        }
+
+        return this;
+    }
+
+    @Override
     public FPlot forEach(TriConsumer<Double, Double, Integer> consumer) {
         Iterator<Double> iteratorX = getRefCoreX().iterator();
         Iterator<Double> iteratorY = getRefCoreY().iterator();
@@ -400,6 +454,28 @@ public class FPlotDef implements FPlot {
     public FPlotInterpolator apx() {
 
         return this.interpolator;
+    }
+
+    @Override
+    public FPlotMeta getRefMeta() {
+
+        if (this.meta == null) {
+            this.meta = this.factory.getFPlotMeta();
+        }
+
+        return this.meta;
+    }
+
+    @Override
+    public FPlot setRefMeta(FPlotMeta meta) {
+
+        if (meta == null) {
+            throw new IllegalArgumentException("The meta data cannot be null");
+        }
+
+        this.meta = meta;
+
+        return this;
     }
 
     @Override
@@ -643,6 +719,8 @@ public class FPlotDef implements FPlot {
 
         return this;
     }
+
+    //--------------------------------------------------
 
     @Override
     public FPlot removeNaN() {

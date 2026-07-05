@@ -76,6 +76,28 @@ public class FAggregateFactoryTest {
         }
 
         @Test
+        @DisplayName("Construct hexagonal pack 2D")
+        void constructHexagonal2D() {
+            FAggregate fAggregate = factory.getFAggregateContext().geometry().d2Hex(25, 1);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().size() > 500),
+                    () -> assertTrue(fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max() < EPSILON)
+            );
+        }
+
+        @Test
+        @DisplayName("Construct hexagonal pack 3D")
+        void constructHexagonal3D() {
+            FAggregate fAggregate = factory.getFAggregateContext().geometry().d3Hex(10, 1);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().size() > 500),
+                    () -> assertTrue(fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max() < EPSILON)
+            );
+        }
+
+        @Test
         @DisplayName("Construct full circle")
         void constructFullCircle() {
             FAggregate fAggregate = factory.getFAggregateContext().geometry().fullCircle(20, 1);

@@ -234,7 +234,7 @@ public class FAggregateTest {
             assertTrue(fAggregateB.isExactData(fAggregateA));
 
             fAggregateB.getRefFExtension().getRefFMaterial().setDensity("X", 5);
-            fAggregateB.getRefParticles().asList().get(0).setRadius(2);
+            fAggregateB.getRefParticles().asList().getFirst().setRadius(2);
 
             assertFalse(fAggregateA.isExact(fAggregateB));
             assertFalse(fAggregateB.isExact(fAggregateA));
@@ -1661,6 +1661,16 @@ public class FAggregateTest {
         }
 
         @Test
+        @DisplayName("Get diameter")
+        void getDiameter() {
+            FAggregate fAggregate = factory.getFAggregateContext().geometry().d1(10);
+
+            double diameter = fAggregate.getDiameter();
+
+            assertEquals(20, diameter, 1E-4);
+        }
+
+        @Test
         @DisplayName("Get mass center - Point contact")
         void getMassCenterPointContact() {
             double delta = 0.1;
@@ -2826,7 +2836,7 @@ public class FAggregateTest {
         void getBoxCoverageFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot results = fAggregate.getBoxCoverageFunction(2, 1, true, true, false);
+            FPlot results = fAggregate.getBoxCoverageFunction(2, 1, true, false);
 
             assertTrue(results.size() >= 5);
             assertTrue(results.getY(0) < results.getY(1));
@@ -3366,7 +3376,7 @@ public class FAggregateTest {
             fAggregate.translate(factory.getFVector(-3, -2, -1, -2, 0, 2));
 
             Assertions.assertAll("Validate FAggregate",
-                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().getFirst().isExact(factory.getFSphere(3, 2, 3))),
                     () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
                     () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
             );
@@ -3388,7 +3398,7 @@ public class FAggregateTest {
             fAggregate.translate(factory.getFPairPos3D(-3, -2, -1, -2, 0, 2));
 
             Assertions.assertAll("Validate FAggregate",
-                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().getFirst().isExact(factory.getFSphere(3, 2, 3))),
                     () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
                     () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
             );
@@ -3586,9 +3596,9 @@ public class FAggregateTest {
                 FAggregate fAggregate18 = factory.getFAggregate(schema18);
                 FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
-                double dim14 = fAggregate14.getFractalDimension(FractalDimension.BOX_ADVANCED_1);
-                double dim18 = fAggregate18.getFractalDimension(FractalDimension.BOX_ADVANCED_1);
-                double dim22 = fAggregate22.getFractalDimension(FractalDimension.BOX_ADVANCED_1);
+                double dim14 = fAggregate14.getFractalDimension(FractalDimension.BC_BASELINE);
+                double dim18 = fAggregate18.getFractalDimension(FractalDimension.BC_BASELINE);
+                double dim22 = fAggregate22.getFractalDimension(FractalDimension.BC_BASELINE);
 
                 assertEquals(1.4, dim14, 0.2);
                 assertEquals(1.8, dim18, 0.2);
@@ -3598,46 +3608,43 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get box dimension - Basic geometry")
             void getBoxDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(10);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(10, 10);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(10, 10, 10);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX_FAST);
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX_FAST);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BOX_FAST);
+                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BC_BASELINE);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BC_BASELINE);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BC_BASELINE);
 
-                assertEquals(1, dim1d, 0.01);
-                assertEquals(2, dim2d, 0.01);
-                assertEquals(3, dim3d, 0.01);
+                assertEquals(1, dim1d, 1 * 0.05);
+                assertEquals(2, dim2d, 2 * 0.05);
+                assertEquals(3, dim3d, 3 * 0.05);
             }
 
             @Test
             @DisplayName("Get box dimension - Basic geometry (asymmetric)")
             void getBoxDimensionBasicGeometryAsymmetric() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(9);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(9, 11);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(9, 11, 13);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 17);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(15, 17, 19);
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX_FAST);
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX_FAST);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BOX_FAST);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BC_BASELINE);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BC_BASELINE);
 
-                assertEquals(1, dim1d, 0.2);
-                assertEquals(2, dim2d, 0.3);
-                assertEquals(3, dim3d, 0.4);
+                assertEquals(2, dim2d, 2 * 0.05);
+                assertEquals(3, dim3d, 3 * 0.05);
             }
 
             @Test
             @DisplayName("Get box dimension - Sphere")
             void getBoxDimensionSphereGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().fullCircle(10);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullSphere(10);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX_FAST);
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX_FAST);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BC_BASELINE);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BC_BASELINE);
 
-                assertEquals(2, dim1d, 0.10);
-                assertEquals(3, dim2d, 0.25);
+                assertEquals(2, dim2d, 0.10);
+                assertEquals(3, dim3d, 0.25);
             }
         }
 
@@ -3657,9 +3664,9 @@ public class FAggregateTest {
                 FAggregate fAggregate18 = factory.getFAggregate(schema18);
                 FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
-                double dim14 = fAggregate14.getFractalDimension(FractalDimension.CORRELATION);
-                double dim18 = fAggregate18.getFractalDimension(FractalDimension.CORRELATION);
-                double dim22 = fAggregate22.getFractalDimension(FractalDimension.CORRELATION);
+                double dim14 = fAggregate14.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim18 = fAggregate18.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim22 = fAggregate22.getFractalDimension(FractalDimension.DC_RESTRICTED);
 
                 assertEquals(1.4, dim14, 1.4 * 0.1);
                 assertEquals(1.8, dim18, 1.8 * 0.1);
@@ -3669,13 +3676,13 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Basic geometry")
             void getDensityDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(30);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(23, 23);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(17, 17, 17);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.CORRELATION);
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
+                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.DC_RESTRICTED);
 
                 assertEquals(1, dim1d, 1 * 0.05);
                 assertEquals(2, dim2d, 2 * 0.05);
@@ -3688,8 +3695,8 @@ public class FAggregateTest {
                 FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 17);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(15, 17, 19);
 
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.DC_RESTRICTED);
 
                 assertEquals(2, dim2d, 2 * 0.05);
                 assertEquals(3, dim3d, 3 * 0.05);
@@ -3698,17 +3705,17 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Basic geometry (translated)")
             void getDensityDimensionBasicGeometryTranslated() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(30);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(23, 23);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(17, 17, 17);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
                 fAggregate1d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
                 fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
                 fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.CORRELATION);
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
+                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.DC_RESTRICTED);
 
                 assertEquals(1, dim1d, 1 * 0.05);
                 assertEquals(2, dim2d, 2 * 0.05);
@@ -3718,11 +3725,11 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Sphere")
             void getDensityDimensionSphereGeometry() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullCircle(12);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().fullSphere(12);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
 
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.DC_RESTRICTED);
 
                 assertEquals(2, dim2d, 2 * 0.05);
                 assertEquals(3, dim3d, 3 * 0.05);
@@ -3745,9 +3752,9 @@ public class FAggregateTest {
                 FAggregate fAggregate18 = factory.getFAggregate(schema18);
                 FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
-                double dim14 = fAggregate14.getFractalDimension(FractalDimension.MASS);
-                double dim18 = fAggregate18.getFractalDimension(FractalDimension.MASS);
-                double dim22 = fAggregate22.getFractalDimension(FractalDimension.MASS);
+                double dim14 = fAggregate14.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim18 = fAggregate18.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim22 = fAggregate22.getFractalDimension(FractalDimension.MR_RESTRICTED);
 
                 assertEquals(1.4, dim14, 0.2);
                 assertEquals(1.8, dim18, 0.2);
@@ -3757,13 +3764,13 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry")
             void getMassDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(30);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(23, 23);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(17, 17, 17);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.MASS);
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MASS);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MASS);
+                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MR_RESTRICTED);
 
                 assertEquals(1, dim1d, 1 * 0.05);
                 assertEquals(2, dim2d, 2 * 0.05);
@@ -3773,11 +3780,11 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry (asymmetric)")
             void getMassDimensionBasicGeometryAsymmetric() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(17, 19);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 17);
                 FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(15, 17, 19);
 
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MASS);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MASS);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MR_RESTRICTED);
 
                 assertEquals(2, dim2d, 2 * 0.05);
                 assertEquals(3, dim3d, 3 * 0.05);
@@ -3786,17 +3793,17 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry (translated)")
             void getMassDimensionBasicGeometryTranslated() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(30);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(23, 23);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(17, 17, 17);
+                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
 
                 fAggregate1d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
                 fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
                 fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
 
-                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.MASS);
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MASS);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MASS);
+                double dim1d = fAggregate1d.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MR_RESTRICTED);
 
                 assertEquals(1, dim1d, 1 * 0.05);
                 assertEquals(2, dim2d, 2 * 0.05);
@@ -3806,11 +3813,11 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Sphere")
             void getMassDimensionSphereGeometry() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().fullCircle(12);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().fullSphere(12);
+                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
+                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
 
-                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MASS);
-                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MASS);
+                double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);
+                double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MR_RESTRICTED);
 
                 assertEquals(2, dim2d, 2 * 0.05);
                 assertEquals(3, dim3d, 3 * 0.05);
