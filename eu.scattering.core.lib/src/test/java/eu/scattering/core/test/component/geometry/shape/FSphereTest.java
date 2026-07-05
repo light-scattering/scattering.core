@@ -279,7 +279,7 @@ public class FSphereTest {
     class FSphereAdvancedTest {
 
         @Nested
-        @Tag("Module - Position")
+        @Tag("Module-Position")
         @DisplayName("Functionality - Advanced (position)")
         class FSphereModulePositionTest {
 
@@ -875,7 +875,7 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module - Dimension")
+        @Tag("Module-Dimension")
         @DisplayName("Functionality - Advanced (dimension)")
         class FSphereModuleDimensionTest {
 
@@ -2010,7 +2010,7 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module - Relation")
+        @Tag("Module-Relation")
         @DisplayName("Functionality - Advanced (relation)")
         class FSphereModuleRelationTest {
 
@@ -3965,7 +3965,7 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module - Composition")
+        @Tag("Module-Composition")
         @DisplayName("Functionality - Advanced (composition)")
         class FSphereModuleCompositionTest {
 
@@ -4159,7 +4159,7 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module - Interaction")
+        @Tag("Module-Interaction")
         @DisplayName("Functionality - Advanced (interaction)")
         class FSphereModuleInteractionTest {
 

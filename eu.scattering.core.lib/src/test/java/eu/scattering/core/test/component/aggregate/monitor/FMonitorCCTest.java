@@ -55,7 +55,7 @@ public class FMonitorCCTest {
     }
 
     @Nested
-    @Tag("Radius of gyration")
+    @Tag("Radius_of_gyration")
     @DisplayName("FMonitor radius of gyration")
     class FMonitorRadiusOfGyrationTest {
 

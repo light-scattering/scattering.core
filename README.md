@@ -1,6 +1,6 @@
 # Scattering Core
 
-Scattering Core is a highly optimized Java library designed for the generation and morphological analysis of synthetic fractal aggregates.
+Scattering Core is an optimized Java library designed for the generation and morphological analysis of synthetic fractal aggregates.
 
 > **Note on Manuscript Reproducibility:**
 > This manual is actively being expanded and currently focuses on the specific methods required to reproduce the findings of the recently submitted manuscript. 

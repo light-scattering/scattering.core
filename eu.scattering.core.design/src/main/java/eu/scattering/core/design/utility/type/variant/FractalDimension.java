@@ -7,10 +7,10 @@ public enum FractalDimension {
 
     // -------------------------------------------------------------------------------------------------
 
-    @Deprecated(forRemoval = true) BC_MANUSCRIPT_BASELINE,
-    @Deprecated(forRemoval = true) BC_MANUSCRIPT_PCA,
-    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT,
-    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT_PCA,
-    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT_FACTOR,
-    @Deprecated(forRemoval = true) BC_MANUSCRIPT_SHIFT_PCA_FACTOR
+    BC_MANUSCRIPT_BASELINE,
+    BC_MANUSCRIPT_PCA,
+    BC_MANUSCRIPT_SHIFT,
+    BC_MANUSCRIPT_SHIFT_PCA,
+    BC_MANUSCRIPT_SHIFT_FACTOR,
+    BC_MANUSCRIPT_SHIFT_PCA_FACTOR
 }

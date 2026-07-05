@@ -130,7 +130,7 @@ public class FModelCCRLCATest {
     }
 
     @Nested
-    @Tag("Aggregation 3D")
+    @Tag("Aggregation_3D")
     @DisplayName("Aggregation 3D")
     class Aggregation3DTest {
 
@@ -277,7 +277,7 @@ public class FModelCCRLCATest {
     }
 
     @Nested
-    @Tag("Aggregation 2D")
+    @Tag("Aggregation_2D")
     @DisplayName("Aggregation 2D")
     class Aggregation2DTest {
 
