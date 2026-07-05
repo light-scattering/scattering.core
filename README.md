@@ -1,10 +1,12 @@
-# Introduction
+# Scattering Core
 
-The purpose of the code is to generate and analyze synthetic fractal aggregates.
+Scattering Core is a highly optimized Java library designed for the generation and morphological analysis of synthetic fractal aggregates.
 
-> **Note:** The manual is actively being expanded.
-> Currently, it outlines methods required to reproduce the results of the recently submitted manuscript.
-> 
+> **Note on Manuscript Reproducibility:**
+> This manual is actively being expanded and currently focuses on the specific methods required to reproduce the findings of the recently submitted manuscript. 
+> All test configurations used to generate the manuscript's data are preserved in the `lib` module, located at:
+> `src/test/java/eu/scattering/core/paper/morphology_07_2026`.
+
 ## Table of contents
 
 - [Modules](#modules)
@@ -24,7 +26,6 @@ The project is divided into three decoupled modules:
 
 
 All generation and analysis operations begin with the `ScatFactory`, which serves as the core entry point for the library:
-
 ```java
 var factory = ScatFactoryDef.create();
 ```
@@ -38,8 +39,8 @@ double rp = 1.0;    // Particle radius
 var fAggregate = factory.getFAggregateContext().base().monodisperse(size, rp);
 ```
 
-Next, define the aggregation algorithm and its morphological targets by configuring parameters such as the fractal dimension (`df`) and the fractal prefactor (`kf`). Once you bind this model to your aggregate, simply execute the build process to physically position the particles according to your constraints:
-
+Next, define the aggregation algorithm and its morphological targets by configuring parameters such as the fractal dimension (`df`) and the fractal prefactor (`kf`). 
+Once you bind this model to your aggregate, simply execute the build process to physically position the particles according to your constraints:
 ```java
 double df = 1.8;    // Fractal dimension
 double kf = 1.3;    // Fractal prefactor
@@ -52,3 +53,18 @@ fModel.build();
 ```
 
 ## Morphological analysis
+
+Once an aggregate is generated (or loaded into memory), you can perform various morphological analyses on it. 
+As with generation, these operations rely on the `ScatFactory` as the core entry point.
+
+To extract the fractal dimension, simply pass your preferred analytical method directly to the aggregate object:
+```java
+// The optimized box-counting method
+double dimBC = fAggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED);
+
+// The density correlation method with boundary restriction
+double dimDC = fAggregate.getFractalDimension(FractalDimension.DC_RESTRICTED);
+
+// The mass-radius method with boundary restriction
+double dimMR = fAggregate.getFractalDimension(FractalDimension.MR_RESTRICTED);
+```

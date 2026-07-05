@@ -255,12 +255,6 @@ public class DfMethodComparisonTest {
                 timeBc = System.currentTimeMillis() - time;
             }
 
-            aggregate.getFractalDimension(FractalDimension.BC_BASELINE);
-            aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED);
-            aggregate.getFractalDimension(FractalDimension.CD_RESTRICTED);
-            aggregate.getFractalDimension(FractalDimension.MR_RESTRICTED);
-
-
             if (runDcLimited) {
                 long time = System.currentTimeMillis();
                 resDcl = aggregate.getFractalDimensionDensityCorrelation(0.9, RadiusOfGyration.DEDICATED_FILIPPOV, 1.1, true);

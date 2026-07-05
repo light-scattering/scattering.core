@@ -51,11 +51,11 @@ public class FAggregateModuleFractalDimensionDef {
                     this.bc.getResultsOptimized(2, 3, false, true),
                     0.9, plot
             );
-            case CD_RESTRICTED -> this.dc.analyze(
+            case DC_RESTRICTED -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
                     0.9
             );
-            case CD_FULL -> this.dc.analyze(
+            case DC_FULL -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
                     0.9
             );

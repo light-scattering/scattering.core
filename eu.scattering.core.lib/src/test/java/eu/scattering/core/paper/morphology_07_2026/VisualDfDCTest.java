@@ -47,13 +47,13 @@ public class VisualDfDCTest {
 
         FBoxString plotFull = factory.getFBoxString();
 
-        double dimFull = fAggregate.getFractalDimension(FractalDimension.CD_FULL, plotFull);
+        double dimFull = fAggregate.getFractalDimension(FractalDimension.DC_FULL, plotFull);
 
         assertTrue(dimFull > 0);
 
         FBoxString plotReduced = factory.getFBoxString();
 
-        double dimReduced = fAggregate.getFractalDimension(FractalDimension.CD_RESTRICTED, plotReduced);
+        double dimReduced = fAggregate.getFractalDimension(FractalDimension.DC_RESTRICTED, plotReduced);
 
         assertTrue(dimReduced > 0);
     }

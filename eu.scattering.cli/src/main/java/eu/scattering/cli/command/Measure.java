@@ -246,12 +246,12 @@ public class Measure {
 
     private static String getDfCorrelation(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.CD_RESTRICTED));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_RESTRICTED));
     }
 
     private static String getDfCorrelationFull(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.CD_FULL));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_FULL));
     }
 
     private static String getDfMass(FAggregate aggregate) {

@@ -2,7 +2,7 @@ package eu.scattering.core.design.utility.type.variant;
 
 public enum FractalDimension {
     BC_RAW, BC_BASELINE, BC_OPTIMIZED,
-    CD_RESTRICTED, CD_FULL,
+    DC_RESTRICTED, DC_FULL,
     MR_RESTRICTED, MR_FULL,
 
     // -------------------------------------------------------------------------------------------------
