@@ -2,7 +2,9 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
+import eu.scattering.core.design.component.aggregate.meta.bc.FMetaBC;
 import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -449,9 +451,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {
+    public double getFractalDimension(FConfigBC config) {
 
-        return this.moduleFractalDimension.getFractalDimensionBoxCounting(window, step, shift, reposition, pca);
+        return this.moduleFractalDimension.getFractalDimensionBoxCounting(config);
+    }
+
+    @Override
+    public double getFractalDimension(FConfigBC config, FMetaBC meta) {
+
+        return this.moduleFractalDimension.getFractalDimensionBoxCounting(config, meta);
     }
 
     @Override
@@ -467,9 +475,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca) {
+    public FPlot getBoxCoverageFunction(FConfigBC config) {
 
-        return this.moduleFractalDimension.getBoxCoverageFunction(step, shift, reposition, pca);
+        return this.moduleFractalDimension.getBoxCoverageFunction(config);
     }
 
     @Override

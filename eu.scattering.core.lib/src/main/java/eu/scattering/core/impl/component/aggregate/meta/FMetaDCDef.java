@@ -66,13 +66,13 @@ public class FMetaDCDef implements FMetaDC {
     }
 
     @Override
-    public int getNumberOfRefs() {
+    public int getReferenceParticleCount() {
 
         return this.refs;
     }
 
     @Override
-    public void setNumberOfRefs(int refs) {
+    public void setReferenceParticleTime(int refs) {
 
         this.refs = refs;
     }

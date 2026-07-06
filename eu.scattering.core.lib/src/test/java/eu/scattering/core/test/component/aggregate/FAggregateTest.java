@@ -1,6 +1,7 @@
 package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
 import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -2836,7 +2837,13 @@ public class FAggregateTest {
         void getBoxCoverageFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot results = fAggregate.getBoxCoverageFunction(2, 1, true, false);
+            FConfigBC config = factory.getFConfigBC()
+                    .setScalingFactor(2.0)
+                    .setShiftsPerAxis(1)
+                    .setAlignedOrigin(true)
+                    .setAlignedPCA(false);
+
+            FPlot results = fAggregate.getBoxCoverageFunction(config);
 
             assertTrue(results.size() >= 5);
             assertTrue(results.getY(0) < results.getY(1));

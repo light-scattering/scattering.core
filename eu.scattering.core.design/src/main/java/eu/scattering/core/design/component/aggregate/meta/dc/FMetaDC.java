@@ -13,8 +13,8 @@ public interface FMetaDC {
     FPlot getData();
     void setData(FPlot data);
 
-    int getNumberOfRefs();
-    void setNumberOfRefs(int refs);
+    int getReferenceParticleCount();
+    void setReferenceParticleTime(int refs);
 
     long getExecutionTime();
     void setExecutionTime(long time);

@@ -3,6 +3,7 @@ package eu.scattering.cli.command;
 import eu.scattering.cli.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.utility.type.method.MassCenter;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
@@ -572,9 +573,14 @@ public class Measure {
     }
 
     private static String getBoxCoverageFunction(ScatFactory factory, FAggregate aggregate) {
+        FConfigBC config = factory.getFConfigBC()
+                .setScalingFactor(2.0)
+                .setShiftsPerAxis(3)
+                .setAlignedOrigin(false)
+                .setAlignedPCA(false);
 
         return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getBoxCoverageFunction(1.3, 3, false, false));
+                .toCLI(aggregate.getBoxCoverageFunction(config));
     }
 
     private static String getDensityCorrelationFunction(ScatFactory factory, FAggregate aggregate) {

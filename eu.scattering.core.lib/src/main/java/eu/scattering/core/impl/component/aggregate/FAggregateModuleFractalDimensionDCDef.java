@@ -67,7 +67,7 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         if (meta != null) {
             meta.setExecutionTime(System.currentTimeMillis() - executionTime);
-            meta.setNumberOfRefs(refs);
+            meta.setReferenceParticleTime(refs);
             meta.setData(results);
         }
 

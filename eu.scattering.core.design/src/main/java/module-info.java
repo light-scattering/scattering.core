@@ -100,4 +100,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.utility.type.preset;
     exports eu.scattering.core.design.utility.type.variant;
     exports eu.scattering.core.design;
+    exports eu.scattering.core.design.component.aggregate.config.bc;
+    exports eu.scattering.core.design.component.aggregate.meta.bc;
 }
