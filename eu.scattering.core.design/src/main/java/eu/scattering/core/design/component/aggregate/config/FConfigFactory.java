@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.aggregate.config;
 
-import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
 
 public interface FConfigFactory {
 

@@ -1,9 +1,10 @@
-package eu.scattering.core.design.component.aggregate.meta.bc;
+package eu.scattering.core.design.component.aggregate.meta.df.bc;
 
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.utility.annotation.Modificator;
 
-public interface FMetaBC {
+public interface FMetaBC extends FMetaDF {
 
     String getPythonRenderScript();
     void setPythonRenderScript(String script);

@@ -28,7 +28,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.rotate;
     exports eu.scattering.core.design.aspect.save;
     exports eu.scattering.core.design.component.aggregate.extension;
-    exports eu.scattering.core.design.component.aggregate.meta.dc;
+    exports eu.scattering.core.design.component.aggregate.meta.df.dc;
     exports eu.scattering.core.design.component.aggregate.model.cc.ballistic;
     exports eu.scattering.core.design.component.aggregate.model.cc.dlca;
     exports eu.scattering.core.design.component.aggregate.model.cc.rlca;
@@ -100,6 +100,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.utility.type.preset;
     exports eu.scattering.core.design.utility.type.variant;
     exports eu.scattering.core.design;
-    exports eu.scattering.core.design.component.aggregate.config.bc;
-    exports eu.scattering.core.design.component.aggregate.meta.bc;
+    exports eu.scattering.core.design.component.aggregate.config.df.bc;
+    exports eu.scattering.core.design.component.aggregate.meta.df.bc;
+    exports eu.scattering.core.design.component.aggregate.meta.df;
 }

@@ -3,7 +3,7 @@ package eu.scattering.cli.command;
 import eu.scattering.cli.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.utility.type.method.MassCenter;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;

@@ -1,7 +1,7 @@
 package eu.scattering.core.paper.morphology_07_2026;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import org.junit.jupiter.api.Disabled;

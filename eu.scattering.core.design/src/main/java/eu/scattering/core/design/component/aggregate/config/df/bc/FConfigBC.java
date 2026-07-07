@@ -1,4 +1,4 @@
-package eu.scattering.core.design.component.aggregate.config.bc;
+package eu.scattering.core.design.component.aggregate.config.df.bc;
 
 public interface FConfigBC {
 

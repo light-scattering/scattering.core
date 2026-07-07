@@ -1,4 +1,4 @@
-package eu.scattering.core.design.component.aggregate.meta.dc;
+package eu.scattering.core.design.component.aggregate.meta.df.dc;
 
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 

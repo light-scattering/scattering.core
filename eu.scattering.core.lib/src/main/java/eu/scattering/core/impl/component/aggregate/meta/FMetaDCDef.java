@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.meta;
 
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 
 public class FMetaDCDef implements FMetaDC {

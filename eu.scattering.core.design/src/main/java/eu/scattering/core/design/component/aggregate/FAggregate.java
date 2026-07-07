@@ -1,8 +1,9 @@
 package eu.scattering.core.design.component.aggregate;
 
-import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
-import eu.scattering.core.design.component.aggregate.meta.bc.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
+import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
@@ -120,7 +121,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
     //--------------------------------------------------
 
     double getFractalDimension(FractalDimension type);
-    double getFractalDimension(FractalDimension type, FBoxString plot);
+    double getFractalDimension(FractalDimension type, FMetaDF meta);
 
     double getFractalDimension(FConfigBC config);
     double getFractalDimension(FConfigBC config, FMetaBC meta);

@@ -1,65 +1,13 @@
 package eu.scattering.core.impl.component.aggregate.meta;
 
-import eu.scattering.core.design.component.aggregate.meta.bc.FMetaBC;
-import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
 
-public class FMetaBCDef implements FMetaBC {
-    private String script;
-    private long millis;
-    private FPlot data;
+public class FMetaBCDef extends FMetaDFDef implements FMetaBC {
 
     private FMetaBCDef() {}
 
     public static FMetaBC create() {
 
         return new FMetaBCDef();
-    }
-
-    @Override
-    public String getPythonRenderScript() {
-
-        return this.script;
-    }
-
-    @Override
-    public void setPythonRenderScript(String script) {
-
-        if (script == null || script.isBlank()) {
-            throw new IllegalArgumentException("The script cannot be empty");
-        }
-
-        this.script = script;
-    }
-
-    @Override
-    public long getExecutionTimeMillis() {
-
-        return this.millis;
-    }
-
-    @Override
-    public void setExecutionTimeMillis(long millis) {
-
-        if (millis < 0) {
-            throw new IllegalArgumentException("The time cannot be lower than zero");
-        }
-
-        this.millis = millis;
-    }
-
-    @Override
-    public FPlot getRefData() {
-
-        return this.data;
-    }
-
-    @Override
-    public void setRefData(FPlot data) {
-
-        if (data == null) {
-            throw new IllegalArgumentException("The data cannot be null");
-        }
-
-        this.data = data;
     }
 }

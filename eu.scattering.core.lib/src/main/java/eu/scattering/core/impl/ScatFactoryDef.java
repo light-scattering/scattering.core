@@ -11,9 +11,10 @@ import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
-import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
-import eu.scattering.core.design.component.aggregate.meta.bc.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
+import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactoryContext;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
@@ -92,6 +93,7 @@ import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.config.FConfigBCDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaBCDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaDCDef;
+import eu.scattering.core.impl.component.aggregate.meta.FMetaDFDef;
 import eu.scattering.core.impl.component.aggregate.model.FModelFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.validator.FValidatorFactoryContextDef;
@@ -528,6 +530,12 @@ public final class ScatFactoryDef implements ScatFactory {
     public FConfigBC getFConfigBC(FConfigBC.Preset preset) {
 
         return FConfigBCDef.create(preset);
+    }
+
+    @Override
+    public FMetaDF getFMetaDF() {
+
+        return FMetaDFDef.create();
     }
 
     @Override

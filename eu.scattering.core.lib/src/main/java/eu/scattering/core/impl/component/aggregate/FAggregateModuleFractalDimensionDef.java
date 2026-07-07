@@ -2,11 +2,11 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.bc.FConfigBC;
-import eu.scattering.core.design.component.aggregate.meta.bc.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
+import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
@@ -41,23 +41,55 @@ public class FAggregateModuleFractalDimensionDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getFractalDimension(FractalDimension type, FBoxString plot) {
+    protected double getFractalDimension(FractalDimension type) {
+
+        return getFractalDimension(type, null);
+    }
+
+    protected double getFractalDimension(FractalDimension type, FMetaDF meta) {
 
         return switch (type) {
             case BC_RAW -> {
-                FConfigBC config = factory.getFConfigBC(FConfigBC.Preset.RAW);
+                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.RAW);
+                FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
 
-                yield this.bc.analyze(this.bc.getResultsRaw(), config);
+                double res = this.bc.analyze(this.bc.getResultsRaw(metaBC), configBC, metaBC);
+
+                if (meta != null) {
+                    meta.setExecutionTimeMillis(metaBC.getExecutionTimeMillis());
+                    meta.setPythonRenderScript(metaBC.getPythonRenderScript());
+                    meta.setRefData(metaBC.getRefData());
+                }
+
+                yield res;
             }
             case BC_BASELINE -> {
-                FConfigBC config = factory.getFConfigBC(FConfigBC.Preset.BASELINE);
+                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.BASELINE);
+                FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
 
-                yield this.bc.analyze(this.bc.getResultsOptimized(config), config);
+                double res = this.bc.analyze(this.bc.getResultsOptimized(configBC, metaBC), configBC, metaBC);
+
+                if (meta != null) {
+                    meta.setExecutionTimeMillis(metaBC.getExecutionTimeMillis());
+                    meta.setPythonRenderScript(metaBC.getPythonRenderScript());
+                    meta.setRefData(metaBC.getRefData());
+                }
+
+                yield res;
             }
             case BC_OPTIMIZED -> {
-                FConfigBC config = factory.getFConfigBC(FConfigBC.Preset.OPTIMIZED);
+                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.OPTIMIZED);
+                FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
 
-                yield this.bc.analyze(this.bc.getResultsOptimized(config),config);
+                double res = this.bc.analyze(this.bc.getResultsOptimized(configBC, metaBC), configBC, metaBC);
+
+                if (meta != null) {
+                    meta.setExecutionTimeMillis(metaBC.getExecutionTimeMillis());
+                    meta.setPythonRenderScript(metaBC.getPythonRenderScript());
+                    meta.setRefData(metaBC.getRefData());
+                }
+
+                yield res;
             }
             case DC_RESTRICTED -> this.dc.analyze(
                     this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
@@ -69,68 +101,12 @@ public class FAggregateModuleFractalDimensionDef {
             );
             case MR_RESTRICTED -> this.mr.analyze(
                     this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
-                    0.9, plot
+                    0.9, null
             );
             case MR_FULL -> this.mr.analyze(
                     this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
-                    0.9, plot
+                    0.9, null
             );
-
-            // -------------------------------------------------------------------------------------------------
-
-            case BC_MANUSCRIPT_BASELINE -> {
-                FConfigBC config = factory.getFConfigBC()
-                        .setShiftsPerAxis(1)
-                        .setAlignedPCA(false)
-                        .setWindowRatio(0.9);
-
-                yield this.bc.analyze(this.bc.getResultsOptimized(config), config);
-            }
-            case BC_MANUSCRIPT_PCA -> {
-                FConfigBC config = factory.getFConfigBC()
-                        .setScalingFactor(2.0)
-                        .setShiftsPerAxis(1)
-                        .setAlignedPCA(true)
-                        .setWindowRatio(0.9);
-
-                yield this.bc.analyze(this.bc.getResultsOptimized(config),config);
-            }
-            case BC_MANUSCRIPT_SHIFT -> {
-                FConfigBC config = factory.getFConfigBC()
-                        .setScalingFactor(2.0)
-                        .setShiftsPerAxis(3)
-                        .setAlignedPCA(false)
-                        .setWindowRatio(0.9);
-
-                yield this.bc.analyze(this.bc.getResultsOptimized(config),config);
-            }
-            case BC_MANUSCRIPT_SHIFT_PCA -> {
-                FConfigBC config = factory.getFConfigBC()
-                        .setScalingFactor(2.0)
-                        .setShiftsPerAxis(3)
-                        .setAlignedPCA(true)
-                        .setWindowRatio(0.9);
-
-                yield this.bc.analyze(this.bc.getResultsOptimized(config), config);
-            }
-            case BC_MANUSCRIPT_SHIFT_FACTOR -> {
-                FConfigBC config = factory.getFConfigBC()
-                        .setScalingFactor(1.25)
-                        .setShiftsPerAxis(3)
-                        .setAlignedPCA(false)
-                        .setWindowRatio(0.9);
-
-                yield this.bc.analyze(this.bc.getResultsOptimized(config),config);
-            }
-            case BC_MANUSCRIPT_SHIFT_PCA_FACTOR -> {
-                FConfigBC config = factory.getFConfigBC()
-                        .setScalingFactor(1.25)
-                        .setShiftsPerAxis(3)
-                        .setAlignedPCA(true)
-                        .setWindowRatio(0.9);
-
-                yield this.bc.analyze(this.bc.getResultsOptimized(config),config);
-            }
         };
     }
 
