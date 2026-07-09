@@ -1,7 +1,8 @@
 package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
 import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -2815,7 +2816,12 @@ public class FAggregateTest {
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
             FAggregate fAggregate = factory.getRefFAggregate(core);
 
-            FPlot results = fAggregate.getDensityCorrelationFunction(1.1);
+            FConfigDC config = factory.getFConfigDC()
+                    .setScalingFactor(1.1)
+                    .setRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY)
+                    .setRestricted(false);
+
+            FPlot results = fAggregate.getDensityCorrelationFunction(config);
             results.mutateY(FStat::distribute);
 
             assertEquals(1, results.getRefCoreY().sum(), 1E-4);
@@ -2827,7 +2833,12 @@ public class FAggregateTest {
         void getDensityCorrelationFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot results = fAggregate.getDensityCorrelationFunction(1.1);
+            FConfigDC config = factory.getFConfigDC()
+                    .setScalingFactor(1.1)
+                    .setRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY)
+                    .setRestricted(false);
+
+            FPlot results = fAggregate.getDensityCorrelationFunction(config);
 
             assertTrue(results.size() > 25);
         }

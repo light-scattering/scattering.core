@@ -3,7 +3,8 @@ package eu.scattering.cli.command;
 import eu.scattering.cli.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.utility.type.method.MassCenter;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
@@ -584,8 +585,12 @@ public class Measure {
     }
 
     private static String getDensityCorrelationFunction(ScatFactory factory, FAggregate aggregate) {
+        FConfigDC config = factory.getFConfigDC()
+                .setScalingFactor(1.1)
+                .setRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY)
+                .setRestricted(false);
 
         return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getDensityCorrelationFunction(1.1));
+                .toCLI(aggregate.getDensityCorrelationFunction(config));
     }
 }

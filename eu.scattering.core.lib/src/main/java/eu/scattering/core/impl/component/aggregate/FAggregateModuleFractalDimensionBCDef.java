@@ -2,8 +2,8 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
-import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;

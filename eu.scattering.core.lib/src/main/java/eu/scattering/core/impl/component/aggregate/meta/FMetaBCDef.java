@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.meta;
 
-import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
 
 public class FMetaBCDef extends FMetaDFDef implements FMetaBC {
 

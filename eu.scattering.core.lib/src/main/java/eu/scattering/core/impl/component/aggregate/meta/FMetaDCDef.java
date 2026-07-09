@@ -1,14 +1,11 @@
 package eu.scattering.core.impl.component.aggregate.meta;
 
-import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
-import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
 
-public class FMetaDCDef implements FMetaDC {
-    private String plotApproximation;
-    private String plotDerivative;
-    private FPlot data;
-    private long time = -1;
+public class FMetaDCDef extends FMetaDFDef implements FMetaDC {
+    private Script script = Script.DEFAULT;
     private int refs = -1;
+
 
     private FMetaDCDef() {}
 
@@ -17,63 +14,29 @@ public class FMetaDCDef implements FMetaDC {
         return new FMetaDCDef();
     }
 
-    @Override
-    public String getPlotApproximation() {
-
-        return this.plotApproximation;
-    }
+    // -------------------------------------------------------------------------------------------------
 
     @Override
-    public void setPlotApproximation(String plot) {
-
-        this.plotApproximation = plot;
-    }
-
-    @Override
-    public String getPlotDerivative() {
-
-        return this.plotDerivative;
-    }
-
-    @Override
-    public void setPlotDerivative(String plot) {
-
-        this.plotDerivative = plot;
-    }
-
-    @Override
-    public FPlot getData() {
-
-        return this.data;
-    }
-
-    @Override
-    public void setData(FPlot data) {
-
-        this.data = data;
-    }
-
-    @Override
-    public long getExecutionTime() {
-
-        return this.time;
-    }
-
-    @Override
-    public void setExecutionTime(long time) {
-
-        this.time = time;
-    }
-
-    @Override
-    public int getReferenceParticleCount() {
+    public int getRefParticlesCount() {
 
         return this.refs;
     }
 
     @Override
-    public void setReferenceParticleTime(int refs) {
+    public void setRefParticlesCount(int count) {
 
-        this.refs = refs;
+        this.refs = count;
+    }
+
+    @Override
+    public Script getScriptType() {
+
+        return this.script;
+    }
+
+    @Override
+    public void setScriptType(Script script) {
+
+        this.script = script;
     }
 }

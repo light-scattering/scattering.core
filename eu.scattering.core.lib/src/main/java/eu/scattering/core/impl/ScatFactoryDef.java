@@ -11,10 +11,12 @@ import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
-import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
-import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactoryContext;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
@@ -91,6 +93,8 @@ import eu.scattering.core.impl.aspect.rotate.transfer.FRotQtDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.config.FConfigBCDef;
+import eu.scattering.core.impl.component.aggregate.config.FConfigDCDef;
+import eu.scattering.core.impl.component.aggregate.config.FConfigMRDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaBCDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaDCDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaDFDef;
@@ -530,6 +534,30 @@ public final class ScatFactoryDef implements ScatFactory {
     public FConfigBC getFConfigBC(FConfigBC.Preset preset) {
 
         return FConfigBCDef.create(preset);
+    }
+
+    @Override
+    public FConfigDC getFConfigDC() {
+
+        return FConfigDCDef.create();
+    }
+
+    @Override
+    public FConfigDC getFConfigDC(FConfigDC.Preset preset) {
+
+        return FConfigDCDef.create(preset);
+    }
+
+    @Override
+    public FConfigMR getFConfigMR() {
+
+        return FConfigMRDef.create();
+    }
+
+    @Override
+    public FConfigMR getFConfigMR(FConfigMR.Preset preset) {
+
+        return FConfigMRDef.create(preset);
     }
 
     @Override

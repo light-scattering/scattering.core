@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.config;
 
-import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
 
 public class FConfigBCDef implements FConfigBC {
     private int shiftsPerAxis = 3;

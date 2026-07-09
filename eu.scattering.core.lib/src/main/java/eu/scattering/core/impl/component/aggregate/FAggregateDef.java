@@ -2,11 +2,12 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.bc.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
-import eu.scattering.core.design.component.aggregate.meta.df.bc.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.df.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -463,15 +464,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    public double getFractalDimension(FConfigDC config) {
 
-        return getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, null);
+        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(config);
     }
 
     @Override
-    public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
+    public double getFractalDimension(FConfigDC config, FMetaDC meta) {
 
-        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, meta);
+        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(config, meta);
     }
 
     @Override
@@ -481,9 +482,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot getDensityCorrelationFunction(double stepFactor) {
+    public FPlot getDensityCorrelationFunction(FConfigDC config) {
 
-        return this.moduleFractalDimension.getDensityCorrelationFunction(stepFactor);
+        return this.moduleFractalDimension.getDensityCorrelationFunction(config);
     }
 
     @Override
