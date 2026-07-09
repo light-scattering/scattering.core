@@ -74,16 +74,16 @@ public class FAggregateModuleFractalDimensionDCDef {
         FPlot approximation = results.copy();
         approximation.setY(regression);
 
-        double dim = 3 + regression.at(1);
+        double dimension = 3 + regression.at(1);
 
         if (meta != null) {
             switch (meta.getScriptType()) {
-                case DEFAULT -> meta.setPythonRenderScript(plotDefault(results, approximation, regression, dim));
+                case DEFAULT -> meta.setPythonRenderScript(plotDefault(results, approximation, regression, dimension));
                 case DERIVATIVE -> meta.setPythonRenderScript(plotDerivative(results));
             }
         }
 
-        return dim;
+        return dimension;
     }
 
     private String plotDefault(FPlot results, FPlot approximation, FPoly regression, double dimension) {
@@ -229,7 +229,6 @@ public class FAggregateModuleFractalDimensionDCDef {
 
             this.min = Double.POSITIVE_INFINITY;
             this.max = Double.NEGATIVE_INFINITY;
-
         }
 
         FPlot process() {

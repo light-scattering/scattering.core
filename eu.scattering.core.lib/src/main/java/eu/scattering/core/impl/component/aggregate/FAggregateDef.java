@@ -4,10 +4,12 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
 import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -446,9 +448,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    public double getFractalDimension(FConfigMR config) {
 
-        return this.moduleFractalDimension.getFractalDimensionMassRadius(window, method, stepFactor, rangeLimit);
+        return this.moduleFractalDimension.getFractalDimensionMassRadius(config);
+    }
+
+    @Override
+    public double getFractalDimension(FConfigMR config, FMetaMR meta) {
+
+        return this.moduleFractalDimension.getFractalDimensionMassRadius(config, meta);
     }
 
     @Override

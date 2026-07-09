@@ -4,12 +4,13 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
 import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
-import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 public class FAggregateModuleFractalDimensionDef {
     private final FAggregateModuleFractalDimensionBCDef bc;
@@ -56,11 +57,7 @@ public class FAggregateModuleFractalDimensionDef {
 
                 double res = this.bc.analyze(this.bc.getResultsRaw(metaBC), configBC, metaBC);
 
-                if (meta != null) {
-                    meta.setExecutionTimeMillis(metaBC.getExecutionTimeMillis());
-                    meta.setPythonRenderScript(metaBC.getPythonRenderScript());
-                    meta.setRefData(metaBC.getRefData());
-                }
+                setMetaValues(meta, metaBC);
 
                 yield res;
             }
@@ -70,11 +67,7 @@ public class FAggregateModuleFractalDimensionDef {
 
                 double res = this.bc.analyze(this.bc.getResultsOptimized(configBC, metaBC), configBC, metaBC);
 
-                if (meta != null) {
-                    meta.setExecutionTimeMillis(metaBC.getExecutionTimeMillis());
-                    meta.setPythonRenderScript(metaBC.getPythonRenderScript());
-                    meta.setRefData(metaBC.getRefData());
-                }
+                setMetaValues(meta, metaBC);
 
                 yield res;
             }
@@ -84,11 +77,7 @@ public class FAggregateModuleFractalDimensionDef {
 
                 double res = this.bc.analyze(this.bc.getResultsOptimized(configBC, metaBC), configBC, metaBC);
 
-                if (meta != null) {
-                    meta.setExecutionTimeMillis(metaBC.getExecutionTimeMillis());
-                    meta.setPythonRenderScript(metaBC.getPythonRenderScript());
-                    meta.setRefData(metaBC.getRefData());
-                }
+                setMetaValues(meta, metaBC);
 
                 yield res;
             }
@@ -98,11 +87,7 @@ public class FAggregateModuleFractalDimensionDef {
 
                 double res = this.dc.analyze(this.dc.getResults(configDC, metaDC), configDC, metaDC);
 
-                if (meta != null) {
-                    meta.setExecutionTimeMillis(metaDC.getExecutionTimeMillis());
-                    meta.setPythonRenderScript(metaDC.getPythonRenderScript());
-                    meta.setRefData(metaDC.getRefData());
-                }
+                setMetaValues(meta, metaDC);
 
                 yield res;
             }
@@ -112,22 +97,30 @@ public class FAggregateModuleFractalDimensionDef {
 
                 double res = this.dc.analyze(this.dc.getResults(configDC, metaDC), configDC, metaDC);
 
-                if (meta != null) {
-                    meta.setExecutionTimeMillis(metaDC.getExecutionTimeMillis());
-                    meta.setPythonRenderScript(metaDC.getPythonRenderScript());
-                    meta.setRefData(metaDC.getRefData());
-                }
+                setMetaValues(meta, metaDC);
 
                 yield res;
             }
-            case MR_RESTRICTED -> this.mr.analyze(
-                    this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
-                    0.9, null
-            );
-            case MR_FULL -> this.mr.analyze(
-                    this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
-                    0.9, null
-            );
+            case MR_RESTRICTED -> {
+                FConfigMR configMR = factory.getFConfigMR(FConfigMR.Preset.RESTRICTED);
+                FMetaMR metaMR = meta != null ? factory.getFMetaMR() : null;
+
+                double res = this.mr.analyze(this.mr.getResults(configMR, metaMR), configMR, metaMR);
+
+                setMetaValues(meta, metaMR);
+
+                yield res;
+            }
+            case MR_FULL -> {
+                FConfigMR configMR = factory.getFConfigMR(FConfigMR.Preset.FULL);
+                FMetaMR metaMR = meta != null ? factory.getFMetaMR() : null;
+
+                double res = this.mr.analyze(this.mr.getResults(configMR, metaMR), configMR, metaMR);
+
+                setMetaValues(meta, metaMR);
+
+                yield res;
+            }
         };
     }
 
@@ -151,8 +144,22 @@ public class FAggregateModuleFractalDimensionDef {
         return this.dc.analyze(this.dc.getResults(config, meta), config, meta);
     }
 
-    protected double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    protected double getFractalDimensionMassRadius(FConfigMR config) {
 
-        return this.mr.analyze(this.mr.getResults(method, stepFactor, rangeLimit), window, null);
+        return getFractalDimensionMassRadius(config, null);
+    }
+
+    protected double getFractalDimensionMassRadius(FConfigMR config, FMetaMR meta) {
+
+        return this.mr.analyze(this.mr.getResults(config, meta), config, meta);
+    }
+
+    private void setMetaValues(FMetaDF in, FMetaDF ref) {
+
+        if (in != null) {
+            in.setExecutionTimeMillis(ref.getExecutionTimeMillis());
+            in.setPythonRenderScript(ref.getPythonRenderScript());
+            in.setRefData(ref.getRefData());
+        }
     }
 }

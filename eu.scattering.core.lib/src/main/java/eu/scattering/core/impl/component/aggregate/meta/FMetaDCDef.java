@@ -6,7 +6,6 @@ public class FMetaDCDef extends FMetaDFDef implements FMetaDC {
     private Script script = Script.DEFAULT;
     private int refs = -1;
 
-
     private FMetaDCDef() {}
 
     public static FMetaDC create() {

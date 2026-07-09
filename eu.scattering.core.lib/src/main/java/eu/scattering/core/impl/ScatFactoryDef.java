@@ -17,6 +17,7 @@ import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactoryContext;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
@@ -98,6 +99,7 @@ import eu.scattering.core.impl.component.aggregate.config.FConfigMRDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaBCDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaDCDef;
 import eu.scattering.core.impl.component.aggregate.meta.FMetaDFDef;
+import eu.scattering.core.impl.component.aggregate.meta.FMetaMRDef;
 import eu.scattering.core.impl.component.aggregate.model.FModelFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.validator.FValidatorFactoryContextDef;
@@ -576,6 +578,12 @@ public final class ScatFactoryDef implements ScatFactory {
     public FMetaDC getFMetaDC() {
 
         return FMetaDCDef.create();
+    }
+
+    @Override
+    public FMetaMR getFMetaMR() {
+
+        return FMetaMRDef.create();
     }
 
     //--------------------------------------------------
