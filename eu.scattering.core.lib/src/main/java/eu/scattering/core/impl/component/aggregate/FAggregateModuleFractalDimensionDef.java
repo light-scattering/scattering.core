@@ -51,11 +51,11 @@ public class FAggregateModuleFractalDimensionDef {
     protected double getFractalDimension(FractalDimension type, FMetaDF meta) {
 
         return switch (type) {
-            case BC_RAW -> {
+            case BC_NAIVE -> {
                 FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.RAW);
                 FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
 
-                double res = this.bc.analyze(this.bc.getResultsRaw(metaBC), configBC, metaBC);
+                double res = this.bc.analyze(this.bc.getResultsNaive(metaBC), configBC, metaBC);
 
                 setMetaValues(meta, metaBC);
 
@@ -91,28 +91,8 @@ public class FAggregateModuleFractalDimensionDef {
 
                 yield res;
             }
-            case DC_FULL -> {
-                FConfigDC configDC = factory.getFConfigDC(FConfigDC.Preset.FULL);
-                FMetaDC metaDC = meta != null ? factory.getFMetaDC() : null;
-
-                double res = this.dc.analyze(this.dc.getResults(configDC, metaDC), configDC, metaDC);
-
-                setMetaValues(meta, metaDC);
-
-                yield res;
-            }
             case MR_RESTRICTED -> {
                 FConfigMR configMR = factory.getFConfigMR(FConfigMR.Preset.RESTRICTED);
-                FMetaMR metaMR = meta != null ? factory.getFMetaMR() : null;
-
-                double res = this.mr.analyze(this.mr.getResults(configMR, metaMR), configMR, metaMR);
-
-                setMetaValues(meta, metaMR);
-
-                yield res;
-            }
-            case MR_FULL -> {
-                FConfigMR configMR = factory.getFConfigMR(FConfigMR.Preset.FULL);
                 FMetaMR metaMR = meta != null ? factory.getFMetaMR() : null;
 
                 double res = this.mr.analyze(this.mr.getResults(configMR, metaMR), configMR, metaMR);

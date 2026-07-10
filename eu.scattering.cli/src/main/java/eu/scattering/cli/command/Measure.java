@@ -37,9 +37,7 @@ public class Measure {
                 case Df_box_adv_1 -> getDfBoxAdv1(aggregate);
                 case Df_box_adv_2 -> getDfBoxAdv2(aggregate);
                 case Df_density -> getDfCorrelation(aggregate);
-                case Df_density_full -> getDfCorrelationFull(aggregate);
                 case Df_mass -> getDfMass(aggregate);
-                case Df_mass_full -> getDfMassFull(aggregate);
                 case Length_x -> getLengthX(aggregate);
                 case Length_y -> getLengthY(aggregate);
                 case Length_z -> getLengthZ(aggregate);
@@ -233,7 +231,7 @@ public class Measure {
 
     private static String getDfBoxFastBruteForce(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_RAW));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_NAIVE));
     }
 
     private static String getDfBoxAdv1(FAggregate aggregate) {
@@ -251,19 +249,9 @@ public class Measure {
         return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_RESTRICTED));
     }
 
-    private static String getDfCorrelationFull(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_FULL));
-    }
-
     private static String getDfMass(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getFractalDimension(FractalDimension.MR_RESTRICTED));
-    }
-
-    private static String getDfMassFull(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.MR_FULL));
     }
 
     private static String getCmAdaptive(ScatFactory factory, FAggregate aggregate) {

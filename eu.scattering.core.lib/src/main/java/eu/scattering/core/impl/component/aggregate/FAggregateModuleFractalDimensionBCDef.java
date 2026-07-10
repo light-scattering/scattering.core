@@ -48,12 +48,12 @@ public class FAggregateModuleFractalDimensionBCDef {
         return results;
     }
 
-    protected FPlot getResultsRaw() {
+    protected FPlot getResultsNaive() {
 
-        return getResultsRaw(null);
+        return getResultsNaive(null);
     }
 
-    protected FPlot getResultsRaw(FMetaBC meta) {
+    protected FPlot getResultsNaive(FMetaBC meta) {
         long millis = System.currentTimeMillis();
 
         ProcessRaw process = new ProcessRaw(this.factory, this.aggregate);
