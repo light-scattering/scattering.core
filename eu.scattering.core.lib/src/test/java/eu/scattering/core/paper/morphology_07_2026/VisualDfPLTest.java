@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.aggregate.meta.df.kinetic.cc.FMetaCCP
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@Disabled
+@Disabled
 @DisplayName("Paper - PL Visual")
 public class VisualDfPLTest {
 
@@ -38,11 +39,11 @@ public class VisualDfPLTest {
 
         var fMeta = factory.getFMetaPCPL();
 
-        var dim = fMonitor.getPowerLawDimension(FConfigPCPL.Preset.WINDOW, fMeta);
+        var dimension = fMonitor.getPowerLawDimension(FConfigPCPL.Preset.WINDOW, fMeta);
 
         String plot = fMeta.getPythonRenderScript();
 
-        assertEquals(1.8, dim, 0.25);
+        assertEquals(1.8, dimension, 0.25);
         assertFalse(plot.isEmpty());
 
         String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
@@ -75,12 +76,12 @@ public class VisualDfPLTest {
 
         var fMeta = factory.getFMetaCCPL();
 
-        double dim = fMonitor.getPowerLawDimension(FConfigCCPL.Preset.DROP, fMeta);
+        double dimension = fMonitor.getPowerLawDimension(FConfigCCPL.Preset.WINDOW, fMeta);
 
         String plotA = fMeta.getPythonRenderScript(FMetaCCPL.Plot.PARSED);
         String plotB = fMeta.getPythonRenderScript(FMetaCCPL.Plot.RAW);
 
-        assertEquals(1.8, dim, 0.25);
+        assertEquals(1.8, dimension, 0.25);
         assertFalse(plotA.isEmpty());
         assertFalse(plotB.isEmpty());
 

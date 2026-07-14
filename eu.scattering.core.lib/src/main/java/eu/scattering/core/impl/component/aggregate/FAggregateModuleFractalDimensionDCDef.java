@@ -67,16 +67,13 @@ public class FAggregateModuleFractalDimensionDCDef {
         double dimension = 3 + regression.at(1);
 
         if (meta != null) {
-            switch (meta.getScriptType()) {
-                case DEFAULT -> meta.setPythonRenderScript(plotDefault(results, approximation, regression, dimension));
-                case DERIVATIVE -> meta.setPythonRenderScript(plotDerivative(results));
-            }
+            meta.setPythonRenderScript(plot(results, approximation, regression, dimension));
         }
 
         return dimension;
     }
 
-    private String plotDefault(FPlot results, FPlot approximation, FPoly regression, double dimension) {
+    private String plot(FPlot results, FPlot approximation, FPoly regression, double dimension) {
         double r2 = results.r2(regression);
 
         String dimFormat = String.format(Locale.US, "%.2f", dimension);
@@ -109,79 +106,6 @@ public class FAggregateModuleFractalDimensionDCDef {
 
         return  factory.getSaveAspect().getStatisticsContext()
                 .toPythonPlotly(metaGlobal, approximation, results);
-    }
-
-    private String plotDerivative(FPlot results) {
-        double range = 0.15;
-
-        FPlot dataRaw = results.copy();
-
-        dataRaw.derivate();
-
-        double median = dataRaw.getRefCoreY().median();
-        double min = median - range;
-        double max = median + range;
-
-        FPlot dataMedian = factory.getFPlot();
-        dataMedian.add(dataRaw.getX(0), median);
-        dataMedian.add(dataRaw.getX(dataRaw.size() - 1), median);
-
-        FPlot dataMin = factory.getFPlot();
-        dataMin.add(dataRaw.getX(0), min);
-        dataMin.add(dataRaw.getX(dataRaw.size() - 1), min);
-
-        FPlot dataMax = factory.getFPlot();
-        dataMax.add(dataRaw.getX(0), max);
-        dataMax.add(dataRaw.getX(dataRaw.size() - 1), max);
-
-        dataMedian.mutateY((x, y) -> median);
-
-        String initialMedianFormat = String.format(Locale.US, "%.2f", median);
-
-        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
-                .setFontSize(32)
-                .setNameX("ln ρ")
-                .setNameY("Local dimension");
-
-        FPlotMeta metaPlotMin = factory.getFPlotMeta()
-                .setLinesColor("lightgray")
-                .setLinesWidth(4)
-                .setLinesShow(true)
-                .setMarkersShow(false);
-
-        FPlotMeta metaPlotMedian = factory.getFPlotMeta()
-                .setLinesColor("black")
-                .setLinesWidth(4)
-                .setLinesShow(true)
-                .setMarkersShow(false);
-
-        FPlotMeta metaPlotMax = factory.getFPlotMeta()
-                .setLinesColor("lightgray")
-                .setLinesWidth(4)
-                .setLinesShow(true)
-                .setMarkersShow(false);
-
-        FPlotMeta metaPlotDerivative = factory.getFPlotMeta()
-                .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
-                .setLinesShow(false)
-                .setMarkersShow(true);
-
-        dataMin.setName("Min")
-                .setRefMeta(metaPlotMin);
-
-        dataMedian.setName("Median ≈ " + initialMedianFormat)
-                .setRefMeta(metaPlotMedian);
-
-        dataMax.setName("Max")
-                .setRefMeta(metaPlotMax);
-
-        dataRaw.setName("Raw data")
-                .setRefMeta(metaPlotDerivative);
-
-        return factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(metaGlobal, dataMin, dataMedian, dataMax, dataRaw);
     }
 
     // -------------------------------------------------------------------------------------------------
