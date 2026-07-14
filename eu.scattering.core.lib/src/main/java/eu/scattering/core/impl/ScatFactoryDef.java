@@ -11,13 +11,17 @@ import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
+import eu.scattering.core.design.component.aggregate.config.df.kinetic.cc.FConfigCCPL;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
+import eu.scattering.core.design.component.aggregate.config.df.kinetic.pc.FConfigPCPL;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
+import eu.scattering.core.design.component.aggregate.meta.df.kinetic.cc.FMetaCCPL;
+import eu.scattering.core.design.component.aggregate.meta.df.kinetic.pc.FMetaPCPL;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactoryContext;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
@@ -93,13 +97,8 @@ import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.aspect.rotate.transfer.FRotQtDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
-import eu.scattering.core.impl.component.aggregate.config.FConfigBCDef;
-import eu.scattering.core.impl.component.aggregate.config.FConfigDCDef;
-import eu.scattering.core.impl.component.aggregate.config.FConfigMRDef;
-import eu.scattering.core.impl.component.aggregate.meta.FMetaBCDef;
-import eu.scattering.core.impl.component.aggregate.meta.FMetaDCDef;
-import eu.scattering.core.impl.component.aggregate.meta.FMetaDFDef;
-import eu.scattering.core.impl.component.aggregate.meta.FMetaMRDef;
+import eu.scattering.core.impl.component.aggregate.config.*;
+import eu.scattering.core.impl.component.aggregate.meta.*;
 import eu.scattering.core.impl.component.aggregate.model.FModelFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.validator.FValidatorFactoryContextDef;
@@ -527,6 +526,30 @@ public final class ScatFactoryDef implements ScatFactory {
     }
 
     @Override
+    public FConfigPCPL getFConfigPCPL() {
+
+        return FConfigPCPLDef.create();
+    }
+
+    @Override
+    public FConfigPCPL getFConfigPCPL(FConfigPCPL.Preset preset) {
+
+        return FConfigPCPLDef.create(preset);
+    }
+
+    @Override
+    public FConfigCCPL getFConfigCCPL() {
+
+        return FConfigCCPLDef.create();
+    }
+
+    @Override
+    public FConfigCCPL getFConfigCCPL(FConfigCCPL.Preset preset) {
+
+        return FConfigCCPLDef.create(preset);
+    }
+
+    @Override
     public FConfigBC getFConfigBC() {
 
         return FConfigBCDef.create();
@@ -566,6 +589,18 @@ public final class ScatFactoryDef implements ScatFactory {
     public FMetaDF getFMetaDF() {
 
         return FMetaDFDef.create();
+    }
+
+    @Override
+    public FMetaPCPL getFMetaPCPL() {
+
+        return FMetaPCPLDef.create();
+    }
+
+    @Override
+    public FMetaCCPL getFMetaCCPL() {
+
+        return FMetaCCPLDef.create();
     }
 
     @Override

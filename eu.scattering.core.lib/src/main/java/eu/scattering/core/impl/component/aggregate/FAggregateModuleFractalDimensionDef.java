@@ -2,13 +2,13 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
 import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 
@@ -31,14 +31,12 @@ public class FAggregateModuleFractalDimensionDef {
 
     protected FPlot getBoxCoverageFunction(FConfigBC config) {
 
-        return this.bc.getResultsOptimized(config);
+        return this.bc.getResultsOptimized(config, null);
     }
-
-    // -------------------------------------------------------------------------------------------------
 
     protected FPlot getDensityCorrelationFunction(FConfigDC config) {
 
-        return this.dc.getResults(config);
+        return this.dc.getResults(config, null);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -52,7 +50,7 @@ public class FAggregateModuleFractalDimensionDef {
 
         return switch (type) {
             case BC_NAIVE -> {
-                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.RAW);
+                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.NAIVE);
                 FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
 
                 double res = this.bc.analyze(this.bc.getResultsNaive(metaBC), configBC, metaBC);
@@ -106,17 +104,17 @@ public class FAggregateModuleFractalDimensionDef {
 
     protected double getFractalDimensionBoxCounting(FConfigBC config) {
 
-        return this.bc.analyze(this.bc.getResultsOptimized(config), config);
+        return getFractalDimensionBoxCounting(config, null);
     }
 
     protected double getFractalDimensionBoxCounting(FConfigBC config, FMetaBC meta) {
 
-        return this.bc.analyze(this.bc.getResultsOptimized(config), config, meta);
+        return this.bc.analyze(this.bc.getResultsOptimized(config, meta), config, meta);
     }
 
     protected double getFractalDimensionDensityCorrelation(FConfigDC config) {
 
-        return this.dc.analyze(this.dc.getResults(config, null), config, null);
+        return getFractalDimensionDensityCorrelation(config, null);
     }
 
     protected double getFractalDimensionDensityCorrelation(FConfigDC config, FMetaDC meta) {

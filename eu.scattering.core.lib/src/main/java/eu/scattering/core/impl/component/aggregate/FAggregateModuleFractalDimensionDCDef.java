@@ -2,8 +2,8 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigDC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
@@ -27,11 +27,6 @@ public class FAggregateModuleFractalDimensionDCDef {
         this.aggregate = aggregate;
     }
 
-    protected FPlot getResults(FConfigDC config) {
-
-        return getResults(config, null);
-    }
-
     protected FPlot getResults(FConfigDC config, FMetaDC meta) {
         long millis = System.currentTimeMillis();
 
@@ -48,11 +43,6 @@ public class FAggregateModuleFractalDimensionDCDef {
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    protected double analyze(FPlot results, FConfigDC config) {
-
-        return analyze(results, config, null);
-    }
 
     protected double analyze(FPlot results, FConfigDC config, FMetaDC meta) {
         double windowRatio = config.getWindowRatio();

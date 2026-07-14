@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.config;
 
-import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
 
 public class FConfigBCDef implements FConfigBC {
     private int shiftsPerAxis = 3;
@@ -20,26 +20,50 @@ public class FConfigBCDef implements FConfigBC {
         FConfigBC config = create();
 
         switch (preset) {
-            case OPTIMIZED, MAN_07072026_SHIFT_PCA ->  {}
-            case RAW -> config
+            case OPTIMIZED, MAN_072026_SHIFT_PCA -> config
+                    .setShiftsPerAxis(3)
+                    .setWindowRatio(0.9)
+                    .setScalingFactor(2.0)
+                    .setAlignedPCA(true)
+                    .setAlignedOrigin(false);
+            case NAIVE -> config
                     .setWindowRatio(1);
             case BASELINE -> config
                     .setShiftsPerAxis(1)
+                    .setWindowRatio(1)
+                    .setScalingFactor(2.0)
                     .setAlignedPCA(false)
-                    .setAlignedOrigin(true)
-                    .setWindowRatio(1);
-            case MAN_07072026_BASELINE ->  config
+                    .setAlignedOrigin(true);
+            case MAN_072026_BASELINE ->  config
                     .setShiftsPerAxis(1)
-                    .setAlignedPCA(false);
-            case MAN_07072026_PCA ->  config
-                    .setShiftsPerAxis(1);
-            case MAN_07072026_SHIFT -> config
-                    .setAlignedPCA(false);
-            case MAN_07072026_SHIFT_STEP -> config
+                    .setWindowRatio(0.9)
+                    .setScalingFactor(2.0)
+                    .setAlignedPCA(false)
+                    .setAlignedOrigin(false);
+            case MAN_072026_PCA ->  config
+                    .setShiftsPerAxis(1)
+                    .setWindowRatio(0.9)
+                    .setScalingFactor(2.0)
+                    .setAlignedPCA(true)
+                    .setAlignedOrigin(false);
+            case MAN_072026_SHIFT -> config
+                    .setShiftsPerAxis(3)
+                    .setWindowRatio(0.9)
+                    .setScalingFactor(2.0)
+                    .setAlignedPCA(false)
+                    .setAlignedOrigin(false);
+            case MAN_072026_SHIFT_STEP -> config
+                    .setShiftsPerAxis(3)
+                    .setWindowRatio(0.9)
                     .setScalingFactor(1.25)
-                    .setAlignedPCA(false);
-            case MAN_07072026_SHIFT_PCA_STEP -> config
-                    .setScalingFactor(1.25);
+                    .setAlignedPCA(false)
+                    .setAlignedOrigin(false);
+            case MAN_072026_SHIFT_PCA_STEP -> config
+                    .setShiftsPerAxis(3)
+                    .setWindowRatio(0.9)
+                    .setScalingFactor(1.25)
+                    .setAlignedPCA(true)
+                    .setAlignedOrigin(false);
         }
 
         return config;

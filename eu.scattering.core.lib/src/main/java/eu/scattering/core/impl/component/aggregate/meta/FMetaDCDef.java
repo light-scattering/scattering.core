@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.meta;
 
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
 
 public class FMetaDCDef extends FMetaDFDef implements FMetaDC {
     private Script script = Script.DEFAULT;

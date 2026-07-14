@@ -1,4 +1,6 @@
-package eu.scattering.core.design.component.aggregate.meta.df;
+package eu.scattering.core.design.component.aggregate.meta.df.structural;
+
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
 
 public interface FMetaMR extends FMetaDF {
 

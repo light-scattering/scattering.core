@@ -1,9 +1,11 @@
 package eu.scattering.core.design.component.aggregate.meta;
 
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaDC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
+import eu.scattering.core.design.component.aggregate.meta.df.*;
+import eu.scattering.core.design.component.aggregate.meta.df.kinetic.cc.FMetaCCPL;
+import eu.scattering.core.design.component.aggregate.meta.df.kinetic.pc.FMetaPCPL;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 
 public interface FMetaFactory {
 
@@ -12,4 +14,7 @@ public interface FMetaFactory {
     FMetaBC getFMetaBC();
     FMetaDC getFMetaDC();
     FMetaMR getFMetaMR();
+
+    FMetaPCPL getFMetaPCPL();
+    FMetaCCPL getFMetaCCPL();
 }

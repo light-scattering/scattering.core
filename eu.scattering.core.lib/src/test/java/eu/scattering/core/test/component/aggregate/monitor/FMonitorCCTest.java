@@ -1,6 +1,7 @@
 package eu.scattering.core.test.component.aggregate.monitor;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.df.kinetic.cc.FConfigCCPL;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadius;
@@ -87,7 +88,7 @@ public class FMonitorCCTest {
             FPoly slope = fPlot.reg().poly(1);
 
             assertEquals(df, slope.at(1), 0.05);
-            assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
+            assertEquals(df, fMonitorB.getPowerLawDimension(factory.getFConfigCCPL(FConfigCCPL.Preset.WINDOW)), 0.05);
         }
 
         @Test
@@ -118,7 +119,7 @@ public class FMonitorCCTest {
             FPoly slope = fPlot.reg().poly(1);
 
             assertEquals(df, slope.at(1), 0.05);
-            assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
+            assertEquals(df, fMonitorB.getPowerLawDimension(factory.getFConfigCCPL(FConfigCCPL.Preset.WINDOW)), 0.05);
         }
 
         @Test
@@ -149,7 +150,7 @@ public class FMonitorCCTest {
             FPoly slope = fPlot.reg().poly(1);
 
             assertEquals(df, slope.at(1), 0.05);
-            assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
+            assertEquals(df, fMonitorB.getPowerLawDimension(factory.getFConfigCCPL(FConfigCCPL.Preset.WINDOW)), 0.05);
         }
 
         @Test

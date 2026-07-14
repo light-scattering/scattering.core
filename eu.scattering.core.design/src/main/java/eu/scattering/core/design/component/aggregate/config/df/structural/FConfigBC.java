@@ -1,4 +1,4 @@
-package eu.scattering.core.design.component.aggregate.config.df;
+package eu.scattering.core.design.component.aggregate.config.df.structural;
 
 public interface FConfigBC {
 
@@ -20,12 +20,12 @@ public interface FConfigBC {
     // -------------------------------------------------------------------------------------------------
 
     enum Preset {
-        RAW, BASELINE, OPTIMIZED,
-        MAN_07072026_BASELINE,
-        MAN_07072026_PCA,
-        MAN_07072026_SHIFT,
-        MAN_07072026_SHIFT_PCA,
-        MAN_07072026_SHIFT_STEP,
-        MAN_07072026_SHIFT_PCA_STEP
+        NAIVE, BASELINE, OPTIMIZED,
+        MAN_072026_BASELINE,
+        MAN_072026_PCA,
+        MAN_072026_SHIFT,
+        MAN_072026_SHIFT_PCA,
+        MAN_072026_SHIFT_STEP,
+        MAN_072026_SHIFT_PCA_STEP
     }
 }

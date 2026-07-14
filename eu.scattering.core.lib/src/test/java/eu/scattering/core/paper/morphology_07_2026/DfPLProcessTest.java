@@ -1,5 +1,6 @@
 package eu.scattering.core.paper.morphology_07_2026;
 
+import eu.scattering.core.design.component.aggregate.config.df.kinetic.cc.FConfigCCPL;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import org.junit.jupiter.api.Disabled;
@@ -76,6 +77,8 @@ public class DfPLProcessTest {
 
         fModel.build();
 
-        return fMonitor.getPowerLawDimension();
+        var config = factory.getFConfigCCPL(FConfigCCPL.Preset.WINDOW);
+
+        return fMonitor.getPowerLawDimension(config);
     }
 }

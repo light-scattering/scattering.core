@@ -25,12 +25,8 @@ import java.util.Locale;
 import java.util.function.Function;
 
 public class ComponentAspectSaveDef implements ComponentAspectSave {
-    private final ScatFactory factory;
 
-    private ComponentAspectSaveDef(ScatFactory factory) {
-
-        this.factory = factory;
-    }
+    private ComponentAspectSaveDef(ScatFactory factory) {}
 
     public static ComponentAspectSave create(ScatFactory factory) {
 
@@ -81,90 +77,5 @@ public class ComponentAspectSaveDef implements ComponentAspectSave {
     public void toPovRay(FAggregate aggregate, ExPovRay preset, StringBuilder builder) {
 
         ExPovRayDef.core(aggregate, preset, builder);
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public String toChart(FMonitorCCRadiusOfGyration monitor) {
-
-        FPlotBar res = monitor.getRefFPlotBar().copy();
-
-        res.mutateX(FStat::ln);
-        res.mutateY((statY) -> statY.forEach(FStat::ln));
-
-        res.setName("average");
-
-        FPlotBarMetaGlobal metaGlobal = factory.getFPlotBarMetaGlobal()
-                .setPositionLegend(FPlotBarMetaGlobal.Position.LEFT)
-                .setFontSize(32)
-                .setNameX("ln N<sub>p</sub>")
-                .setNameY("ln R<sub>g</sub>")
-                .setCoreLineColor("black")
-                .setCoreLineWidth(4)
-                .setRangeLineColor("darkgray")
-                .setRangeLineWidth(3)
-                .setRangeShow(true)
-                .setErrorShow(false);
-
-        return  factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(metaGlobal, res);
-    }
-
-    @Override
-    public String toChart(FMonitorCCRadiusOfGyration monitor, Function<FStat, Double> function) {
-
-        return toChartFPlot(monitor.getRefFPlotBar().toFPlot(function));
-    }
-
-    @Override
-    public String toChart(FMonitorPCRadiusOfGyration monitor) {
-
-        return toChartFPlot(monitor.getRefFPlot());
-    }
-
-    private String toChartFPlot(FPlot results) {
-
-        results.swapXY();
-        results.mutateX(FStat::ln);
-        results.mutateY(FStat::ln);
-
-        FPoly regression = results.reg().fitSlope((int) (results.size() * 0.9));
-
-        FPlot approximation = results.copy();
-        approximation.setY(regression);
-
-        String dimFormat = String.format(Locale.US, "%.2f", regression.at(1));
-        String r2Format = String.format(Locale.US, "%.4f", results.r2(regression));
-
-        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
-                .setPositionLegend(FPlotMetaGlobal.Position.LEFT)
-                .setPositionAnnotation(FPlotMetaGlobal.Position.RIGHT)
-                .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
-                .setFontSize(32)
-                .setNameX("ln R<sub>g</sub>")
-                .setNameY("ln N<sub>p</sub>");
-
-        FPlotMeta metaPlotFit = factory.getFPlotMeta()
-                .setLinesColor("black")
-                .setLinesWidth(4)
-                .setLinesShow(true)
-                .setMarkersShow(false);
-
-        FPlotMeta metaPlotResults = factory.getFPlotMeta()
-                .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
-                .setLinesShow(false)
-                .setMarkersShow(true);
-
-        approximation.setName("Linear fit (D<sub>PL</sub> ≈ " + dimFormat + ")")
-                .setRefMeta(metaPlotFit);
-
-        results.setName("Averaged data")
-                .setRefMeta(metaPlotResults);
-
-        return  factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(metaGlobal, approximation, results);
     }
 }

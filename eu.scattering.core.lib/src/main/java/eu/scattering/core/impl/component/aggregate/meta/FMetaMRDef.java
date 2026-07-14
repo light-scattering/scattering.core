@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.meta;
 
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 
 public class FMetaMRDef extends FMetaDFDef implements FMetaMR {
     private int refs = -1;

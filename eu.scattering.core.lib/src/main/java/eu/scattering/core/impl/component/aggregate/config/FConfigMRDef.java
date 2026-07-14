@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.config;
 
-import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 public class FConfigMRDef implements FConfigMR {
@@ -20,8 +20,14 @@ public class FConfigMRDef implements FConfigMR {
         FConfigMR config = create();
 
         switch (preset) {
-            case RESTRICTED -> {}
-            case FULL -> config.setRestricted(false);
+            case RESTRICTED -> config
+                    .setWindowRatio(0.9)
+                    .setScalingFactor(1.1)
+                    .setRestricted(true);
+            case FULL -> config
+                    .setWindowRatio(0.9)
+                    .setScalingFactor(1.1)
+                    .setRestricted(false);
         }
 
         return config;

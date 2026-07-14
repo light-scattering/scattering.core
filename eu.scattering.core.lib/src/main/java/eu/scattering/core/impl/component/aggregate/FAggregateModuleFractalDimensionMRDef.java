@@ -2,8 +2,8 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigMR;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaMR;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.statistics.base.FStat;
@@ -27,11 +27,6 @@ public class FAggregateModuleFractalDimensionMRDef {
         this.aggregate = aggregate;
     }
 
-    protected FPlot getResults(FConfigMR config) {
-
-        return getResults(config, null);
-    }
-
     protected FPlot getResults(FConfigMR config, FMetaMR meta) {
         long millis = System.currentTimeMillis();
 
@@ -45,13 +40,6 @@ public class FAggregateModuleFractalDimensionMRDef {
         }
 
         return results;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    protected double analyze(FPlot results, FConfigMR config) {
-
-        return analyze(results, config, null);
     }
 
     protected double analyze(FPlot results, FConfigMR config, FMetaMR meta) {
@@ -210,7 +198,7 @@ public class FAggregateModuleFractalDimensionMRDef {
 
             while (step <= range) {
                 this.results.add(step * step, 0);
-                step = step * this.config.getScalingFactor();;
+                step = step * this.config.getScalingFactor();
             }
         }
 

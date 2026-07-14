@@ -2,8 +2,8 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.FConfigBC;
-import eu.scattering.core.design.component.aggregate.meta.df.FMetaBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -28,11 +28,6 @@ public class FAggregateModuleFractalDimensionBCDef {
         this.aggregate = aggregate;
     }
 
-    protected FPlot getResultsOptimized(FConfigBC config) {
-
-        return getResultsOptimized(config, null);
-    }
-
     protected FPlot getResultsOptimized(FConfigBC config, FMetaBC meta) {
         long millis = System.currentTimeMillis();
 
@@ -48,11 +43,6 @@ public class FAggregateModuleFractalDimensionBCDef {
         return results;
     }
 
-    protected FPlot getResultsNaive() {
-
-        return getResultsNaive(null);
-    }
-
     protected FPlot getResultsNaive(FMetaBC meta) {
         long millis = System.currentTimeMillis();
 
@@ -66,13 +56,6 @@ public class FAggregateModuleFractalDimensionBCDef {
         }
 
         return results;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    protected double analyze(FPlot results, FConfigBC config) {
-
-        return analyze(results, config, null);
     }
 
     protected double analyze(FPlot results, FConfigBC config, FMetaBC meta) {

@@ -100,5 +100,10 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.utility.type.variant;
     exports eu.scattering.core.design;
     exports eu.scattering.core.design.component.aggregate.meta.df;
-    exports eu.scattering.core.design.component.aggregate.config.df;
+    exports eu.scattering.core.design.component.aggregate.meta.df.structural;
+    exports eu.scattering.core.design.component.aggregate.meta.df.kinetic.pc;
+    exports eu.scattering.core.design.component.aggregate.config.df.structural;
+    exports eu.scattering.core.design.component.aggregate.config.df.kinetic.pc;
+    exports eu.scattering.core.design.component.aggregate.config.df.kinetic.cc;
+    exports eu.scattering.core.design.component.aggregate.meta.df.kinetic.cc;
 }

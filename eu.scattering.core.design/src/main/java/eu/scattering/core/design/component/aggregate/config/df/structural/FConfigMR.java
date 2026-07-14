@@ -1,4 +1,4 @@
-package eu.scattering.core.design.component.aggregate.config.df;
+package eu.scattering.core.design.component.aggregate.config.df.structural;
 
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
