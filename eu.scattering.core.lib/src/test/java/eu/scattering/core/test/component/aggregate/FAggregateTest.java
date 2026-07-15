@@ -2635,7 +2635,7 @@ public class FAggregateTest {
             double rgDefault = fAggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX);
             double rgLegacyMono = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
             double rgLegacyPoly = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
-            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
             double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
             double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);

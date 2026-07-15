@@ -190,10 +190,10 @@ public class DFMethodComparisonTest {
 
         private final FConfigCCPL configPL = factory.getFConfigCCPL(FConfigCCPL.Preset.WINDOW);
         private final FConfigBC configBcOptimized = factory.getFConfigBC(FConfigBC.Preset.OPTIMIZED);
-        private final FConfigDC configDcRestricted = factory.getFConfigDC(FConfigDC.Preset.RESTRICTED).setRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
-        private final FConfigDC configDcFull = factory.getFConfigDC(FConfigDC.Preset.FULL).setRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
-        private final FConfigMR configMrRestricted = factory.getFConfigMR(FConfigMR.Preset.RESTRICTED).setRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
-        private final FConfigMR configMrFull = factory.getFConfigMR(FConfigMR.Preset.FULL).setRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+        private final FConfigDC configDcRestricted = factory.getFConfigDC(FConfigDC.Preset.RESTRICTED).setRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+        private final FConfigDC configDcFull = factory.getFConfigDC(FConfigDC.Preset.FULL).setRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+        private final FConfigMR configMrRestricted = factory.getFConfigMR(FConfigMR.Preset.RESTRICTED).setRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+        private final FConfigMR configMrFull = factory.getFConfigMR(FConfigMR.Preset.FULL).setRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
         public Container(double df, double kf, int size, int repetitions) {
            this.df = df;
@@ -230,7 +230,7 @@ public class DFMethodComparisonTest {
 
             var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 
-            var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
             fModel.addStepMonitor(fMonitor);
 
             fModel.build();

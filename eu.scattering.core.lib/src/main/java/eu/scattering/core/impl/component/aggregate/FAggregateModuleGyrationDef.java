@@ -40,7 +40,7 @@ public class FAggregateModuleGyrationDef {
         return switch (type) {
             case SIMPLE_MONO -> getRadiusOfGyrationSimpleMono(Correction.NONE, meta);
             case SIMPLE_MONO_06R1 -> getRadiusOfGyrationSimpleMono(Correction._06R1, meta);
-            case SIMPLE_MONO_10R2, DEDICATED_FILIPPOV -> getRadiusOfGyrationSimpleMono(Correction._10R2, meta);
+            case SIMPLE_MONO_10R2 -> getRadiusOfGyrationSimpleMono(Correction._10R2, meta);
             case SIMPLE_POLY -> getRadiusOfGyrationSimplePoly(Correction.NONE, meta);
             case SIMPLE_POLY_06R1 -> getRadiusOfGyrationSimplePoly(Correction._06R1, meta);
             case SIMPLE_POLY_10R2 -> getRadiusOfGyrationSimplePoly(Correction._10R2, meta);

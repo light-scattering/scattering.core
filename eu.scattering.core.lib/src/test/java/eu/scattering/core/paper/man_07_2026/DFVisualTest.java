@@ -37,7 +37,7 @@ public class DFVisualTest {
 
             var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
 
-            var fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            var fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
             var fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
@@ -73,7 +73,7 @@ public class DFVisualTest {
 
             var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
 
-            var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
             var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
