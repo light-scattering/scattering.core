@@ -1,4 +1,4 @@
-package eu.scattering.core.paper.morphology_07_2026;
+package eu.scattering.core.paper.man_07_2026;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
@@ -15,10 +15,10 @@ import java.text.DecimalFormat;
 import static eu.scattering.core.test.Config.factory;
 
 @Disabled
+@Tag("sandbox")
 @DisplayName("Paper - Morphology (PCA volume reduction)")
-public class DfBCVolumeReductionPCATest {
-    private final int repetitions = 1000;
-    private final int size = 1000;
+public class BCVolumeReductionPCATest {
+    private final int repetitions = 100;
 
     private static final DecimalFormat df = new DecimalFormat("#.####");
 
@@ -27,7 +27,6 @@ public class DfBCVolumeReductionPCATest {
     }
 
     @Test
-    @Tag("Visual")
     @DisplayName("Dimension 1.4")
     void df14() {
         Container container = new Container();
@@ -44,7 +43,6 @@ public class DfBCVolumeReductionPCATest {
     }
 
     @Test
-    @Tag("Visual")
     @DisplayName("Dimension 1.8")
     void df18() {
         Container container = new Container();
@@ -61,7 +59,6 @@ public class DfBCVolumeReductionPCATest {
     }
 
     @Test
-    @Tag("Visual")
     @DisplayName("Dimension 2.2")
     void df22() {
         Container container = new Container();
@@ -78,6 +75,8 @@ public class DfBCVolumeReductionPCATest {
     }
 
     private void measure(Container container, double df, double kf) {
+        int size = 1000;
+
         FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
 
         FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
@@ -88,32 +87,27 @@ public class DfBCVolumeReductionPCATest {
         container.update(fAggregate);
     }
 
-    private record Container(
-            FStat initial,
-            FStat corrected,
-            FStat error
-    ) {
+    private record Container(FStat initial, FStat corrected, FStat error) {
+
         public Container() {
-            this(
-                    factory.getFStat(),
-                    factory.getFStat(),
-                    factory.getFStat());
+
+            this (factory.getFStat(), factory.getFStat(), factory.getFStat());
         }
 
         public void update(FAggregate aggregate) {
-            FPos3D lengthInitial = aggregate.getLength();
-            double volumeInitial = lengthInitial.getD0() * lengthInitial.getD1() * lengthInitial.getD2();
+            FPos3D initLength = aggregate.getLength();
+            double initVolume = initLength.getD0() * initLength.getD1() * initLength.getD2();
 
-            initial.add(volumeInitial);
+            initial.add(initVolume);
 
             aggregate.pca();
 
-            FPos3D lengthCorrected = aggregate.getLength();
-            double volumeCorrected = lengthCorrected.getD0() * lengthCorrected.getD1() * lengthCorrected.getD2();
+            FPos3D updatedLength = aggregate.getLength();
+            double updatedVolume = updatedLength.getD0() * updatedLength.getD1() * updatedLength.getD2();
 
-            corrected.add(volumeCorrected);
+            corrected.add(updatedVolume);
 
-            error.add(factory.getStatisticsHelper().getRelErr(volumeInitial, volumeCorrected));
+            error.add(factory.getStatisticsHelper().getRelErr(initVolume, updatedVolume));
         }
 
         public void show() {

@@ -3599,7 +3599,6 @@ public class FAggregateTest {
     class FAggregateTopologyTest {
 
         @Nested
-        @Tag("Topology")
         @DisplayName("Box counting")
         class BoxCountingTest {
 
@@ -3667,7 +3666,6 @@ public class FAggregateTest {
         }
 
         @Nested
-        @Tag("Topology")
         @DisplayName("Density correlation")
         class DensityCorrelationTest {
 
@@ -3755,7 +3753,6 @@ public class FAggregateTest {
         }
 
         @Nested
-        @Tag("Topology")
         @DisplayName("Mass radius")
         class MassRadiusTest {
 
@@ -3839,6 +3836,56 @@ public class FAggregateTest {
 
                 assertEquals(2, dim2d, 2 * 0.05);
                 assertEquals(3, dim3d, 3 * 0.05);
+            }
+        }
+
+        @Nested
+        @DisplayName("Fractal prefactor")
+        class FractalPrefactorTest {
+
+            @Test
+            @DisplayName("Dimension 1.0")
+            void df10() {
+                int size = 100;
+                FAggregate aggregate = factory.getFAggregateContext().geometry().d1(size);
+
+                double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+
+                double kfCalculated = size / (rg);
+
+                double kfPredicted = Math.sqrt(3);
+
+                assertEquals(kfPredicted, kfCalculated, 1E-3);
+            }
+
+            @Test
+            @DisplayName("Dimension 2.0")
+            void df20() {
+                int size = 25;
+                FAggregate aggregate = factory.getFAggregateContext().geometry().d2Hex(size);
+
+                double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+
+                double kfCalculated = aggregate.size() / (rg * rg);
+
+                double kfPredicted = 1.8138;
+
+                assertEquals(kfPredicted, kfCalculated, 1E-3);
+            }
+
+            @Test
+            @DisplayName("Dimension 3.0")
+            void df30() {
+                int size = 15;
+                FAggregate aggregate = factory.getFAggregateContext().geometry().d3Hex(size);
+
+                double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+
+                double kfCalculated = aggregate.size() / (rg * rg * rg);
+
+                double kfPredicted = 1.593;
+
+                assertEquals(kfPredicted, kfCalculated, 1E-3);
             }
         }
     }
