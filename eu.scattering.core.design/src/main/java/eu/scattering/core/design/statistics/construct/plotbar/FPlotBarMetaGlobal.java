@@ -19,6 +19,12 @@ public interface FPlotBarMetaGlobal {
     String getNameY();
     FPlotBarMetaGlobal setNameY(String nameY);
 
+    String getNameMin();
+    FPlotBarMetaGlobal setNameMin(String nameMin);
+
+    String getNameMax();
+    FPlotBarMetaGlobal setNameMax(String nameMax);
+
     FPos2D getRangeX();
     FPlotBarMetaGlobal setRangeX(double min, double max);
 
@@ -54,6 +60,9 @@ public interface FPlotBarMetaGlobal {
 
     boolean getErrorShow();
     FPlotBarMetaGlobal setErrorShow(boolean show);
+
+    double getGridSize();
+    FPlotBarMetaGlobal setGridSize(double size);
 
     enum Position { LEFT, RIGHT }
 }

@@ -1,10 +1,11 @@
 package eu.scattering.core.impl.statistics.construct.plotbar;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 
-public class FPlotBarMetaDef implements FPlotBarMetaGlobal {
+public class FPlotBarMetaGlobalDef implements FPlotBarMetaGlobal {
     private final ScatFactory factory;
 
     private int fontSize = 18;
@@ -14,6 +15,9 @@ public class FPlotBarMetaDef implements FPlotBarMetaGlobal {
     private String nameY = "";
     private FPos2D rangeX = null;
     private FPos2D rangeY = null;
+
+    private String nameMin = "min";
+    private String nameMax = "max";
 
     private String annotation = "";
 
@@ -32,14 +36,16 @@ public class FPlotBarMetaDef implements FPlotBarMetaGlobal {
     private boolean rangeShow = true;
     private boolean errorShow = true;
 
-    private FPlotBarMetaDef(ScatFactory factory) {
+    private double gridSize = 3;
+
+    private FPlotBarMetaGlobalDef(ScatFactory factory) {
 
         this.factory = factory;
     }
 
     public static FPlotBarMetaGlobal create(ScatFactory factory) {
 
-        return new FPlotBarMetaDef(factory);
+        return new FPlotBarMetaGlobalDef(factory);
     }
 
     @Override
@@ -98,6 +104,34 @@ public class FPlotBarMetaDef implements FPlotBarMetaGlobal {
     public FPlotBarMetaGlobal setNameY(String nameY) {
 
         this.nameY = nameY;
+
+        return this;
+    }
+
+    @Override
+    public String getNameMin() {
+
+        return this.nameMin;
+    }
+
+    @Override
+    public FPlotBarMetaGlobal setNameMin(String nameMin) {
+
+        this.nameMin = nameMin;
+
+        return this;
+    }
+
+    @Override
+    public String getNameMax() {
+
+        return this.nameMax;
+    }
+
+    @Override
+    public FPlotBarMetaGlobal setNameMax(String nameMax) {
+
+        this.nameMax = nameMax;
 
         return this;
     }
@@ -292,6 +326,20 @@ public class FPlotBarMetaDef implements FPlotBarMetaGlobal {
     public FPlotBarMetaGlobal setRangeShow(boolean show) {
 
         this.rangeShow = show;
+
+        return this;
+    }
+
+    @Override
+    public double getGridSize() {
+
+        return this.gridSize;
+    }
+
+    @Override
+    public FPlotBarMetaGlobal setGridSize(double size) {
+
+        this.gridSize = size;
 
         return this;
     }

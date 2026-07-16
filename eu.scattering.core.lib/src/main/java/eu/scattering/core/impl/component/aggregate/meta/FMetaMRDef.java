@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.aggregate.meta;
 import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 
 public class FMetaMRDef extends FMetaDFDef implements FMetaMR {
-    private int refs = -1;
+    private int references = -1;
 
     private FMetaMRDef() {}
 
@@ -17,12 +17,12 @@ public class FMetaMRDef extends FMetaDFDef implements FMetaMR {
     @Override
     public int getRefParticlesCount() {
 
-        return this.refs;
+        return this.references;
     }
 
     @Override
     public void setRefParticlesCount(int count) {
 
-        this.refs = count;
+        this.references = count;
     }
 }

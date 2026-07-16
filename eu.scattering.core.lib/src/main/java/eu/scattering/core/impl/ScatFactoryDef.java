@@ -126,7 +126,7 @@ import eu.scattering.core.impl.statistics.base.FStatMetaDef;
 import eu.scattering.core.impl.statistics.construct.plot.FPlotMetaGlobalDef;
 import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarDef;
 import eu.scattering.core.impl.statistics.construct.plot.FPlotDef;
-import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarMetaDef;
+import eu.scattering.core.impl.statistics.construct.plotbar.FPlotBarMetaGlobalDef;
 import eu.scattering.core.impl.storage.buffer.FBufferDataDef;
 import eu.scattering.core.impl.storage.buffer.FBufferDef;
 import eu.scattering.core.impl.storage.cache.FCacheDef;
@@ -712,7 +712,7 @@ public final class ScatFactoryDef implements ScatFactory {
     @Override
     public FPlotBarMetaGlobal getFPlotBarMetaGlobal() {
 
-        return FPlotBarMetaDef.create(this);
+        return FPlotBarMetaGlobalDef.create(this);
     }
 
     @Override

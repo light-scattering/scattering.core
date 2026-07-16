@@ -93,20 +93,22 @@ public class FAggregateModuleFractalDimensionBCDef {
 
         FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
                 .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
-                .setFontSize(32)
+                .setFontSize(48)
+                .setGridSize(3)
                 .setNameX("ln δ")
                 .setNameY("ln N<sub>δ</sub>");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
                 .setLinesColor("black")
-                .setLinesWidth(4)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(true)
                 .setMarkersShow(false);
 
         FPlotMeta metaPlotResults = factory.getFPlotMeta()
                 .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(false)
                 .setMarkersShow(true);
 

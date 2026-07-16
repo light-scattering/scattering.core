@@ -126,20 +126,22 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
                 .setPositionLegend(FPlotMetaGlobal.Position.LEFT)
                 .setPositionAnnotation(FPlotMetaGlobal.Position.RIGHT)
                 .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
-                .setFontSize(32)
+                .setFontSize(48)
+                .setGridSize(3)
                 .setNameX("ln R<sub>g</sub>")
                 .setNameY("ln N<sub>p</sub>");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
                 .setLinesColor("black")
-                .setLinesWidth(4)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(true)
                 .setMarkersShow(false);
 
         FPlotMeta metaPlotResults = factory.getFPlotMeta()
                 .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(false)
                 .setMarkersShow(true);
 

@@ -117,27 +117,29 @@ public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration
                 .setPositionLegend(FPlotMetaGlobal.Position.LEFT)
                 .setPositionAnnotation(FPlotMetaGlobal.Position.RIGHT)
                 .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
-                .setFontSize(32)
+                .setFontSize(48)
+                .setGridSize(3)
                 .setNameX("ln R<sub>g</sub>")
                 .setNameY("ln N<sub>p</sub>");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
                 .setLinesColor("black")
-                .setLinesWidth(4)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(true)
                 .setMarkersShow(false);
 
         FPlotMeta metaPlotResults = factory.getFPlotMeta()
                 .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(false)
                 .setMarkersShow(true);
 
         approximation.setName("Linear fit (D<sub>PL</sub> ≈ " + dimFormat + ")")
                 .setRefMeta(metaPlotFit);
 
-        results.setName("Averaged data")
+        results.setName("Effective R<sub>g</sub>")
                 .setRefMeta(metaPlotResults);
 
         return  factory.getSaveAspect().getStatisticsContext()
@@ -147,20 +149,24 @@ public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration
     private String plotRaw() {
         FPlotBar results = getRefFPlotBar().copy();
 
+        results.sortX(true);
+
         results.mutateX(FStat::ln);
         results.mutateY((statY) -> statY.forEach(FStat::ln));
 
-        results.setName("average");
+        results.setName("Effective R<sub>g</sub>");
 
         FPlotBarMetaGlobal metaGlobal = factory.getFPlotBarMetaGlobal()
                 .setPositionLegend(FPlotBarMetaGlobal.Position.LEFT)
-                .setFontSize(32)
+                .setFontSize(48)
                 .setNameX("ln N<sub>p</sub>")
                 .setNameY("ln R<sub>g</sub>")
+                .setNameMin("Min R<sub>g</sub>")
+                .setNameMax("Max R<sub>g</sub>")
                 .setCoreLineColor("black")
-                .setCoreLineWidth(4)
+                .setCoreLineWidth(6)
                 .setRangeLineColor("darkgray")
-                .setRangeLineWidth(3)
+                .setRangeLineWidth(5)
                 .setRangeShow(true)
                 .setErrorShow(false);
 

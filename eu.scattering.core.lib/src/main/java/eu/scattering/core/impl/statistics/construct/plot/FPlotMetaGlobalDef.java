@@ -20,6 +20,8 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     private Position positionLegend = Position.RIGHT;
     private Position positionAnnotation = Position.LEFT;
 
+    private double gridSize = 3;
+
     private FPlotMetaGlobalDef(ScatFactory factory) {
 
         this.factory = factory;
@@ -156,6 +158,20 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     public FPlotMetaGlobal setPositionAnnotation(Position position) {
 
         this.positionAnnotation = position;
+
+        return this;
+    }
+
+    @Override
+    public double getGridSize() {
+
+        return this.gridSize;
+    }
+
+    @Override
+    public FPlotMetaGlobal setGridSize(double size) {
+
+        this.gridSize = size;
 
         return this;
     }

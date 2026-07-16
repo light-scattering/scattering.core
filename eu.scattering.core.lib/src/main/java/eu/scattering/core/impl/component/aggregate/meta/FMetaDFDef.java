@@ -4,8 +4,8 @@ import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 
 public class FMetaDFDef implements FMetaDF {
+    private long milliseconds;
     private String script;
-    private long millis;
     private FPlot data;
 
     protected FMetaDFDef() {}
@@ -34,7 +34,7 @@ public class FMetaDFDef implements FMetaDF {
     @Override
     public long getExecutionTimeMillis() {
 
-        return this.millis;
+        return this.milliseconds;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FMetaDFDef implements FMetaDF {
             throw new IllegalArgumentException("The time cannot be lower than zero");
         }
 
-        this.millis = millis;
+        this.milliseconds = millis;
     }
 
     @Override
