@@ -25,7 +25,7 @@ public class FMonitorPCFactoryContextDef implements FMonitorPCFactoryContext {
     //--------------------------------------------------
 
     @Override
-    public FMonitorPCRadiusOfGyration radiusOfGyration(int skip, RadiusOfGyration type) {
+    public FMonitorPCRadiusOfGyration radiusOfGyration(RadiusOfGyration type, int skip) {
 
         return FMonitorPCRadiusOfGyrationDef.create(this.factory, skip, type);
     }

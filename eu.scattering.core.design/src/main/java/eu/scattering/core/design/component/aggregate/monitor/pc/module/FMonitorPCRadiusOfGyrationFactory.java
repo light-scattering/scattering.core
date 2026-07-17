@@ -4,12 +4,12 @@ import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 public interface FMonitorPCRadiusOfGyrationFactory {
 
-    FMonitorPCRadiusOfGyration radiusOfGyration(int skip, RadiusOfGyration type);
+    FMonitorPCRadiusOfGyration radiusOfGyration(RadiusOfGyration type, int skip);
 
     // -------------------------------------------------------------------------------------------------
 
     default FMonitorPCRadiusOfGyration radiusOfGyration(RadiusOfGyration type) {
 
-        return radiusOfGyration(-1, type);
+        return radiusOfGyration(type, -1);
     }
 }
