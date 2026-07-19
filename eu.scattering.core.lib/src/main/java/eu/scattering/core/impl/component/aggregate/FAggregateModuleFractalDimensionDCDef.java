@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
 import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class FAggregateModuleFractalDimensionDCDef {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FAggregate aggregate;
 
-    protected FAggregateModuleFractalDimensionDCDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleFractalDimensionDCDef(ScatterFactory factory, FAggregate aggregate) {
 
         this.factory = factory;
         this.aggregate = aggregate;
@@ -113,7 +113,7 @@ public class FAggregateModuleFractalDimensionDCDef {
     // -------------------------------------------------------------------------------------------------
 
     static class Process {
-        private final ScatFactory factory;
+        private final ScatterFactory factory;
 
         private final FConfigDC config;
         private final FMetaDC meta;
@@ -129,7 +129,7 @@ public class FAggregateModuleFractalDimensionDCDef {
         private double min;
         private double max;
 
-        private Process(ScatFactory factory, FAggregate aggregate, FConfigDC config, FMetaDC meta) {
+        private Process(ScatterFactory factory, FAggregate aggregate, FConfigDC config, FMetaDC meta) {
             this.factory = factory;
 
             this.config = config;

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
@@ -49,7 +49,7 @@ public class FModelPCDLADef implements FModelPCDLA {
 
     private double rp;
 
-    private FModelPCDLADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    private FModelPCDLADef(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -84,7 +84,7 @@ public class FModelPCDLADef implements FModelPCDLA {
         setMovementVariantDimension();
     }
 
-    public static FModelPCDLA create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    public static FModelPCDLA create(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         return new FModelPCDLADef(dimension, aggregate, factory);
     }

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.statistics.construct.plot.utils;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotInterpolator;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
@@ -10,19 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FPlotInterpolatorDef implements FPlotInterpolator {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FPlot data;
 
-    private FPlotInterpolatorDef(ScatFactory factory, FPlot data) {
+    private FPlotInterpolatorDef(ScatterFactory factory, FPlot data) {
 
         this.factory = factory;
         this.data = data;
     }
 
-    public static FPlotInterpolator create(ScatFactory factory, FPlot data) {
+    public static FPlotInterpolator create(ScatterFactory factory, FPlot data) {
 
         return new FPlotInterpolatorDef(factory, data);
     }

@@ -1,6 +1,6 @@
 # Scattering Core
 
-Scattering Core is an optimized Java library designed for the generation and morphological analysis of synthetic fractal aggregates.
+ScatCore is an optimized Java library designed for the generation and morphological analysis of synthetic fractal aggregates.
 
 > **Note on Manuscript Reproducibility:**
 > This manual is actively being expanded and currently focuses on the specific methods required to reproduce the findings of the recently submitted manuscript. 
@@ -16,7 +16,10 @@ Scattering Core is an optimized Java library designed for the generation and mor
 
 All generation and analysis operations begin with the `ScatFactory`, which serves as the core entry point for the library:
 ```java
-var factory = ScatFactoryDef.create();
+ScatFactory factory = ScatFactoryDef.create();
+
+ScatterFactory factory = ScatterCore.createFactory();
+
 ```
 
 To generate a synthetic Cluster-Cluster (CC) aggregate, you must first define its fundamental physical properties.

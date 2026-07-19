@@ -1,12 +1,11 @@
 package eu.scattering.core.impl.statistics.construct.plotbar;
 
-import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 
 public class FPlotBarMetaGlobalDef implements FPlotBarMetaGlobal {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private int fontSize = 18;
 
@@ -38,12 +37,12 @@ public class FPlotBarMetaGlobalDef implements FPlotBarMetaGlobal {
 
     private double gridSize = 3;
 
-    private FPlotBarMetaGlobalDef(ScatFactory factory) {
+    private FPlotBarMetaGlobalDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FPlotBarMetaGlobal create(ScatFactory factory) {
+    public static FPlotBarMetaGlobal create(ScatterFactory factory) {
 
         return new FPlotBarMetaGlobalDef(factory);
     }

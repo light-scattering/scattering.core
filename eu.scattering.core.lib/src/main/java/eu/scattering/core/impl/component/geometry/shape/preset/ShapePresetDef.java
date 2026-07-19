@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.geometry.shape.preset;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -18,14 +18,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static eu.scattering.core.impl.ScatConfigDef.*;
+import static eu.scattering.core.impl.ScatterCoreConfig.*;
 
 public abstract class ShapePresetDef implements Shape {
     private final static boolean SHIFT_GEOMETRY = true;
     private final static double SHIFT_OFFSET = -1d / 3;
     private final static int LAYER_LIMIT = 6;
 
-    protected final ScatFactory factory;
+    protected final ScatterFactory factory;
 
     private final List<FBufferData> metaData = new ArrayList<>();
     private final List<Double> coatData = new ArrayList<>();
@@ -37,7 +37,7 @@ public abstract class ShapePresetDef implements Shape {
 
     private CmpDistCenter cmpDistCenter;
 
-    public ShapePresetDef(ScatFactory factory) {
+    public ShapePresetDef(ScatterFactory factory) {
 
         this.factory = factory;
 

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.statistics;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.StatisticsAspectSave;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsAspectSaveDef implements StatisticsAspectSave {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private StatisticsAspectSaveDef(ScatFactory factory) {
+    private StatisticsAspectSaveDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static StatisticsAspectSave create(ScatFactory factory) {
+    public static StatisticsAspectSave create(ScatterFactory factory) {
 
         return new StatisticsAspectSaveDef(factory);
     }

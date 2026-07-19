@@ -1,21 +1,21 @@
 package eu.scattering.core.impl.statistics.construct.plot.utils;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.util.FPlotRegressor;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 
 public class FPlotRegressorDef implements FPlotRegressor {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FPlot data;
 
-    private FPlotRegressorDef(ScatFactory factory, FPlot data) {
+    private FPlotRegressorDef(ScatterFactory factory, FPlot data) {
 
         this.factory = factory;
         this.data = data;
     }
 
-    public static FPlotRegressor create(ScatFactory factory, FPlot data) {
+    public static FPlotRegressor create(ScatterFactory factory, FPlot data) {
 
         return new FPlotRegressorDef(factory, data);
     }

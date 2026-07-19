@@ -1,7 +1,7 @@
 package eu.scattering.cli.aspect;
 
 import eu.scattering.cli.type.FORMAT_INPUT;
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateAspectLoad;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
@@ -15,12 +15,12 @@ import java.util.Optional;
 
 public class FAggregateLoad {
 
-    public static Optional<FAggregate> load(ScatFactory factory, String file, FORMAT_INPUT format) {
+    public static Optional<FAggregate> load(ScatterFactory factory, String file, FORMAT_INPUT format) {
 
         return "-".equals(file) ? loadFromStreamConsole(factory, format) : loadFromStreamFile(factory, file, format);
     }
 
-    private static Optional<FAggregate> loadFromStreamConsole(ScatFactory factory, FORMAT_INPUT format) {
+    private static Optional<FAggregate> loadFromStreamConsole(ScatterFactory factory, FORMAT_INPUT format) {
 
         try {
             return loadFromStream(factory, System.in, format);
@@ -31,7 +31,7 @@ public class FAggregateLoad {
         }
     }
 
-    private static Optional<FAggregate> loadFromStreamFile(ScatFactory factory, String file, FORMAT_INPUT format) {
+    private static Optional<FAggregate> loadFromStreamFile(ScatterFactory factory, String file, FORMAT_INPUT format) {
 
         try (InputStream is = Files.newInputStream(Paths.get(file))) {
             return loadFromStream(factory, is, format);
@@ -42,13 +42,13 @@ public class FAggregateLoad {
         }
     }
 
-    private static Optional<FAggregate> loadFromStream(ScatFactory factory, InputStream stream, FORMAT_INPUT format) throws IOException {
+    private static Optional<FAggregate> loadFromStream(ScatterFactory factory, InputStream stream, FORMAT_INPUT format) throws IOException {
         String data = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
 
         return loadFromString(factory, data, format);
     }
 
-    private static Optional<FAggregate> loadFromString(ScatFactory factory, String data, FORMAT_INPUT format) {
+    private static Optional<FAggregate> loadFromString(ScatterFactory factory, String data, FORMAT_INPUT format) {
         FAggregateAspectLoad load = factory.getLoadAspect().getFAggregateContext();
 
         return Optional.ofNullable(switch (format) {

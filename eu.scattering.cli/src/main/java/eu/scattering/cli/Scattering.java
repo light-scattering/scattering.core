@@ -9,10 +9,10 @@ import picocli.CommandLine;
         versionProvider = VersionProvider.class,
         subcommands = { MeasureCommand.class, CommandLine.HelpCommand.class },
         description = "Root command for ScatCore morphological analysis.")
-public class Scat {
+public class Scattering {
 
     public static void main(String[] args) {
-        CommandLine cmd = new CommandLine(new Scat());
+        CommandLine cmd = new CommandLine(new Scattering());
 
         cmd.setCaseInsensitiveEnumValuesAllowed(true);
 

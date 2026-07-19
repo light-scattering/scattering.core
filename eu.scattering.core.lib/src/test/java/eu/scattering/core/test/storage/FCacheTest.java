@@ -1,6 +1,6 @@
 package eu.scattering.core.test.storage;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.storage.Storage;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
@@ -188,10 +188,10 @@ public class FCacheTest {
         @DisplayName("Get with key and supplier")
         void getWithKeyAndSupplier() {
             FCache fCache = factory.getFCache(multi);
-            fCache.put(ScatFactory.class, factory);
+            fCache.put(ScatterFactory.class, factory);
 
             FPos3D resultA = fCache.get("data", FPos3D.class,
-                    (cache) -> cache.get(ScatFactory.class).getFPos3D(1, 2, 3));
+                    (cache) -> cache.get(ScatterFactory.class).getFPos3D(1, 2, 3));
             FPos3D resultB = fCache.get("data", FPos3D.class);
 
             Assertions.assertAll("Check values",
@@ -208,10 +208,10 @@ public class FCacheTest {
         @DisplayName("Get with class and supplier")
         void getWithClassAndSupplier() {
             FCache fCache = factory.getFCache(multi);
-            fCache.put(ScatFactory.class, factory);
+            fCache.put(ScatterFactory.class, factory);
 
             FPos3D resultA = fCache.get(FPos3D.class,
-                    (cache) -> cache.get(ScatFactory.class).getFPos3D(1, 2, 3));
+                    (cache) -> cache.get(ScatterFactory.class).getFPos3D(1, 2, 3));
             FPos3D resultB = fCache.get(FPos3D.class);
 
             Assertions.assertAll("Check values",

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
 import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
@@ -16,13 +16,13 @@ import eu.scattering.core.design.utility.type.option.Length;
 
 import java.util.*;
 
-import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FAggregateModuleFractalDimensionBCDef {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FAggregate aggregate;
 
-    protected FAggregateModuleFractalDimensionBCDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleFractalDimensionBCDef(ScatterFactory factory, FAggregate aggregate) {
 
         this.factory = factory;
         this.aggregate = aggregate;
@@ -125,7 +125,7 @@ public class FAggregateModuleFractalDimensionBCDef {
     // -------------------------------------------------------------------------------------------------
 
     static class ProcessOptimized {
-        private final ScatFactory factory;
+        private final ScatterFactory factory;
 
         private final FConfigBC config;
 
@@ -136,7 +136,7 @@ public class FAggregateModuleFractalDimensionBCDef {
 
         private List<FPos3D> shifts;
 
-        private ProcessOptimized(ScatFactory factory, FAggregate aggregate, FConfigBC config) {
+        private ProcessOptimized(ScatterFactory factory, FAggregate aggregate, FConfigBC config) {
             this.factory = factory;
 
             this.config = config;
@@ -287,13 +287,13 @@ public class FAggregateModuleFractalDimensionBCDef {
     }
 
     static class ProcessRaw {
-        private final ScatFactory factory;
+        private final ScatterFactory factory;
 
         private final FPlot results;
 
         private final FAggregate reference;
 
-        private ProcessRaw(ScatFactory factory, FAggregate aggregate) {
+        private ProcessRaw(ScatterFactory factory, FAggregate aggregate) {
             this.factory = factory;
 
             this.results = factory.getFPlot();

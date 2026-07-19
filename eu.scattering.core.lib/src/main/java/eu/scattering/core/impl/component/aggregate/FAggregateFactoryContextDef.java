@@ -1,19 +1,19 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextGeometry;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextBase;
 
 public class FAggregateFactoryContextDef implements FAggregateFactoryContext {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private FAggregateFactoryContextDef(ScatFactory factory) {
+    private FAggregateFactoryContextDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FAggregateFactoryContext create(ScatFactory factory) {
+    public static FAggregateFactoryContext create(ScatterFactory factory) {
 
         return new FAggregateFactoryContextDef(factory);
     }

@@ -7,5 +7,5 @@ import eu.scattering.core.design.physics.PhysicsFactory;
 import eu.scattering.core.design.statistics.StatisticsFactory;
 import eu.scattering.core.design.storage.StorageFactory;
 
-public interface ScatFactory extends ComponentFactory, AspectFactory, MathematicsFactory, StatisticsFactory, StorageFactory, PhysicsFactory {
+public interface ScatterFactory extends ComponentFactory, AspectFactory, MathematicsFactory, StatisticsFactory, StorageFactory, PhysicsFactory {
 }

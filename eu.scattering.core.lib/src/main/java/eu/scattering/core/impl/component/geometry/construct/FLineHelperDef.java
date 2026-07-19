@@ -9,7 +9,7 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 import java.util.Optional;
 
-import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FLineHelperDef implements FLineHelper {
     private final GeometryFactory factory;

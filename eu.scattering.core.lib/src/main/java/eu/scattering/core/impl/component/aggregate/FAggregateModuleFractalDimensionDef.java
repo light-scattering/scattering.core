@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
 import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
@@ -16,9 +16,9 @@ public class FAggregateModuleFractalDimensionDef {
     private final FAggregateModuleFractalDimensionBCDef bc;
     private final FAggregateModuleFractalDimensionDCDef dc;
     private final FAggregateModuleFractalDimensionMRDef mr;
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    protected FAggregateModuleFractalDimensionDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleFractalDimensionDef(ScatterFactory factory, FAggregate aggregate) {
 
         this.bc = new FAggregateModuleFractalDimensionBCDef(factory, aggregate);
         this.dc = new FAggregateModuleFractalDimensionDCDef(factory, aggregate);

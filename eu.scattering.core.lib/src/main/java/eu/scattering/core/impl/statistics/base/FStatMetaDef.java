@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.statistics.base;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 
 public class FStatMetaDef implements FStatMeta {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private String name = "";
     private String nameX = "";
@@ -14,12 +14,12 @@ public class FStatMetaDef implements FStatMeta {
     private FPos2D rangeX = null;
     private FPos2D rangeY = null;
 
-    private FStatMetaDef(ScatFactory factory) {
+    private FStatMetaDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FStatMeta create(ScatFactory factory) {
+    public static FStatMeta create(ScatterFactory factory) {
 
         return new FStatMetaDef(factory);
     }

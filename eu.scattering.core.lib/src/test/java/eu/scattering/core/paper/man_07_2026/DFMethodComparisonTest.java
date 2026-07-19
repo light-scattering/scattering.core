@@ -1,5 +1,6 @@
 package eu.scattering.core.paper.man_07_2026;
 
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.kinetic.cc.FConfigCCPL;
 import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
@@ -8,6 +9,7 @@ import eu.scattering.core.design.component.aggregate.config.df.structural.FConfi
 import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadiusOfGyration;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
+import eu.scattering.core.impl.ScatterCore;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;

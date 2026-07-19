@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.monitor.cc.module;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadius;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -13,7 +13,7 @@ public class FMonitorCCRadiusDef implements FMonitorCCRadius {
 
     private final FPoint center;
 
-    private FMonitorCCRadiusDef(ScatFactory factory, Center type) {
+    private FMonitorCCRadiusDef(ScatterFactory factory, Center type) {
 
         this.type = type;
         this.fPlotBar = factory.getFPlotBar();
@@ -23,7 +23,7 @@ public class FMonitorCCRadiusDef implements FMonitorCCRadius {
         this.fPlotBar.setName("Radius");
     }
 
-    public static FMonitorCCRadius create(ScatFactory factory, Center type) {
+    public static FMonitorCCRadius create(ScatterFactory factory, Center type) {
 
         return new FMonitorCCRadiusDef(factory, type);
     }

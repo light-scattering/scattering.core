@@ -3,10 +3,10 @@ package eu.scattering.cli.command;
 import eu.scattering.cli.aspect.FAggregateLoad;
 import eu.scattering.cli.type.FORMAT_INPUT;
 import eu.scattering.cli.type.TYPE_METRIC;
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.impl.ScatConfigDef;
-import eu.scattering.core.impl.ScatFactoryDef;
+import eu.scattering.core.impl.ScatterCoreConfig;
+import eu.scattering.core.impl.factory.ScatterFactoryDef;
 import picocli.CommandLine;
 
 import java.util.List;
@@ -36,16 +36,16 @@ public class MeasureCommand implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             FAggregate fAggregate = FAggregateLoad.load(factory, file, format)
                     .orElseThrow(() -> new IllegalArgumentException("The geometry could not be parsed"));
 
-            if (epsilon != ScatConfigDef.SHAPE_EPSILON) {
+            if (epsilon != ScatterCoreConfig.SHAPE_EPSILON) {
                 fAggregate.setParticleEpsilon(epsilon);
             }
 
-            if (delta != ScatConfigDef.SHAPE_DELTA) {
+            if (delta != ScatterCoreConfig.SHAPE_DELTA) {
                 fAggregate.setParticleDelta(delta);
             }
 

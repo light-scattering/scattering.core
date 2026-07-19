@@ -1,20 +1,20 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateAspectLoad;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.impl.component.aggregate.load.ImBasicDef;
 
 public class FAggregateAspectLoadDef implements FAggregateAspectLoad {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private FAggregateAspectLoadDef(ScatFactory factory) {
+    private FAggregateAspectLoadDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FAggregateAspectLoadDef create(ScatFactory factory) {
+    public static FAggregateAspectLoadDef create(ScatterFactory factory) {
 
         return new FAggregateAspectLoadDef(factory);
     }

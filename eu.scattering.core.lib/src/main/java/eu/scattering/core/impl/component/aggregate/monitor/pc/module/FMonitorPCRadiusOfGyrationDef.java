@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.monitor.pc.module;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.kinetic.pc.FConfigPCPL;
 import eu.scattering.core.design.component.aggregate.meta.df.kinetic.pc.FMetaPCPL;
@@ -16,14 +16,14 @@ import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import java.util.Locale;
 
 public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private final RadiusOfGyration radiusOfGyration;
     private final FPlot fPlot;
 
     private double skip = -1;
 
-    private FMonitorPCRadiusOfGyrationDef(ScatFactory factory, RadiusOfGyration radiusOfGyration) {
+    private FMonitorPCRadiusOfGyrationDef(ScatterFactory factory, RadiusOfGyration radiusOfGyration) {
         this.factory = factory;
 
         this.radiusOfGyration = radiusOfGyration;
@@ -32,7 +32,7 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
         this.fPlot.setName("Radius of gyration");
     }
 
-    public static FMonitorPCRadiusOfGyration create(ScatFactory factory, int skip, RadiusOfGyration radiusOfGyration) {
+    public static FMonitorPCRadiusOfGyration create(ScatterFactory factory, int skip, RadiusOfGyration radiusOfGyration) {
         FMonitorPCRadiusOfGyration results = new FMonitorPCRadiusOfGyrationDef(factory, radiusOfGyration);
 
         results.setSkip(skip);

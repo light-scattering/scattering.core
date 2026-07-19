@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelPCRLA;
@@ -33,7 +33,7 @@ public class FModelPCRLADef implements FModelPCRLA {
     private final FAssembly<Shape> attached;
     private final List<Shape> detached;
 
-    private FModelPCRLADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    private FModelPCRLADef(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -59,7 +59,7 @@ public class FModelPCRLADef implements FModelPCRLA {
         this.detached = new ArrayList<>(this.aggregate.size());
     }
 
-    public static FModelPCRLA create(Dimension dimension, FAggregate aggregate, ScatFactory random) {
+    public static FModelPCRLA create(Dimension dimension, FAggregate aggregate, ScatterFactory random) {
 
         return new FModelPCRLADef(dimension, aggregate, random);
     }

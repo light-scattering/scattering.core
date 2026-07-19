@@ -1,6 +1,6 @@
-package eu.scattering.core.impl;
+package eu.scattering.core.impl.factory;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.save.FSaveAspect;
 import eu.scattering.core.design.aspect.load.FLoadAspect;
 import eu.scattering.core.design.aspect.prototype.FProtoAspect;
@@ -142,7 +142,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ScatFactoryDef implements ScatFactory {
+public final class ScatterFactoryDef implements ScatterFactory {
     private final GeometryParser fGeometryParser;
 
     private final FRandGenerator fRandGenerator;
@@ -165,12 +165,12 @@ public final class ScatFactoryDef implements ScatFactory {
     private final FPlaneHelper fPlaneHelper;
     private final FSphereHelper fSphereHelper;
 
-    private ScatFactoryDef() {
+    private ScatterFactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create(this);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
     }
 
-    private ScatFactoryDef(long seed) {
+    private ScatterFactoryDef(long seed) {
         this.fRandGenerator = FRandGeneratorDef.create(this, seed);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
     }
@@ -198,15 +198,15 @@ public final class ScatFactoryDef implements ScatFactory {
         this.fSphereHelper = FSphereHelperDef.create(this.fPointHelper);
     }
 
-    public static ScatFactory create() {
+    public static ScatterFactory create() {
 
-        return new ScatFactoryDef();
+        return new ScatterFactoryDef();
     }
 
-    public static ScatFactory create(long seed) {
+    public static ScatterFactory create(long seed) {
 
         if (seed >= 0) {
-            return new ScatFactoryDef(seed);
+            return new ScatterFactoryDef(seed);
         }
 
         long timestamp = System.currentTimeMillis();

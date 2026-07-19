@@ -1,12 +1,12 @@
 package eu.scattering.core.test.component.aggregate.model.cc.symmetric;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.option.Dimension;
-import eu.scattering.core.impl.ScatFactoryDef;
+import eu.scattering.core.impl.factory.ScatterFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -163,13 +163,13 @@ public class FModelCCTunableTest {
         void randomization() {
             int size = 32;
 
-            ScatFactory factoryA = ScatFactoryDef.create(123);
+            ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCCTunable fModelA = factoryA.getFModelContext().cc().tunable(fAggregateA, 1.8, 1.6);
             fModelA.setEarlyStageCorrection(true);
 
-            ScatFactory factoryB = ScatFactoryDef.create(123);
+            ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCCTunable fModelB = factoryB.getFModelContext().cc().tunable(fAggregateB, 1.8, 1.6);
@@ -359,14 +359,14 @@ public class FModelCCTunableTest {
         void randomization() {
             int size = 32;
 
-            ScatFactory factoryA = ScatFactoryDef.create(123);
+            ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCCTunable fModelA = factoryA.getFModelContext().cc().tunable(Dimension.D2, fAggregateA, 1.5, 1.5);
             fModelA.setEarlyStageCorrection(true);
             fModelA.setCorrection(true);
 
-            ScatFactory factoryB = ScatFactoryDef.create(123);
+            ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCCTunable fModelB = factoryB.getFModelContext().cc().tunable(Dimension.D2, fAggregateB, 1.5, 1.5);

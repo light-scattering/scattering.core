@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
 import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
@@ -43,7 +43,7 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_PARTICLES = "particles";
     private static final String JSON_EXTENSION = "extension";
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FAssembly<Shape> particles;
 
     private final FAggregateModuleGyrationDef moduleGyration;
@@ -56,7 +56,7 @@ public class FAggregateDef implements FAggregate {
 
     private final FExtension extension;
 
-    private FAggregateDef(ScatFactory factory, FAssembly<Shape> refParticles, FExtension refExtension) {
+    private FAggregateDef(ScatterFactory factory, FAssembly<Shape> refParticles, FExtension refExtension) {
 
         this.factory = factory;
         this.particles = refParticles;
@@ -72,22 +72,22 @@ public class FAggregateDef implements FAggregate {
         this.extension = Objects.requireNonNullElseGet(refExtension, () -> FExtensionDef.create(this.factory));
     }
 
-    public static FAggregate create(ScatFactory factory, FAssembly<Shape> refParticles, FExtension extension) {
+    public static FAggregate create(ScatterFactory factory, FAssembly<Shape> refParticles, FExtension extension) {
 
         return new FAggregateDef(factory, refParticles, extension);
     }
 
-    public static FAggregate create(ScatFactory factory, FAssembly<Shape> refParticles) {
+    public static FAggregate create(ScatterFactory factory, FAssembly<Shape> refParticles) {
 
         return new FAggregateDef(factory, refParticles, null);
     }
 
-    public static FAggregate create(ScatFactory factory, List<Shape> refParticles) {
+    public static FAggregate create(ScatterFactory factory, List<Shape> refParticles) {
 
         return new FAggregateDef(factory, factory.getFAssembly(refParticles), null);
     }
 
-    public static FAggregate create(ScatFactory factory, JSONObject json) {
+    public static FAggregate create(ScatterFactory factory, JSONObject json) {
 
         if (!json.getString(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("Invalid JSON header (FAggregate)");

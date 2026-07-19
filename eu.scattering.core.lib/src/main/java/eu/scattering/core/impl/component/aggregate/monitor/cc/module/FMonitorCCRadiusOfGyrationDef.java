@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.monitor.cc.module;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.config.df.kinetic.cc.FConfigCCPL;
 import eu.scattering.core.design.component.aggregate.meta.df.kinetic.cc.FMetaCCPL;
@@ -17,12 +17,12 @@ import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import java.util.Locale;
 
 public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private final RadiusOfGyration radiusOfGyration;
     private final FPlotBar fPlotBar;
 
-    private FMonitorCCRadiusOfGyrationDef(ScatFactory factory, RadiusOfGyration radiusOfGyration) {
+    private FMonitorCCRadiusOfGyrationDef(ScatterFactory factory, RadiusOfGyration radiusOfGyration) {
         this.factory = factory;
 
         this.radiusOfGyration = radiusOfGyration;
@@ -31,7 +31,7 @@ public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration
         this.fPlotBar.setName("Radius of gyration");
     }
 
-    public static FMonitorCCRadiusOfGyration create(ScatFactory factory, RadiusOfGyration radiusOfGyration) {
+    public static FMonitorCCRadiusOfGyration create(ScatterFactory factory, RadiusOfGyration radiusOfGyration) {
 
         return new FMonitorCCRadiusOfGyrationDef(factory, radiusOfGyration);
     }

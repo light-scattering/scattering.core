@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.cc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
@@ -30,7 +30,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FRandAspect random;
 
     private final FAggregate aggregate;
@@ -48,7 +48,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
     private boolean symmetry;
 
-    private FModelCCTunableDef(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    private FModelCCTunableDef(Dimension dimension, FAggregate aggregate, ScatterFactory factory, double df, double kf) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -89,7 +89,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
         this.symmetry = true;
     }
 
-    public static FModelCCTunable create(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    public static FModelCCTunable create(Dimension dimension, FAggregate aggregate, ScatterFactory factory, double df, double kf) {
 
         return new FModelCCTunableDef(dimension, aggregate, factory, df, kf);
     }

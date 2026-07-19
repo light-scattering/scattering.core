@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FSphereDef extends ShapePresetDef implements FSphere {
     private static final String JSON_TYPE = "type";
@@ -45,13 +45,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     private CmpDistSpace cmpDistSpace;
 
-    private FSphereDef(ScatFactory factory) {
+    private FSphereDef(ScatterFactory factory) {
         super(factory);
 
         this.helper = factory.getFSphereHelper();
     }
 
-    public static FSphere create(ScatFactory factory, FPoint refCenter) {
+    public static FSphere create(ScatterFactory factory, FPoint refCenter) {
 
         var fSphere = new FSphereDef(factory);
 

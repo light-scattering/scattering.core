@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.aspect.rotate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
@@ -9,14 +9,14 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos4D;
 
 public class FRotProcessorDef implements FRotGenerator {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private FRotProcessorDef(ScatFactory factory) {
+    private FRotProcessorDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FRotGenerator create(ScatFactory factory) {
+    public static FRotGenerator create(ScatterFactory factory) {
 
         return new FRotProcessorDef(factory);
     }

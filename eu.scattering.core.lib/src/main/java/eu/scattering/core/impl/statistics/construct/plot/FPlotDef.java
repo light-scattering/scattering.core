@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.statistics.construct.plot;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
@@ -29,7 +29,7 @@ public class FPlotDef implements FPlot {
     private static final String JSON_DATA_X = "dataX";
     private static final String JSON_DATA_Y = "dataY";
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private final FStat dataX;
     private final FStat dataY;
@@ -41,7 +41,7 @@ public class FPlotDef implements FPlot {
 
     private FPlotMeta meta;
 
-    private FPlotDef(ScatFactory factory, FStat dataX, FStat dataY) {
+    private FPlotDef(ScatterFactory factory, FStat dataX, FStat dataY) {
 
         this.factory = factory;
 
@@ -56,17 +56,17 @@ public class FPlotDef implements FPlot {
         this.regressor = FPlotRegressorDef.create(factory, this);
     }
 
-    public static FPlot create(ScatFactory factory) {
+    public static FPlot create(ScatterFactory factory) {
 
         return new FPlotDef(factory, null, null);
     }
 
-    public static FPlot create(ScatFactory factory, FStat dataX, FStat dataY) {
+    public static FPlot create(ScatterFactory factory, FStat dataX, FStat dataY) {
 
         return new FPlotDef(factory, dataX, dataY);
     }
 
-    public static FPlot create(ScatFactory factory, FLayer fLayer) {
+    public static FPlot create(ScatterFactory factory, FLayer fLayer) {
         FPlotDef fPlot = new FPlotDef(factory, null, null);
 
         for (int i = 0 ; i < fLayer.size() ; i++) {
@@ -77,7 +77,7 @@ public class FPlotDef implements FPlot {
         return fPlot;
     }
 
-    public static FPlot create(ScatFactory factory, JSONObject json) {
+    public static FPlot create(ScatterFactory factory, JSONObject json) {
         FStat dataX = factory.getFStat(json.getJSONObject(JSON_DATA_X));
         FStat dataY = factory.getFStat(json.getJSONObject(JSON_DATA_Y));
 
