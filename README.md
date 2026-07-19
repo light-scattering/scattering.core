@@ -32,11 +32,15 @@ If you wish to utilize them in your own projects, please refer to the `design` m
 
 ## Development and AI transparency
 
-This project began several years ago, well before the LLM era. 
-As a result, the architectural foundation was built the old-school way: through academic literature, official documentation, and Stack Overflow posts.
+This project began several years ago, well before the LLM era.
+As a result, the architectural foundation was built the old-school way: through academic literature, official documentation, and Stack Overflow.
 
-AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as the gyration tensor calculation). 
-In those limited, specific cases, the AI-generated code was copied in as a baseline, but every line was subsequently refactored, manually analyzed, and rigorously tested to ensure strict scientific accuracy.
+During the later stages of development, maintaining the scientific correctness and cleanliness of the code remained the highest priority. 
+AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as calculating the gyration tensor and performing PCA).
+
+To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. 
+Furthermore, the generated code was only used as a baseline. 
+Every single line within those marked methods was subsequently refactored, manually analyzed, and rigorously tested to ensure strict scientific accuracy.
 
 On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM (hi Gemini!) to heavily polish, structure, and rewrite my original text for better readability.
 

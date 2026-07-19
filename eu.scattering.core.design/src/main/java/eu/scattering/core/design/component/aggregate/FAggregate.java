@@ -12,6 +12,7 @@ import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
+import eu.scattering.core.design.utility.annotation.LLM;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
@@ -113,6 +114,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     //--------------------------------------------------
 
+    @LLM
     FMatrix3x3D getGyrationTensor(GyrationTensor type);
 
     double getRadiusOfGyration(RadiusOfGyration type);
@@ -193,6 +195,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     void rotate(FMatrix3x3D matrix);
 
+    @LLM
     void pca();
 
     @Modificator
