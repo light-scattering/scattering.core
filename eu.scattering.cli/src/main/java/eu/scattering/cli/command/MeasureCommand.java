@@ -12,10 +12,51 @@ import picocli.CommandLine;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "measure", description = "Calculates morphological parameters", usageHelpAutoWidth = true)
+@CommandLine.Command(
+        name = "measure",
+        description = "Calculates morphological parameters",
+        mixinStandardHelpOptions = true,
+        usageHelpAutoWidth = true
+)
 public class MeasureCommand implements Callable<Integer> {
 
-    @CommandLine.Option(names = {"-m", "--metrics"}, arity = "1..*", required = true, description = "Measurement types")
+    static class MetricConverter implements CommandLine.ITypeConverter<TYPE_METRIC> {
+
+        @Override
+        public TYPE_METRIC convert(String value) {
+            String normalized = value.replace(":", "__").replace("-", "_");
+
+            for (TYPE_METRIC metric : TYPE_METRIC.values()) {
+
+                if (metric.name().equalsIgnoreCase(normalized)) {
+                    return metric;
+                }
+            }
+            throw new CommandLine.TypeConversionException("Unknown metric: '" + value + "'");
+        }
+    }
+
+    static class MetricCandidates implements Iterable<String> {
+
+        @Override
+        public java.util.Iterator<String> iterator() {
+
+            return java.util.Arrays.stream(TYPE_METRIC.values())
+                    .map(m -> m.name().replace("__", ":"))
+                    .map(m -> m.replace("_", "-"))
+                    .map(String::toLowerCase)
+                    .iterator();
+        }
+    }
+
+    @CommandLine.Option(
+            names = {"-m", "--metrics"},
+            arity = "1..*",
+            required = true,
+            description = "Measurement types. Valid values: ${COMPLETION-CANDIDATES}",
+            converter = MetricConverter.class,
+            completionCandidates = MetricCandidates.class
+    )
     private List<TYPE_METRIC> metrics;
 
     @CommandLine.Option(names = {"-f", "--format"}, defaultValue = "json", description = "Input format")

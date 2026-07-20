@@ -1,13 +1,11 @@
 package eu.scattering.cli.type;
 
 public enum TYPE_METRIC {
-    Np,
-    Rp, Rp__avg, Rp__std, Rp__max, Rp__min,
-    Rg_mono, Rg_mono_06R1, Rg_mono_10R2, Rg_poly, Rg_poly_06R1, Rg_poly_10R2, Rg_mesh, RG_filippov,
-    Df_box, Df_box_brute_force,  Df_box_adv_1, Df_box_adv_2,
-    Df_density,
-    Df_mass,
+    np,
+    rp, rp__avg, rp__std, rp__max, rp__min,
+    df_bc, df_mr, df_dc,
     //--------------------
+    Rg_mesh, Rg_mono, Rg_mono_06R1, Rg_mono_10R2, Rg_poly, Rg_poly_06R1, Rg_poly_10R2,
     Length_x,
     Length_y,
     Length_z,

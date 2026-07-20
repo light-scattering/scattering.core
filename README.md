@@ -23,7 +23,7 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
           
 ## Background and scope
 
-The core aggregation elements were build upon the foundation of my previous project, FLAGE (Fractal-Like Aggregate Generation Environment). 
+The core aggregation elements were built upon the foundation of my previous project, FLAGE (Fractal-Like Aggregate Generation Environment). 
 However, ScatterCore is not a simple port - the entire codebase was rewritten almost from scratch to be modernized, heavily optimized, and highly extensible.
 
 Because the project is massive, and I am currently the sole developer, this manual focuses strictly on high-level features, such as aggregation models and morphological analysis. 

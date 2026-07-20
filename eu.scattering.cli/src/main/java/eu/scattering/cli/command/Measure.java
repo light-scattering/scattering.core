@@ -26,18 +26,15 @@ public class Measure {
         for (TYPE_METRIC metric : metrics) {
 
             results.add(switch (metric) {
-                case Np -> getNp(aggregate);
-                case Rp -> getRp(factory, aggregate);
-                case Rp__avg -> getRpAvg(aggregate);
-                case Rp__std -> getRpStd(aggregate);
-                case Rp__max -> getRpMax(aggregate);
-                case Rp__min -> getRpMin(aggregate);
-                case Df_box -> getDfBoxFast(aggregate);
-                case Df_box_brute_force -> getDfBoxFastBruteForce(aggregate);
-                case Df_box_adv_1 -> getDfBoxAdv1(aggregate);
-                case Df_box_adv_2 -> getDfBoxAdv2(aggregate);
-                case Df_density -> getDfCorrelation(aggregate);
-                case Df_mass -> getDfMass(aggregate);
+                case np -> getNp(aggregate);
+                case rp -> getRp(factory, aggregate);
+                case rp__avg -> getRpAvg(aggregate);
+                case rp__std -> getRpStd(aggregate);
+                case rp__max -> getRpMax(aggregate);
+                case rp__min -> getRpMin(aggregate);
+                case df_bc -> getDfBoxCountingOptimized(aggregate);
+                case df_mr -> getDfMassRadiusRestricted(aggregate);
+                case df_dc -> getDfDensityCorrelationRestricted(aggregate);
                 case Length_x -> getLengthX(aggregate);
                 case Length_y -> getLengthY(aggregate);
                 case Length_z -> getLengthZ(aggregate);
@@ -72,7 +69,6 @@ public class Measure {
                 case Rg_poly_06R1 -> getRgSimplePoly06R1(aggregate);
                 case Rg_poly_10R2 -> getRgSimplePoly10R2(aggregate);
                 case Rg_mesh -> getRgComplex(aggregate);
-                case RG_filippov -> getRgDedicatedFilippov(aggregate);
                 case OverlapFactor_c_vol -> getOverlapFactorClusterVolumetric(factory, aggregate);
                 case OverlapFactor_p_vol -> getOverlapFactorParticleVolumetric(factory, aggregate);
                 case OverlapFactor_p_vol__avg -> getOverlapFactorParticleVolumetricAvg(aggregate);
@@ -224,34 +220,19 @@ public class Measure {
         return String.valueOf(aggregate.getSurfaceRadius(Surface.COMPLEX));
     }
 
-    private static String getDfBoxFast(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_BASELINE));
-    }
-
-    private static String getDfBoxFastBruteForce(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_NAIVE));
-    }
-
-    private static String getDfBoxAdv1(FAggregate aggregate) {
+    private static String getDfBoxCountingOptimized(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED));
     }
 
-    private static String getDfBoxAdv2(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED));
-    }
-
-    private static String getDfCorrelation(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_RESTRICTED));
-    }
-
-    private static String getDfMass(FAggregate aggregate) {
+    private static String getDfMassRadiusRestricted(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getFractalDimension(FractalDimension.MR_RESTRICTED));
+    }
+
+    private static String getDfDensityCorrelationRestricted(FAggregate aggregate) {
+
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_RESTRICTED));
     }
 
     private static String getCmAdaptive(ScatterFactory factory, FAggregate aggregate) {
@@ -359,11 +340,6 @@ public class Measure {
     private static String getRgComplex(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX));
-    }
-
-    private static String getRgDedicatedFilippov(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV));
     }
 
     private static String getOverlapFactorParticleVolumetric(ScatterFactory factory, FAggregate aggregate) {
