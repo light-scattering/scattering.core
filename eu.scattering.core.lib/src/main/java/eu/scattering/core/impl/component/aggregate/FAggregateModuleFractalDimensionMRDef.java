@@ -1,68 +1,51 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-// TODO - Refactor (limit method parameters).
 public class FAggregateModuleFractalDimensionMRDef {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FAggregate aggregate;
 
-    protected FAggregateModuleFractalDimensionMRDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleFractalDimensionMRDef(ScatterFactory factory, FAggregate aggregate) {
 
         this.factory = factory;
         this.aggregate = aggregate;
     }
 
-    protected FPlot getResults(RadiusOfGyration type, double stepFactor, boolean rangeLimit) {
-        FPlot results = this.factory.getFPlot();
-        FPoint massCenter = this.factory.getFPoint();
+    protected FPlot getResults(FConfigMR config, FMetaMR meta) {
+        long millis = System.currentTimeMillis();
 
-        List<Double> massFragments = new ArrayList<>(this.aggregate.size());
-        List<FPos3D> centerFragments = new ArrayList<>(this.aggregate.size());
+        Process process = new Process(this.factory, this.aggregate, config, meta);
 
-        double radiusOfGyration = this.aggregate.getRadiusOfGyration(type, massCenter, massFragments, centerFragments);
+        FPlot results = process.process();
 
-        double range = rangeLimit ? radiusOfGyration * 0.5 : this.aggregate.getRadiusFrom(massCenter) * 2.1;
-
-        FStat particles = this.aggregate.getFStatParticleRadius();
-
-        double delta = particles.mean();
-        double start = delta * 2 * stepFactor;
-
-        initResults(results, range, stepFactor, start);
-
-        FBoxDouble min = factory.getFBoxDouble();
-        FBoxDouble max = factory.getFBoxDouble();
-
-        int count = setData(results, massCenter.toFPos3D(), min, max, massFragments, centerFragments, range);
-
-        limitResults(results, max.getValue());
-
-        results.mutateY(a -> a.mutate(b -> b / count));
-        results.mutateX(a -> a.mutate(Math::sqrt));
+        if (meta != null) {
+            meta.setExecutionTimeMillis(System.currentTimeMillis() - millis);
+            meta.setRefData(results);
+        }
 
         return results;
     }
 
-    protected double analyze(FPlot results, double window, FBoxString plot) {
+    protected double analyze(FPlot results, FConfigMR config, FMetaMR meta) {
+        double windowRatio = config.getWindowRatio();
 
-        if (window <= 0 || window > 1) {
+        if (windowRatio <= 0 || windowRatio > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
         }
 
@@ -91,44 +74,47 @@ public class FAggregateModuleFractalDimensionMRDef {
 
         results.filter((x, y) -> y > 0);
 
-        FPoly regression = window == 1 ? results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * window));
+        FPoly regression = windowRatio == 1 ?
+                results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * windowRatio));
 
         FPlot approximation = results.copy();
         approximation.setY(regression);
 
-        double dim = regression.at(1);
+        double dimension = regression.at(1);
 
-        if (plot != null) {
-            plot.setValue(plot(results, approximation, regression, dim));
+        if (meta != null) {
+            meta.setPythonRenderScript(plot(results, approximation, regression, dimension));
         }
 
-        return dim;
+        return dimension;
     }
 
-    private String plot(FPlot results, FPlot approximation, FPoly regression, double dim) {
+    private String plot(FPlot results, FPlot approximation, FPoly regression, double dimension) {
         double r2 = results.r2(regression);
 
-        String dimFormat = String.format(Locale.US, "%.2f", dim);
+        String dimFormat = String.format(Locale.US, "%.2f", dimension);
         String r2Format = String.format(Locale.US, "%.4f", r2);
 
         FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
                 .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
                 .setPositionAnnotation(FPlotMetaGlobal.Position.RIGHT)
                 .setPositionLegend(FPlotMetaGlobal.Position.LEFT)
-                .setFontSize(32)
+                .setFontSize(48)
+                .setGridSize(3)
                 .setNameX("ln ρ")
                 .setNameY("ln M(ρ)");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
                 .setLinesColor("black")
-                .setLinesWidth(4)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(true)
                 .setMarkersShow(false);
 
         FPlotMeta metaPlotResults = factory.getFPlotMeta()
                 .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(false)
                 .setMarkersShow(true);
 
@@ -142,72 +128,141 @@ public class FAggregateModuleFractalDimensionMRDef {
                 .toPythonPlotly(metaGlobal, approximation, results);
     }
 
-    private void initResults(FPlot results, double range, double factor, double start) {
-        double step = start;
+    // -------------------------------------------------------------------------------------------------
 
-        while (step <= range) {
-            results.add(step * step, 0);
-            step = step * factor;
+    static class Process {
+        private final ScatterFactory factory;
+
+        private final FConfigMR config;
+        private final FMetaMR meta;
+
+        private final FAggregate aggregate;
+
+        private final FPlot results;
+        private final FPoint massCenter;
+
+        private final List<Double> massFragments;
+        private final List<FPos3D> centerFragments;
+
+        private double min;
+        private double max;
+
+        private Process(ScatterFactory factory, FAggregate aggregate, FConfigMR config, FMetaMR meta) {
+            this.factory = factory;
+
+            this.config = config;
+            this.meta = meta;
+
+            this.aggregate = aggregate;
+
+            this.results = factory.getFPlot();
+            this.massCenter = factory.getFPoint();
+
+            this.massFragments = new ArrayList<>(this.aggregate.size());
+            this.centerFragments = new ArrayList<>(this.aggregate.size());
+
+            this.min = Double.POSITIVE_INFINITY;
+            this.max = Double.NEGATIVE_INFINITY;
         }
-    }
 
-    private void limitResults(FPlot results, double max) {
+        FPlot process() {
 
-        results.filter((x, y) -> x <= max);
-    }
+            run();
 
-    private int setData(FPlot results, FPos3D massCenter, FBoxDouble min, FBoxDouble max, List<Double> massFragments, List<FPos3D> centerFragments, double limit) {
-        int count = 0;
-        int size = this.aggregate.size();
-        double limitP2 = limit * limit;
+            return this.results;
+        }
 
-        FPointHelper helper = this.factory.getFPointHelper();
+        protected void run() {
+            double rog = this.aggregate.getRadiusOfGyration(this.config.getRadiusOfGyration(), this.massCenter, this.massFragments, this.centerFragments);
+            double range = this.config.isRestricted() ? rog * 0.5 : this.aggregate.getRadiusFrom(this.massCenter) * 2.1;
 
-        for (int i = 0 ; i < size ; i++) {
-            FPos3D cA = centerFragments.get(i);
+            FStat rp = this.aggregate.getFStatParticleRadius();
 
-            if (helper.getDistanceP2(massCenter, cA) > limitP2) {
-                continue;
+            double delta = rp.mean();
+            double start = delta * 2 * this.config.getScalingFactor();
+
+            initResults(range, start);
+
+            int count = setData(range);
+
+            limitResults();
+
+            this.results.mutateY(a -> a.mutate(b -> b / count));
+            this.results.mutateX(a -> a.mutate(Math::sqrt));
+
+            if (this.meta != null) {
+                this.meta.setRefParticlesCount(count);
             }
+        }
 
-            count ++;
+        private void initResults(double range, double start) {
+            double step = start;
 
-            for (int j = 0 ; j < size ; j++) {
-                FPos3D cB = centerFragments.get(j);
+            while (step <= range) {
+                this.results.add(step * step, 0);
+                step = step * this.config.getScalingFactor();
+            }
+        }
 
-                double distP2 = helper.getDistanceP2(cA, cB);
+        private void limitResults() {
+            double cutoff = this.max;
 
-                if (distP2 > limitP2) {
+            this.results.filter((x, y) -> x <= cutoff);
+        }
+
+        private int setData(double limit) {
+            int count = 0;
+            int size = this.aggregate.size();
+            double limitP2 = limit * limit;
+
+            FPointHelper helper = this.factory.getFPointHelper();
+
+            for (int i = 0 ; i < size ; i++) {
+                FPos3D cA = this.centerFragments.get(i);
+
+                if (this.massCenter.getDistanceP2(cA) > limitP2) {
                     continue;
                 }
 
-                setExtremum(distP2, min, max);
+                count ++;
 
-                for (int k = 0 ; k < results.size() ; k++) {
-                    if (distP2 <= results.getX(k)) {
-                        results.setY(k, results.getY(k) + massFragments.get(j));
+                for (int j = 0 ; j < size ; j++) {
+                    FPos3D cB = this.centerFragments.get(j);
 
-                        break;
+                    double distP2 = helper.getDistanceP2(cA, cB);
+
+                    if (distP2 > limitP2) {
+                        continue;
+                    }
+
+                    setExtremum(distP2);
+
+                    for (int k = 0 ; k < this.results.size() ; k++) {
+                        if (distP2 <= this.results.getX(k)) {
+                            this.results.setY(k, this.results.getY(k) + this.massFragments.get(j));
+
+                            break;
+                        }
                     }
                 }
             }
+
+            for (int k = 1 ; k < this.results.size() ; k++) {
+                this.results.setY(k, this.results.getY(k) + this.results.getY(k - 1));
+            }
+
+            return count;
         }
 
-        for (int k = 1 ; k < results.size() ; k++) {
-            results.setY(k, results.getY(k) + results.getY(k - 1));
-        }
+        private void setExtremum(double distance) {
 
-        return count;
-    }
+            if (distance < this.min) {
+                this.min = distance;
+            }
 
-    private void setExtremum(double distance, FBoxDouble min, FBoxDouble max) {
-
-        if (distance < min.getValue()) {
-            min.setValue(distance);
-        }
-
-        if (distance > max.getValue()) {
-            max.setValue(distance);
+            if (distance > this.max) {
+                this.max = distance;
+            }
         }
     }
 }

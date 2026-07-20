@@ -1,6 +1,8 @@
 package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
 import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -2633,7 +2635,7 @@ public class FAggregateTest {
             double rgDefault = fAggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX);
             double rgLegacyMono = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
             double rgLegacyPoly = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
-            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
             double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
             double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
@@ -2814,7 +2816,12 @@ public class FAggregateTest {
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
             FAggregate fAggregate = factory.getRefFAggregate(core);
 
-            FPlot results = fAggregate.getDensityCorrelationFunction(1.1);
+            FConfigDC config = factory.getFConfigDC()
+                    .setScalingFactor(1.1)
+                    .setRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY)
+                    .setRestricted(false);
+
+            FPlot results = fAggregate.getDensityCorrelationFunction(config);
             results.mutateY(FStat::distribute);
 
             assertEquals(1, results.getRefCoreY().sum(), 1E-4);
@@ -2826,7 +2833,12 @@ public class FAggregateTest {
         void getDensityCorrelationFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot results = fAggregate.getDensityCorrelationFunction(1.1);
+            FConfigDC config = factory.getFConfigDC()
+                    .setScalingFactor(1.1)
+                    .setRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY)
+                    .setRestricted(false);
+
+            FPlot results = fAggregate.getDensityCorrelationFunction(config);
 
             assertTrue(results.size() > 25);
         }
@@ -2836,7 +2848,13 @@ public class FAggregateTest {
         void getBoxCoverageFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot results = fAggregate.getBoxCoverageFunction(2, 1, true, false);
+            FConfigBC config = factory.getFConfigBC()
+                    .setScalingFactor(2.0)
+                    .setShiftsPerAxis(1)
+                    .setAlignedOrigin(true)
+                    .setAlignedPCA(false);
+
+            FPlot results = fAggregate.getBoxCoverageFunction(config);
 
             assertTrue(results.size() >= 5);
             assertTrue(results.getY(0) < results.getY(1));
@@ -3581,7 +3599,6 @@ public class FAggregateTest {
     class FAggregateTopologyTest {
 
         @Nested
-        @Tag("Topology")
         @DisplayName("Box counting")
         class BoxCountingTest {
 
@@ -3649,7 +3666,6 @@ public class FAggregateTest {
         }
 
         @Nested
-        @Tag("Topology")
         @DisplayName("Density correlation")
         class DensityCorrelationTest {
 
@@ -3737,7 +3753,6 @@ public class FAggregateTest {
         }
 
         @Nested
-        @Tag("Topology")
         @DisplayName("Mass radius")
         class MassRadiusTest {
 
@@ -3821,6 +3836,56 @@ public class FAggregateTest {
 
                 assertEquals(2, dim2d, 2 * 0.05);
                 assertEquals(3, dim3d, 3 * 0.05);
+            }
+        }
+
+        @Nested
+        @DisplayName("Fractal prefactor")
+        class FractalPrefactorTest {
+
+            @Test
+            @DisplayName("Dimension 1.0")
+            void df10() {
+                int size = 100;
+                FAggregate aggregate = factory.getFAggregateContext().geometry().d1(size);
+
+                double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+
+                double kfCalculated = size / (rg);
+
+                double kfPredicted = Math.sqrt(3);
+
+                assertEquals(kfPredicted, kfCalculated, 1E-3);
+            }
+
+            @Test
+            @DisplayName("Dimension 2.0")
+            void df20() {
+                int size = 25;
+                FAggregate aggregate = factory.getFAggregateContext().geometry().d2Hex(size);
+
+                double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+
+                double kfCalculated = aggregate.size() / (rg * rg);
+
+                double kfPredicted = 1.8138;
+
+                assertEquals(kfPredicted, kfCalculated, 1E-3);
+            }
+
+            @Test
+            @DisplayName("Dimension 3.0")
+            void df30() {
+                int size = 15;
+                FAggregate aggregate = factory.getFAggregateContext().geometry().d3Hex(size);
+
+                double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+
+                double kfCalculated = aggregate.size() / (rg * rg * rg);
+
+                double kfPredicted = 1.593;
+
+                assertEquals(kfPredicted, kfCalculated, 1E-3);
             }
         }
     }

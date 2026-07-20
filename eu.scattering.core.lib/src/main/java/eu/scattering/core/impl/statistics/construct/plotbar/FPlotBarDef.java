@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.statistics.construct.plotbar;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -22,14 +22,14 @@ public class FPlotBarDef implements FPlotBar {
     private static final String JSON_DATA_X = "dataX";
     private static final String JSON_DATA_Y = "dataY";
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private final FStat dataX;
     private final List<FStat> dataY;
 
     private String name = "";
 
-    private FPlotBarDef(ScatFactory factory, FStat dataX, List<FStat> dataY) {
+    private FPlotBarDef(ScatterFactory factory, FStat dataX, List<FStat> dataY) {
 
         this.factory = factory;
 
@@ -41,17 +41,17 @@ public class FPlotBarDef implements FPlotBar {
         }
     }
 
-    public static FPlotBar create(ScatFactory factory) {
+    public static FPlotBar create(ScatterFactory factory) {
 
         return new FPlotBarDef(factory, null, null);
     }
 
-    public static FPlotBar create(ScatFactory factory, FStat dataX, List<FStat> dataY) {
+    public static FPlotBar create(ScatterFactory factory, FStat dataX, List<FStat> dataY) {
 
         return new FPlotBarDef(factory, dataX, dataY);
     }
 
-    public static FPlotBar create(ScatFactory factory, JSONObject json) {
+    public static FPlotBar create(ScatterFactory factory, JSONObject json) {
         FStat dataX = factory.getFStat(json.getJSONObject(JSON_DATA_X));
 
         List<FStat> dataY = new ArrayList<>();

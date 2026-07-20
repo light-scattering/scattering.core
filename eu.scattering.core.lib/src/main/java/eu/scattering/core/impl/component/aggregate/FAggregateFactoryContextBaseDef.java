@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal.FDist1DNormal;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextBase;
@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContextBase {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private FAggregateFactoryContextBaseDef(ScatFactory factory) {
+    private FAggregateFactoryContextBaseDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FAggregateFactoryContextBase create(ScatFactory factory) {
+    public static FAggregateFactoryContextBase create(ScatterFactory factory) {
 
         return new FAggregateFactoryContextBaseDef(factory);
     }

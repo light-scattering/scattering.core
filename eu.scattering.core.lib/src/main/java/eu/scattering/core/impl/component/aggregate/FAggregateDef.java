@@ -1,9 +1,15 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -14,7 +20,6 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
@@ -38,7 +43,7 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_PARTICLES = "particles";
     private static final String JSON_EXTENSION = "extension";
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FAssembly<Shape> particles;
 
     private final FAggregateModuleGyrationDef moduleGyration;
@@ -51,7 +56,7 @@ public class FAggregateDef implements FAggregate {
 
     private final FExtension extension;
 
-    private FAggregateDef(ScatFactory factory, FAssembly<Shape> refParticles, FExtension refExtension) {
+    private FAggregateDef(ScatterFactory factory, FAssembly<Shape> refParticles, FExtension refExtension) {
 
         this.factory = factory;
         this.particles = refParticles;
@@ -67,22 +72,22 @@ public class FAggregateDef implements FAggregate {
         this.extension = Objects.requireNonNullElseGet(refExtension, () -> FExtensionDef.create(this.factory));
     }
 
-    public static FAggregate create(ScatFactory factory, FAssembly<Shape> refParticles, FExtension extension) {
+    public static FAggregate create(ScatterFactory factory, FAssembly<Shape> refParticles, FExtension extension) {
 
         return new FAggregateDef(factory, refParticles, extension);
     }
 
-    public static FAggregate create(ScatFactory factory, FAssembly<Shape> refParticles) {
+    public static FAggregate create(ScatterFactory factory, FAssembly<Shape> refParticles) {
 
         return new FAggregateDef(factory, refParticles, null);
     }
 
-    public static FAggregate create(ScatFactory factory, List<Shape> refParticles) {
+    public static FAggregate create(ScatterFactory factory, List<Shape> refParticles) {
 
         return new FAggregateDef(factory, factory.getFAssembly(refParticles), null);
     }
 
-    public static FAggregate create(ScatFactory factory, JSONObject json) {
+    public static FAggregate create(ScatterFactory factory, JSONObject json) {
 
         if (!json.getString(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("Invalid JSON header (FAggregate)");
@@ -433,49 +438,61 @@ public class FAggregateDef implements FAggregate {
     @Override
     public double getFractalDimension(FractalDimension type) {
 
-        return this.moduleFractalDimension.getFractalDimension(type, null);
+        return this.moduleFractalDimension.getFractalDimension(type);
     }
 
     @Override
-    public double getFractalDimension(FractalDimension type, FBoxString plot) {
+    public double getFractalDimension(FractalDimension type, FMetaDF meta) {
 
-        return this.moduleFractalDimension.getFractalDimension(type, plot);
+        return this.moduleFractalDimension.getFractalDimension(type, meta);
     }
 
     @Override
-    public double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    public double getFractalDimension(FConfigMR config) {
 
-        return this.moduleFractalDimension.getFractalDimensionMassRadius(window, method, stepFactor, rangeLimit);
+        return this.moduleFractalDimension.getFractalDimensionMassRadius(config);
     }
 
     @Override
-    public double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {
+    public double getFractalDimension(FConfigMR config, FMetaMR meta) {
 
-        return this.moduleFractalDimension.getFractalDimensionBoxCounting(window, step, shift, reposition, pca);
+        return this.moduleFractalDimension.getFractalDimensionMassRadius(config, meta);
     }
 
     @Override
-    public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    public double getFractalDimension(FConfigBC config) {
 
-        return getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, null);
+        return this.moduleFractalDimension.getFractalDimensionBoxCounting(config);
     }
 
     @Override
-    public double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
+    public double getFractalDimension(FConfigBC config, FMetaBC meta) {
 
-        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(window, method, stepFactor, rangeLimit, meta);
+        return this.moduleFractalDimension.getFractalDimensionBoxCounting(config, meta);
     }
 
     @Override
-    public FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca) {
+    public double getFractalDimension(FConfigDC config) {
 
-        return this.moduleFractalDimension.getBoxCoverageFunction(step, shift, reposition, pca);
+        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(config);
     }
 
     @Override
-    public FPlot getDensityCorrelationFunction(double stepFactor) {
+    public double getFractalDimension(FConfigDC config, FMetaDC meta) {
 
-        return this.moduleFractalDimension.getDensityCorrelationFunction(stepFactor);
+        return this.moduleFractalDimension.getFractalDimensionDensityCorrelation(config, meta);
+    }
+
+    @Override
+    public FPlot getBoxCoverageFunction(FConfigBC config) {
+
+        return this.moduleFractalDimension.getBoxCoverageFunction(config);
+    }
+
+    @Override
+    public FPlot getDensityCorrelationFunction(FConfigDC config) {
+
+        return this.moduleFractalDimension.getDensityCorrelationFunction(config);
     }
 
     @Override

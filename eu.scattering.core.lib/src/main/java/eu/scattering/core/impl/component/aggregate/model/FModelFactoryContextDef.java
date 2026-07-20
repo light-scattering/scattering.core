@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCCFactoryContext;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPCFactoryContext;
@@ -8,14 +8,14 @@ import eu.scattering.core.impl.component.aggregate.model.cc.FModelCCFactoryConte
 import eu.scattering.core.impl.component.aggregate.model.pc.FModelPCFactoryContextDef;
 
 public class FModelFactoryContextDef implements FModelFactoryContext {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private FModelFactoryContextDef(ScatFactory factory) {
+    private FModelFactoryContextDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FModelFactoryContext create(ScatFactory factory) {
+    public static FModelFactoryContext create(ScatterFactory factory) {
 
         return new FModelFactoryContextDef(factory);
     }

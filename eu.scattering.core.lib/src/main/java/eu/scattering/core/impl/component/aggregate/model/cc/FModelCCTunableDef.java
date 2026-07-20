@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.cc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
@@ -30,7 +30,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FRandAspect random;
 
     private final FAggregate aggregate;
@@ -48,7 +48,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
     private boolean symmetry;
 
-    private FModelCCTunableDef(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    private FModelCCTunableDef(Dimension dimension, FAggregate aggregate, ScatterFactory factory, double df, double kf) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -89,7 +89,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
         this.symmetry = true;
     }
 
-    public static FModelCCTunable create(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    public static FModelCCTunable create(Dimension dimension, FAggregate aggregate, ScatterFactory factory, double df, double kf) {
 
         return new FModelCCTunableDef(dimension, aggregate, factory, df, kf);
     }
@@ -323,8 +323,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
     private double getMassCenterDistance(FAggregate aggA, FAggregate aggB) {
         int npA = aggA.size();
         int npB = aggB.size();
-        double rgA = aggA.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
-        double rgB = aggB.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV);
+        double rgA = aggA.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+        double rgB = aggB.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
         double stepA = Math.pow((npA + npB) / kf, 2 / df) * ((npA + npB) * (npA + npB) * rp * rp) / (npA * npB);
         double stepB = ((npA + npB) * rgA * rgA) / npB;

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.monitor.pc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.monitor.pc.FMonitorPCFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadius;
 import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadiusOfGyration;
@@ -10,14 +10,14 @@ import eu.scattering.core.impl.component.aggregate.monitor.pc.module.FMonitorPCR
 import eu.scattering.core.impl.component.aggregate.monitor.pc.module.FMonitorPCRadiusOfGyrationDef;
 
 public class FMonitorPCFactoryContextDef implements FMonitorPCFactoryContext {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private FMonitorPCFactoryContextDef(ScatFactory factory) {
+    private FMonitorPCFactoryContextDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FMonitorPCFactoryContext create(ScatFactory factory) {
+    public static FMonitorPCFactoryContext create(ScatterFactory factory) {
 
         return new FMonitorPCFactoryContextDef(factory);
     }
@@ -25,7 +25,7 @@ public class FMonitorPCFactoryContextDef implements FMonitorPCFactoryContext {
     //--------------------------------------------------
 
     @Override
-    public FMonitorPCRadiusOfGyration radiusOfGyration(int skip, RadiusOfGyration type) {
+    public FMonitorPCRadiusOfGyration radiusOfGyration(RadiusOfGyration type, int skip) {
 
         return FMonitorPCRadiusOfGyrationDef.create(this.factory, skip, type);
     }

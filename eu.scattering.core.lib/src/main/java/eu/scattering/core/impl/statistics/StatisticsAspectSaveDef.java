@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.statistics;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.StatisticsAspectSave;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsAspectSaveDef implements StatisticsAspectSave {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private StatisticsAspectSaveDef(ScatFactory factory) {
+    private StatisticsAspectSaveDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static StatisticsAspectSave create(ScatFactory factory) {
+    public static StatisticsAspectSave create(ScatterFactory factory) {
 
         return new StatisticsAspectSaveDef(factory);
     }
@@ -174,47 +174,74 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         builder.append("\n");
 
         builder.append("fig.update_layout(\n");
-        builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
+        builder.append("  hoverlabel=dict(\n");
+        builder.append("    font=dict(\n");
+        builder.append("      family='Courier New, monospace',\n");
+        builder.append("    ),\n");
+        builder.append("  ),\n");
         builder.append("  paper_bgcolor='rgba(0,0,0,0)',\n");
         builder.append("  plot_bgcolor='rgba(0,0,0,0)',\n");
         if (!namePlot.isEmpty()) {
             builder.append("  title=dict(\n");
             builder.append("    text='").append(namePlot).append("',\n");
-            builder.append("    font=dict(size=").append((int) (fontSize * 1.5)).append("),\n");
+            builder.append("    font=dict(\n");
+            builder.append("      size=").append((int) (fontSize * 1.5)).append(",\n");
+            builder.append("    ),\n");
             builder.append("    xanchor='center',\n");
             builder.append("    x=0.5,\n");
             builder.append("  ),\n");
-            builder.append("  margin=dict(r=40),\n");
+            builder.append("  margin=dict(\n");
+            builder.append("    r=40,\n");
+            builder.append("  ),\n");
         }
         else {
             builder.append("  title=None,\n");
-            builder.append("  margin=dict(t=20, r=40),\n");
+            builder.append("  margin=dict(\n");
+            builder.append("    t=20,\n");
+            builder.append("    r=40,\n");
+            builder.append("  ),\n");
         }
         builder.append("  xaxis=dict(\n");
-        builder.append("    title=dict(text='").append(nameX).append("', font=dict(size=").append(fontSize).append(")),\n");
-        builder.append("    tickfont=dict(size=").append(fontSize).append("),\n");
+        builder.append("    title=dict(\n");
+        builder.append("      text='").append(nameX).append("',\n");
+        builder.append("      font=dict(\n");
+        builder.append("        size=").append(fontSize).append(",\n");
+        builder.append("      ),\n");
+        builder.append("    ),\n");
+        builder.append("    tickfont=dict(\n");
+        builder.append("      size=").append(fontSize).append(",\n");
+        builder.append("    ),\n");
         if (config.getRangeX() != null) {
             builder.append("    range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
         }
         builder.append("  ),\n");
         builder.append("  yaxis=dict(\n");
-        builder.append("    title=dict(text='").append(nameY).append("', font=dict(size=").append(fontSize).append(")),\n");
-        builder.append("    tickfont=dict(size=").append(fontSize).append("),\n");
+        builder.append("    title=dict(\n");
+        builder.append("      text='").append(nameY).append("',\n");
+        builder.append("      font=dict(\n");
+        builder.append("        size=").append(fontSize).append(",\n");
+        builder.append("      ),\n");
+        builder.append("    ),\n");
+        builder.append("    tickfont=dict(\n");
+        builder.append("      size=").append(fontSize).append(",\n");
+        builder.append("    ),\n");
         if (config.getRangeY() != null) {
             builder.append("    range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
         builder.append("  ),\n");
         builder.append("  legend=dict(\n");
-        builder.append("    font=dict(size=").append(fontSize).append("),\n");
+        builder.append("    font=dict(\n");
+        builder.append("      size=").append(fontSize).append(",\n");
+        builder.append("    ),\n");
         if (config.getPositionLegend().equals(FPlotMetaGlobal.Position.RIGHT)) {
             builder.append("    xanchor='right',\n");
-            builder.append("    x=0.95,\n");
+            builder.append("    x=1.000,\n");
         } else {
             builder.append("    xanchor='left',\n");
-            builder.append("    x=0.05,\n");
+            builder.append("    x=0.025,\n");
         }
         builder.append("    yanchor='top',\n");
-        builder.append("    y=0.95,\n");
+        builder.append("    y=1.000,\n");
         builder.append("    bgcolor='rgba(255, 255, 255, 0.8)',\n");
         builder.append("    bordercolor='black',\n");
         builder.append("    borderwidth=2\n");
@@ -229,28 +256,44 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("  showarrow=False,\n");
             if (config.getPositionAnnotation().equals(FPlotMetaGlobal.Position.RIGHT)) {
                 builder.append("  xanchor='right',\n");
-                builder.append("  x=0.95, \n");
+                builder.append("  x=1.000, \n");
             } else {
                 builder.append("  xanchor='left',\n");
-                builder.append("  x=0.05, \n");
+                builder.append("  x=0.025, \n");
             }
             builder.append("  yanchor='bottom',\n");
-            builder.append("  y=0.05,\n");
-            builder.append("  font=dict(size=").append(fontSize).append("),\n");
+            builder.append("  y=0.025,\n");
+            builder.append("  font=dict(\n");
+            builder.append("    size=").append(fontSize).append(",\n");
+            builder.append("  ),\n");
             builder.append(")\n\n");
         }
 
-        builder.append("fig.update_xaxes(");
-        builder.append("  showline=True, linewidth=2, linecolor='black',\n");
-        builder.append("  ticks='outside', tickwidth=2, tickcolor='black', ticklen=6,\n");
-        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)', griddash='dot', gridwidth=2\n");
-        builder.append(")\n");
+        builder.append("fig.update_xaxes(\n");
+        builder.append("  showline=True,\n");
+        builder.append("  linewidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  linecolor='black',\n");
+        builder.append("  ticks='outside',\n");
+        builder.append("  tickwidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  tickcolor='black',\n");
+        builder.append("  ticklen=").append(config.getGridSize() * 3).append(",\n");
+        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)',\n");
+        builder.append("  griddash='dot',\n");
+        builder.append("  gridwidth=").append(config.getGridSize()).append("\n");
+        builder.append(")\n\n");
 
-        builder.append("fig.update_yaxes(");
-        builder.append("  showline=True, linewidth=2, linecolor='black',\n");
-        builder.append("  ticks='outside', tickwidth=2, tickcolor='black', ticklen=6,\n");
-        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)', griddash='dot', gridwidth=2\n");
-        builder.append(")\n");
+        builder.append("fig.update_yaxes(\n");
+        builder.append("  showline=True,\n");
+        builder.append("  linewidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  linecolor='black',\n");
+        builder.append("  ticks='outside',\n");
+        builder.append("  tickwidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  tickcolor='black',\n");
+        builder.append("  ticklen=").append(config.getGridSize() * 3).append(",\n");
+        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)',\n");
+        builder.append("  griddash='dot',\n");
+        builder.append("  gridwidth=").append(config.getGridSize()).append("\n");
+        builder.append(")\n\n");
 
         builder.append("fig.show()");
 
@@ -368,7 +411,7 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("  go.Scatter(\n");
             builder.append("    x=[").append(String.join(",", x)).append("],\n");
             builder.append("    y=[").append(String.join(",", max)).append("],\n");
-            builder.append("    name='max',\n");
+            builder.append("    name='").append(config.getNameMax()).append("',\n");
             builder.append("    hovertemplate='").append("x").append(" = %{x}<br>").append("max y").append(" = %{y}<extra></extra>',\n");
             builder.append("    mode='lines',\n");
             builder.append("    line_shape='linear',\n");
@@ -411,7 +454,7 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("  go.Scatter(\n");
             builder.append("    x=[").append(String.join(",", x)).append("],\n");
             builder.append("    y=[").append(String.join(",", min)).append("],\n");
-            builder.append("    name='min',\n");
+            builder.append("    name='").append(config.getNameMin()).append("',\n");
             builder.append("    hovertemplate='").append("x").append(" = %{x}<br>").append("min y").append(" = %{y}<extra></extra>',\n");
             builder.append("    mode='lines',\n");
             builder.append("    line_shape='linear',\n");
@@ -427,47 +470,74 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
         builder.append("\n");
 
         builder.append("fig.update_layout(\n");
-        builder.append("  hoverlabel=dict(font=dict(family='Courier New, monospace')),\n");
+        builder.append("  hoverlabel=dict(\n");
+        builder.append("    font=dict(\n");
+        builder.append("      family='Courier New, monospace',\n");
+        builder.append("    ),\n");
+        builder.append("  ),\n");
         builder.append("  paper_bgcolor='rgba(0,0,0,0)',\n");
         builder.append("  plot_bgcolor='rgba(0,0,0,0)',\n");
         if (!namePlot.isEmpty()) {
             builder.append("  title=dict(\n");
             builder.append("    text='").append(namePlot).append("',\n");
-            builder.append("    font=dict(size=").append((int) (fontSize * 1.5)).append("),\n");
+            builder.append("    font=dict(\n");
+            builder.append("      size=").append((int) (fontSize * 1.5)).append(",\n");
+            builder.append("    ),\n");
             builder.append("    xanchor='center',\n");
             builder.append("    x=0.5,\n");
             builder.append("  ),\n");
-            builder.append("  margin=dict(r=40),\n");
+            builder.append("  margin=dict(\n");
+            builder.append("    r=40,\n");
+            builder.append("  ),\n");
         }
         else {
             builder.append("  title=None,\n");
-            builder.append("  margin=dict(t=20, r=40),\n");
+            builder.append("  margin=dict(\n");
+            builder.append("    t=20,\n");
+            builder.append("    r=40,\n");
+            builder.append("  ),\n");
         }
         builder.append("  xaxis=dict(\n");
-        builder.append("    title=dict(text='").append(nameX).append("', font=dict(size=").append(fontSize).append(")),\n");
-        builder.append("    tickfont=dict(size=").append(fontSize).append("),\n");
+        builder.append("    title=dict(\n");
+        builder.append("      text='").append(nameX).append("',\n");
+        builder.append("      font=dict(\n");
+        builder.append("        size=").append(fontSize).append(",\n");
+        builder.append("      ),\n");
+        builder.append("    ),\n");
+        builder.append("    tickfont=dict(\n");
+        builder.append("      size=").append(fontSize).append(",\n");
+        builder.append("    ),\n");
         if (config.getRangeX() != null) {
             builder.append("    range=[").append(config.getRangeX().getD0()).append(",").append(config.getRangeX().getD1()).append("],\n");
         }
         builder.append("  ),\n");
         builder.append("  yaxis=dict(\n");
-        builder.append("    title=dict(text='").append(nameY).append("', font=dict(size=").append(fontSize).append(")),\n");
-        builder.append("    tickfont=dict(size=").append(fontSize).append("),\n");
+        builder.append("    title=dict(\n");
+        builder.append("      text='").append(nameY).append("',\n");
+        builder.append("      font=dict(\n");
+        builder.append("        size=").append(fontSize).append(",\n");
+        builder.append("      ),\n");
+        builder.append("    ),\n");
+        builder.append("    tickfont=dict(\n");
+        builder.append("      size=").append(fontSize).append(",\n");
+        builder.append("    ),\n");
         if (config.getRangeY() != null) {
             builder.append("    range=[").append(config.getRangeY().getD0()).append(",").append(config.getRangeY().getD1()).append("],\n");
         }
         builder.append("  ),\n");
         builder.append("  legend=dict(\n");
-        builder.append("    font=dict(size=").append(fontSize).append("),\n");
+        builder.append("    font=dict(\n");
+        builder.append("      size=").append(fontSize).append(",\n");
+        builder.append("    ),\n");
         if (config.getPositionLegend().equals(FPlotBarMetaGlobal.Position.RIGHT)) {
             builder.append("    xanchor='right',\n");
-            builder.append("    x=0.95,\n");
+            builder.append("    x=1.000,\n");
         } else {
             builder.append("    xanchor='left',\n");
-            builder.append("    x=0.05,\n");
+            builder.append("    x=0.025,\n");
         }
         builder.append("    yanchor='top',\n");
-        builder.append("    y=0.95,\n");
+        builder.append("    y=1.000,\n");
         builder.append("    bgcolor='rgba(255, 255, 255, 0.8)',\n");
         builder.append("    bordercolor='black',\n");
         builder.append("    borderwidth=2\n");
@@ -482,28 +552,44 @@ public class StatisticsAspectSaveDef implements StatisticsAspectSave {
             builder.append("  showarrow=False,\n");
             if (config.getPositionAnnotation().equals(FPlotBarMetaGlobal.Position.RIGHT)) {
                 builder.append("  xanchor='right',\n");
-                builder.append("  x=0.95, \n");
+                builder.append("  x=1.000, \n");
             } else {
                 builder.append("  xanchor='left',\n");
-                builder.append("  x=0.05, \n");
+                builder.append("  x=0.025, \n");
             }
             builder.append("  yanchor='bottom',\n");
-            builder.append("  y=0.05,\n");
-            builder.append("  font=dict(size=").append(fontSize).append("),\n");
+            builder.append("  y=0.025,\n");
+            builder.append("  font=dict(\n");
+            builder.append("    size=").append(fontSize).append(",\n");
+            builder.append("  ),\n");
             builder.append(")\n\n");
         }
 
-        builder.append("fig.update_xaxes(");
-        builder.append("  showline=True, linewidth=2, linecolor='black',\n");
-        builder.append("  ticks='outside', tickwidth=2, tickcolor='black', ticklen=6,\n");
-        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)', griddash='dot', gridwidth=2\n");
-        builder.append(")\n");
+        builder.append("fig.update_xaxes(\n");
+        builder.append("  showline=True,\n");
+        builder.append("  linewidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  linecolor='black',\n");
+        builder.append("  ticks='outside',\n");
+        builder.append("  tickwidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  tickcolor='black',\n");
+        builder.append("  ticklen=").append(config.getGridSize() * 3).append(",\n");
+        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)',\n");
+        builder.append("  griddash='dot',\n");
+        builder.append("  gridwidth=").append(config.getGridSize()).append("\n");
+        builder.append(")\n\n");
 
-        builder.append("fig.update_yaxes(");
-        builder.append("  showline=True, linewidth=2, linecolor='black',\n");
-        builder.append("  ticks='outside', tickwidth=2, tickcolor='black', ticklen=6,\n");
-        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)', griddash='dot', gridwidth=2\n");
-        builder.append(")\n");
+        builder.append("fig.update_yaxes(\n");
+        builder.append("  showline=True,\n");
+        builder.append("  linewidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  linecolor='black',\n");
+        builder.append("  ticks='outside',\n");
+        builder.append("  tickwidth=").append(config.getGridSize()).append(",\n");
+        builder.append("  tickcolor='black',\n");
+        builder.append("  ticklen=").append(config.getGridSize() * 3).append(",\n");
+        builder.append("  gridcolor='rgba(200, 200, 200, 0.8)',\n");
+        builder.append("  griddash='dot',\n");
+        builder.append("  gridwidth=").append(config.getGridSize()).append("\n");
+        builder.append(")\n\n");
 
         builder.append("fig.show()");
 

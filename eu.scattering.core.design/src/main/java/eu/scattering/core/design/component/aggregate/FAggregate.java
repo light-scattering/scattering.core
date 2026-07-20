@@ -1,12 +1,18 @@
 package eu.scattering.core.design.component.aggregate;
 
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.annotation.Fragment;
+import eu.scattering.core.design.utility.annotation.LLM;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
@@ -108,6 +114,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     //--------------------------------------------------
 
+    @LLM
     FMatrix3x3D getGyrationTensor(GyrationTensor type);
 
     double getRadiusOfGyration(RadiusOfGyration type);
@@ -118,16 +125,19 @@ public interface FAggregate extends Component, Iterable<Shape> {
     //--------------------------------------------------
 
     double getFractalDimension(FractalDimension type);
-    double getFractalDimension(FractalDimension type, FBoxString plot);
+    double getFractalDimension(FractalDimension type, FMetaDF meta);
 
-    double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
-    double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca);
+    double getFractalDimension(FConfigBC config);
+    double getFractalDimension(FConfigBC config, FMetaBC meta);
 
-    double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit);
-    double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta);
+    double getFractalDimension(FConfigDC config);
+    double getFractalDimension(FConfigDC config, FMetaDC meta);
 
-    FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca);
-    FPlot getDensityCorrelationFunction(double factor);
+    double getFractalDimension(FConfigMR config);
+    double getFractalDimension(FConfigMR config, FMetaMR meta);
+
+    FPlot getBoxCoverageFunction(FConfigBC config);
+    FPlot getDensityCorrelationFunction(FConfigDC config);
 
     //--------------------------------------------------
 
@@ -185,6 +195,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     void rotate(FMatrix3x3D matrix);
 
+    @LLM
     void pca();
 
     @Modificator

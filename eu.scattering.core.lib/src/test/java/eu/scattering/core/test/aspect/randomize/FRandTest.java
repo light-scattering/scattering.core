@@ -1,6 +1,6 @@
 package eu.scattering.core.test.aspect.randomize;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.statistics.base.FStat;
@@ -10,7 +10,7 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos4D
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos4D;
-import eu.scattering.core.impl.ScatFactoryDef;
+import eu.scattering.core.impl.factory.ScatterFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class FRandTest {
         void getSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             Assertions.assertAll("Validate return value",
                     () -> assertEquals(Optional.of(seed), fRandom.getSeed()));
@@ -44,7 +44,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get seed - Disabled")
         void getSeedDisabled() {
-            FRandGenerator fRandom = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create().getFRand();
 
             Assertions.assertAll("Validate return value",
                     () -> assertEquals(Optional.empty(), fRandom.getSeed()));
@@ -55,7 +55,7 @@ public class FRandTest {
         void validateRandomizationSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom1 = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom1 = ScatterFactoryDef.create(seed).getFRand();
 
             double val1A = fRandom1.nextDouble();
             double val1B = fRandom1.nextDouble();
@@ -63,7 +63,7 @@ public class FRandTest {
             double val1D = fRandom1.nextDouble();
             double val1E = fRandom1.nextDouble();
 
-            FRandGenerator fRandom2 = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom2 = ScatterFactoryDef.create(seed).getFRand();
 
             double val2A = fRandom2.nextDouble();
             double val2B = fRandom2.nextDouble();
@@ -82,11 +82,11 @@ public class FRandTest {
         @Test
         @DisplayName("Validate randomization - Seed disabled")
         void validateRandomizationSeedDisabled() {
-            FRandGenerator fRandom1 = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandom1 = ScatterFactoryDef.create().getFRand();
 
             double val1A = fRandom1.nextDouble();
 
-            FRandGenerator fRandom2 = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandom2 = ScatterFactoryDef.create().getFRand();
 
             double val2A = fRandom2.nextDouble();
 
@@ -97,7 +97,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get random with range")
         void nextDouble1DRange() {
-            FRandGenerator fRandom = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create().getFRand();
 
             double min = 0;
             double max = 0.00001;
@@ -113,7 +113,7 @@ public class FRandTest {
         void nextDoubleWithReversedRangeSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             double min = 0;
             double max = 0.00001;
@@ -127,7 +127,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get random with reversed range - Seed disabled")
         void nextDoubleWithReversedRangeSeedDisabled() {
-            FRandGenerator fRandom = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create().getFRand();
 
             double min = 0;
             double max = 0.00001;
@@ -143,7 +143,7 @@ public class FRandTest {
         void nextDoubleWithZeroRangeSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             double min = 0;
             double max = 0;
@@ -155,7 +155,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get random with zero range - Seed disabled")
         void nextDoubleWithZeroRangeSeedDisabled() {
-            FRandGenerator fRandom = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create().getFRand();
 
             double min = 0;
             double max = 0;
@@ -169,7 +169,7 @@ public class FRandTest {
         void nextLong() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             long valA = fRandom.nextLong();
             long valB = fRandom.nextLong();
@@ -183,7 +183,7 @@ public class FRandTest {
         void nextLongWithRange() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             boolean has0 = false;
             boolean has1 = false;
@@ -211,7 +211,7 @@ public class FRandTest {
         void nextInteger() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             int valA = fRandom.nextInteger();
             int valB = fRandom.nextInteger();
@@ -225,7 +225,7 @@ public class FRandTest {
         void nextIntegerWithRange() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             boolean has0 = false;
             boolean has1 = false;
@@ -257,7 +257,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get random 2D with range")
         void nextDouble2DRange() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             FRandGenerator fRandom = factory.getFRand();
 
@@ -277,7 +277,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get random 3D with range")
         void nextDouble3DRange() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             FRandGenerator fRandom = factory.getFRand();
 
@@ -298,7 +298,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get random 4D with range")
         void nextDouble4DRange() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             FRandGenerator fRandom = factory.getFRand();
 
@@ -320,17 +320,17 @@ public class FRandTest {
         @Test
         @DisplayName("Get position on sphere - Seed enabled")
         void getPositionOnSphereWithSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
             double jitter = 1E-8;
 
-            FRandGenerator randomA = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomA = ScatterFactoryDef.create(seed).getFRand();
             FPos3D posA = randomA.nextDoubleOnSphere(radius);
             FPoint pointA = factory.getFPoint(posA);
 
-            FRandGenerator randomB = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomB = ScatterFactoryDef.create(seed).getFRand();
             FPos3D posB = randomB.nextDoubleOnSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
@@ -347,7 +347,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get position on sphere - Seed disabled")
         void getPositionOnSphereWithoutSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             double radius = 5;
             double jitter = 1E-8;
@@ -373,16 +373,16 @@ public class FRandTest {
         @Test
         @DisplayName("Get position in sphere - Seed enabled")
         void getPositionInSphereWithSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
 
-            FRandGenerator randomA = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomA = ScatterFactoryDef.create(seed).getFRand();
             FPos3D posA = randomA.nextDoubleInSphere(radius);
             FPoint pointA = factory.getFPoint(posA);
 
-            FRandGenerator randomB = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomB = ScatterFactoryDef.create(seed).getFRand();
             FPos3D posB = randomB.nextDoubleInSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
@@ -399,7 +399,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get position in sphere - Seed disabled")
         void getPositionInSphereWithoutSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             double radius = 5;
 
@@ -424,17 +424,17 @@ public class FRandTest {
         @Test
         @DisplayName("Get position on circle - Seed enabled")
         void getPositionOnCircleWithSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
             double jitter = 1E-8;
 
-            FRandGenerator randomA = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomA = ScatterFactoryDef.create(seed).getFRand();
             FPos2D posA = randomA.nextDoubleOnCircle(radius);
             FPoint pointA = factory.getFPoint(factory.getFPos3D(posA, 0));
 
-            FRandGenerator randomB = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomB = ScatterFactoryDef.create(seed).getFRand();
             FPos2D posB = randomB.nextDoubleOnCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
@@ -451,7 +451,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get position on circle - Seed disabled")
         void getPositionOnCircleWithoutSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             double radius = 5;
             double jitter = 1E-8;
@@ -477,16 +477,16 @@ public class FRandTest {
         @Test
         @DisplayName("Get position in circle - Seed enabled")
         void getPositionInCircleWithSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
 
-            FRandGenerator randomA = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomA = ScatterFactoryDef.create(seed).getFRand();
             FPos2D posA = randomA.nextDoubleInCircle(radius);
             FPoint pointA = factory.getFPoint(factory.getFPos3D(posA, 0));
 
-            FRandGenerator randomB = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator randomB = ScatterFactoryDef.create(seed).getFRand();
             FPos2D posB = randomB.nextDoubleInCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
@@ -503,7 +503,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get position in circle - Seed disabled")
         void getPositionInCircleWithoutSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             double radius = 5;
 
@@ -530,8 +530,8 @@ public class FRandTest {
         void getPositionInShellWithSeed() {
             long seed = 123;
 
-            FRandGenerator fRandA = ScatFactoryDef.create(seed).getFRand();
-            FRandGenerator fRandB = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandA = ScatterFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandB = ScatterFactoryDef.create(seed).getFRand();
 
             double rMin = 2.5;
             double rMax = 4.5;
@@ -548,7 +548,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get position in shell - Seed disabled")
         void getPositionInShellWithoutSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             double rMin = 2.5;
             double rMax = 4.5;
@@ -567,7 +567,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get position in shell (inverted) - Seed disabled")
         void getPositionInShellInvertedWithoutSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             double rMin = 2.5;
             double rMax = 4.5;
@@ -586,7 +586,7 @@ public class FRandTest {
         @Test
         @DisplayName("Get position in shell (equal) - Seed disabled")
         void getPositionInShellEqualWithoutSeed() {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             double rMin = 3;
             double rMax = 3;
@@ -613,8 +613,8 @@ public class FRandTest {
                         "Lists should be equal");
             }
 
-            FRandGenerator fRandomA = ScatFactoryDef.create(123).getFRand();
-            FRandGenerator fRandomB = ScatFactoryDef.create(123).getFRand();
+            FRandGenerator fRandomA = ScatterFactoryDef.create(123).getFRand();
+            FRandGenerator fRandomB = ScatterFactoryDef.create(123).getFRand();
 
             fRandomA.shuffle(listA);
             fRandomB.shuffle(listB);
@@ -642,8 +642,8 @@ public class FRandTest {
                         "Lists should be equal");
             }
 
-            FRandGenerator fRandomA = ScatFactoryDef.create().getFRand();
-            FRandGenerator fRandomB = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandomA = ScatterFactoryDef.create().getFRand();
+            FRandGenerator fRandomB = ScatterFactoryDef.create().getFRand();
 
             fRandomA.shuffle(listA);
             fRandomB.shuffle(listB);
@@ -665,7 +665,7 @@ public class FRandTest {
         void getListElement() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             List<Integer> list = List.of(1, 2, 3, 4, 5);
 
@@ -684,7 +684,7 @@ public class FRandTest {
         void getListElementWithRemoval() {
             long seed = 12345;
 
-            FRandGenerator fRandom = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandom = ScatterFactoryDef.create(seed).getFRand();
 
             List<Integer> list = new ArrayList<>(List.of(1, 2, 3, 4, 5));
 
@@ -718,8 +718,8 @@ public class FRandTest {
             double mean = 10;
             double std = 1;
 
-            FRandGenerator fRandomA = ScatFactoryDef.create(seed).getFRand();
-            FRandGenerator fRandomB = ScatFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandomA = ScatterFactoryDef.create(seed).getFRand();
+            FRandGenerator fRandomB = ScatterFactoryDef.create(seed).getFRand();
 
             FStat fStatA = factory.getFStat();
             FStat fStatB = factory.getFStat();
@@ -742,8 +742,8 @@ public class FRandTest {
             double mean = 10;
             double std = 1;
 
-            FRandGenerator fRandomA = ScatFactoryDef.create().getFRand();
-            FRandGenerator fRandomB = ScatFactoryDef.create().getFRand();
+            FRandGenerator fRandomA = ScatterFactoryDef.create().getFRand();
+            FRandGenerator fRandomB = ScatterFactoryDef.create().getFRand();
 
             FStat fStatA = factory.getFStat();
             FStat fStatB = factory.getFStat();

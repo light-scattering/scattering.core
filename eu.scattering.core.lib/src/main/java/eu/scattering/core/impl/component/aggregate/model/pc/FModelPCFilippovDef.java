@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
@@ -44,7 +44,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
 
     private double rp;
 
-    private FModelPCFilippovDef(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    private FModelPCFilippovDef(Dimension dimension, FAggregate aggregate, ScatterFactory factory, double df, double kf) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -83,7 +83,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
         this.kf = kf;
     }
 
-    public static FModelPCTunable create(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    public static FModelPCTunable create(Dimension dimension, FAggregate aggregate, ScatterFactory factory, double df, double kf) {
 
         return new FModelPCFilippovDef(dimension, aggregate, factory, df, kf);
     }

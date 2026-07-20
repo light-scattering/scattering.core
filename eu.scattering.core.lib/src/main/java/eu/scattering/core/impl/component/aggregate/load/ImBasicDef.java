@@ -1,13 +1,13 @@
 package eu.scattering.core.impl.component.aggregate.load;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 
 public class ImBasicDef {
 
-    public static FAggregate core(ScatFactory factory, String data, ExBasic preset) {
+    public static FAggregate core(ScatterFactory factory, String data, ExBasic preset) {
         FAggregate fAggregate = factory.getFAggregate();
 
         if (preset == ExBasic.MULTISPHERE) {
@@ -17,7 +17,7 @@ public class ImBasicDef {
         return fAggregate;
     }
 
-    private static void particlesMultisphere(ScatFactory factory, FAggregate aggregate, String data) {
+    private static void particlesMultisphere(ScatterFactory factory, FAggregate aggregate, String data) {
         String[] particles = data.split("\n");
 
         for (String particle : particles) {
@@ -25,7 +25,7 @@ public class ImBasicDef {
         }
     }
 
-    private static FSphere toFSphereMultisphere(ScatFactory factory, String particle) {
+    private static FSphere toFSphereMultisphere(ScatterFactory factory, String particle) {
         String parsed = particle.replaceAll("\t", " ");
 
         while (parsed.contains("  ")) {

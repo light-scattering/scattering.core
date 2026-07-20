@@ -1,32 +1,39 @@
 package eu.scattering.core.impl.component.aggregate.monitor.pc.module;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.df.kinetic.pc.FConfigPCPL;
+import eu.scattering.core.design.component.aggregate.meta.df.kinetic.pc.FMetaPCPL;
 import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadiusOfGyration;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
+import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
-public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration {
-    private final static Approximation approx = Approximation.WINDOW;
+import java.util.Locale;
 
-    private final RadiusOfGyration type;
+public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration {
+    private final ScatterFactory factory;
+
+    private final RadiusOfGyration radiusOfGyration;
     private final FPlot fPlot;
 
     private double skip = -1;
 
-    private FMonitorPCRadiusOfGyrationDef(ScatFactory factory, RadiusOfGyration type) {
+    private FMonitorPCRadiusOfGyrationDef(ScatterFactory factory, RadiusOfGyration radiusOfGyration) {
+        this.factory = factory;
 
-        this.type = type;
+        this.radiusOfGyration = radiusOfGyration;
         this.fPlot = factory.getFPlot();
 
         this.fPlot.setName("Radius of gyration");
     }
 
-    public static FMonitorPCRadiusOfGyration create(ScatFactory factory, int skip, RadiusOfGyration type) {
-        FMonitorPCRadiusOfGyration results = new FMonitorPCRadiusOfGyrationDef(factory, type);
+    public static FMonitorPCRadiusOfGyration create(ScatterFactory factory, int skip, RadiusOfGyration radiusOfGyration) {
+        FMonitorPCRadiusOfGyration results = new FMonitorPCRadiusOfGyrationDef(factory, radiusOfGyration);
 
         results.setSkip(skip);
 
@@ -42,8 +49,6 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
     @Override
     public FPlot getRefFPlot() {
 
-        this.fPlot.sortX(true);
-
         return this.fPlot;
     }
 
@@ -54,24 +59,44 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
             this.fPlot.clear();
         } else {
             if (fAggregate.getRefParticles().size() > this.skip) {
-                this.fPlot.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyration(type));
+                this.fPlot.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyration(radiusOfGyration));
             }
         }
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
-    public double getPowerLawDimension() {
+    public double getPowerLawDimension(FConfigPCPL.Preset preset, FMetaPCPL meta) {
 
-        this.fPlot.sortX(true);
+        return getPowerLawDimension(this.factory.getFConfigPCPL(preset), meta);
+    }
 
-        FPlot results = getResults();
-        FPoly regression = getRegression(results);
+    @Override
+    public double getPowerLawDimension(FConfigPCPL config, FMetaPCPL meta) {
+
+        FPlot results = getResults(config);
+        FPoly regression = getRegression(results, config);
+
+        if (meta != null) {
+            meta.setPythonRenderScript(plot(results, regression));
+        }
 
         return regression.at(1);
     }
 
-    private FPlot getResults() {
+    private FPlot getResults(FConfigPCPL config) {
         FPlot results = this.fPlot.copy();
+
+        results.sortX(true);
+
+        int drop = (int) (results.size() * config.getDropRatio());
+
+        for (int i = 0 ; i < drop ; i++) {
+            results.setX(i, Double.NaN);
+        }
+
+        results.removeNaN();
 
         results.swapXY();
 
@@ -81,18 +106,52 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
         return results;
     }
 
-    private FPoly getRegression(FPlot results) {
+    private FPoly getRegression(FPlot results, FConfigPCPL config) {
 
-        if (approx.equals(Approximation.WINDOW)) {
-            return results.reg().fitSlope((int) (results.size() * 0.9));
+        if (config.getWindowRatio() < 1) {
+            return results.reg().fitSlope((int) (results.size() * config.getWindowRatio()));
         }
 
-        return results.reg().fitLinear((int) (results.size() * 0.3), results.size() - 1);
+        return results.reg().fitLinear();
     }
 
-    //-----------------------------------------------------------------------------------------------------
+    private String plot(FPlot results, FPoly regression) {
+        FPlot approximation = results.copy();
+        approximation.setY(regression);
 
-    private enum Approximation {
-        WINDOW, OFFSET
+        String dimFormat = String.format(Locale.US, "%.2f", regression.at(1));
+        String r2Format = String.format(Locale.US, "%.4f", results.r2(regression));
+
+        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
+                .setPositionLegend(FPlotMetaGlobal.Position.LEFT)
+                .setPositionAnnotation(FPlotMetaGlobal.Position.RIGHT)
+                .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
+                .setFontSize(48)
+                .setGridSize(3)
+                .setNameX("ln R<sub>g</sub>")
+                .setNameY("ln N<sub>p</sub>");
+
+        FPlotMeta metaPlotFit = factory.getFPlotMeta()
+                .setLinesColor("black")
+                .setLinesWidth(6)
+                .setMarkersSize(21)
+                .setLinesShow(true)
+                .setMarkersShow(false);
+
+        FPlotMeta metaPlotResults = factory.getFPlotMeta()
+                .setMarkersColor("black")
+                .setLinesWidth(6)
+                .setMarkersSize(21)
+                .setLinesShow(false)
+                .setMarkersShow(true);
+
+        approximation.setName("Linear fit (D<sub>PL</sub> ≈ " + dimFormat + ")")
+                .setRefMeta(metaPlotFit);
+
+        results.setName("Averaged data")
+                .setRefMeta(metaPlotResults);
+
+        return  factory.getSaveAspect().getStatisticsContext()
+                .toPythonPlotly(metaGlobal, approximation, results);
     }
 }

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.cc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.rlca.FModelCCRLCA;
@@ -24,7 +24,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FRandAspect random;
 
     private final FAggregate aggregate;
@@ -33,7 +33,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
 
     private boolean symmetry;
 
-    private FModelCCRLCADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    private FModelCCRLCADef(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -59,7 +59,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
         this.symmetry = true;
     }
 
-    public static FModelCCRLCA create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    public static FModelCCRLCA create(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         return new FModelCCRLCADef(dimension, aggregate, factory);
     }

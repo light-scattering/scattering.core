@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.statistics.base;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.base.FStat;
 import org.json.JSONArray;
@@ -18,29 +18,29 @@ public class FStatDef implements FStat {
     private static final String JSON_TOTAL = "total";
     private static final String JSON_INVALID = "invalid";
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private final List<Double> data;
 
     private String name = "";
 
-    private FStatDef(ScatFactory factory, List<Double> data) {
+    private FStatDef(ScatterFactory factory, List<Double> data) {
 
         this.factory = factory;
         this.data = data == null ? new ArrayList<>() : data;
     }
 
-    public static FStat create(ScatFactory factory) {
+    public static FStat create(ScatterFactory factory) {
 
         return new FStatDef(factory, null);
     }
 
-    public static FStat create(ScatFactory factory, List<Double> data) {
+    public static FStat create(ScatterFactory factory, List<Double> data) {
 
         return new FStatDef(factory, data);
     }
 
-    public static FStat create(ScatFactory factory, double... data) {
+    public static FStat create(ScatterFactory factory, double... data) {
         List<Double> dataList = new ArrayList<>(data.length);
 
         for (Double element : data) {
@@ -50,7 +50,7 @@ public class FStatDef implements FStat {
         return new FStatDef(factory, dataList);
     }
 
-    public static FStat create(ScatFactory factory, JSONObject json) {
+    public static FStat create(ScatterFactory factory, JSONObject json) {
         FStat fStat = FStatDef.create(factory);
 
         JSONArray data = json.getJSONArray(JSON_DATA);

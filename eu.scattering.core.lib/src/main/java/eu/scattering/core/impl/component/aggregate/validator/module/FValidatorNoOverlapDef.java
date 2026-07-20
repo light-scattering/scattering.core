@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorNoOverlap;
 import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 
-import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FValidatorNoOverlapDef implements FValidatorNoOverlap {
 

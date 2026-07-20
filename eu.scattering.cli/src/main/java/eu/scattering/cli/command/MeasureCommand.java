@@ -3,19 +3,60 @@ package eu.scattering.cli.command;
 import eu.scattering.cli.aspect.FAggregateLoad;
 import eu.scattering.cli.type.FORMAT_INPUT;
 import eu.scattering.cli.type.TYPE_METRIC;
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.impl.ScatConfigDef;
-import eu.scattering.core.impl.ScatFactoryDef;
+import eu.scattering.core.impl.ScatterCoreConfig;
+import eu.scattering.core.impl.factory.ScatterFactoryDef;
 import picocli.CommandLine;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "measure", description = "Calculates morphological parameters", usageHelpAutoWidth = true)
+@CommandLine.Command(
+        name = "measure",
+        description = "Calculates morphological parameters",
+        mixinStandardHelpOptions = true,
+        usageHelpAutoWidth = true
+)
 public class MeasureCommand implements Callable<Integer> {
 
-    @CommandLine.Option(names = {"-m", "--metrics"}, arity = "1..*", required = true, description = "Measurement types")
+    static class MetricConverter implements CommandLine.ITypeConverter<TYPE_METRIC> {
+
+        @Override
+        public TYPE_METRIC convert(String value) {
+            String normalized = value.replace(":", "__").replace("-", "_");
+
+            for (TYPE_METRIC metric : TYPE_METRIC.values()) {
+
+                if (metric.name().equalsIgnoreCase(normalized)) {
+                    return metric;
+                }
+            }
+            throw new CommandLine.TypeConversionException("Unknown metric: '" + value + "'");
+        }
+    }
+
+    static class MetricCandidates implements Iterable<String> {
+
+        @Override
+        public java.util.Iterator<String> iterator() {
+
+            return java.util.Arrays.stream(TYPE_METRIC.values())
+                    .map(m -> m.name().replace("__", ":"))
+                    .map(m -> m.replace("_", "-"))
+                    .map(String::toLowerCase)
+                    .iterator();
+        }
+    }
+
+    @CommandLine.Option(
+            names = {"-m", "--metrics"},
+            arity = "1..*",
+            required = true,
+            description = "Measurement types. Valid values: ${COMPLETION-CANDIDATES}",
+            converter = MetricConverter.class,
+            completionCandidates = MetricCandidates.class
+    )
     private List<TYPE_METRIC> metrics;
 
     @CommandLine.Option(names = {"-f", "--format"}, defaultValue = "json", description = "Input format")
@@ -36,16 +77,16 @@ public class MeasureCommand implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            ScatFactory factory = ScatFactoryDef.create();
+            ScatterFactory factory = ScatterFactoryDef.create();
 
             FAggregate fAggregate = FAggregateLoad.load(factory, file, format)
                     .orElseThrow(() -> new IllegalArgumentException("The geometry could not be parsed"));
 
-            if (epsilon != ScatConfigDef.SHAPE_EPSILON) {
+            if (epsilon != ScatterCoreConfig.SHAPE_EPSILON) {
                 fAggregate.setParticleEpsilon(epsilon);
             }
 
-            if (delta != ScatConfigDef.SHAPE_DELTA) {
+            if (delta != ScatterCoreConfig.SHAPE_DELTA) {
                 fAggregate.setParticleDelta(delta);
             }
 

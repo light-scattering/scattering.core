@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.cc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
@@ -28,7 +28,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private final FRandAspect random;
     private final FRotAspect rotation;
@@ -42,7 +42,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
     private boolean symmetry;
 
-    private FModelCCBallisticDef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    private FModelCCBallisticDef(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -76,7 +76,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         this.symmetry = true;
     }
 
-    public static FModelCCBallistic create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    public static FModelCCBallistic create(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         return new FModelCCBallisticDef(dimension, aggregate, factory);
     }

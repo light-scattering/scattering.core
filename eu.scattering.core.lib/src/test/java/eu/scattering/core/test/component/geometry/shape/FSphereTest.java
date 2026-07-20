@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.scattering.core.impl.ScatConfigDef.*;
+import static eu.scattering.core.impl.ScatterCoreConfig.*;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;

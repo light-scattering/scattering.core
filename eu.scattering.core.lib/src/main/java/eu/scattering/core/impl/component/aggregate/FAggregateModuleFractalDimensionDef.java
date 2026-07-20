@@ -1,114 +1,143 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigMR;
+import eu.scattering.core.design.component.aggregate.meta.df.FMetaDF;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaMR;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxString;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
-import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 public class FAggregateModuleFractalDimensionDef {
     private final FAggregateModuleFractalDimensionBCDef bc;
     private final FAggregateModuleFractalDimensionDCDef dc;
     private final FAggregateModuleFractalDimensionMRDef mr;
+    private final ScatterFactory factory;
 
-    protected FAggregateModuleFractalDimensionDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleFractalDimensionDef(ScatterFactory factory, FAggregate aggregate) {
 
         this.bc = new FAggregateModuleFractalDimensionBCDef(factory, aggregate);
         this.dc = new FAggregateModuleFractalDimensionDCDef(factory, aggregate);
         this.mr = new FAggregateModuleFractalDimensionMRDef(factory, aggregate);
+
+        this.factory = factory;
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    protected FPlot getBoxCoverageFunction(double step, int shift, boolean reposition, boolean pca) {
+    protected FPlot getBoxCoverageFunction(FConfigBC config) {
 
-        return this.bc.getResultsOptimized(step, shift, reposition, pca);
+        return this.bc.getResultsOptimized(config, null);
+    }
+
+    protected FPlot getDensityCorrelationFunction(FConfigDC config) {
+
+        return this.dc.getResults(config, null);
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    protected FPlot getDensityCorrelationFunction(double step) {
+    protected double getFractalDimension(FractalDimension type) {
 
-        return this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, step, false);
+        return getFractalDimension(type, null);
     }
 
-    // -------------------------------------------------------------------------------------------------
-
-    protected double getFractalDimension(FractalDimension type, FBoxString plot) {
+    protected double getFractalDimension(FractalDimension type, FMetaDF meta) {
 
         return switch (type) {
-            case BC_RAW -> this.bc.analyze(
-                    this.bc.getResultsRaw(),
-                    1, plot
-            );
-            case BC_BASELINE -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 1, true, false),
-                    1, plot
-            );
-            case BC_OPTIMIZED -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2, 3, false, true),
-                    0.9, plot
-            );
-            case DC_RESTRICTED -> this.dc.analyze(
-                    this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
-                    0.9
-            );
-            case DC_FULL -> this.dc.analyze(
-                    this.dc.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
-                    0.9
-            );
-            case MR_RESTRICTED -> this.mr.analyze(
-                    this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, true),
-                    0.9, plot
-            );
-            case MR_FULL -> this.mr.analyze(
-                    this.mr.getResults(RadiusOfGyration.SIMPLE_POLY, 1.1, false),
-                    0.9, plot
-            );
+            case BC_NAIVE -> {
+                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.NAIVE);
+                FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
 
-            // -------------------------------------------------------------------------------------------------
+                double res = this.bc.analyze(this.bc.getResultsNaive(metaBC), configBC, metaBC);
 
-            case BC_MANUSCRIPT_BASELINE -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2.00, 1, false, false),
-                    0.9, plot
-            );
-            case BC_MANUSCRIPT_PCA -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2.00, 1, false, true),
-                    0.9, plot
-            );
-            case BC_MANUSCRIPT_SHIFT -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2.00, 3, false, false),
-                    0.9, plot
-            );
-            case BC_MANUSCRIPT_SHIFT_PCA -> this.bc.analyze(
-                    this.bc.getResultsOptimized(2.00, 3, false, true),
-                    0.9, plot
-            );
-            case BC_MANUSCRIPT_SHIFT_FACTOR -> this.bc.analyze(
-                    this.bc.getResultsOptimized(1.25, 3, false, false),
-                    0.9, plot
-            );
-            case BC_MANUSCRIPT_SHIFT_PCA_FACTOR -> this.bc.analyze(
-                    this.bc.getResultsOptimized(1.25, 3, false, true),
-                    0.9, plot
-            );
+                setMetaValues(meta, metaBC);
+
+                yield res;
+            }
+            case BC_BASELINE -> {
+                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.BASELINE);
+                FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
+
+                double res = this.bc.analyze(this.bc.getResultsOptimized(configBC, metaBC), configBC, metaBC);
+
+                setMetaValues(meta, metaBC);
+
+                yield res;
+            }
+            case BC_OPTIMIZED -> {
+                FConfigBC configBC = factory.getFConfigBC(FConfigBC.Preset.OPTIMIZED);
+                FMetaBC metaBC = meta != null ? factory.getFMetaBC() : null;
+
+                double res = this.bc.analyze(this.bc.getResultsOptimized(configBC, metaBC), configBC, metaBC);
+
+                setMetaValues(meta, metaBC);
+
+                yield res;
+            }
+            case DC_RESTRICTED -> {
+                FConfigDC configDC = factory.getFConfigDC(FConfigDC.Preset.RESTRICTED);
+                FMetaDC metaDC = meta != null ? factory.getFMetaDC() : null;
+
+                double res = this.dc.analyze(this.dc.getResults(configDC, metaDC), configDC, metaDC);
+
+                setMetaValues(meta, metaDC);
+
+                yield res;
+            }
+            case MR_RESTRICTED -> {
+                FConfigMR configMR = factory.getFConfigMR(FConfigMR.Preset.RESTRICTED);
+                FMetaMR metaMR = meta != null ? factory.getFMetaMR() : null;
+
+                double res = this.mr.analyze(this.mr.getResults(configMR, metaMR), configMR, metaMR);
+
+                setMetaValues(meta, metaMR);
+
+                yield res;
+            }
         };
     }
 
-    protected double getFractalDimensionMassRadius(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    protected double getFractalDimensionBoxCounting(FConfigBC config) {
 
-        return this.mr.analyze(this.mr.getResults(method, stepFactor, rangeLimit), window, null);
+        return getFractalDimensionBoxCounting(config, null);
     }
 
-    protected double getFractalDimensionBoxCounting(double window, double step, int shift, boolean reposition, boolean pca) {
+    protected double getFractalDimensionBoxCounting(FConfigBC config, FMetaBC meta) {
 
-        return this.bc.analyze(this.bc.getResultsOptimized(step, shift, reposition, pca), window, null);
+        return this.bc.analyze(this.bc.getResultsOptimized(config, meta), config, meta);
     }
 
-    protected double getFractalDimensionDensityCorrelation(double window, RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
+    protected double getFractalDimensionDensityCorrelation(FConfigDC config) {
 
-        return this.dc.analyze(this.dc.getResults(method, stepFactor, rangeLimit, meta), window, meta);
+        return getFractalDimensionDensityCorrelation(config, null);
+    }
+
+    protected double getFractalDimensionDensityCorrelation(FConfigDC config, FMetaDC meta) {
+
+        return this.dc.analyze(this.dc.getResults(config, meta), config, meta);
+    }
+
+    protected double getFractalDimensionMassRadius(FConfigMR config) {
+
+        return getFractalDimensionMassRadius(config, null);
+    }
+
+    protected double getFractalDimensionMassRadius(FConfigMR config, FMetaMR meta) {
+
+        return this.mr.analyze(this.mr.getResults(config, meta), config, meta);
+    }
+
+    private void setMetaValues(FMetaDF in, FMetaDF ref) {
+
+        if (in != null) {
+            in.setExecutionTimeMillis(ref.getExecutionTimeMillis());
+            in.setPythonRenderScript(ref.getPythonRenderScript());
+            in.setRefData(ref.getRefData());
+        }
     }
 }

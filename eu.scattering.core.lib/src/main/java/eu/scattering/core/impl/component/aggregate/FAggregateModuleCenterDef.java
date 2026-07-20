@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -15,10 +15,10 @@ import eu.scattering.core.design.utility.type.method.MassCenter;
 import java.util.List;
 
 public class FAggregateModuleCenterDef {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FAggregate aggregate;
 
-    protected FAggregateModuleCenterDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleCenterDef(ScatterFactory factory, FAggregate aggregate) {
 
         this.factory = factory;
         this.aggregate = aggregate;

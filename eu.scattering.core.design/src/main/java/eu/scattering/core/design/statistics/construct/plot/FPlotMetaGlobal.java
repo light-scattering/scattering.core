@@ -31,5 +31,8 @@ public interface FPlotMetaGlobal {
     Position getPositionAnnotation();
     FPlotMetaGlobal setPositionAnnotation(Position position);
 
+    double getGridSize();
+    FPlotMetaGlobal setGridSize(double size);
+
     enum Position { LEFT, RIGHT }
 }

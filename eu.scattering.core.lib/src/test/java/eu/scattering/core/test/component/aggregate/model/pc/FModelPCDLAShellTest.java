@@ -1,6 +1,6 @@
 package eu.scattering.core.test.component.aggregate.model.pc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
@@ -10,7 +10,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.utility.type.option.Dimension;
-import eu.scattering.core.impl.ScatFactoryDef;
+import eu.scattering.core.impl.factory.ScatterFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
@@ -158,12 +158,12 @@ public class FModelPCDLAShellTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = ScatFactoryDef.create(123);
+            ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelA = factoryA.getFModelContext().pc().dla(fAggregateA);
 
-            ScatFactory factoryB = ScatFactoryDef.create(123);
+            ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelB = factoryB.getFModelContext().pc().dla(fAggregateB);
@@ -329,12 +329,12 @@ public class FModelPCDLAShellTest {
         void randomization() {
             int size = 28;
 
-            ScatFactory factoryA = ScatFactoryDef.create(123);
+            ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelA = factoryA.getFModelContext().pc().dla(Dimension.D2, fAggregateA);
 
-            ScatFactory factoryB = ScatFactoryDef.create(123);
+            ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModel fModelB = factoryB.getFModelContext().pc().dla(Dimension.D2, fAggregateB);

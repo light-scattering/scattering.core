@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.extension;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.extension.FExtension;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.storage.buffer.FBuffer;
@@ -13,22 +13,22 @@ public class FExtensionDef implements FExtension {
     private static final String JSON_CAPACITY = "capacity";
     private static final String JSON_MATERIAL = "material";
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private FBuffer<FBufferData> buffer;
     private FMaterial material;
 
-    private FExtensionDef(ScatFactory factory) {
+    private FExtensionDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FExtension create(ScatFactory factory) {
+    public static FExtension create(ScatterFactory factory) {
 
         return new FExtensionDef(factory);
     }
 
-    public static FExtension create(ScatFactory factory, JSONObject json) {
+    public static FExtension create(ScatterFactory factory, JSONObject json) {
         FExtension results = new FExtensionDef(factory);
 
         if (json.has(JSON_MATERIAL)) {

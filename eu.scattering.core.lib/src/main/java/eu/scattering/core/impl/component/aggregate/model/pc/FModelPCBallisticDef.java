@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
@@ -42,7 +42,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
 
     private double distance;
 
-    private FModelPCBallisticDef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    private FModelPCBallisticDef(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -71,7 +71,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
         this.detached = new ArrayList<>(this.aggregate.size());
     }
 
-    public static FModelPCBallistic create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    public static FModelPCBallistic create(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         return new FModelPCBallisticDef(dimension, aggregate, factory);
     }

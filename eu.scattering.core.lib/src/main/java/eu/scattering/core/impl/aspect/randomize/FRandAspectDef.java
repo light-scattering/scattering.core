@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.aspect.randomize;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
@@ -19,15 +19,15 @@ import eu.scattering.core.design.utility.type.method.MassCenter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FRandAspectDef implements FRandAspect {
     private final FRandGenerator core;
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private final FRandAspectModuleFAggregateDef moduleFAggregate;
 
-    private FRandAspectDef(FRandGenerator core, ScatFactory factory) {
+    private FRandAspectDef(FRandGenerator core, ScatterFactory factory) {
 
         this.core = core;
         this.factory = factory;
@@ -35,7 +35,7 @@ public class FRandAspectDef implements FRandAspect {
         this.moduleFAggregate = FRandAspectModuleFAggregateDef.create(factory);
     }
 
-    public static FRandAspect create(FRandGenerator core, ScatFactory factory) {
+    public static FRandAspect create(FRandGenerator core, ScatterFactory factory) {
 
         return new FRandAspectDef(core, factory);
     }

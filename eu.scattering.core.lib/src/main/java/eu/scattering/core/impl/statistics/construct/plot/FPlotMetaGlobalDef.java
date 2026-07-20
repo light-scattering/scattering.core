@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.statistics.construct.plot;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 
 public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
     private int fontSize = 18;
 
@@ -20,12 +20,14 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     private Position positionLegend = Position.RIGHT;
     private Position positionAnnotation = Position.LEFT;
 
-    private FPlotMetaGlobalDef(ScatFactory factory) {
+    private double gridSize = 3;
+
+    private FPlotMetaGlobalDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FPlotMetaGlobal create(ScatFactory factory) {
+    public static FPlotMetaGlobal create(ScatterFactory factory) {
 
         return new FPlotMetaGlobalDef(factory);
     }
@@ -156,6 +158,20 @@ public class FPlotMetaGlobalDef implements FPlotMetaGlobal {
     public FPlotMetaGlobal setPositionAnnotation(Position position) {
 
         this.positionAnnotation = position;
+
+        return this;
+    }
+
+    @Override
+    public double getGridSize() {
+
+        return this.gridSize;
+    }
+
+    @Override
+    public FPlotMetaGlobal setGridSize(double size) {
+
+        this.gridSize = size;
 
         return this;
     }

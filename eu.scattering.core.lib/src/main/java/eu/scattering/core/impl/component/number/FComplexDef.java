@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static eu.scattering.core.impl.ScatConfigDef.EPSILON;
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FComplexDef implements FComplex {
     private static final String JSON_TYPE = "type";

@@ -1,8 +1,10 @@
 package eu.scattering.cli.command;
 
 import eu.scattering.cli.type.TYPE_METRIC;
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.utility.type.method.MassCenter;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
@@ -18,26 +20,21 @@ import java.util.List;
 
 public class Measure {
 
-    public static String measure(ScatFactory factory, FAggregate aggregate, List<TYPE_METRIC> metrics) {
+    public static String measure(ScatterFactory factory, FAggregate aggregate, List<TYPE_METRIC> metrics) {
         List<String> results = new ArrayList<>(metrics.size());
 
         for (TYPE_METRIC metric : metrics) {
 
             results.add(switch (metric) {
-                case Np -> getNp(aggregate);
-                case Rp -> getRp(factory, aggregate);
-                case Rp__avg -> getRpAvg(aggregate);
-                case Rp__std -> getRpStd(aggregate);
-                case Rp__max -> getRpMax(aggregate);
-                case Rp__min -> getRpMin(aggregate);
-                case Df_box -> getDfBoxFast(aggregate);
-                case Df_box_brute_force -> getDfBoxFastBruteForce(aggregate);
-                case Df_box_adv_1 -> getDfBoxAdv1(aggregate);
-                case Df_box_adv_2 -> getDfBoxAdv2(aggregate);
-                case Df_density -> getDfCorrelation(aggregate);
-                case Df_density_full -> getDfCorrelationFull(aggregate);
-                case Df_mass -> getDfMass(aggregate);
-                case Df_mass_full -> getDfMassFull(aggregate);
+                case np -> getNp(aggregate);
+                case rp -> getRp(factory, aggregate);
+                case rp__avg -> getRpAvg(aggregate);
+                case rp__std -> getRpStd(aggregate);
+                case rp__max -> getRpMax(aggregate);
+                case rp__min -> getRpMin(aggregate);
+                case df_bc -> getDfBoxCountingOptimized(aggregate);
+                case df_mr -> getDfMassRadiusRestricted(aggregate);
+                case df_dc -> getDfDensityCorrelationRestricted(aggregate);
                 case Length_x -> getLengthX(aggregate);
                 case Length_y -> getLengthY(aggregate);
                 case Length_z -> getLengthZ(aggregate);
@@ -72,7 +69,6 @@ public class Measure {
                 case Rg_poly_06R1 -> getRgSimplePoly06R1(aggregate);
                 case Rg_poly_10R2 -> getRgSimplePoly10R2(aggregate);
                 case Rg_mesh -> getRgComplex(aggregate);
-                case RG_filippov -> getRgDedicatedFilippov(aggregate);
                 case OverlapFactor_c_vol -> getOverlapFactorClusterVolumetric(factory, aggregate);
                 case OverlapFactor_p_vol -> getOverlapFactorParticleVolumetric(factory, aggregate);
                 case OverlapFactor_p_vol__avg -> getOverlapFactorParticleVolumetricAvg(aggregate);
@@ -123,7 +119,7 @@ public class Measure {
         return String.valueOf(aggregate.size());
     }
 
-    private static String getRp(ScatFactory factory, FAggregate aggregate) {
+    private static String getRp(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getFStatParticleRadius());
@@ -224,113 +220,88 @@ public class Measure {
         return String.valueOf(aggregate.getSurfaceRadius(Surface.COMPLEX));
     }
 
-    private static String getDfBoxFast(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_BASELINE));
-    }
-
-    private static String getDfBoxFastBruteForce(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_RAW));
-    }
-
-    private static String getDfBoxAdv1(FAggregate aggregate) {
+    private static String getDfBoxCountingOptimized(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED));
     }
 
-    private static String getDfBoxAdv2(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.BC_OPTIMIZED));
-    }
-
-    private static String getDfCorrelation(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_RESTRICTED));
-    }
-
-    private static String getDfCorrelationFull(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_FULL));
-    }
-
-    private static String getDfMass(FAggregate aggregate) {
+    private static String getDfMassRadiusRestricted(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getFractalDimension(FractalDimension.MR_RESTRICTED));
     }
 
-    private static String getDfMassFull(FAggregate aggregate) {
+    private static String getDfDensityCorrelationRestricted(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getFractalDimension(FractalDimension.MR_FULL));
+        return String.valueOf(aggregate.getFractalDimension(FractalDimension.DC_RESTRICTED));
     }
 
-    private static String getCmAdaptive(ScatFactory factory, FAggregate aggregate) {
+    private static String getCmAdaptive(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
                 .toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.ADAPTIVE));
     }
 
-    private static String getCmSimpleMono(ScatFactory factory, FAggregate aggregate) {
+    private static String getCmSimpleMono(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
                 .toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_MONO));
     }
 
-    private static String getCmSimplePoly(ScatFactory factory, FAggregate aggregate) {
+    private static String getCmSimplePoly(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
                 .toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY));
     }
 
-    private static String getCmComplex(ScatFactory factory, FAggregate aggregate) {
+    private static String getCmComplex(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
                 .toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.COMPLEX));
     }
 
-    private static String getCs(ScatFactory factory, FAggregate aggregate) {
+    private static String getCs(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
                 .toCLI(aggregate.getCenter(factory.getFPoint(), Center.SPHERICAL));
     }
 
-    private static String getCb(ScatFactory factory, FAggregate aggregate) {
+    private static String getCb(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
                 .toCLI(aggregate.getCenter(factory.getFPoint(), Center.SPATIAL));
     }
 
-    private static String getRadiusCmAdaptive(ScatFactory factory, FAggregate aggregate) {
+    private static String getRadiusCmAdaptive(ScatterFactory factory, FAggregate aggregate) {
         FPoint center = aggregate.getMassCenter(factory.getFPoint(), MassCenter.ADAPTIVE);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }
 
-    private static String getRadiusCmSimpleMono(ScatFactory factory, FAggregate aggregate) {
+    private static String getRadiusCmSimpleMono(ScatterFactory factory, FAggregate aggregate) {
         FPoint center = aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_MONO);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }
 
-    private static String getRadiusCmSimplePoly(ScatFactory factory, FAggregate aggregate) {
+    private static String getRadiusCmSimplePoly(ScatterFactory factory, FAggregate aggregate) {
         FPoint center = aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }
 
-    private static String getRadiusCmComplex(ScatFactory factory, FAggregate aggregate) {
+    private static String getRadiusCmComplex(ScatterFactory factory, FAggregate aggregate) {
         FPoint center = aggregate.getMassCenter(factory.getFPoint(), MassCenter.COMPLEX);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }
 
-    private static String getRadiusCb(ScatFactory factory, FAggregate aggregate) {
+    private static String getRadiusCb(ScatterFactory factory, FAggregate aggregate) {
         FPoint center = aggregate.getCenter(factory.getFPoint(), Center.SPATIAL);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }
 
-    private static String getRadiusCs(ScatFactory factory, FAggregate aggregate) {
+    private static String getRadiusCs(ScatterFactory factory, FAggregate aggregate) {
         FPoint center = aggregate.getCenter(factory.getFPoint(), Center.SPHERICAL);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
@@ -371,12 +342,7 @@ public class Measure {
         return String.valueOf(aggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX));
     }
 
-    private static String getRgDedicatedFilippov(FAggregate aggregate) {
-
-        return String.valueOf(aggregate.getRadiusOfGyration(RadiusOfGyration.DEDICATED_FILIPPOV));
-    }
-
-    private static String getOverlapFactorParticleVolumetric(ScatFactory factory, FAggregate aggregate) {
+    private static String getOverlapFactorParticleVolumetric(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC));
@@ -402,7 +368,7 @@ public class Measure {
         return String.valueOf(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC).min());
     }
 
-    private static String getOverlapFactorParticleQuantitative(ScatFactory factory, FAggregate aggregate) {
+    private static String getOverlapFactorParticleQuantitative(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE));
@@ -428,7 +394,7 @@ public class Measure {
         return String.valueOf(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE).min());
     }
 
-    private static String getOverlapFactorParticleLinear(ScatFactory factory, FAggregate aggregate) {
+    private static String getOverlapFactorParticleLinear(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR));
@@ -454,7 +420,7 @@ public class Measure {
         return String.valueOf(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).min());
     }
 
-    private static String getOverlapFactorClusterVolumetric(ScatFactory factory, FAggregate aggregate) {
+    private static String getOverlapFactorClusterVolumetric(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC));
@@ -475,13 +441,13 @@ public class Measure {
         return String.valueOf(aggregate.isNonOverlapping());
     }
 
-    private static String getTripletAngle(ScatFactory factory, FAggregate aggregate) {
+    private static String getTripletAngle(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getTripletAngle());
     }
 
-    private static String getTripletAngleFunction(ScatFactory factory, FAggregate aggregate) {
+    private static String getTripletAngleFunction(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getTripletAngleFunction());
@@ -507,13 +473,13 @@ public class Measure {
         return String.valueOf(aggregate.getTripletAngle().min());
     }
 
-    private static String getPairDistance(ScatFactory factory, FAggregate aggregate) {
+    private static String getPairDistance(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getPairDistance());
     }
 
-    private static String getPairDistanceFunction(ScatFactory factory, FAggregate aggregate) {
+    private static String getPairDistanceFunction(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getPairDistanceFunction());
@@ -539,13 +505,13 @@ public class Measure {
         return String.valueOf(aggregate.getPairDistance().min());
     }
 
-    private static String getCoordinationNumber(ScatFactory factory, FAggregate aggregate) {
+    private static String getCoordinationNumber(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getCoordinationNumber());
     }
 
-    private static String getCoordinationNumberFunction(ScatFactory factory, FAggregate aggregate) {
+    private static String getCoordinationNumberFunction(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getStatisticsContext()
                 .toCLI(aggregate.getCoordinationNumber());
@@ -571,15 +537,24 @@ public class Measure {
         return String.valueOf(aggregate.getCoordinationNumber().min());
     }
 
-    private static String getBoxCoverageFunction(ScatFactory factory, FAggregate aggregate) {
+    private static String getBoxCoverageFunction(ScatterFactory factory, FAggregate aggregate) {
+        FConfigBC config = factory.getFConfigBC()
+                .setScalingFactor(2.0)
+                .setShiftsPerAxis(3)
+                .setAlignedOrigin(false)
+                .setAlignedPCA(false);
 
         return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getBoxCoverageFunction(1.3, 3, false, false));
+                .toCLI(aggregate.getBoxCoverageFunction(config));
     }
 
-    private static String getDensityCorrelationFunction(ScatFactory factory, FAggregate aggregate) {
+    private static String getDensityCorrelationFunction(ScatterFactory factory, FAggregate aggregate) {
+        FConfigDC config = factory.getFConfigDC()
+                .setScalingFactor(1.1)
+                .setRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY)
+                .setRestricted(false);
 
         return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getDensityCorrelationFunction(1.1));
+                .toCLI(aggregate.getDensityCorrelationFunction(config));
     }
 }

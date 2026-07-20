@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.model.cc;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
@@ -32,7 +32,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private TriConsumer<FAggregate, FRandAspect, FPoint> movement;
 
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FRandAspect random;
 
     private final FAggregate aggregate;
@@ -57,7 +57,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private boolean symmetry;
 
-    private FModelCCDLCADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    private FModelCCDLCADef(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -97,7 +97,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         setMovementVariantDimension();
     }
 
-    public static FModelCCDLCA create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
+    public static FModelCCDLCA create(Dimension dimension, FAggregate aggregate, ScatterFactory factory) {
 
         return new FModelCCDLCADef(dimension, aggregate, factory);
     }

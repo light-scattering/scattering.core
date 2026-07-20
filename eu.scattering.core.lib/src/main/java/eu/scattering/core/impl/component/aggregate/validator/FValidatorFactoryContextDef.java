@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.validator;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorFractalDimension;
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorNoOverlap;
@@ -9,14 +9,14 @@ import eu.scattering.core.impl.component.aggregate.validator.module.FValidatorFr
 import eu.scattering.core.impl.component.aggregate.validator.module.FValidatorNoOverlapDef;
 
 public class FValidatorFactoryContextDef implements FValidatorFactoryContext {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
 
-    private FValidatorFactoryContextDef(ScatFactory factory) {
+    private FValidatorFactoryContextDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FValidatorFactoryContext create(ScatFactory factory) {
+    public static FValidatorFactoryContext create(ScatterFactory factory) {
 
         return new FValidatorFactoryContextDef(factory);
     }

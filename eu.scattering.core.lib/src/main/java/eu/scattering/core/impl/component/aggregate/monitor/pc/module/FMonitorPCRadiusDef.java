@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.aggregate.monitor.pc.module;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadius;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -16,7 +16,7 @@ public class FMonitorPCRadiusDef implements FMonitorPCRadius {
 
     private double skip = -1;
 
-    private FMonitorPCRadiusDef(ScatFactory factory, Center type) {
+    private FMonitorPCRadiusDef(ScatterFactory factory, Center type) {
 
         this.type = type;
         this.fPlot = factory.getFPlot();
@@ -26,7 +26,7 @@ public class FMonitorPCRadiusDef implements FMonitorPCRadius {
         this.fPlot.setName("Radius");
     }
 
-    public static FMonitorPCRadius create(ScatFactory factory, int skip, Center type) {
+    public static FMonitorPCRadius create(ScatterFactory factory, int skip, Center type) {
         FMonitorPCRadius results = new FMonitorPCRadiusDef(factory, type);
 
         results.setSkip(skip);

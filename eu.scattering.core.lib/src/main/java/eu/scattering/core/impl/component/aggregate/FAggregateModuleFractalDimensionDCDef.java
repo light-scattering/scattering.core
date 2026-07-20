@@ -1,8 +1,9 @@
 package eu.scattering.core.impl.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.meta.dc.FMetaDC;
+import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
+import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
@@ -10,78 +11,43 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlotMetaGlobal;
-import eu.scattering.core.design.storage.transfer.box.variant.FBoxDouble;
 import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
-import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
-import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-// TODO - Refactor (limit method parameters).
 public class FAggregateModuleFractalDimensionDCDef {
-    private final ScatFactory factory;
+    private final ScatterFactory factory;
     private final FAggregate aggregate;
 
-    protected FAggregateModuleFractalDimensionDCDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleFractalDimensionDCDef(ScatterFactory factory, FAggregate aggregate) {
 
         this.factory = factory;
         this.aggregate = aggregate;
     }
 
-    protected FPlot getResults(RadiusOfGyration method, double stepFactor, boolean rangeLimit) {
+    protected FPlot getResults(FConfigDC config, FMetaDC meta) {
+        long millis = System.currentTimeMillis();
 
-        return getResults(method, stepFactor, rangeLimit, null);
-    }
+        Process process = new Process(this.factory, this.aggregate, config, meta);
 
-    protected FPlot getResults(RadiusOfGyration method, double stepFactor, boolean rangeLimit, FMetaDC meta) {
-        long executionTime = System.currentTimeMillis();
-
-        FPlot results = this.factory.getFPlot();
-        FPoint massCenter = this.factory.getFPoint();
-
-        double radiusOfGyration = this.aggregate.getRadiusOfGyration(method, massCenter, null, null);
-
-        double range = rangeLimit ? radiusOfGyration * 0.5 : this.aggregate.getRadiusFrom(massCenter) * 2.1;
-
-        FStat particles = this.aggregate.getFStatParticleRadius();
-
-        double delta = particles.mean();
-        double start = delta * 2 * stepFactor;
-
-        initResults(results, range, stepFactor, start);
-
-        FBoxDouble min = factory.getFBoxDouble();
-        FBoxDouble max = factory.getFBoxDouble();
-
-        int refs = getCorePairDistance(results, massCenter.toFPos3D(), min, max, delta, range);
-
-        limitResults(results, max.getValue(), delta);
-
-        processDensity(results, delta);
-
-        normalize(results, refs);
-        sanitize(results);
+        FPlot results = process.process();
 
         if (meta != null) {
-            meta.setExecutionTime(System.currentTimeMillis() - executionTime);
-            meta.setNumberOfRefs(refs);
-            meta.setData(results);
+            meta.setExecutionTimeMillis(System.currentTimeMillis() - millis);
+            meta.setRefData(results);
         }
 
         return results;
     }
 
-    protected double analyze(FPlot results, double window) {
+    // -------------------------------------------------------------------------------------------------
 
-        return analyze(results, window, null);
-    }
+    protected double analyze(FPlot results, FConfigDC config, FMetaDC meta) {
+        double windowRatio = config.getWindowRatio();
 
-    protected double analyze(FPlot results, double window, FMetaDC meta) {
-
-        if (window <= 0 || window > 1) {
+        if (windowRatio <= 0 || windowRatio > 1) {
             throw new IllegalArgumentException("The window must be in range 0-1");
         }
 
@@ -92,116 +58,45 @@ public class FAggregateModuleFractalDimensionDCDef {
             b.ln();
         });
 
-        FPoly regression = window == 1 ? results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * window));
+        FPoly regression = windowRatio == 1 ?
+                results.reg().poly(1) : results.reg().fitSlope((int) (results.size() * windowRatio));
 
         FPlot approximation = results.copy();
         approximation.setY(regression);
 
-        double dim = 3 + regression.at(1);
+        double dimension = 3 + regression.at(1);
 
         if (meta != null) {
-            meta.setPlotDerivative(plotDerivative(results));
-            meta.setPlotApproximation(plotApproximation(results, approximation, regression, dim));
+            meta.setPythonRenderScript(plot(results, approximation, regression, dimension));
         }
 
-        return dim;
+        return dimension;
     }
 
-    private String plotDerivative(FPlot results) {
-        double range = 0.15;
-
-        FPlot dataRaw = results.copy();
-
-        dataRaw.derivate();
-
-        double median = dataRaw.getRefCoreY().median();
-        double min = median - range;
-        double max = median + range;
-
-        FPlot dataMedian = factory.getFPlot();
-        dataMedian.add(dataRaw.getX(0), median);
-        dataMedian.add(dataRaw.getX(dataRaw.size() - 1), median);
-
-        FPlot dataMin = factory.getFPlot();
-        dataMin.add(dataRaw.getX(0), min);
-        dataMin.add(dataRaw.getX(dataRaw.size() - 1), min);
-
-        FPlot dataMax = factory.getFPlot();
-        dataMax.add(dataRaw.getX(0), max);
-        dataMax.add(dataRaw.getX(dataRaw.size() - 1), max);
-
-        dataMedian.mutateY((x, y) -> median);
-
-        String initialMedianFormat = String.format(Locale.US, "%.2f", median);
-
-        FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
-                .setFontSize(32)
-                .setNameX("ln ρ")
-                .setNameY("Local dimension");
-
-        FPlotMeta metaPlotMin = factory.getFPlotMeta()
-                .setLinesColor("lightgray")
-                .setLinesWidth(4)
-                .setLinesShow(true)
-                .setMarkersShow(false);
-
-        FPlotMeta metaPlotMedian = factory.getFPlotMeta()
-                .setLinesColor("black")
-                .setLinesWidth(4)
-                .setLinesShow(true)
-                .setMarkersShow(false);
-
-        FPlotMeta metaPlotMax = factory.getFPlotMeta()
-                .setLinesColor("lightgray")
-                .setLinesWidth(4)
-                .setLinesShow(true)
-                .setMarkersShow(false);
-
-        FPlotMeta metaPlotDerivative = factory.getFPlotMeta()
-                .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
-                .setLinesShow(false)
-                .setMarkersShow(true);
-
-        dataMin.setName("Min")
-                .setRefMeta(metaPlotMin);
-
-        dataMedian.setName("Median ≈ " + initialMedianFormat)
-                .setRefMeta(metaPlotMedian);
-
-        dataMax.setName("Max")
-                .setRefMeta(metaPlotMax);
-
-        dataRaw.setName("Raw data")
-                .setRefMeta(metaPlotDerivative);
-
-        return  factory.getSaveAspect().getStatisticsContext()
-                .toPythonPlotly(metaGlobal, dataMin, dataMedian, dataMax, dataRaw);
-    }
-
-    private String plotApproximation(FPlot results, FPlot approximation, FPoly regression, double dim) {
+    private String plot(FPlot results, FPlot approximation, FPoly regression, double dimension) {
         double r2 = results.r2(regression);
 
-        String dimFormat = String.format(Locale.US, "%.2f", dim);
+        String dimFormat = String.format(Locale.US, "%.2f", dimension);
         String r2Format = String.format(Locale.US, "%.4f", r2);
 
         FPlotMetaGlobal metaGlobal = factory.getFPlotMetaGlobal()
                 .setAnnotation("R<sup>2</sup> ≈ " + r2Format)
-                .setFontSize(32)
+                .setFontSize(48)
+                .setGridSize(3)
                 .setNameX("ln ρ")
                 .setNameY("ln C(ρ)");
 
         FPlotMeta metaPlotFit = factory.getFPlotMeta()
                 .setLinesColor("black")
-                .setLinesWidth(4)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(true)
                 .setMarkersShow(false);
 
         FPlotMeta metaPlotResults = factory.getFPlotMeta()
                 .setMarkersColor("black")
-                .setLinesWidth(4)
-                .setMarkersSize(14)
+                .setLinesWidth(6)
+                .setMarkersSize(21)
                 .setLinesShow(false)
                 .setMarkersShow(true);
 
@@ -215,129 +110,193 @@ public class FAggregateModuleFractalDimensionDCDef {
                 .toPythonPlotly(metaGlobal, approximation, results);
     }
 
-    private int getCorePairDistance(FPlot results, FPos3D center, FBoxDouble min, FBoxDouble max, double delta, double range) {
+    // -------------------------------------------------------------------------------------------------
 
-        min.setValue(Double.POSITIVE_INFINITY);
-        max.setValue(Double.NEGATIVE_INFINITY);
+    static class Process {
+        private final ScatterFactory factory;
 
-        List<Shape> internal = new ArrayList<>();
-        List<Shape> external = new ArrayList<>();
+        private final FConfigDC config;
+        private final FMetaDC meta;
 
-        splitByRange(internal, external, center, range);
+        private final FAggregate aggregate;
 
-        addInternalPairDistance(results, internal, min, max, delta, range);
-        addExternalPairDistance(results, internal, external, min, max, delta, range);
+        private final FPlot results;
+        private final FPoint massCenter;
 
-        return internal.size();
-    }
+        private final List<Shape> internal;
+        private final List<Shape> external;
 
-    private void splitByRange(Collection<Shape> internal, Collection<Shape> external, FPos3D center, double range) {
-        List<Shape> particles = this.aggregate.getRefParticles().asList();
+        private double min;
+        private double max;
 
-        if (range <= 0) {
-            external.addAll(particles);
-            return;
+        private Process(ScatterFactory factory, FAggregate aggregate, FConfigDC config, FMetaDC meta) {
+            this.factory = factory;
+
+            this.config = config;
+            this.meta = meta;
+
+            this.aggregate = aggregate;
+
+            this.results = factory.getFPlot();
+            this.massCenter = factory.getFPoint();
+
+            this.internal = new ArrayList<>();
+            this.external = new ArrayList<>();
+
+            this.min = Double.POSITIVE_INFINITY;
+            this.max = Double.NEGATIVE_INFINITY;
         }
 
-        double rangeP2 = range * range;
-        double cutoffP2 = (range * 2) * (range * 2);
+        FPlot process() {
 
-        for (Shape particle : particles) {
-            double distance = particle.getDistCenterP2(center);
+            run();
 
-            if (distance <= rangeP2) {
-                internal.add(particle);
-            } else if (distance <= cutoffP2) {
-                external.add(particle);
+            return this.results;
+        }
+
+        private void run() {
+            double rog = this.aggregate.getRadiusOfGyration(this.config.getRadiusOfGyration(), this.massCenter, null, null);
+            double range = this.config.isRestricted() ? rog * 0.5 : this.aggregate.getRadiusFrom(this.massCenter) * 2.1;
+
+            FStat rp = this.aggregate.getFStatParticleRadius();
+
+            double delta = rp.mean();
+            double start = delta * 2 * this.config.getScalingFactor();
+
+            initResults(range, start);
+
+            getCorePairDistance(delta, range);
+
+            limitResults(delta);
+
+            processDensity(delta);
+
+            normalize();
+            sanitize();
+
+            if (this.meta != null) {
+                this.meta.setRefParticlesCount(this.internal.size());
             }
         }
-    }
 
-    private void addInternalPairDistance(FPlot results, List<Shape> internal, FBoxDouble min, FBoxDouble max, double delta, double range) {
+        private void getCorePairDistance(double delta, double range) {
 
-        for (int i = 0 ; i < internal.size() - 1 ; i++) {
-            for (int j = i + 1 ; j < internal.size() ; j++) {
-                double distance = internal.get(i).getDistCenter(internal.get(j));
+            splitByRange(range);
 
-                if (distance <= range) {
+            addInternalPairDistance(delta, range);
+            addExternalPairDistance(delta, range);
+        }
 
-                    setExtremum(distance, min, max);
+        private void splitByRange(double range) {
 
-                    setDistance(results, distance, delta, 2);
+            List<Shape> particles = this.aggregate.getRefParticles().asList();
+
+            if (range <= 0) {
+                this.external.addAll(particles);
+                return;
+            }
+
+            double rangeP2 = range * range;
+            double cutoffP2 = (range * 2) * (range * 2);
+
+            for (Shape particle : particles) {
+                double distance = particle.getDistCenterP2(this.massCenter);
+
+                if (distance <= rangeP2) {
+                    this.internal.add(particle);
+                } else if (distance <= cutoffP2) {
+                    this.external.add(particle);
                 }
             }
         }
-    }
 
-    private void addExternalPairDistance(FPlot results, List<Shape> internal, List<Shape> external, FBoxDouble min, FBoxDouble max, double delta, double range) {
+        private void addInternalPairDistance(double delta, double range) {
 
-        for (Shape inner : internal) {
-            for (Shape outer : external) {
-                double distance = inner.getDistCenter(outer);
+            for (int i = 0 ; i < this.internal.size() - 1 ; i++) {
+                for (int j = i + 1 ; j < this.internal.size() ; j++) {
+                    double distance = this.internal.get(i).getDistCenter(this.internal.get(j));
 
-                if (distance <= range) {
+                    if (distance <= range) {
 
-                    setExtremum(distance, min, max);
+                        setExtremum(distance);
 
-                    setDistance(results, distance, delta, 1);
+                        setDistance(distance, delta, 2);
+                    }
                 }
             }
         }
-    }
 
-    private void setExtremum(double distance, FBoxDouble min, FBoxDouble max) {
+        private void addExternalPairDistance(double delta, double range) {
 
-        if (distance < min.getValue()) {
-            min.setValue(distance);
-        }
+            for (Shape inner : this.internal) {
+                for (Shape outer : this.external) {
+                    double distance = inner.getDistCenter(outer);
 
-        if (distance > max.getValue()) {
-            max.setValue(distance);
-        }
-    }
+                    if (distance <= range) {
 
-    private void initResults(FPlot results, double range, double factor, double start) {
-        double step = start;
+                        setExtremum(distance);
 
-        while (step <= range) {
-            results.add(step, 0);
-            step = step * factor;
-        }
-    }
-
-    private void limitResults(FPlot results, double max, double delta) {
-        double cutoff = max - delta;
-
-        results.filter((x, y) -> x <= cutoff);
-    }
-
-    private void setDistance(FPlot results, double distance, double delta, int quantity) {
-
-        for (int i = 0 ; i < results.size() ; i++) {
-
-            if (Math.abs(distance - results.getX(i)) < delta) {
-                results.setY(i, results.getY(i) + quantity);
-            }
-
-            if (distance + delta < results.getX(i)) {
-                break;
+                        setDistance(distance, delta, 1);
+                    }
+                }
             }
         }
-    }
 
-    private void processDensity(FPlot results, double delta) {
-        FSphereHelper helper = this.factory.getFSphereHelper();
+        private void setExtremum(double distance) {
 
-        results.mutateY((x, y) -> y / helper.getVolumeRing(x - delta, x + delta));
-    }
+            if (distance < this.min) {
+                this.min = distance;
+            }
 
-    private void normalize(FPlot results, int refs) {
+            if (distance > this.max) {
+                this.max = distance;
+            }
+        }
 
-        results.mutateY((x, y) -> y / refs);
-    }
+        private void initResults(double range, double start) {
+            double step = start;
 
-    private void sanitize(FPlot results) {
+            while (step <= range) {
+                this.results.add(step, 0);
+                step = step * this.config.getScalingFactor();
+            }
+        }
 
-        results.filter((x, y) -> x > 0 && y > 0);
+        private void limitResults(double delta) {
+            double cutoff = this.max - delta;
+
+            this.results.filter((x, y) -> x <= cutoff);
+        }
+
+        private void setDistance(double distance, double delta, int quantity) {
+
+            for (int i = 0 ; i < this.results.size() ; i++) {
+
+                if (Math.abs(distance - this.results.getX(i)) < delta) {
+                    this.results.setY(i, this.results.getY(i) + quantity);
+                }
+
+                if (distance + delta < this.results.getX(i)) {
+                    break;
+                }
+            }
+        }
+
+        private void processDensity(double delta) {
+            FSphereHelper helper = this.factory.getFSphereHelper();
+
+            this.results.mutateY((x, y) -> y / helper.getVolumeRing(x - delta, x + delta));
+        }
+
+        private void normalize() {
+            int refs = this.internal.size();
+
+            this.results.mutateY((x, y) -> y / refs);
+        }
+
+        private void sanitize() {
+
+            this.results.filter((x, y) -> x > 0 && y > 0);
+        }
     }
 }
