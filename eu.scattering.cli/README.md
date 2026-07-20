@@ -26,14 +26,14 @@ The CLI is organized around specific subcommands. At the moment, only the `measu
 The `measure` command calculates the morphological parameters of a loaded aggregate. To invoke it, type:
 
 ```bash
-java -jar scatt-cli-0.1.0.jar measure [options] [file]
+java -jar scatt-cli-0.2.0.jar measure [options] [file]
 ```
 
 ### Help and available metrics
 
 To see a complete list of all available morphological parameters and command options, you can use the built-in help flag:
 ```bash
-java -jar scatt-cli-0.1.0.jar measure --help
+java -jar scatt-cli-0.2.0.jar measure --help
 ```
 
 This will output the documentation directly to your terminal, including a comma-separated list of every valid metric tag (e.g., `np`, `rp`, `df-bc`, etc.) that can be passed to the `--metrics` option.
@@ -58,5 +58,5 @@ If omitted (or if `-` is provided), the CLI will read directly from standard inp
 
 A complete command to measure the fractal dimensions of a multisphere file named `aggregate.geo` looks like this:
 ```bash
-java -jar scatt-cli-0.1.0.jar measure --metrics df-bc df-mr df-dc --format multisphere aggregate.geo
+java -jar scatt-cli-0.2.0.jar measure --metrics df-bc df-mr df-dc --format multisphere aggregate.geo
 ```
