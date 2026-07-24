@@ -3006,13 +3006,13 @@ public class FAggregateTest {
 
         @Test
         @DisplayName("Get FStat distance")
-        void getFStatDistance() {
+        void getFStatParticleDistance() {
             FAggregate fAggregate = factory.getFAggregate();
             fAggregate.addRefParticle(factory.getFSphere(-1, 0, 0));
             fAggregate.addRefParticle(factory.getFSphere(0, 2, 0));
             fAggregate.addRefParticle(factory.getFSphere(0, 0, -3));
 
-            FStat stat = fAggregate.getFStatDistance(Center.ORIGIN);
+            FStat stat = fAggregate.getFStatParticleDistance(Center.ORIGIN);
 
             assertEquals(3, stat.size());
             assertEquals(1, stat.min());

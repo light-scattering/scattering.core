@@ -69,8 +69,8 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void setRadiusFrom(FPos3D center, double radius);
     void setRadiusFrom(Center type, double radius);
 
-    FStat getFStatDistance(Center type);
     FStat getFStatParticleRadius();
+    FStat getFStatParticleDistance(Center type);
 
     //--------------------------------------------------
 

@@ -242,9 +242,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FStat getFStatDistance(Center type) {
+    public FStat getFStatParticleDistance(Center type) {
 
-        return this.moduleGeometry.getFStatDistance(type);
+        return this.moduleGeometry.getFStatParticleDistance(type);
     }
 
     @Override

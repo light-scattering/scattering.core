@@ -424,7 +424,7 @@ public class FAggregateModuleGeometryDef {
         return particles;
     }
 
-    protected FStat getFStatDistance(Center type) {
+    protected FStat getFStatParticleDistance(Center type) {
         FStat distances = this.factory.getFStat();
 
         FPos3D center = this.aggregate.getCenter(type);
