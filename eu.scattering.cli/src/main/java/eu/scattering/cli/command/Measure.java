@@ -256,7 +256,7 @@ public class Measure {
     private static String getCmComplex(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
-                .toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.COMPLEX));
+                .toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.VOLUMETRIC));
     }
 
     private static String getCs(ScatterFactory factory, FAggregate aggregate) {
@@ -290,7 +290,7 @@ public class Measure {
     }
 
     private static String getRadiusCmComplex(ScatterFactory factory, FAggregate aggregate) {
-        FPoint center = aggregate.getMassCenter(factory.getFPoint(), MassCenter.COMPLEX);
+        FPoint center = aggregate.getMassCenter(factory.getFPoint(), MassCenter.VOLUMETRIC);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }

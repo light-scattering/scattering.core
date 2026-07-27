@@ -81,7 +81,7 @@ public class FAggregateModuleCenterDef {
         switch (type) {
             case SIMPLE_MONO -> getMassCenterMethodSimpleMono(in, meta);
             case SIMPLE_POLY -> getMassCenterMethodSimplePoly(in, meta);
-            case COMPLEX -> getMassCenterMethodComplex(in, meta);
+            case VOLUMETRIC -> getMassCenterMethodComplex(in, meta);
             case ADAPTIVE -> getMassCenterMethodAdaptive(in, meta);
         }
     }
@@ -320,7 +320,7 @@ public class FAggregateModuleCenterDef {
 
         FBoxDouble volume = this.factory.getFBoxDouble();
 
-        this.aggregate.getRefFExtension().getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+        buffer.forEach((index, d0, d1, d2, data, meta) -> {
             center.setX(center.getX() + (d0 * unitVolume));
             center.setY(center.getY() + (d1 * unitVolume));
             center.setZ(center.getZ() + (d2 * unitVolume));
@@ -348,7 +348,7 @@ public class FAggregateModuleCenterDef {
 
         FBoxDouble mass = this.factory.getFBoxDouble();
 
-        this.aggregate.getRefFExtension().getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+        buffer.forEach((index, d0, d1, d2, data, meta) -> {
             double unitMass = unitVolume * material.getDensity(meta.getMeta());
 
             center.setX(center.getX() + (d0 * unitMass));

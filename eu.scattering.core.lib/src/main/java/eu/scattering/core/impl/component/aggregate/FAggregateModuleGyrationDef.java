@@ -141,7 +141,7 @@ public class FAggregateModuleGyrationDef {
     private double getRadiusOfGyrationComplex(Meta meta) {
         FComplex data = this.factory.getFComplex();
 
-        FPos3D centerFixed = this.aggregate.getMassCenter(MassCenter.COMPLEX, meta.massFragments(), meta.centerFragments());
+        FPos3D centerFixed = this.aggregate.getMassCenter(MassCenter.VOLUMETRIC, meta.massFragments(), meta.centerFragments());
         FPoint center = this.factory.getFPoint(centerFixed);
 
         if (meta.massCenter() != null) {
@@ -247,7 +247,7 @@ public class FAggregateModuleGyrationDef {
             case ADAPTIVE -> MassCenter.ADAPTIVE;
             case SIMPLE_MONO -> MassCenter.SIMPLE_MONO;
             case SIMPLE_POLY -> MassCenter.SIMPLE_POLY;
-            case COMPLEX -> MassCenter.COMPLEX;
+            case COMPLEX -> MassCenter.VOLUMETRIC;
         };
 
         FPos3D massCenter = this.aggregate.getMassCenter(massCenterType, massFragments, massCenters);
