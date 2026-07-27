@@ -339,7 +339,7 @@ public class Measure {
 
     private static String getRgComplex(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX));
+        return String.valueOf(aggregate.getRadiusOfGyration(RadiusOfGyration.VOLUMETRIC));
     }
 
     private static String getOverlapFactorParticleVolumetric(ScatterFactory factory, FAggregate aggregate) {

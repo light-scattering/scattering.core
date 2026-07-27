@@ -2610,7 +2610,7 @@ public class FAggregateTest {
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
             double rgExpected = factory.getFSphereHelper().getRadiusOfGyration(radius);
-            double rgActual = fAggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX);
+            double rgActual = fAggregate.getRadiusOfGyration(RadiusOfGyration.VOLUMETRIC);
 
             double rgErr = factory.getStatisticsHelper().getRelErr(rgExpected, rgActual);
 
@@ -2632,7 +2632,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000).addFMaterial();
 
-            double rgDefault = fAggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX);
+            double rgDefault = fAggregate.getRadiusOfGyration(RadiusOfGyration.VOLUMETRIC);
             double rgLegacyMono = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
             double rgLegacyPoly = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
             double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
