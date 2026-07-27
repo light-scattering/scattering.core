@@ -173,10 +173,8 @@ You can also evaluate the structural integrity and connectivity of the entire ge
 ```java
 // Determines if all particles in the aggregate form a single, continuous structure.
 boolean isConnected = fAggregate.isConnected();
-
 // Determines if the particles are connected exactly via point contacts, without any volumetric overlap.
 boolean isPointConnected = fAggregate.isPointConnected();
-
 // Evaluates whether all primary particles within the aggregate are strictly non-overlapping.
 boolean isNonOverlapping = fAggregate.isNonOverlapping();
 ```
@@ -297,6 +295,31 @@ If you need to perform custom spatial analysis, export the geometry to an extern
 // Generates and returns the full mesh representation.
 FMesh<FBufferData> mesh = fAggregate.getVolumeMesh();
 ```
+
+### Radius of gyration and gyration tensor
+
+The library provides methods to analyze the spatial distribution of mass within the aggregate by calculating its gyration tensor and the  radius of gyration.
+```java
+// Calculates the 3x3 gyration tensor matrix.
+FMatrix3x3D tensor = fAggregate.getGyrationTensor(GyrationTensor.ADAPTIVE);
+// Calculates the radius of gyration.
+double rg = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
+```
+
+Under the hood, these calculations automatically determine and use the corresponding mass center (as discussed in the **Centers** section) to ensure consistency.
+
+For the **Gyration Tensor**, the `GyrationTensor` enum provides the standard approaches:
+- **`SIMPLE_POLY`** and **`SIMPLE_MONO`**: Fast approximations that treat primary particles as mass points, either using their exact individual sizes or a single averaged size.
+- **`VOLUMETRIC`**: Calculates an accurate spatial distribution by decomposing the geometry.
+- **`ADAPTIVE`**: The optimal approach. It uses the fast `SIMPLE_POLY` logic where particles do not overlap, and applies meshing logic strictly to intersecting regions.
+
+When calculating the **Radius of Gyration** using the simple mass-point approximations (`SIMPLE_MONO` and `SIMPLE_POLY`), the primary particles' own internal volumes are ignored.
+
+To account for this, the `RadiusOfGyration` enum offers specific correction factors based on `r` (the averaged radius of all primary particles):
+- **Base Methods (`SIMPLE_MONO`, `SIMPLE_POLY`)**: Strictly uses the point-mass approximation without any corrections.
+- **`_06R1` Corrections**: Adds an offset of `0.6 * r` to the final calculation.
+- **`_10R2` Corrections**: Adds an offset of `r * r` (or `r^2`) to the final calculation.
+- **`VOLUMETRIC`**: Because this method accurately decomposes the full intersecting geometry, it inherently accounts for the particles' actual spatial distribution and requires no geometric corrections.
 
 ### Fractal dimension
 
