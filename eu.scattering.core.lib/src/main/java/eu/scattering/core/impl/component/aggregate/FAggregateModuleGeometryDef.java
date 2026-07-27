@@ -41,7 +41,7 @@ public class FAggregateModuleGeometryDef {
         double surface = 0;
 
         FLayer fLayer = switch (type) {
-            case ADAPTIVE, COMPLEX -> this.factory.getFLayer();
+            case ADAPTIVE, DISCRETE -> this.factory.getFLayer();
             case SIMPLE -> null;
         };
 
@@ -52,7 +52,7 @@ public class FAggregateModuleGeometryDef {
             surface += switch (type) {
                 case ADAPTIVE -> getParticleSurfaceAdaptive(field, fLayer, shape);
                 case SIMPLE -> getParticleSurfaceSimple(shape);
-                case COMPLEX -> getParticleSurfaceComplex(field, fLayer, shape);
+                case DISCRETE -> getParticleSurfaceComplex(field, fLayer, shape);
             };
         }
 
@@ -94,7 +94,7 @@ public class FAggregateModuleGeometryDef {
             switch (type) {
                 case ADAPTIVE -> getParticleSurfaceAdaptive(field, shape, layers);
                 case SIMPLE -> getParticleSurfaceSimple(shape, layers);
-                case COMPLEX -> getParticleSurfaceComplex(field, shape, layers);
+                case DISCRETE -> getParticleSurfaceComplex(field, shape, layers);
             }
         }
 
@@ -165,7 +165,7 @@ public class FAggregateModuleGeometryDef {
         double volume = 0;
 
         FLayer fLayer = switch (type) {
-            case ADAPTIVE, COMPLEX -> this.factory.getFLayer();
+            case ADAPTIVE, DISCRETE -> this.factory.getFLayer();
             case SIMPLE -> null;
         };
 
@@ -178,7 +178,7 @@ public class FAggregateModuleGeometryDef {
             volume += switch (type) {
                 case ADAPTIVE -> getParticleVolumeAdaptive(queue, fLayer, shape);
                 case SIMPLE -> getParticleVolumeSimple(shape);
-                case COMPLEX -> getParticleVolumeComplex(queue, fLayer, shape);
+                case DISCRETE -> getParticleVolumeComplex(queue, fLayer, shape);
             };
 
             queue.poll();
@@ -220,7 +220,7 @@ public class FAggregateModuleGeometryDef {
             switch (type) {
                 case ADAPTIVE -> getParticleVolumeAdaptive(shape, layers);
                 case SIMPLE -> getParticleVolumeSimple(shape, layers);
-                case COMPLEX -> getParticleVolumeComplex(shape, layers);
+                case DISCRETE -> getParticleVolumeComplex(shape, layers);
             }
         }
 

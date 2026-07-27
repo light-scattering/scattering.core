@@ -172,7 +172,7 @@ public class Measure {
 
     private static String getVolumeComplex(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getVolume(Volume.COMPLEX));
+        return String.valueOf(aggregate.getVolume(Volume.DISCRETE));
     }
 
     private static String getRadiusVolumeAdaptive(FAggregate aggregate) {
@@ -187,7 +187,7 @@ public class Measure {
 
     private static String getRadiusVolumeComplex(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getVolumeRadius(Volume.COMPLEX));
+        return String.valueOf(aggregate.getVolumeRadius(Volume.DISCRETE));
     }
 
     private static String getSurfaceAdaptive(FAggregate aggregate) {
@@ -202,7 +202,7 @@ public class Measure {
 
     private static String getSurfaceComplex(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getSurface(Surface.COMPLEX));
+        return String.valueOf(aggregate.getSurface(Surface.DISCRETE));
     }
 
     private static String getRadiusSurfaceAdaptive(FAggregate aggregate) {
@@ -217,7 +217,7 @@ public class Measure {
 
     private static String getRadiusSurfaceComplex(FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getSurfaceRadius(Surface.COMPLEX));
+        return String.valueOf(aggregate.getSurfaceRadius(Surface.DISCRETE));
     }
 
     private static String getDfBoxCountingOptimized(FAggregate aggregate) {
