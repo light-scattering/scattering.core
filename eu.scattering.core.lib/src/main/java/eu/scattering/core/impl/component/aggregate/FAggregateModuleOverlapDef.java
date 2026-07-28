@@ -49,7 +49,7 @@ public class FAggregateModuleOverlapDef {
     protected boolean isConnected() {
         List<Shape> processed = new ArrayList<>();
 
-        isConnectedRecurrence(this.aggregate.getRefParticles().asList().get(0), processed);
+        isConnectedRecurrence(this.aggregate.getRefParticles().asList().getFirst(), processed);
 
         return this.aggregate.getRefParticles().asList().size() == processed.size();
     }
@@ -360,11 +360,11 @@ public class FAggregateModuleOverlapDef {
 
     private void getClusterVolumetricMethodPrecise(Shape shape, List<Double> volume) {
 
-        if (volume.size() < 1) {
+        if (volume.isEmpty()) {
             volume.add(0d);
         }
 
-        volume.set(0, volume.get(0) + shape.getVolumeAlgebraic());
+        volume.set(0, volume.getFirst() + shape.getVolumeAlgebraic());
     }
 
     private void getClusterVolumetricMethodApprox(Shape shape, List<Double> volume) {
