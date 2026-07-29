@@ -10,11 +10,20 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
 - [Background and scope](#background-and-scope)
 - [Development and AI transparency](#development-and-ai-transparency)
 - [Project structure](#project-structure)
-- [Entry point](#entry-point)
-    - [Reproducible mode](#reproducible-mode-deterministic)
-    - [Performance mode](#performance-mode-non-deterministic)
+- [Engine initialization](#engine-initialization)
+    - [Reproducible mode](#reproducible-mode)
+    - [Performance mode](#performance-mode)
+- [Computational parameters](#computational-parameters)
 - [Generation algorithms](#generation-algorithms)
+- [Loading and saving](#loading-and-saving)
 - [Morphological analysis](#morphological-analysis)
+    - [Core properties](#core-properties)
+    - [Connectivity and overlap](#connectivity-and-overlap)
+    - [Linear measurements](#linear-measurements)
+    - [Centers of mass and geometry](#centers-of-mass-and-geometry)
+    - [Surface and volume](#surface-and-volume)
+    - [Gyration metrics](#gyration-metrics)
+    - [Topological metrics](#topological-metrics)
     - [Fractal dimension](#fractal-dimension)
         - [Structural methods](#structural-methods)
         - [Kinetic methods](#kinetic-methods)
@@ -55,12 +64,12 @@ The repository is divided into three base modules:
 This manual focuses exclusively on the **`design`** and **`lib`** modules. 
 The **`cli`** module is documented separately in its own project README file.
 
-## Entry point
+## Engine initialization
 
 All generation and analysis operations begin with the `ScatterFactory`, which serves as the core entry point for the library. 
 The factory can be initialized in one of two main operating modes depending on your needs for reproducibility and performance.
 
-### Reproducible mode (deterministic)
+### Reproducible mode
 
 This mode requires a seed value. 
 When a seed is provided, all subsequent operations are executed on a single thread and are fully deterministic. 
@@ -74,7 +83,7 @@ ScatterFactory factory = ScatterCore.createFactory(123L);
 ScatterFactory factory = ScatterCore.createFactory(-1L);
 ```
 
-### Performance mode (non-deterministic)
+### Performance mode
 
 If reproducibility is not required, you can initialize the factory without a seed. 
 This mode utilizes a different, non-deterministic random generation strategy. 
@@ -84,6 +93,38 @@ As a result, it is extremely unlikely that the exact same aggregate structure wi
 ```java
 // Initialize the factory for maximum multi-threaded performance
 ScatterFactory factory = ScatterCore.createFactory();
+```
+
+## Computational parameters
+
+To maintain high performance and numerical stability, the library relies on three configuration elements for calculations. They can be configured globally for the entire aggregate or fine-tuned for each individual particle:
+- *epsilon* (Continuous Tolerance): The continuous threshold used for mathematical calculations across the engine. While it can be used to evaluate physical rules (like overlaps or contacts), it applies broadly to any continuous numerical evaluation. Default is `10E-4`.
+- *delta* (Discrete Tolerance): The discrete threshold used for calculations. When operations require discretizing continuous space (such as mesh decomposition), this defines the element resolution. Default is 10E-2.
+- *FBuffer* (Memory Management): A reusable data buffer required for heavy meshing and discrete operations. Recycling memory allocations across iterations prevents Garbage Collection (GC) overhead and maintains performance.
+
+Before running complex operations, you can configure your tolerances and inject a pre-allocated buffer into the aggregate:
+```java
+// 1. Initialize and inject the reusable mesh buffer.
+int capacity = 1000;
+FBuffer<FBufferData> fBuffer = factory.getFBuffer(capacity);
+fAggregate.setRefFBuffer(fBuffer);
+
+// 2. Define the computational tolerances (defaults shown).
+double epsilon = 10E-4;
+double delta = 10E-2;
+
+// 3. Apply tolerances to the entire aggregate.
+fAggregate.setParticleEpsilon(epsilon);
+fAggregate.setParticleDelta(delta);
+```
+
+If your operations require it, you can override these global parameters for specific particles:
+```java
+// Apply specific tolerances to individual particles.
+for (var fShape : fAggregate) {
+    fShape.setEpsilon(10E-5);   // Stricter continuous tolerance.
+    fShape.setDelta(10E-3);     // Finer discrete resolution.
+}
 ```
 
 ## Generation algorithms
@@ -111,41 +152,44 @@ var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 fModel.build();
 ```
 
+## Loading and saving
+
+The library provides dedicated aspects for serializing aggregates and exporting them to various external formats. This allows you to save your generated structures, import existing ones, or export them for external visualization and mesh generation.
+
+Both loading and saving contexts are accessed via the main `ScatterFactory` instance.
+
+**Loading aggregates**
+You can reconstruct an `FAggregate` from a string representation. The default and most comprehensive format is JSON, which strictly preserves all component properties.
+
+```java
+String data = "...";                                                // The serialized string data.
+
+var load = this.factory.getLoadAspect().getFAggregateContext();     // Retrieve the loading context for aggregates.
+
+FAggregate fAggregate = load.fromJSON(data);                        // Load from the default JSON format.     
+FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from an alternative basic format.
+```
+
+**Saving and exporting aggregates**
+When saving an aggregate, you have access to several specialized exporters depending on your target application (e.g., storage, meshing, or rendering).
+
+```java
+
+var save = this.factory.getSaveAspect().getComponentContext();      // Retrieve the saving context for components.
+
+// 1. Standard Serialization
+String output = save.toJSON(this.aggregate);                        // The default, comprehensive JSON format.      
+String output = save.toBasic(this.aggregate, ExBasic.MULTISPHERE);  // Alternative lightweight formats.
+
+// 2. External Tool Compatibility
+String output = save.toFLAGE(this.aggregate);                       // Export to a format compatible with the FLAGE program.
+String output = save.toNGSolve(this.aggregate);                     // Export for volumetric mesh generation using NetGen/NGSolve. 
+String output = save.toPovRay(this.aggregate, ExPovRay.BOUNDARY);   // Export for high-quality 3D rendering using PovRay.
+```
+
 ## Morphological analysis
 
 Once an aggregate is generated or loaded into memory, you can perform various morphological analyses directly through its API.
-
-### Computational parameters
-
-To maintain high performance and numerical stability, the library relies on three configuration elements for calculations. They can be configured globally for the entire aggregate or fine-tuned for each individual particle:
-- *epsilon* (Continuous Tolerance): The continuous threshold used for mathematical calculations across the engine. While it can be used to evaluate physical rules (like overlaps or contacts), it applies broadly to any continuous numerical evaluation. Default is `10E-4`.
-- *delta* (Discrete Tolerance): The discrete threshold used for calculations. When operations require discretizing continuous space (such as mesh decomposition), this defines the element resolution. Default is 10E-2.
-- *FBuffer* (Memory Management): A reusable data buffer required for heavy meshing and discrete operations. Recycling memory allocations across iterations prevents Garbage Collection (GC) overhead and maintains performance.
-
-Before running complex operations, you can configure your tolerances and inject a pre-allocated buffer into the aggregate:
-```java
-// 1. Initialize and inject the reusable mesh buffer.
-int capacity = 1000;
-FBuffer<FBufferData> fBuffer = factory.getFBuffer(capacity);
-fAggregate.setRefFBuffer(fBuffer);
-
-// 2. Define the computational tolerances (defaults shown).
-double epsilon = 10E-4;
-double delta = 10E-2;
-
-// 3. Apply tolerances to the entire aggregate.
-fAggregate.setParticleEpsilon(epsilon);
-fAggregate.setParticleDelta(delta);
-```
-
-If your operations require it, you can override these global parameters for specific particles:
-```java
-// Apply specific tolerances to individual particles.
-for (var fShape : fAggregate) {
-    fShape.setEpsilon(10E-5); // Stricter continuous tolerance.
-    fShape.setDelta(10E-3);   // Finer discrete resolution.
-}
-```
 
 ### Core properties
 
@@ -153,10 +197,10 @@ This section provides fundamental information about the aggregate's size, compos
 
 ```java
 // Returns the total number of primary particles that make up the geometry.
-int np = fAggregate.size();
+int size = fAggregate.size();
 
 // Returns a comprehensive statistical summary of the primary particle radii.
-FStat rp = fAggregate.getFStatParticleRadius();
+FStat radius = fAggregate.getFStatParticleRadius();
 ```
 
 Primary particles can also be accessed or iterated over directly for custom analysis:
@@ -166,9 +210,14 @@ Primary particles can also be accessed or iterated over directly for custom anal
 FAssembly<Shape> fAssembly = fAggregate.getRefParticles();
 
 // Iterates through individual primary particles.
-for (var fShape : fAggregate) {
+for (var fParticle : fAggregate) {
     // Perform individual particle evaluation.
 }
+
+// Iterates exclusively through pairs of particles that are in direct contact.
+fAggregate.forEachPairInContact((fParticle1, fParticle2) -> {
+    // Perform pair particle evaluation.
+});
 ```
 
 ### Connectivity and overlap
@@ -185,8 +234,8 @@ boolean isNonOverlapping = fAggregate.isNonOverlapping();
 boolean touches = fAggregate.touches(otherAggregate);
 boolean overlaps = fAggregate.overlaps(otherAggregate);
 
-// Calculates statistical overlap factors across the structure.
-FStat overlapFactor = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE);
+// Calculates statistical overlap measures across the structure.
+FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE);
 ```
 
 The `getOverlapFactor` method returns an `FStat` object, which provides statistical analysis over a collection of calculated values. The `OverlapFactor` enum dictates exactly how these values are generated:
@@ -201,7 +250,7 @@ For these methods, the `FStat` collection contains exactly one element per prima
 **Cluster-Level Metrics**
 For these methods, the `FStat` collection contains elements corresponding to structural overlap layers, rather than individual particles:
 
-- **`CLUSTER_VOLUMETRIC`**: Evaluates the volume distribution across different intersection depths for the entire aggregate. The overlap fraction for each layer is `1 - (Vi / Vt)`, where `Vt` is the total aggregate volume, and `Vi` is the volume of the `i`-th layer (e.g., `v0` is the volume belonging to no other particles, `v1` is shared by exactly 2 particles, `v2` is shared by 3 particles, etc.). The sum of all individual layer volumes exactly equals the total aggregate volume. This calculation requires a pre-injected `FBuffer` and is governed by the `delta` parameter.
+- **`CLUSTER_VOLUMETRIC`**: Evaluates the volume distribution across different intersection depths for the entire aggregate. The overlap fraction for each layer is `1 - (Vi / Vt)`, where `Vt` is the total aggregate volume, and `Vi` is the volume of the `i`-th layer (e.g., `V0` is the volume belonging to no other particles, `V1` is shared by exactly 2 particles, `V2` is shared by 3 particles, etc.). The sum of all individual layer volumes exactly equals the total aggregate volume. This calculation requires a pre-injected `FBuffer` and is governed by the `delta` parameter.
 
 > **Note:** Connectivity and point-based overlap metrics heavily depend on the `epsilon` tolerance parameter. When working with geometries generated by external algorithms or imported files, you may need to adjust `epsilon` to match their specific definitions of point contact and overlap. Conversely, all volumetric metrics depend on the `delta` parameter for mesh discretization.
 
@@ -215,9 +264,9 @@ FPairPos3D boundary = fAggregate.getBoundary();
 double diameter = fAggregate.getDiameter();
 
 // Calculates the total length of the bounding box along the X, Y, and Z axes.
-FPos3D lengthXYZ = fAggregate.getLength();
+FPos3D length = fAggregate.getLength();
 // Calculates a specific bounding box dimension based on the Length enum.
-double lengthMax = fAggregate.getLength(Length.MAX);
+double length = fAggregate.getLength(Length.MAX);
 ```
 
 The `Length` enum provides the following options for extracting specific dimensions:
@@ -229,14 +278,14 @@ This is useful when comparing different structural definitions of the aggregate.
 The method is overloaded to accept various input formats:
 ```java
 // Calculates the spanning radius originating from explicitly defined raw coordinates.
-double radiusFromCoordinates = fAggregate.getRadiusFrom(0.0, 0.0, 0.0);
+double radius = fAggregate.getRadiusFrom(0.0, 0.0, 0.0);
 
 // Calculates the spanning radius originating from a dynamically calculated center type.
-double radiusFromCenterType = fAggregate.getRadiusFrom(Center.MASS);
+double radius = fAggregate.getRadiusFrom(Center.MASS);
 
 // Calculates the spanning radius originating from an existing FPoint or FPos3D object.
-double radiusFromFPoint = fAggregate.getRadiusFrom(fPoint);
-double radiusFromFPos3D = fAggregate.getRadiusFrom(fPos3D);
+double radius = fAggregate.getRadiusFrom(fPoint);
+double radius = fAggregate.getRadiusFrom(fPos3D);
 ```
 
 When using dynamically calculated centers, the following `Center` enum definitions are available:
@@ -249,10 +298,10 @@ If you need the full spatial distribution rather than just the maximum boundary,
 
 ```java
 // Returns a comprehensive statistical summary (FStat) of particle distances from the specified center.
-FStat particleDistances = fAggregate.getFStatParticleDistance(Center.MASS);
+FStat distances = fAggregate.getFStatParticleDistance(Center.MASS);
 ```
 
-### Centers
+### Centers of mass and geometry
 
 The aggregate's center point can be calculated using several different structural definitions.
 
@@ -270,7 +319,7 @@ Because primary particles can vary in size, material, and overlap, the `MassCent
 - **`SIMPLE_MONO`**: Approximates particles as mass points, ignoring overlap. While different materials are permitted, layered particles are not. It calculates a single, averaged radius and applies it uniformly to all particle positions.
 - **`SIMPLE_POLY`**: Approximates particles as mass points, ignoring overlap. It accounts for different materials and layered particles, and evaluates each particle using its exact, individual size.
 - **`VOLUMETRIC`**: Supports all shape types and overlapping geometries by decomposing the aggregate into a mesh. This requires passing an `FBuffer` object to handle the meshing operations, and the precision is governed by the `delta` parameter.
-- **`ADAPTIVE`**: The approach makes a separate decision for each individual particle. It uses the fast `SIMPLE_POLY` logic where particles do not overlap, and strictly applies the `VOLUMETRIC` meshing logic to intersecting regions.
+- **`ADAPTIVE`**: This approach makes a separate decision for each individual particle. It uses the fast `SIMPLE_POLY` logic where particles do not overlap, and strictly applies the `VOLUMETRIC` meshing logic to intersecting regions.
 
 You can also retrieve any of the basic center coordinates dynamically using the general `getCenter` method and the `Center` enum:
 ```java
@@ -320,9 +369,9 @@ If you need to perform custom spatial analysis, export the geometry to an extern
 FMesh<FBufferData> mesh = fAggregate.getVolumeMesh();
 ```
 
-### Radius of gyration and gyration tensor
+### Gyration metrics
 
-The library provides methods to analyze the spatial distribution of mass within the aggregate by calculating its gyration tensor and the  radius of gyration.
+The library provides methods to analyze the spatial distribution of mass within the aggregate by calculating its gyration tensor and the radius of gyration.
 ```java
 // Calculates the 3x3 gyration tensor matrix.
 FMatrix3x3D tensor = fAggregate.getGyrationTensor(GyrationTensor.ADAPTIVE);
@@ -345,17 +394,35 @@ To account for this, the `RadiusOfGyration` enum offers specific correction fact
 - **`_10R2` Corrections**: Adds an offset of `r * r` (or `r^2`) to the final calculation.
 - **`VOLUMETRIC`**: Because this method accurately decomposes the full intersecting geometry, it inherently accounts for the particles' actual spatial distribution and requires no geometric corrections.
 
+### Topological metrics
+
+To deeply analyze the internal structure of the aggregate, the library provides methods to evaluate how primary particles are spatially arranged relative to one another.
+
+Each of these metrics can be extracted in two formats: as an `FStat` object for basic statistical summaries (mean, variance, min, max), or as an `FPlot` object containing the distribution function data, which is ready to be visualized as a histogram.
+
+```java
+// Retrieve a statistical summary of the coordination numbers.
+FStat coordStats = fAggregate.getCoordinationNumber();
+
+// Retrieve the full distribution function for plotting.
+FPlot coordPlot = fAggregate.getCoordinationNumberFunction();
+```
+
+The available topological metrics include:
+
+- **Coordination Number** (`getCoordinationNumber` / `Function`): Evaluates how many direct neighbors (intersecting or touching) each primary particle has within the aggregate. When exported as an `FPlot`, it generates a discrete histogram ranging from 1 to the maximum coordination number, with a bin size of exactly 1.
+- **Pair Distance** (`getPairDistance` / `Function`): Measures the spatial distances between the centers of primary particle pairs. The corresponding `FPlot` histogram spans from 0 to the maximum pair distance, dynamically scaling the number of bins based on the smallest primary particle radius (`max_distance / min_radius`).
+- **Triplet Angle** (`getTripletAngle` / `Function`): Calculates the angles formed by triplets of adjacent primary particles, providing insight into the linearity, branching, and folding of the aggregate's chains. The `FPlot` histogram spans from 0 to π radians with exactly 180 bins, effectively providing a 1-degree resolution.
+
 ### Fractal dimension
 
 This project implements two categories of fractal dimension extraction methods: structural and kinetic. 
 
 #### Structural methods
 
-Structural methods can be applied to any generated aggregate model or sphere assembly. 
-Because they analyze the final geometry, they require no historical data about the aggregation process itself.
+Structural methods can be applied to any generated aggregate model or sphere assembly. Because they analyze the final geometry, they require no historical data about the aggregation process itself.
 
-Currently, three structural algorithms are available: BC (Box-Counting), MR (Mass-Radius), and DC (Density Correlation). 
-The simplest way to execute these measurements is by calling the desired method directly on the aggregate object:
+Currently, three structural algorithms are available: BC (Box-Counting), MR (Mass-Radius), and DC (Density Correlation). The simplest way to execute these measurements is by calling the desired method directly on the aggregate object:
 ```java
 // 1. Box-Counting (BC)
 // The original, unoptimized box-counting method. It iterates over vast amounts of empty space. 
@@ -464,11 +531,7 @@ FConfigDC fConfigPreset = factory.getFConfigDC(FConfigDC.Preset.FULL);
 
 #### Kinetic methods
 
-Kinetic methods, on the other hand, require a monitor to be injected during the aggregation process. 
-A monitor is simply an object that collects data at each step of the simulation. 
-While you can easily create custom monitors, the most common ones are already built-in. 
-For instance, you will use the radius of gyration monitor to measure the PL (Power-Law) fractal dimension. 
-Note that there are separate monitors for the PC (Particle-Cluster) and the CC (Cluster-Cluster) aggregation processes.
+Kinetic methods, on the other hand, require a monitor to be injected during the aggregation process. A monitor is simply an object that collects data at each step of the simulation. While you can easily create custom monitors, the most common ones are already built-in. For instance, you will use the radius of gyration monitor to measure the PL (Power-Law) fractal dimension. Note that there are separate monitors for the PC (Particle-Cluster) and the CC (Cluster-Cluster) aggregation processes.
 
 ##### Particle-Cluster (PC) aggregation
 
