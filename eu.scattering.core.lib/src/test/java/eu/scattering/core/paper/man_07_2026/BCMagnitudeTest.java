@@ -27,7 +27,7 @@ public class BCMagnitudeTest {
 
         fModel.build();
 
-        fAggregate.setSphericalCenterAsZero(1000);
+        fAggregate.setSphereCenterAsZero(1000);
         double radius = fAggregate.getRadiusFrom(0, 0, 0);
 
         double cutoffOuter = fAggregate.getLength(Length.MAX) * 0.5;

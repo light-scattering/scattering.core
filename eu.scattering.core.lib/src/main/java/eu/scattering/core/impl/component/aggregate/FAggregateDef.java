@@ -296,17 +296,17 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPoint getSphericalCenter(FPoint in, int steps) {
+    public FPoint getSphereCenter(FPoint in, int steps) {
 
-        this.moduleCenter.getSphericalCenter(in, steps);
+        this.moduleCenter.getSphereCenter(in, steps);
 
         return in;
     }
 
     @Override
-    public FPos3D getSphericalCenter(int steps) {
+    public FPos3D getSphereCenter(int steps) {
 
-        return this.moduleCenter.getSphericalCenter(steps);
+        return this.moduleCenter.getSphereCenter(steps);
     }
 
     @Override
@@ -376,21 +376,21 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void setSphericalCenter(double x, double y, double z, int steps) {
+    public void setSphereCenter(double x, double y, double z, int steps) {
 
-        this.moduleCenter.setSphericalCenter(x, y, z, steps);
+        this.moduleCenter.setSphereCenter(x, y, z, steps);
     }
 
     @Override
-    public void setSphericalCenter(FPoint position, int steps) {
+    public void setSphereCenter(FPoint position, int steps) {
 
-        this.moduleCenter.setSphericalCenter(position, steps);
+        this.moduleCenter.setSphereCenter(position, steps);
     }
 
     @Override
-    public void setSphericalCenter(FPos3D position, int steps) {
+    public void setSphereCenter(FPos3D position, int steps) {
 
-        this.moduleCenter.setSphericalCenter(position, steps);
+        this.moduleCenter.setSphereCenter(position, steps);
     }
 
     @Override
@@ -412,9 +412,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void setSphericalCenterAsZero(int steps) {
+    public void setSphereCenterAsZero(int steps) {
 
-        this.moduleCenter.setSphericalCenterAsZero(steps);
+        this.moduleCenter.setSphereCenterAsZero(steps);
     }
 
     @Override

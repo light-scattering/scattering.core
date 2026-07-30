@@ -23,8 +23,8 @@ public enum TYPE_METRIC {
     rg_mesh,
     rg_mono, rg_mono_06r1, rg_mono_10r2,
     rg_poly, rg_poly_06r1, rg_poly_10r2,
-    angle, angle__fun, angle__avg, angle__std, angle__max, angle__min,
     coord, coord__fun, coord__avg, coord__std, coord__max, coord__min,
+    angle, angle__fun, angle__avg, angle__std, angle__max, angle__min,
     dist, dist__fun, dist__avg, dist__std, dist__max, dist__min,
     df_bc, df_mr, df_dc,
 }

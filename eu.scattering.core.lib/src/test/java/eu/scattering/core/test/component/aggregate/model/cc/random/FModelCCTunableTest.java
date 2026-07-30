@@ -314,9 +314,9 @@ public class FModelCCTunableTest {
             fModelB.build();
             fModelC.build();
 
-            double rangeA = fAggregateA.getRadiusFrom(Center.SPHERICAL);
-            double rangeB = fAggregateB.getRadiusFrom(Center.SPHERICAL);
-            double rangeC = fAggregateC.getRadiusFrom(Center.SPHERICAL);
+            double rangeA = fAggregateA.getRadiusFrom(Center.SPHERE);
+            double rangeB = fAggregateB.getRadiusFrom(Center.SPHERE);
+            double rangeC = fAggregateC.getRadiusFrom(Center.SPHERE);
 
             assertTrue(rangeA < rangeB);
             assertTrue(rangeB < rangeC);

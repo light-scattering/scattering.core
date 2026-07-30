@@ -55,8 +55,6 @@ public class Measure {
                 case len_x -> getLengthX(aggregate);
                 case len_y -> getLengthY(aggregate);
                 case len_z -> getLengthZ(aggregate);
-
-
                 case df_bc -> getDfBoxCountingOptimized(aggregate);
                 case df_mr -> getDfMassRadiusRestricted(aggregate);
                 case df_dc -> getDfDensityCorrelationRestricted(aggregate);
@@ -280,7 +278,7 @@ public class Measure {
     private static String getCs(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
-                .toCLI(aggregate.getCenter(factory.getFPoint(), Center.SPHERICAL));
+                .toCLI(aggregate.getCenter(factory.getFPoint(), Center.SPHERE));
     }
 
     private static String getCb(ScatterFactory factory, FAggregate aggregate) {
@@ -320,7 +318,7 @@ public class Measure {
     }
 
     private static String getRadiusCs(ScatterFactory factory, FAggregate aggregate) {
-        FPoint center = aggregate.getCenter(factory.getFPoint(), Center.SPHERICAL);
+        FPoint center = aggregate.getCenter(factory.getFPoint(), Center.SPHERE);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }

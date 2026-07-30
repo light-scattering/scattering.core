@@ -83,8 +83,8 @@ public interface FAggregate extends Component, Iterable<Shape> {
     FPoint getBoxCenter(FPoint in);
     FPos3D getBoxCenter();
 
-    FPoint getSphericalCenter(FPoint in, int steps);
-    FPos3D getSphericalCenter(int steps);
+    FPoint getSphereCenter(FPoint in, int steps);
+    FPos3D getSphereCenter(int steps);
 
     void setCenter(Center type, double x, double y, double z);
     void setCenter(Center type, FPoint position);
@@ -101,10 +101,10 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void setBoxCenter(FPos3D position);
     void setBoxCenterAsZero();
 
-    void setSphericalCenter(double x, double y, double z, int steps);
-    void setSphericalCenter(FPoint position, int steps);
-    void setSphericalCenter(FPos3D position, int steps);
-    void setSphericalCenterAsZero(int steps);
+    void setSphereCenter(double x, double y, double z, int steps);
+    void setSphereCenter(FPoint position, int steps);
+    void setSphereCenter(FPos3D position, int steps);
+    void setSphereCenterAsZero(int steps);
 
     void setPositionAsZero(FPoint center);
     void setPositionAsZero(FPos3D center);

@@ -603,7 +603,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public void getBoxCenter(FPoint center, int steps) {
+    public void getSphereCenter(FPoint center, int steps) {
 
         if (steps <= 0) {
             throw new IllegalArgumentException("The number of steps must be greater than zero");
