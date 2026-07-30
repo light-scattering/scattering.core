@@ -49,7 +49,8 @@ public class Measure {
                 case ov_p_lin__max -> getOverlapFactorParticleLinearMax(aggregate);
                 case ov_p_lin__min -> getOverlapFactorParticleLinearMin(aggregate);
                 case ov_c_vol -> getOverlapFactorClusterVolumetric(factory, aggregate);
-                case box -> getBoundary(aggregate);
+                case len -> getLength(factory, aggregate);
+                case box -> getBoundary(factory, aggregate);
                 case diam -> getDiameter(aggregate);
                 case len_x -> getLengthX(aggregate);
                 case len_y -> getLengthY(aggregate);
@@ -145,9 +146,16 @@ public class Measure {
         return String.valueOf(aggregate.getFStatParticleRadius().min());
     }
 
-    private static String getBoundary(FAggregate aggregate) {
+    private static String getLength(ScatterFactory factory, FAggregate aggregate) {
 
-        return String.valueOf(aggregate.getBoundary());
+        return factory.getSaveAspect().getStorageContext()
+                .toCLI(aggregate.getLength());
+    }
+
+    private static String getBoundary(ScatterFactory factory, FAggregate aggregate) {
+
+        return factory.getSaveAspect().getStorageContext()
+                .toCLI(aggregate.getBoundary());
     }
 
     private static String getDiameter(FAggregate aggregate) {

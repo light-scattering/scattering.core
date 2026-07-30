@@ -8,7 +8,7 @@ public enum TYPE_METRIC {
     ov_p_num, ov_p_num__avg, ov_p_num__std, ov_p_num__max, ov_p_num__min,
     ov_p_lin, ov_p_lin__avg, ov_p_lin__std, ov_p_lin__max, ov_p_lin__min,
     ov_c_vol,
-    box, diam,
+    len, box, diam,
     len_x, len_y, len_z,
     r_cm_mono, r_cm_poly, r_cm_mesh, r_cm_adapt,
     r_cs,
