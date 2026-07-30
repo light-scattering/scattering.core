@@ -592,7 +592,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public void getSpatialCenter(FPoint center) {
+    public void getBoxCenter(FPoint center) {
         FPairPos3D dimension = getBoundary();
 
         double x = (dimension.getPosA().getD0() + dimension.getPosB().getD0()) * 0.5;
@@ -603,7 +603,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public void getSphericalCenter(FPoint center, int steps) {
+    public void getBoxCenter(FPoint center, int steps) {
 
         if (steps <= 0) {
             throw new IllegalArgumentException("The number of steps must be greater than zero");
@@ -612,7 +612,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         double learningRate = 0.1;
         double learningRateChange = 0.9;
 
-        getSpatialCenter(center);
+        getBoxCenter(center);
 
         for (int step = 0; step < steps + 1; step++) {
             FPoint candidate = null;

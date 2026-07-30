@@ -286,7 +286,7 @@ public class Measure {
     private static String getCb(ScatterFactory factory, FAggregate aggregate) {
 
         return factory.getSaveAspect().getComponentContext()
-                .toCLI(aggregate.getCenter(factory.getFPoint(), Center.SPATIAL));
+                .toCLI(aggregate.getCenter(factory.getFPoint(), Center.BOX));
     }
 
     private static String getRadiusCmAdaptive(ScatterFactory factory, FAggregate aggregate) {
@@ -314,7 +314,7 @@ public class Measure {
     }
 
     private static String getRadiusCb(ScatterFactory factory, FAggregate aggregate) {
-        FPoint center = aggregate.getCenter(factory.getFPoint(), Center.SPATIAL);
+        FPoint center = aggregate.getCenter(factory.getFPoint(), Center.BOX);
 
         return String.valueOf(aggregate.getRadiusFrom(center));
     }

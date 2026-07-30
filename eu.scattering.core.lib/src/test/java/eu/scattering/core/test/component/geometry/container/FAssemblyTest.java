@@ -1652,15 +1652,15 @@ public class FAssemblyTest {
         }
 
         @Test
-        @DisplayName("Get spatial center")
-        void getSpatialCenter() {
+        @DisplayName("Get box center")
+        void getBoxCenter() {
             FSphere fSphereA = factory.getFSphere(1, 0, 0, 1);
             FSphere fSphereB = factory.getFSphere(-1, 0, 0, 1);
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
             FPoint center = factory.getFPoint();
-            fAssembly.getSpatialCenter(center);
+            fAssembly.getBoxCenter(center);
 
             assertTrue(center.isSimilar(0, 0, 0),
                     "The range center is erroneous");
@@ -1669,7 +1669,7 @@ public class FAssemblyTest {
 
             fAssembly.translate(offset);
 
-            fAssembly.getSpatialCenter(center);
+            fAssembly.getBoxCenter(center);
 
             assertTrue(center.isSimilar(1, 2, 3),
                     "The range center is erroneous");
@@ -1690,7 +1690,7 @@ public class FAssemblyTest {
             fAssembly.translate(offset);
 
             FPoint center = factory.getFPoint();
-            fAssembly.getSphericalCenter(center, 100);
+            fAssembly.getBoxCenter(center, 100);
 
             double relErrX = factory.getStatisticsHelper().getRelErr(offset.getD0(), center.getX());
             double relErrY = factory.getStatisticsHelper().getRelErr(offset.getD1(), center.getY());
@@ -1717,7 +1717,7 @@ public class FAssemblyTest {
             fAssembly.translate(offset);
 
             FPoint center = factory.getFPoint();
-            fAssembly.getSphericalCenter(center, 100);
+            fAssembly.getBoxCenter(center, 100);
 
             double relErrX = factory.getStatisticsHelper().getRelErr(offset.getD0(), center.getX());
             double relErrY = factory.getStatisticsHelper().getRelErr(offset.getD1() + (0.5 * Math.sqrt(3)), center.getY());
@@ -1741,7 +1741,7 @@ public class FAssemblyTest {
 
             FPoint center = factory.getFPoint();
 
-            assertThrows(IllegalArgumentException.class, () -> fAssembly.getSphericalCenter(center, 0));
+            assertThrows(IllegalArgumentException.class, () -> fAssembly.getBoxCenter(center, 0));
         }
     }
 }

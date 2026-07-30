@@ -58,8 +58,8 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
 
     FPairPos3D getBoundary();
 
-    void getSpatialCenter(FPoint center);
-    void getSphericalCenter(FPoint center, int steps);
+    void getBoxCenter(FPoint center);
+    void getBoxCenter(FPoint center, int steps);
 
     //--------------------------------------------------
 

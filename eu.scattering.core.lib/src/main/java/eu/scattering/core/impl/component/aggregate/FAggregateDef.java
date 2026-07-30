@@ -282,17 +282,17 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPoint getSpatialCenter(FPoint in) {
+    public FPoint getBoxCenter(FPoint in) {
 
-        this.moduleCenter.getSpatialCenter(in);
+        this.moduleCenter.getBoxCenter(in);
 
         return in;
     }
 
     @Override
-    public FPos3D getSpatialCenter() {
+    public FPos3D getBoxCenter() {
 
-        return this.moduleCenter.getSpatialCenter();
+        return this.moduleCenter.getBoxCenter();
     }
 
     @Override
@@ -358,21 +358,21 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void setSpatialCenter(double x, double y, double z) {
+    public void setBoxCenter(double x, double y, double z) {
 
-        this.moduleCenter.setSpatialCenter(x, y, z);
+        this.moduleCenter.setBoxCenter(x, y, z);
     }
 
     @Override
-    public void setSpatialCenter(FPoint position) {
+    public void setBoxCenter(FPoint position) {
 
-        this.moduleCenter.setSpatialCenter(position);
+        this.moduleCenter.setBoxCenter(position);
     }
 
     @Override
-    public void setSpatialCenter(FPos3D position) {
+    public void setBoxCenter(FPos3D position) {
 
-        this.moduleCenter.setSpatialCenter(position);
+        this.moduleCenter.setBoxCenter(position);
     }
 
     @Override
@@ -406,9 +406,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void setSpatialCenterAsZero() {
+    public void setBoxCenterAsZero() {
 
-        this.moduleCenter.setSpatialCenterAsZero();
+        this.moduleCenter.setBoxCenterAsZero();
     }
 
     @Override

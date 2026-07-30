@@ -405,8 +405,8 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     }
 
     private void adjustParameters(FAggregate aggA, FAggregate aggB) {
-        aggA.getCenter(this.cAggA, Center.SPATIAL);
-        aggB.getCenter(this.cAggB, Center.SPATIAL);
+        aggA.getCenter(this.cAggA, Center.BOX);
+        aggB.getCenter(this.cAggB, Center.BOX);
 
         this.rAggA = this.aggregate.getRadiusFrom(this.cAggA);
         this.rAggB = this.aggregate.getRadiusFrom(this.cAggB);

@@ -289,9 +289,9 @@ double radius = fAggregate.getRadiusFrom(fPos3D);
 ```
 
 When using dynamically calculated centers, the following `Center` enum definitions are available:
+- `BOX`: The geometric center (centroid of the bounding box).
 - `MASS`: The center of mass based on the particle mass distribution.
 - `ORIGIN`: The absolute coordinate system origin (0, 0, 0).
-- `SPATIAL`: The geometric center (centroid of the bounding box).
 - `SPHERICAL`: The center of the minimum bounding sphere enclosing the aggregate (100 iterations).
 
 If you need the full spatial distribution rather than just the maximum boundary, you can extract the distances of all primary particles relative to a specific origin:
@@ -307,7 +307,7 @@ The aggregate's center point can be calculated using several different structura
 
 ```java
 // Returns the geometric center (centroid of the bounding box).
-FPos3D center = fAggregate.getSpatialCenter();
+FPos3D center = fAggregate.getBoxCenter();
 // Returns the center of the minimum bounding sphere using a custom number of iterations (e.g., 500).
 FPos3D center = fAggregate.getSphericalCenter(500);
 // Returns the center of mass based on a specific mass distribution type.
@@ -324,7 +324,7 @@ Because primary particles can vary in size, material, and overlap, the `MassCent
 You can also retrieve any of the basic center coordinates dynamically using the general `getCenter` method and the `Center` enum:
 ```java
 // Dynamically fetches the requested center type.
-FPos3D center = fAggregate.getCenter(Center.SPATIAL);
+FPos3D center = fAggregate.getCenter(Center.BOX);
 ```
 
 These center calculations are often invoked thousands of times inside tight iteration loops (e.g., during fractal dimension analysis or collision detection). To prevent massive Garbage Collection (GC) overhead from constantly instantiating new `FPos3D` objects, every method provides an overload that accepts a pre-allocated `FPoint`.
@@ -338,7 +338,7 @@ FPoint bufferPoint = factory.getFPoint();
 for (int i = 0; i < 1_000_000; i++) {
 // The aggregate updates 'bufferPoint' and returns it, allowing direct chaining.
 // No new objects are created in memory.
-    double distance = fAggregate.getSpatialCenter(bufferPoint).getDistance(target);
+    double distance = fAggregate.getBoxCenter(bufferPoint).getDistance(target);
 }
 ```
 

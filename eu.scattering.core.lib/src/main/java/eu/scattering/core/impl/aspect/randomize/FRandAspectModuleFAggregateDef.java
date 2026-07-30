@@ -255,8 +255,8 @@ public class FRandAspectModuleFAggregateDef {
         FVector dir = factory.getRefFVector(base, head);
 
         while (true) {
-            ref.setPositionAsZero(ref.getSpatialCenter());
-            arg.setPositionAsZero(arg.getSpatialCenter());
+            ref.setPositionAsZero(ref.getBoxCenter());
+            arg.setPositionAsZero(arg.getBoxCenter());
 
             double radiusRef = ref.getRadiusFrom(Center.ORIGIN);
             double radiusArg = arg.getRadiusFrom(Center.ORIGIN);

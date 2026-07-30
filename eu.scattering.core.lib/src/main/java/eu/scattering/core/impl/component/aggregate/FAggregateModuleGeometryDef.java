@@ -378,7 +378,7 @@ public class FAggregateModuleGeometryDef {
         return switch(type) {
             case ORIGIN -> getRadiusFrom(0, 0, 0);
             case MASS -> getRadiusFrom(aggregate.getMassCenter(MassCenter.ADAPTIVE));
-            case SPATIAL -> getRadiusFrom(aggregate.getSpatialCenter());
+            case BOX -> getRadiusFrom(aggregate.getBoxCenter());
             case SPHERICAL -> getRadiusFrom(aggregate.getSphericalCenter(100));
         };
     }

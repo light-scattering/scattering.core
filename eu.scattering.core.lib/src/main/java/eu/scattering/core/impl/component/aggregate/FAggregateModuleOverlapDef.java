@@ -73,8 +73,8 @@ public class FAggregateModuleOverlapDef {
     // -------------------------------------------------------------------------------------------------
 
     protected boolean touches(FAggregate arg) {
-        FPos3D centerRef = this.aggregate.getSpatialCenter();
-        FPos3D centerArg = arg.getSpatialCenter();
+        FPos3D centerRef = this.aggregate.getBoxCenter();
+        FPos3D centerArg = arg.getBoxCenter();
 
         double radiusRef = this.aggregate.getRadiusFrom(centerRef);
         double radiusArg = arg.getRadiusFrom(centerArg);
@@ -111,8 +111,8 @@ public class FAggregateModuleOverlapDef {
     }
 
     protected boolean overlaps(FAggregate arg) {
-        FPos3D centerRef = this.aggregate.getSpatialCenter();
-        FPos3D centerArg = arg.getSpatialCenter();
+        FPos3D centerRef = this.aggregate.getBoxCenter();
+        FPos3D centerArg = arg.getBoxCenter();
 
         double radiusRef = this.aggregate.getRadiusFrom(centerRef);
         double radiusArg = arg.getRadiusFrom(centerArg);
@@ -144,8 +144,8 @@ public class FAggregateModuleOverlapDef {
     }
 
     protected boolean overlapsWithShift(FAggregate arg, FVector shift) {
-        FPos3D centerRef = this.aggregate.getSpatialCenter();
-        FPos3D centerArg = arg.getSpatialCenter();
+        FPos3D centerRef = this.aggregate.getBoxCenter();
+        FPos3D centerArg = arg.getBoxCenter();
 
         double radiusRef = this.aggregate.getRadiusFrom(centerRef);
         double radiusArg = arg.getRadiusFrom(centerArg);

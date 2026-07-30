@@ -61,7 +61,7 @@ public class MeasureCommand implements Callable<Integer> {
                     "  Core              : np, rp[S]",
                     "  Connectivity      : conn, conn-pt, conn-non-ov",
                     "                      ov-p-vol/lin/num[S], ov-c-vol",
-                    "  Dimension         : box, diam",
+                    "  Dimension         : len, box, diam",
                     "                      len-x/y/z",
                     "                      r-cm-mono/poly/mesh/adapt",
                     "                      r-cs, r-cb",

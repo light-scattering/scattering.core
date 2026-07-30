@@ -1804,7 +1804,7 @@ public class FAggregateTest {
 
             FPoint results = fAggregate.getSphericalCenter(center, 100);
 
-            Assertions.assertAll("Validate spatial center",
+            Assertions.assertAll("Validate spherical center",
                     () -> assertSame(center, results,
                             "The reference should not change"),
                     () -> assertEquals(0, center.getX(),
@@ -1828,7 +1828,7 @@ public class FAggregateTest {
 
             FPos3D center = fAggregate.getSphericalCenter(100);
 
-            Assertions.assertAll("Validate spatial center",
+            Assertions.assertAll("Validate spherical center",
                     () -> assertEquals(0, center.getD0(),
                             1E-4, "Value X is incorrect"),
                     () -> assertEquals(0, center.getD1(),
@@ -1839,8 +1839,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get spatial center with FPoint")
-        void getSpatialCenterFPoint() {
+        @DisplayName("Get box center with FPoint")
+        void getBoxCenterFPoint() {
             Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
             Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
@@ -1850,23 +1850,23 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            FPoint results = fAggregate.getSpatialCenter(center);
+            FPoint results = fAggregate.getBoxCenter(center);
 
             double d0 = (2 - 7) / 2d;
             double d1 = (3 - 8) / 2d;
             double d2 = (4 - 9) / 2d;
 
-            Assertions.assertAll("Validate spatial center",
+            Assertions.assertAll("Validate box center",
                     () -> assertSame(center, results,
                             "The reference should not change"),
                     () -> assertTrue(center.isSimilar(d0, d1, d2),
-                            "The spatial center position is incorrect")
+                            "The box center position is incorrect")
             );
         }
 
         @Test
-        @DisplayName("Get spatial center")
-        void getSpatialCenter() {
+        @DisplayName("Get box center")
+        void getBoxCenter() {
             Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
             Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
@@ -1874,15 +1874,15 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FPos3D center = fAggregate.getSpatialCenter();
+            FPos3D center = fAggregate.getBoxCenter();
 
             double d0 = (2 - 7) / 2d;
             double d1 = (3 - 8) / 2d;
             double d2 = (4 - 9) / 2d;
 
-            Assertions.assertAll("Validate spatial center",
+            Assertions.assertAll("Validate box center",
                     () -> assertTrue(factory.getFPointHelper().isSimilar(center.getD0(), center.getD1(), center.getD2(), d0, d1, d2),
-                            "The spatial center position is incorrect")
+                            "The box center position is incorrect")
             );
         }
 
@@ -1961,13 +1961,13 @@ public class FAggregateTest {
 
             assertTrue(center.isSimilar(0, 0, 0));
 
-            fAggregate.getSpatialCenter(center);
+            fAggregate.getBoxCenter(center);
 
             assertFalse(center.isSimilar(0, 0, 0));
 
-            fAggregate.setCenterAsZero(Center.SPATIAL);
+            fAggregate.setCenterAsZero(Center.BOX);
 
-            fAggregate.getSpatialCenter(center);
+            fAggregate.getBoxCenter(center);
 
             assertTrue(center.isSimilar(0, 0, 0));
 
@@ -2000,8 +2000,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Reset spatial center")
-        void resetSpatialCenter() {
+        @DisplayName("Reset box center")
+        void resetBoxCenter() {
             FAggregate fAggregate = factory.getFAggregate();
             fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
             fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
@@ -2009,9 +2009,9 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.setSpatialCenterAsZero();
+            fAggregate.setBoxCenterAsZero();
 
-            fAggregate.getSpatialCenter(center);
+            fAggregate.getBoxCenter(center);
 
             assertTrue(center.isSimilar(0, 0, 0));
         }
@@ -2053,9 +2053,9 @@ public class FAggregateTest {
 
             assertTrue(center.isSimilar(fAggregate.getMassCenter(MassCenter.ADAPTIVE)));
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
-            assertTrue(center.isSimilar(fAggregate.getSpatialCenter()));
+            assertTrue(center.isSimilar(fAggregate.getBoxCenter()));
 
             fAggregate.getCenter(center, Center.SPHERICAL);
 
@@ -2080,9 +2080,9 @@ public class FAggregateTest {
 
             assertTrue(center.isSimilar(fAggregate.getMassCenter(MassCenter.ADAPTIVE)));
 
-            center.set(fAggregate.getCenter(Center.SPATIAL));
+            center.set(fAggregate.getCenter(Center.BOX));
 
-            assertTrue(center.isSimilar(fAggregate.getSpatialCenter()));
+            assertTrue(center.isSimilar(fAggregate.getBoxCenter()));
 
             center.set(fAggregate.getCenter(Center.SPHERICAL));
 
@@ -2113,9 +2113,9 @@ public class FAggregateTest {
 
             assertTrue(center.isSimilar(-1, -2, -3));
 
-            fAggregate.setCenter(Center.SPATIAL, 1, 2, 3);
+            fAggregate.setCenter(Center.BOX, 1, 2, 3);
 
-            center.set(fAggregate.getSpatialCenter());
+            center.set(fAggregate.getBoxCenter());
 
             assertTrue(center.isSimilar(1, 2, 3));
 
@@ -2150,9 +2150,9 @@ public class FAggregateTest {
 
             assertTrue(center.isSimilar(-1, -2, -3));
 
-            fAggregate.setCenter(Center.SPATIAL, factory.getFPoint(1, 2, 3));
+            fAggregate.setCenter(Center.BOX, factory.getFPoint(1, 2, 3));
 
-            center.set(fAggregate.getSpatialCenter());
+            center.set(fAggregate.getBoxCenter());
 
             assertTrue(center.isSimilar(1, 2, 3));
 
@@ -2187,9 +2187,9 @@ public class FAggregateTest {
 
             assertTrue(center.isSimilar(-1, -2, -3));
 
-            fAggregate.setCenter(Center.SPATIAL, factory.getFPos3D(1, 2, 3));
+            fAggregate.setCenter(Center.BOX, factory.getFPos3D(1, 2, 3));
 
-            center.set(fAggregate.getSpatialCenter());
+            center.set(fAggregate.getBoxCenter());
 
             assertTrue(center.isSimilar(1, 2, 3));
 
@@ -2240,8 +2240,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Set spatial center")
-        void setSpatialCenter() {
+        @DisplayName("Set box center")
+        void setBoxCenter() {
             FAggregate fAggregate = factory.getFAggregate();
             fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
             fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
@@ -2257,21 +2257,21 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.setSpatialCenter(1, 2, 3);
+            fAggregate.setBoxCenter(1, 2, 3);
 
-            center.set(fAggregate.getSpatialCenter());
+            center.set(fAggregate.getBoxCenter());
 
             assertTrue(center.isSimilar(1, 2, 3));
 
-            fAggregate.setSpatialCenter(factory.getFPoint(-1, -2, -3));
+            fAggregate.setBoxCenter(factory.getFPoint(-1, -2, -3));
 
-            center.set(fAggregate.getSpatialCenter());
+            center.set(fAggregate.getBoxCenter());
 
             assertTrue(center.isSimilar(-1, -2, -3));
 
-            fAggregate.setSpatialCenter(factory.getFPos3D(1, 2, 3));
+            fAggregate.setBoxCenter(factory.getFPos3D(1, 2, 3));
 
-            center.set(fAggregate.getSpatialCenter());
+            center.set(fAggregate.getBoxCenter());
 
             assertTrue(center.isSimilar(1, 2, 3));
         }
@@ -3133,8 +3133,8 @@ public class FAggregateTest {
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
 
-            aggregateA.getSpatialCenter(centerA);
-            aggregateB.getSpatialCenter(centerB);
+            aggregateA.getBoxCenter(centerA);
+            aggregateB.getBoxCenter(centerB);
 
             aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB));
 
@@ -3154,8 +3154,8 @@ public class FAggregateTest {
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
 
-            aggregateA.getSpatialCenter(centerA);
-            aggregateB.getSpatialCenter(centerB);
+            aggregateA.getBoxCenter(centerA);
+            aggregateB.getBoxCenter(centerB);
 
             aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB));
 
@@ -3177,8 +3177,8 @@ public class FAggregateTest {
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
 
-            aggregateA.getSpatialCenter(centerA);
-            aggregateB.getSpatialCenter(centerB);
+            aggregateA.getBoxCenter(centerA);
+            aggregateB.getBoxCenter(centerB);
 
             double shiftA = aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB), 50);
 
@@ -3204,8 +3204,8 @@ public class FAggregateTest {
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
 
-            aggregateA.getSpatialCenter(centerA);
-            aggregateB.getSpatialCenter(centerB);
+            aggregateA.getBoxCenter(centerA);
+            aggregateB.getBoxCenter(centerB);
 
             double shiftA = aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB), 50);
 
@@ -3435,14 +3435,14 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerA = center.copy();
             double radiusA = fAggregate.getRadiusFrom(centerA);
 
             fAggregate.setRadiusFrom(center.getX(), center.getY(), center.getZ(), size);
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerB = center.copy();
             double radiusB = fAggregate.getRadiusFrom(centerB);
@@ -3467,14 +3467,14 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerA = center.copy();
             double radiusA = fAggregate.getRadiusFrom(centerA);
 
             fAggregate.setRadiusFrom(center, size);
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerB = center.copy();
             double radiusB = fAggregate.getRadiusFrom(centerB);
@@ -3499,14 +3499,14 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerA = center.copy();
             double radiusA = fAggregate.getRadiusFrom(centerA);
 
             fAggregate.setRadiusFrom(center.toFPos3D(), size);
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerB = center.copy();
             double radiusB = fAggregate.getRadiusFrom(centerB);
@@ -3531,14 +3531,14 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerA = center.copy();
             double radiusA = fAggregate.getRadiusFrom(centerA);
 
-            fAggregate.setRadiusFrom(Center.SPATIAL, size);
+            fAggregate.setRadiusFrom(Center.BOX, size);
 
-            fAggregate.getCenter(center, Center.SPATIAL);
+            fAggregate.getCenter(center, Center.BOX);
 
             FPoint centerB = center.copy();
             double radiusB = fAggregate.getRadiusFrom(centerB);
