@@ -3,8 +3,6 @@ package eu.scattering.cli.command;
 import eu.scattering.cli.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigBC;
-import eu.scattering.core.design.component.aggregate.config.df.structural.FConfigDC;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.utility.type.method.MassCenter;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
@@ -32,82 +30,84 @@ public class Measure {
                 case rp__std -> getRpStd(aggregate);
                 case rp__max -> getRpMax(aggregate);
                 case rp__min -> getRpMin(aggregate);
+                case conn -> isConnected(aggregate);
+                case conn_pt -> isPointConnected(aggregate);
+                case conn_non_ov -> inNonOverlapping(aggregate);
+                case ov_p_vol -> getOverlapFactorParticleVolumetric(factory, aggregate);
+                case ov_p_vol__avg -> getOverlapFactorParticleVolumetricAvg(aggregate);
+                case ov_p_vol__std -> getOverlapFactorParticleVolumetricStd(aggregate);
+                case ov_p_vol__max -> getOverlapFactorParticleVolumetricMax(aggregate);
+                case ov_p_vol__min -> getOverlapFactorParticleVolumetricMin(aggregate);
+                case ov_p_num -> getOverlapFactorParticleQuantitative(factory, aggregate);
+                case ov_p_num__avg -> getOverlapFactorParticleQuantitativeAvg(aggregate);
+                case ov_p_num__std -> getOverlapFactorParticleQuantitativeStd(aggregate);
+                case ov_p_num__max -> getOverlapFactorParticleQuantitativeMax(aggregate);
+                case ov_p_num__min -> getOverlapFactorParticleQuantitativeMin(aggregate);
+                case ov_p_lin -> getOverlapFactorParticleLinear(factory, aggregate);
+                case ov_p_lin__avg -> getOverlapFactorParticleLinearAvg(aggregate);
+                case ov_p_lin__std -> getOverlapFactorParticleLinearStd(aggregate);
+                case ov_p_lin__max -> getOverlapFactorParticleLinearMax(aggregate);
+                case ov_p_lin__min -> getOverlapFactorParticleLinearMin(aggregate);
+                case ov_c_vol -> getOverlapFactorClusterVolumetric(factory, aggregate);
+                case box -> getBoundary(aggregate);
+                case diam -> getDiameter(aggregate);
+                case len_x -> getLengthX(aggregate);
+                case len_y -> getLengthY(aggregate);
+                case len_z -> getLengthZ(aggregate);
+
+
                 case df_bc -> getDfBoxCountingOptimized(aggregate);
                 case df_mr -> getDfMassRadiusRestricted(aggregate);
                 case df_dc -> getDfDensityCorrelationRestricted(aggregate);
-                case Length_x -> getLengthX(aggregate);
-                case Length_y -> getLengthY(aggregate);
-                case Length_z -> getLengthZ(aggregate);
-                case Volume -> getVolumeAdaptive(aggregate);
-                case Volume_simple -> getVolumeSimple(aggregate);
-                case Volume_complex -> getVolumeComplex(aggregate);
-                case VolumeRadius -> getRadiusVolumeAdaptive(aggregate);
-                case VolumeRadius_simple -> getRadiusVolumeSimple(aggregate);
-                case VolumeRadius_complex -> getRadiusVolumeComplex(aggregate);
-                case Surface -> getSurfaceAdaptive(aggregate);
-                case Surface_simple -> getSurfaceSimple(aggregate);
-                case Surface_complex -> getSurfaceComplex(aggregate);
-                case SurfaceRadius -> getRadiusSurfaceAdaptive(aggregate);
-                case SurfaceRadius_simple -> getRadiusSurfaceSimple(aggregate);
-                case SurfaceRadius_complex -> getRadiusSurfaceComplex(aggregate);
-                case MassCenter -> getCmAdaptive(factory, aggregate);
-                case MassCenter_mono -> getCmSimpleMono(factory, aggregate);
-                case MassCenter_poly -> getCmSimplePoly(factory, aggregate);
-                case MassCenter_mesh -> getCmComplex(factory, aggregate);
-                case BoxCenter -> getCb(factory, aggregate);
-                case SphericalCenter -> getCs(factory, aggregate);
-                case RadiusFromMassCenter -> getRadiusCmAdaptive(factory, aggregate);
-                case RadiusFromMassCenter_mono -> getRadiusCmSimpleMono(factory, aggregate);
-                case RadiusFromMassCenter_poly -> getRadiusCmSimplePoly(factory, aggregate);
-                case RadiusFromMassCenter_mesh -> getRadiusCmComplex(factory, aggregate);
-                case RadiusFromSphericalCenter -> getRadiusCs(factory, aggregate);
-                case RadiusFromBoxCenter -> getRadiusCb(factory, aggregate);
-                case Rg_mono -> getRgSimpleMono(aggregate);
-                case Rg_mono_06R1 -> getRgSimpleMono06R1(aggregate);
-                case Rg_mono_10R2 -> getRgSimpleMono10R2(aggregate);
-                case Rg_poly -> getRgSimplePoly(aggregate);
-                case Rg_poly_06R1 -> getRgSimplePoly06R1(aggregate);
-                case Rg_poly_10R2 -> getRgSimplePoly10R2(aggregate);
-                case Rg_mesh -> getRgComplex(aggregate);
-                case OverlapFactor_c_vol -> getOverlapFactorClusterVolumetric(factory, aggregate);
-                case OverlapFactor_p_vol -> getOverlapFactorParticleVolumetric(factory, aggregate);
-                case OverlapFactor_p_vol__avg -> getOverlapFactorParticleVolumetricAvg(aggregate);
-                case OverlapFactor_p_vol__std -> getOverlapFactorParticleVolumetricStd(aggregate);
-                case OverlapFactor_p_vol__max -> getOverlapFactorParticleVolumetricMax(aggregate);
-                case OverlapFactor_p_vol__min -> getOverlapFactorParticleVolumetricMin(aggregate);
-                case OverlapFactor_p_count -> getOverlapFactorParticleQuantitative(factory, aggregate);
-                case OverlapFactor_p_count__avg -> getOverlapFactorParticleQuantitativeAvg(aggregate);
-                case OverlapFactor_p_count__std -> getOverlapFactorParticleQuantitativeStd(aggregate);
-                case OverlapFactor_p_count__max -> getOverlapFactorParticleQuantitativeMax(aggregate);
-                case OverlapFactor_p_count__min -> getOverlapFactorParticleQuantitativeMin(aggregate);
-                case OverlapFactor_p_lin -> getOverlapFactorParticleLinear(factory, aggregate);
-                case OverlapFactor_p_lin__avg -> getOverlapFactorParticleLinearAvg(aggregate);
-                case OverlapFactor_p_lin__std -> getOverlapFactorParticleLinearStd(aggregate);
-                case OverlapFactor_p_lin__max -> getOverlapFactorParticleLinearMax(aggregate);
-                case OverlapFactor_p_lin__min -> getOverlapFactorParticleLinearMin(aggregate);
-                case IsConnected -> isConnected(aggregate);
-                case IsPointConnected -> isPointConnected(aggregate);
-                case IsNonOverlapping -> inNonOverlapping(aggregate);
-                case TripletAngle -> getTripletAngle(factory, aggregate);
-                case TripletAngle__fun -> getTripletAngleFunction(factory, aggregate);
-                case TripletAngle__avg -> getTripletAngleAvg(aggregate);
-                case TripletAngle__std -> getTripletAngleStd(aggregate);
-                case TripletAngle__max -> getTripletAngleMax(aggregate);
-                case TripletAngle__min -> getTripletAngleMin(aggregate);
-                case PairDistance -> getPairDistance(factory, aggregate);
-                case PairDistance__fun -> getPairDistanceFunction(factory, aggregate);
-                case PairDistance__avg -> getPairDistanceAvg(aggregate);
-                case PairDistance__std -> getPairDistanceStd(aggregate);
-                case PairDistance__max -> getPairDistanceMax(aggregate);
-                case PairDistance__min -> getPairDistanceMin(aggregate);
-                case CoordinationNumber -> getCoordinationNumber(factory, aggregate);
-                case CoordinationNumber__fun -> getCoordinationNumberFunction(factory, aggregate);
-                case CoordinationNumber__avg -> getCoordinationNumberAvg(aggregate);
-                case CoordinationNumber__std -> getCoordinationNumberStd(aggregate);
-                case CoordinationNumber__max -> getCoordinationNumberMax(aggregate);
-                case CoordinationNumber__min -> getCoordinationNumberMin(aggregate);
-                case BoxCoverage__fun -> getBoxCoverageFunction(factory, aggregate);
-                case DensityCorrelation__fun -> getDensityCorrelationFunction(factory, aggregate);
+                case vol_adapt -> getVolumeAdaptive(aggregate);
+                case vol_sum -> getVolumeSimple(aggregate);
+                case vol_mesh -> getVolumeComplex(aggregate);
+                case r_vol_adapt -> getRadiusVolumeAdaptive(aggregate);
+                case r_vol_sum -> getRadiusVolumeSimple(aggregate);
+                case r_vol_mesh -> getRadiusVolumeComplex(aggregate);
+                case srf_adapt -> getSurfaceAdaptive(aggregate);
+                case srf_sum -> getSurfaceSimple(aggregate);
+                case srf_mesh -> getSurfaceComplex(aggregate);
+                case r_srf_adapt -> getRadiusSurfaceAdaptive(aggregate);
+                case r_srf_sum -> getRadiusSurfaceSimple(aggregate);
+                case r_srf_mesh -> getRadiusSurfaceComplex(aggregate);
+                case cm_adapt -> getCmAdaptive(factory, aggregate);
+                case cm_mono -> getCmSimpleMono(factory, aggregate);
+                case cm_poly -> getCmSimplePoly(factory, aggregate);
+                case cm_mesh -> getCmComplex(factory, aggregate);
+                case cb -> getCb(factory, aggregate);
+                case cs -> getCs(factory, aggregate);
+                case r_cm_adapt -> getRadiusCmAdaptive(factory, aggregate);
+                case r_cm_mono -> getRadiusCmSimpleMono(factory, aggregate);
+                case r_cm_poly -> getRadiusCmSimplePoly(factory, aggregate);
+                case r_cm_mesh -> getRadiusCmComplex(factory, aggregate);
+                case r_cs -> getRadiusCs(factory, aggregate);
+                case r_cb -> getRadiusCb(factory, aggregate);
+                case rg_mono -> getRgSimpleMono(aggregate);
+                case rg_mono_06r1 -> getRgSimpleMono06R1(aggregate);
+                case rg_mono_10r2 -> getRgSimpleMono10R2(aggregate);
+                case rg_poly -> getRgSimplePoly(aggregate);
+                case rg_poly_06r1 -> getRgSimplePoly06R1(aggregate);
+                case rg_poly_10r2 -> getRgSimplePoly10R2(aggregate);
+                case rg_mesh -> getRgComplex(aggregate);
+                case angle -> getTripletAngle(factory, aggregate);
+                case angle__fun -> getTripletAngleFunction(factory, aggregate);
+                case angle__avg -> getTripletAngleAvg(aggregate);
+                case angle__std -> getTripletAngleStd(aggregate);
+                case angle__max -> getTripletAngleMax(aggregate);
+                case angle__min -> getTripletAngleMin(aggregate);
+                case dist -> getPairDistance(factory, aggregate);
+                case dist__fun -> getPairDistanceFunction(factory, aggregate);
+                case dist__avg -> getPairDistanceAvg(aggregate);
+                case dist__std -> getPairDistanceStd(aggregate);
+                case dist__max -> getPairDistanceMax(aggregate);
+                case dist__min -> getPairDistanceMin(aggregate);
+                case coord -> getCoordinationNumber(factory, aggregate);
+                case coord__fun -> getCoordinationNumberFunction(factory, aggregate);
+                case coord__avg -> getCoordinationNumberAvg(aggregate);
+                case coord__std -> getCoordinationNumberStd(aggregate);
+                case coord__max -> getCoordinationNumberMax(aggregate);
+                case coord__min -> getCoordinationNumberMin(aggregate);
             });
         }
 
@@ -143,6 +143,16 @@ public class Measure {
     private static String getRpMin(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getFStatParticleRadius().min());
+    }
+
+    private static String getBoundary(FAggregate aggregate) {
+
+        return String.valueOf(aggregate.getBoundary());
+    }
+
+    private static String getDiameter(FAggregate aggregate) {
+
+        return String.valueOf(aggregate.getDiameter());
     }
 
     private static String getLengthX(FAggregate aggregate) {
@@ -535,26 +545,5 @@ public class Measure {
     private static String getCoordinationNumberMin(FAggregate aggregate) {
 
         return String.valueOf(aggregate.getCoordinationNumber().min());
-    }
-
-    private static String getBoxCoverageFunction(ScatterFactory factory, FAggregate aggregate) {
-        FConfigBC config = factory.getFConfigBC()
-                .setScalingFactor(2.0)
-                .setShiftsPerAxis(3)
-                .setAlignedOrigin(false)
-                .setAlignedPCA(false);
-
-        return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getBoxCoverageFunction(config));
-    }
-
-    private static String getDensityCorrelationFunction(ScatterFactory factory, FAggregate aggregate) {
-        FConfigDC config = factory.getFConfigDC()
-                .setScalingFactor(1.1)
-                .setRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY)
-                .setRestricted(false);
-
-        return factory.getSaveAspect().getStatisticsContext()
-                .toCLI(aggregate.getDensityCorrelationFunction(config));
     }
 }

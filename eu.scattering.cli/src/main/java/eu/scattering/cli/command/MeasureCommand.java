@@ -53,9 +53,34 @@ public class MeasureCommand implements Callable<Integer> {
             names = {"-m", "--metrics"},
             arity = "1..*",
             required = true,
-            description = "Measurement types. Valid values: ${COMPLETION-CANDIDATES}",
             converter = MetricConverter.class,
-            completionCandidates = MetricCandidates.class
+            completionCandidates = MetricCandidates.class,
+            description = {
+                    "Measurement types to calculate. Modifiers are indicated by [S] and [F].",
+                    "",
+                    "  Core              : np, rp[S]",
+                    "  Connectivity      : conn, conn-pt, conn-non-ov",
+                    "                      ov-p-vol/lin/num[S], ov-c-vol",
+                    "  Dimension         : box, diam",
+                    "                      len-x/y/z",
+                    "                      r-cm-mono/poly/mesh/adapt",
+                    "                      r-cs, r-cb",
+                    "  Center            : cm-mono/poly/mesh/adapt",
+                    "                      cs, cb",
+                    "  Volume            : vol-sum/mesh/adapt, r-vol-sum/mesh/adapt",
+                    "  Surface           : srf-sum/mesh/adapt, r-srf-sum/mesh/adapt",
+                    "  Gyration          : rg-mesh",
+                    "                      rg-mono, rg-mono-06r1/10r2",
+                    "                      rg-poly, rg-poly-06r1/10r2",
+                    "  Topology          : coord[S|F], angle[S|F], dist[S|F]",
+                    "  Fractal dimension : df-bc/mr/dc",
+                    "",
+                    "Modifiers:",
+                    "  [S] Stat : Append :avg, :std, :max, or :min (e.g., rp:avg)",
+                    "  [F] Fun  : Append :fun for full distribution data (e.g., coord:fun)",
+                    "",
+                    "Note: Some methods require a buffer to be set via -b/--buffer."
+            }
     )
     private List<TYPE_METRIC> metrics;
 
