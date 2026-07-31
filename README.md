@@ -11,8 +11,6 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
 - [Development and AI transparency](#development-and-ai-transparency)
 - [Project structure](#project-structure)
 - [Engine initialization](#engine-initialization)
-    - [Reproducible mode](#reproducible-mode)
-    - [Performance mode](#performance-mode)
 - [Computational parameters](#computational-parameters)
 - [Generation algorithms](#generation-algorithms)
 - [Loading and saving](#loading-and-saving)
@@ -32,26 +30,19 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
 
 ## Background and scope
 
-The core aggregation elements were built upon the foundation of my previous project, FLAGE (Fractal-Like Aggregate Generation Environment). 
-However, ScatterCore is not a simple port - the entire codebase was rewritten almost from scratch to be modernized, heavily optimized, and highly extensible.
+The core aggregation elements were built upon the foundation of my previous project, FLAGE (Fractal-Like Aggregate Generation Environment). However, ScatterCore is not a simple port - the entire codebase was rewritten almost from scratch to be modernized, optimized, and extensible.
 
-Because the project is massive, and I am currently the sole developer, this manual focuses strictly on high-level features, such as aggregation models and morphological analysis. 
-Low-level mathematical primitives (like `FComplex`, `FPoint`, and `FVector`) are excluded from this guide. 
-If you wish to utilize them in your own projects, please refer to the `design` module, where all public interfaces are clearly defined.
+Because the project is massive, and I am currently the sole developer, this manual focuses strictly on high-level features, such as aggregation models and morphological analysis. Low-level mathematical primitives (like `FComplex`, `FPoint`, and `FVector`) are excluded from this guide. If you wish to utilize them in your own projects, please refer to the `design` module, where all public interfaces are clearly defined.
 
 ## Development and AI transparency
 
-This project began several years ago, well before the LLM era.
-As a result, the architectural foundation was built the old-school way: through academic literature, official documentation, and Stack Overflow.
+This project began several years ago, well before the LLM era. As a result, the architectural foundation was built the old-school way: through academic literature, official documentation, and Stack Overflow.
 
-During the later stages of development, maintaining the scientific correctness and cleanliness of the code remained the highest priority. 
-AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as calculating the gyration tensor and performing PCA).
+During the later stages of development, maintaining the scientific correctness and cleanliness of the code remained the highest priority. AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as calculating the gyration tensor and performing PCA).
 
-To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. 
-Furthermore, the generated code was only used as a baseline. 
-Every single line within those marked methods was subsequently refactored, manually analyzed, and rigorously tested to ensure strict scientific accuracy.
+To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. Furthermore, the generated code was only used as a baseline. Every single line within those marked methods was subsequently refactored, manually analyzed, and rigorously tested to ensure strict scientific accuracy.
 
-On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM (hi Gemini!) to heavily polish, structure, and rewrite my original text for better readability.
+On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to heavily polish, structure, and rewrite my original text for better readability.
 
 ## Project structure
 
@@ -61,21 +52,17 @@ The repository is divided into three base modules:
 *   **`lib`** - Contains the core implementation of the design, including the main `ScatterCore` entry point.
 *   **`cli`** - Provides a command-line interface and is used to build a standalone, executable JAR file.
 
-This manual focuses exclusively on the **`design`** and **`lib`** modules. 
-The **`cli`** module is documented separately in its own project README file.
+This manual focuses exclusively on the **`design`** and **`lib`** modules. The **`cli`** module is documented separately in its own project README file.
 
 ## Engine initialization
 
-All generation and analysis operations begin with the `ScatterFactory`, which serves as the core entry point for the library. 
-The factory can be initialized in one of two main operating modes depending on your needs for reproducibility and performance.
+All generation and analysis operations begin with the `ScatterFactory`, which serves as the core entry point for the library. The factory can be initialized in one of two main operating modes depending on your needs for reproducibility and performance.
 
-### Reproducible mode
+**Reproducible mode**
 
-This mode requires a seed value. 
-When a seed is provided, all subsequent operations are executed on a single thread and are fully deterministic. 
-If you generate an aggregate or run an analysis using the same seed, the results will be identical every time.
+This mode requires a seed value. When a seed is provided, all subsequent operations are executed on a single thread and are fully deterministic. If you generate an aggregate or run an analysis using the same seed, the results will be identical every time.
 ```java
-// Initialize the factory with a specific seed for full reproducibility
+// Initialize the factory with a specific seed for full reproducibility.
 ScatterFactory factory = ScatterCore.createFactory(123L);
 
 // Alternatively, pass -1L to randomly generate a seed. 
@@ -83,15 +70,13 @@ ScatterFactory factory = ScatterCore.createFactory(123L);
 ScatterFactory factory = ScatterCore.createFactory(-1L);
 ```
 
-### Performance mode
+**Performance mode**
 
-If reproducibility is not required, you can initialize the factory without a seed. 
-This mode utilizes a different, non-deterministic random generation strategy. 
-As a result, it is extremely unlikely that the exact same aggregate structure will be generated twice.
+If reproducibility is not required, you can initialize the factory without a seed. This mode utilizes a different, non-deterministic random generation strategy. As a result, it is extremely unlikely that the exact same aggregate structure will be generated twice.
 
 *(While current development strictly prioritizes mathematical correctness for research publication, the unseeded mode lays the architectural groundwork for multithreaded performance optimizations planned for a near-future release)*
 ```java
-// Initialize the factory for maximum multi-threaded performance
+// Initialize the factory for maximum multi-threaded performance.
 ScatterFactory factory = ScatterCore.createFactory();
 ```
 
@@ -99,7 +84,7 @@ ScatterFactory factory = ScatterCore.createFactory();
 
 To maintain high performance and numerical stability, the library relies on three configuration elements for calculations. They can be configured globally for the entire aggregate or fine-tuned for each individual particle:
 - *epsilon* (Continuous Tolerance): The continuous threshold used for mathematical calculations across the engine. While it can be used to evaluate physical rules (like overlaps or contacts), it applies broadly to any continuous numerical evaluation. Default is `10E-4`.
-- *delta* (Discrete Tolerance): The discrete threshold used for calculations. When operations require discretizing continuous space (such as mesh decomposition), this defines the element resolution. Default is 10E-2.
+- *delta* (Discrete Tolerance): The discrete threshold used for calculations. When operations require discretizing continuous space (such as mesh decomposition), this defines the element resolution. Default is `10E-2`.
 - *FBuffer* (Memory Management): A reusable data buffer required for heavy meshing and discrete operations. Recycling memory allocations across iterations prevents Garbage Collection (GC) overhead and maintains performance.
 
 Before running complex operations, you can configure your tolerances and inject a pre-allocated buffer into the aggregate:
@@ -129,8 +114,7 @@ for (var fShape : fAggregate) {
 
 ## Generation algorithms
 
-To generate a synthetic Cluster-Cluster (CC) aggregate, you must first define its fundamental physical properties. 
-In this step, the primary particles are pre-allocated in memory, resulting in an unassembled aggregate where particles are not yet spatially positioned.
+To generate a synthetic Cluster-Cluster (CC) aggregate, you must first define its fundamental physical properties. In this step, the primary particles are pre-allocated in memory, resulting in an unassembled aggregate where particles are not yet spatially positioned.
 ```java
 int np = 1000;      // Number of primary particles.
 double rp = 1.0;    // Particle radius.
@@ -139,8 +123,7 @@ double rp = 1.0;    // Particle radius.
 FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(np, rp);
 ```
 
-Next, define the aggregation algorithm and its morphological targets by configuring parameters such as the fractal dimension and the fractal prefactor. 
-Once you bind this model to your unassembled aggregate, simply execute the build process to physically position the particles according to your constraints:
+Next, define the aggregation algorithm and its morphological targets by configuring parameters such as the fractal dimension and the fractal prefactor. Once you bind this model to your unassembled aggregate, simply execute the build process to physically position the particles according to your constraints:
 ```java
 double df = 1.8;    // Target fractal dimension.
 double kf = 1.3;    // Target fractal prefactor.
@@ -151,6 +134,10 @@ var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 // Assemble the aggregate.
 fModel.build();
 ```
+
+This decoupled approach was designed to overcome limitations found in the previous FLAGE software, where particles were generated randomly during the aggregation process itself. While that method worked fine for monodisperse aggregates, complex polydisperse aggregates (especially those featuring multimodal size distributions, overlapping geometries, or coated particles) lacked reproducibility. Each run resulted in geometries with vastly different morphological parameters.
+
+By pre-allocating the particles first, you can repeat the spatial assembly process multiple times while keeping the fundamental physical parameters (such as shape, mass, volume, and coating) strictly constant. This guarantees a much more precise comparison across different aggregation models. Naturally, a single aggregate can be reused and passed to multiple different models.
 
 ## Loading and saving
 
@@ -245,12 +232,12 @@ For these methods, the `FStat` collection contains exactly one element per prima
 
 - **`PARTICLE_QUANTITATIVE`**: Returns the absolute count of overlaps (coordination number) for each particle.
 - **`PARTICLE_LINEAR`**: Calculates the mean linear overlap for each particle. For any intersecting pair, the overlap is defined as `1 - d/(r1 + r2)`, where `d` is the distance between their centers.
-- **`PARTICLE_VOLUMETRIC`**: Evaluates the overlapping volume fraction for each particle. The formula is `1 - (Vn / Vt)`, where `Vt` is the particle's total volume and `Vn` is its strictly non-overlapping volume. This calculation requires a pre-injected `FBuffer` and is governed by the `delta` parameter.
+- **`PARTICLE_VOLUMETRIC`**: Evaluates the overlapping volume fraction for each particle. The formula is `1 - (Vn / Vt)`, where `Vt` is the particle's total volume and `Vn` is its strictly non-overlapping volume. This metric is governed by the `delta` parameter.
 
 **Cluster-Level Metrics**
 For these methods, the `FStat` collection contains elements corresponding to structural overlap layers, rather than individual particles:
 
-- **`CLUSTER_VOLUMETRIC`**: Evaluates the volume distribution across different intersection depths for the entire aggregate. The overlap fraction for each layer is `1 - (Vi / Vt)`, where `Vt` is the total aggregate volume, and `Vi` is the volume of the `i`-th layer (e.g., `V0` is the volume belonging to no other particles, `V1` is shared by exactly 2 particles, `V2` is shared by 3 particles, etc.). The sum of all individual layer volumes exactly equals the total aggregate volume. This calculation requires a pre-injected `FBuffer` and is governed by the `delta` parameter.
+- **`CLUSTER_VOLUMETRIC`**: Evaluates the volume distribution across different intersection depths for the aggregate's overlapping regions. It returns the fraction of the total overlapped volume (`Vo`) shared by multiple particles. The distribution array starts at a depth of 2 particles: index `0` represents the volume fraction shared by exactly 2 particles (`V2 / Vo`), index `1` by 3 particles (`V3 / Vo`), and so on. The unshared volume is excluded from this calculation. This metric is governed by the `delta` parameter.
 
 > **Note:** Connectivity and point-based overlap metrics heavily depend on the `epsilon` tolerance parameter. When working with geometries generated by external algorithms or imported files, you may need to adjust `epsilon` to match their specific definitions of point contact and overlap. Conversely, all volumetric metrics depend on the `delta` parameter for mesh discretization.
 
@@ -292,7 +279,7 @@ When using dynamically calculated centers, the following `Center` enum definitio
 - `BOX`: The geometric center (centroid of the bounding box).
 - `MASS`: The center of mass based on the particle mass distribution.
 - `ORIGIN`: The absolute coordinate system origin (0, 0, 0).
-- `SPHERICAL`: The center of the minimum bounding sphere enclosing the aggregate (100 iterations).
+- `SPHERE`: The center of the minimum bounding sphere enclosing the aggregate (100 iterations).
 
 If you need the full spatial distribution rather than just the maximum boundary, you can extract the distances of all primary particles relative to a specific origin:
 
@@ -309,7 +296,7 @@ The aggregate's center point can be calculated using several different structura
 // Returns the geometric center (centroid of the bounding box).
 FPos3D center = fAggregate.getBoxCenter();
 // Returns the center of the minimum bounding sphere using a custom number of iterations (e.g., 500).
-FPos3D center = fAggregate.getSphericalCenter(500);
+FPos3D center = fAggregate.getSphereCenter(500);
 // Returns the center of mass based on a specific mass distribution type.
 FPos3D center = fAggregate.getMassCenter(MassCenter.ADAPTIVE);
 ```
