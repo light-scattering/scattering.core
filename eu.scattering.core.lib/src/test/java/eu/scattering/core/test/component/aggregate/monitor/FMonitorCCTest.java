@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FMonitorCCTest {
 
     @Nested
-    @Tag("Radius")
     @DisplayName("FMonitor radius")
     class FMonitorRadiusTest {
 
@@ -56,7 +55,6 @@ public class FMonitorCCTest {
     }
 
     @Nested
-    @Tag("Radius_of_gyration")
     @DisplayName("FMonitor radius of gyration")
     class FMonitorRadiusOfGyrationTest {
 

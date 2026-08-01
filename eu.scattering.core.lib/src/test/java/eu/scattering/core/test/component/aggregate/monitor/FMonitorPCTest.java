@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FMonitorPCTest {
 
     @Nested
-    @Tag("Custom")
     @DisplayName("FMonitor custom")
     class FMonitorCustomTest {
 
@@ -58,7 +57,6 @@ public class FMonitorPCTest {
     }
 
     @Nested
-    @Tag("Radius")
     @DisplayName("FMonitor radius")
     class FMonitorRadiusTest {
 
@@ -86,7 +84,6 @@ public class FMonitorPCTest {
     }
 
     @Nested
-    @Tag("Radius_of_gyration")
     @DisplayName("FMonitor radius of gyration")
     class FMonitorRadiusOfGyrationTest {
 

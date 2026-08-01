@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FRotQtTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FRotBasicTest {
 
@@ -51,7 +50,6 @@ public class FRotQtTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FRotAdvancedTest {
 

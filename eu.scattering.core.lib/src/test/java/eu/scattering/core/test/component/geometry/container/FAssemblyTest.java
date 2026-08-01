@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FAssemblyTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FPointBasicTest {
 
@@ -114,7 +113,6 @@ public class FAssemblyTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core features")
     class FPointCoreTest {
 
@@ -608,7 +606,6 @@ public class FAssemblyTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FPointAdvancedTest {
 

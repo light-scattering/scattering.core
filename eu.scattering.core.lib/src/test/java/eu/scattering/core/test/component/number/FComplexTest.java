@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FComplexTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FComplexBasicTest {
 
@@ -165,7 +164,6 @@ public class FComplexTest {
     }
 
     @Nested
-    @Tag("Mutable")
     @DisplayName("Base mutable")
     class FComplexMutableTest {
 
@@ -738,7 +736,6 @@ public class FComplexTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core features")
     class FComplexCoreTest {
         private double refRe, refIm;
@@ -950,7 +947,6 @@ public class FComplexTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FComplexAdvancedTest {
 
@@ -1459,7 +1455,6 @@ public class FComplexTest {
     }
 
     @Nested
-    @Tag("Extension")
     @DisplayName("Extension")
     class FComplexExtensionTest {
 

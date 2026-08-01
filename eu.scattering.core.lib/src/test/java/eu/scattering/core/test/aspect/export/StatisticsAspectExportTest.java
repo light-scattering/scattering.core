@@ -263,7 +263,6 @@ public class StatisticsAspectExportTest {
     }
 
     @Nested
-    @Tag("Meta")
     @DisplayName("Meta")
     class StatisticsConfigTest {
 

@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FPlotTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FPlotBasicTest {
 
@@ -322,7 +321,6 @@ public class FPlotTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core")
     class FPlotCoreTest {
 
@@ -432,7 +430,6 @@ public class FPlotTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FPlotAdvancedTest {
 
@@ -1627,7 +1624,6 @@ public class FPlotTest {
     }
 
     @Nested
-    @Tag("Regressor")
     @DisplayName("Regressor")
     class FPlotRegressorTest {
 
@@ -1723,7 +1719,6 @@ public class FPlotTest {
     }
 
     @Nested
-    @Tag("Interpolator")
     @DisplayName("Interpolator")
     class FPlotInterpolatorTest {
 
@@ -1935,7 +1930,6 @@ public class FPlotTest {
     }
 
     @Nested
-    @Tag("Meta")
     @DisplayName("Meta")
     class FPlotMetaTest {
 

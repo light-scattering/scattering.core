@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FValidatorTest {
 
     @Nested
-    @Tag("FValidator")
     @DisplayName("FValidator overlap")
     class FValidatorOverlapTest {
 
@@ -96,7 +95,6 @@ public class FValidatorTest {
     }
 
     @Nested
-    @Tag("FValidator")
     @DisplayName("FValidator fractal dimension")
     class FValidatorFractalDimensionTest {
 

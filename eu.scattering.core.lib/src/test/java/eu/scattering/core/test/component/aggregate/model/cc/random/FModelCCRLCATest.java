@@ -21,7 +21,6 @@ public class FModelCCRLCATest {
 
     @Disabled
     @Nested
-    @Tag("Predefined")
     @DisplayName("Aggregation 3D - Predefined")
     class AggregationPredefinedTest {
 
@@ -64,7 +63,6 @@ public class FModelCCRLCATest {
 
     @Disabled
     @Nested
-    @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
     class AggregationHeavyTest {
 
@@ -134,7 +132,6 @@ public class FModelCCRLCATest {
     }
 
     @Nested
-    @Tag("Aggregation_3D")
     @DisplayName("Aggregation 3D")
     class Aggregation3DTest {
 
@@ -290,7 +287,6 @@ public class FModelCCRLCATest {
     }
 
     @Nested
-    @Tag("Aggregation_2D")
     @DisplayName("Aggregation 2D")
     class Aggregation2DTest {
 

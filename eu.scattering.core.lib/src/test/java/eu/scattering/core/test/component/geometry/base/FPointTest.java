@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FPointTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FPointBasicTest {
 
@@ -287,7 +286,6 @@ public class FPointTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FPointAdvancedTest {
 
@@ -2176,7 +2174,6 @@ public class FPointTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core features")
     class FPointCoreTest {
 
@@ -2515,7 +2512,6 @@ public class FPointTest {
     }
 
     @Nested
-    @Tag("Mutable")
     @DisplayName("Base mutable")
     class FPointMutableTest {
 
@@ -3371,7 +3367,6 @@ public class FPointTest {
     }
 
     @Nested
-    @Tag("Extension")
     @DisplayName("Extension")
     class FPointExtensionTest {
 

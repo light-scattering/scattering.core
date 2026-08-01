@@ -42,7 +42,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FAggregateTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FAggregateBasicTest {
 
@@ -162,7 +161,6 @@ public class FAggregateTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core features")
     class FAggregateCoreTest {
 
@@ -287,7 +285,6 @@ public class FAggregateTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FAggregateAdvancedTest {
 
@@ -3594,7 +3591,6 @@ public class FAggregateTest {
     }
 
     @Nested
-    @Tag("Topology")
     @DisplayName("Topology")
     class FAggregateTopologyTest {
 

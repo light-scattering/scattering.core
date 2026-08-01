@@ -16,7 +16,6 @@ public class FCacheTest {
     private final boolean multi = true;
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FCacheBasicTest {
 
@@ -299,7 +298,6 @@ public class FCacheTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FCacheAdvancedTest {
 

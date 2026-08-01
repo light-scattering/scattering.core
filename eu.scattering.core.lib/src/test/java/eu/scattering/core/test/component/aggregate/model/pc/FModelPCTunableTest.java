@@ -23,7 +23,6 @@ public class FModelPCTunableTest {
 
     @Disabled
     @Nested
-    @Tag("Predefined")
     @DisplayName("Aggregation 3D - Predefined")
     class AggregationPredefinedTest {
 
@@ -66,7 +65,6 @@ public class FModelPCTunableTest {
 
     @Disabled
     @Nested
-    @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
     class AggregationHeavyTest {
 
@@ -136,7 +134,6 @@ public class FModelPCTunableTest {
     }
 
     @Nested
-    @Tag("Aggregation_3D")
     @DisplayName("Aggregation 3D")
     class Aggregation3DTest {
 
@@ -338,7 +335,6 @@ public class FModelPCTunableTest {
     }
 
     @Nested
-    @Tag("Aggregation_2D")
     @DisplayName("Aggregation 2D")
     class Aggregation2DTest {
 

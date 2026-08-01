@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FRayTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FRayBasicTest {
 

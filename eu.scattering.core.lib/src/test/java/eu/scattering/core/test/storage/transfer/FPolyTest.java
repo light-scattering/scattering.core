@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FPolyTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FPolyBasicTest {
 
@@ -34,7 +33,6 @@ public class FPolyTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FPolyAdvancedTest {
 
@@ -63,7 +61,6 @@ public class FPolyTest {
     }
 
     @Nested
-    @Tag("Java")
     @DisplayName("Java")
     class FPolyJavaTest {
 

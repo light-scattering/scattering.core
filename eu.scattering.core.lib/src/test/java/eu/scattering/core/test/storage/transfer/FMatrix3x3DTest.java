@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class FMatrix3x3DTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FMatrix3x3DBasicTest {
 
@@ -169,7 +168,6 @@ public class FMatrix3x3DTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FMatrix3x3DAdvancedTest {
 
@@ -199,7 +197,6 @@ public class FMatrix3x3DTest {
     }
 
     @Nested
-    @Tag("Java")
     @DisplayName("Java")
     class FMatrix3x3DJavaTest {
 

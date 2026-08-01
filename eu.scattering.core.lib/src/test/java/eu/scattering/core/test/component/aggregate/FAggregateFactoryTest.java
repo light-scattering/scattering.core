@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FAggregateFactoryTest {
 
     @Nested
-    @Tag("Geometry")
     @DisplayName("Module - Geometry")
     class ModuleGeometryTest {
 
@@ -137,7 +136,6 @@ public class FAggregateFactoryTest {
     }
 
     @Nested
-    @Tag("Template")
     @DisplayName("Module - Template")
     class ModuleTemplateTest {
 

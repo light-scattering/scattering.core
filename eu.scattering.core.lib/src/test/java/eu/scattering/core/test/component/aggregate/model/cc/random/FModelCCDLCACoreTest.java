@@ -24,7 +24,6 @@ public class FModelCCDLCACoreTest {
 
     @Disabled
     @Nested
-    @Tag("Predefined")
     @DisplayName("Aggregation 3D - Predefined")
     class AggregationPredefinedTest {
 
@@ -69,7 +68,6 @@ public class FModelCCDLCACoreTest {
 
     @Disabled
     @Nested
-    @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
     class AggregationHeavyTest {
 
@@ -143,7 +141,6 @@ public class FModelCCDLCACoreTest {
     }
 
     @Nested
-    @Tag("Aggregation_3D")
     @DisplayName("Aggregation 3D")
     class Aggregation3DTest {
 
@@ -314,7 +311,6 @@ public class FModelCCDLCACoreTest {
     }
 
     @Nested
-    @Tag("Aggregation_2D")
     @DisplayName("Aggregation 2D")
     class Aggregation2DTest {
 
