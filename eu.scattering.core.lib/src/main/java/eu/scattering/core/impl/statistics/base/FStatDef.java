@@ -809,7 +809,7 @@ public class FStatDef implements FStat {
     public FPlot toFPlotHistogram(double min, double max, int divisions) {
 
         if (divisions < 2) {
-            throw new IllegalArgumentException("The number of groups must be greater then one");
+            throw new IllegalArgumentException("The number of groups must be at least two");
         }
 
         if (min >= max) {

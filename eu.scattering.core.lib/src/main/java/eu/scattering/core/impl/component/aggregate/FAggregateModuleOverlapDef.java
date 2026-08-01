@@ -389,7 +389,7 @@ public class FAggregateModuleOverlapDef {
         double volTmp;
         double volTotal = 0;
 
-        for (int i = 0 ; i < volume.size() ; i++) {
+        for (int i = 0 ; i < volume.size() - 1 ; i++) {
             results.add(0);
         }
 

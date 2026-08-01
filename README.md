@@ -13,7 +13,7 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
 - [Engine initialization](#engine-initialization)
 - [Computational parameters](#computational-parameters)
 - [Generation algorithms](#generation-algorithms)
-- [Loading and saving](#loading-and-saving)
+- [Loading, saving, and exporting](#loading-saving-and-exporting)
 - [Morphological analysis](#morphological-analysis)
     - [Core properties](#core-properties)
     - [Connectivity and overlap](#connectivity-and-overlap)
@@ -128,24 +128,23 @@ Next, define the aggregation algorithm and its morphological targets by configur
 double df = 1.8;    // Target fractal dimension.
 double kf = 1.3;    // Target fractal prefactor.
 
-// Bind the tunable CC model to the aggregate.
+// Bind the tunable CC model to the unassembled aggregate.
 var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 
-// Assemble the aggregate.
+// Build the aggregate.
 fModel.build();
 ```
 
-This decoupled approach was designed to overcome limitations found in the previous FLAGE software, where particles were generated randomly during the aggregation process itself. While that method worked fine for monodisperse aggregates, complex polydisperse aggregates (especially those featuring multimodal size distributions, overlapping geometries, or coated particles) lacked reproducibility. Each run resulted in geometries with vastly different morphological parameters.
+This decoupled approach was designed to overcome limitations found in the previous version of the software, where particles were generated randomly during the aggregation process itself. While that method worked fine for monodisperse aggregates, complex polydisperse structures (especially those featuring multimodal size distributions) lacked reproducibility. Each run resulted in geometries with vastly different morphological parameters. By pre-allocating the particles first, you can repeat the spatial assembly process multiple times while keeping the fundamental physical parameters (such as shape, mass, volume, and coating) strictly constant. This guarantees a much more precise comparison across different aggregation models. Naturally, a single aggregate can be reused and passed to multiple different models.
 
-By pre-allocating the particles first, you can repeat the spatial assembly process multiple times while keeping the fundamental physical parameters (such as shape, mass, volume, and coating) strictly constant. This guarantees a much more precise comparison across different aggregation models. Naturally, a single aggregate can be reused and passed to multiple different models.
-
-## Loading and saving
+## Loading, saving, and exporting
 
 The library provides dedicated aspects for serializing aggregates and exporting them to various external formats. This allows you to save your generated structures, import existing ones, or export them for external visualization and mesh generation.
 
-Both loading and saving contexts are accessed via the main `ScatterFactory` instance.
+All contexts are accessed via the main `ScatterFactory` instance.
 
 **Loading aggregates**
+
 You can reconstruct an `FAggregate` from a string representation. The default and most comprehensive format is JSON, which strictly preserves all component properties.
 
 ```java
@@ -154,21 +153,27 @@ String data = "...";                                                // The seria
 var load = this.factory.getLoadAspect().getFAggregateContext();     // Retrieve the loading context for aggregates.
 
 FAggregate fAggregate = load.fromJSON(data);                        // Load from the default JSON format.     
-FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from an alternative basic format.
+FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from an alternative format.
 ```
 
-**Saving and exporting aggregates**
-When saving an aggregate, you have access to several specialized exporters depending on your target application (e.g., storage, meshing, or rendering).
+**Saving aggregates**
+
+For data storage, serialization, or transferring structures between processes, you can save aggregates into standard string formats. The JSON format is highly recommended as it strictly preserves all component properties.
 
 ```java
+var save = this.factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
 
-var save = this.factory.getSaveAspect().getComponentContext();      // Retrieve the saving context for components.
-
-// 1. Standard Serialization
 String output = save.toJSON(this.aggregate);                        // The default, comprehensive JSON format.      
-String output = save.toBasic(this.aggregate, ExBasic.MULTISPHERE);  // Alternative lightweight formats.
+String output = save.toBasic(this.aggregate, ExBasic.MULTISPHERE);  // Alternative formats.
+```
 
-// 2. External Tool Compatibility
+**Exporting aggregates**
+
+When preparing an aggregate for external applications (such as meshing, rendering, or interfacing with legacy software),  you can use specialized exporters tailored to those target environments.
+
+```java
+var save = this.factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
+
 String output = save.toFLAGE(this.aggregate);                       // Export to a format compatible with the FLAGE program.
 String output = save.toNGSolve(this.aggregate);                     // Export for volumetric mesh generation using NetGen/NGSolve. 
 String output = save.toPovRay(this.aggregate, ExPovRay.BOUNDARY);   // Export for high-quality 3D rendering using PovRay.
@@ -201,7 +206,7 @@ for (var fParticle : fAggregate) {
     // Perform individual particle evaluation.
 }
 
-// Iterates exclusively through pairs of particles that are in direct contact.
+// Iterates through pairs of particles that are in direct contact.
 fAggregate.forEachPairInContact((fParticle1, fParticle2) -> {
     // Perform pair particle evaluation.
 });
