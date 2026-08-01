@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FMonitorPCTest {
 
     @Nested
-    @Tag("Custom")
     @DisplayName("FMonitor custom")
     class FMonitorCustomTest {
 
@@ -58,7 +57,6 @@ public class FMonitorPCTest {
     }
 
     @Nested
-    @Tag("Radius")
     @DisplayName("FMonitor radius")
     class FMonitorRadiusTest {
 
@@ -86,7 +84,6 @@ public class FMonitorPCTest {
     }
 
     @Nested
-    @Tag("Radius_of_gyration")
     @DisplayName("FMonitor radius of gyration")
     class FMonitorRadiusOfGyrationTest {
 
@@ -198,7 +195,7 @@ public class FMonitorPCTest {
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-            FMonitorPCRadiusOfGyration fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.COMPLEX);
+            FMonitorPCRadiusOfGyration fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.VOLUMETRIC);
             FMonitorPCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
             FMonitorPCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
             FMonitorPCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
@@ -231,7 +228,7 @@ public class FMonitorPCTest {
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-            FMonitorPCRadiusOfGyration fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.COMPLEX, skip);
+            FMonitorPCRadiusOfGyration fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.VOLUMETRIC, skip);
             FMonitorPCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1, skip);
             FMonitorPCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1, skip);
             FMonitorPCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2, skip);

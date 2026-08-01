@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class FPos2DTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FPos2DBasicTest {
 
@@ -29,7 +28,6 @@ public class FPos2DTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FPos2DAdvancedTest {
 
@@ -47,7 +45,6 @@ public class FPos2DTest {
     }
 
     @Nested
-    @Tag("Java")
     @DisplayName("Java")
     class FPos2DJavaTest {
 

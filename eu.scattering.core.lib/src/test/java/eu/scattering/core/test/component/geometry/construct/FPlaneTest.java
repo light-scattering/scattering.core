@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FPlaneTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FPlaneBasicTest {
 

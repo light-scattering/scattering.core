@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FPlotBarTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FPlotBarBasicTest {
 
@@ -198,7 +197,6 @@ public class FPlotBarTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core")
     class FPlotBarCoreTest {
 
@@ -305,7 +303,6 @@ public class FPlotBarTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FPlotBarAdvancedTest {
 
@@ -670,7 +667,6 @@ public class FPlotBarTest {
     }
 
     @Nested
-    @Tag("Meta")
     @DisplayName("Meta")
     class FPlotBarMetaTest {
 

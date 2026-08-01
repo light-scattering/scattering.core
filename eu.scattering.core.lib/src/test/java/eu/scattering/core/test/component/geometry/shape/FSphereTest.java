@@ -31,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FSphereTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FSphereBasicTest {
 
@@ -274,12 +273,10 @@ public class FSphereTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FSphereAdvancedTest {
 
         @Nested
-        @Tag("Module-Position")
         @DisplayName("Functionality - Advanced (position)")
         class FSphereModulePositionTest {
 
@@ -875,7 +872,6 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module-Dimension")
         @DisplayName("Functionality - Advanced (dimension)")
         class FSphereModuleDimensionTest {
 
@@ -2010,7 +2006,6 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module-Relation")
         @DisplayName("Functionality - Advanced (relation)")
         class FSphereModuleRelationTest {
 
@@ -3965,7 +3960,6 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module-Composition")
         @DisplayName("Functionality - Advanced (composition)")
         class FSphereModuleCompositionTest {
 
@@ -4159,7 +4153,6 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module-Interaction")
         @DisplayName("Functionality - Advanced (interaction)")
         class FSphereModuleInteractionTest {
 
@@ -5489,7 +5482,6 @@ public class FSphereTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core features")
     class FSphereCoreTest {
 

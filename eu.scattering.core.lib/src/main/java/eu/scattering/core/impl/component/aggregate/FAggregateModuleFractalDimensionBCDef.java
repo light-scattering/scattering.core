@@ -13,6 +13,7 @@ import eu.scattering.core.design.storage.transfer.polynomial.variant.FPoly;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.utility.type.option.Length;
+import eu.scattering.core.design.utility.type.variant.Center;
 
 import java.util.*;
 
@@ -87,6 +88,14 @@ public class FAggregateModuleFractalDimensionBCDef {
 
     private String plot(FPlot results, FPlot approximation, FPoly regression, double dimension) {
         double r2 = results.r2(regression);
+
+
+
+
+        double radiusFromCenter = aggregate.getRadiusFrom(Center.MASS);
+
+
+
 
         String dimFormat = String.format(Locale.US, "%.2f", dimension);
         String r2Format = String.format(Locale.US, "%.4f", r2);

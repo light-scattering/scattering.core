@@ -210,7 +210,7 @@ public class DFVisualTest {
 
             fModel.build();
 
-            fAggregate.setSphericalCenterAsZero(1000);
+            fAggregate.setSphereCenterAsZero(1000);
 
             FPos3D length = fAggregate.getLength();
             double radius = fAggregate.getRadiusFrom(0, 0, 0);

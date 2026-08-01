@@ -114,7 +114,7 @@ public class FAggregateModuleSupportDef {
         FVector translator = dir.copy();
         List<Shape> candidates = new ArrayList<>(this.aggregate.getRefParticles().asList());
 
-        FPoint centerArg = target.getCenter(this.factory.getFPoint(), Center.SPATIAL);
+        FPoint centerArg = target.getCenter(this.factory.getFPoint(), Center.BOX);
 
         candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
 
@@ -143,8 +143,8 @@ public class FAggregateModuleSupportDef {
     }
 
     protected double project(FAggregate target, FVector dir, double distLimit) {
-        FPoint centerRef = this.aggregate.getCenter(this.factory.getFPoint(), Center.SPATIAL);
-        FPoint centerArg = target.getCenter(this.factory.getFPoint(), Center.SPATIAL);
+        FPoint centerRef = this.aggregate.getCenter(this.factory.getFPoint(), Center.BOX);
+        FPoint centerArg = target.getCenter(this.factory.getFPoint(), Center.BOX);
 
         if (centerRef.getDistance(centerArg) > this.aggregate.getRadiusFrom(centerRef) + this.aggregate.getRadiusFrom(centerArg) + distLimit) {
             return -1;

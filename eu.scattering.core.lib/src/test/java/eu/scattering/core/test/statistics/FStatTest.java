@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FStatTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FStatBasicTest {
 
@@ -179,7 +178,6 @@ public class FStatTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core")
     class FStatCoreTest {
 
@@ -313,7 +311,6 @@ public class FStatTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FStatAdvancedTest {
 
@@ -1801,7 +1798,6 @@ public class FStatTest {
     }
 
     @Nested
-    @Tag("Meta")
     @DisplayName("Meta")
     class FStatMetaTest {
 

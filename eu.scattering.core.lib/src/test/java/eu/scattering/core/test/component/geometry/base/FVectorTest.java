@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FVectorTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FVectorBasicTest {
 
@@ -1023,7 +1022,6 @@ public class FVectorTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FVectorAdvancedTest {
 
@@ -5022,7 +5020,6 @@ public class FVectorTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core features")
     class FVectorCoreTest {
 
@@ -5534,7 +5531,6 @@ public class FVectorTest {
     }
 
     @Nested
-    @Tag("Mutable")
     @DisplayName("Base mutable")
     class FVectorMutableTest {
 
@@ -6428,7 +6424,6 @@ public class FVectorTest {
     }
 
     @Nested
-    @Tag("Extension")
     class FVectorExtensionTest {
 
         @Test

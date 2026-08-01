@@ -45,7 +45,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
         FAggregate fAggregate = FAggregateDef.create(factory, fAssembly);
 
         FPoint center = factory.getFPoint();
-        fAggregate.getSpatialCenter(center);
+        fAggregate.getBoxCenter(center);
 
         fAggregate.setPositionAsZero(center);
 
@@ -72,7 +72,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
         FAggregate fAggregate = FAggregateDef.create(factory, fAssembly);
 
         FPoint center = factory.getFPoint();
-        fAggregate.getSpatialCenter(center);
+        fAggregate.getBoxCenter(center);
 
         fAggregate.setPositionAsZero(center);
 
@@ -101,7 +101,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
         FAggregate fAggregate = FAggregateDef.create(factory, fAssembly);
 
         FPoint center = factory.getFPoint();
-        fAggregate.getSpatialCenter(center);
+        fAggregate.getBoxCenter(center);
 
         fAggregate.setPositionAsZero(center);
 

@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FLayerTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FLayerCounterBasicTest {
 
@@ -287,7 +286,6 @@ public class FLayerTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core")
     class FLayerCounterCoreTest {
 
@@ -345,7 +343,6 @@ public class FLayerTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FLayerCounterAdvancedTest {
 

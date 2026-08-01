@@ -69,8 +69,8 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void setRadiusFrom(FPos3D center, double radius);
     void setRadiusFrom(Center type, double radius);
 
-    FStat getFStatDistance(Center type);
     FStat getFStatParticleRadius();
+    FStat getFStatParticleDistance(Center type);
 
     //--------------------------------------------------
 
@@ -80,11 +80,11 @@ public interface FAggregate extends Component, Iterable<Shape> {
     FPoint getMassCenter(FPoint in, MassCenter type);
     FPos3D getMassCenter(MassCenter type);
 
-    FPoint getSpatialCenter(FPoint in);
-    FPos3D getSpatialCenter();
+    FPoint getBoxCenter(FPoint in);
+    FPos3D getBoxCenter();
 
-    FPoint getSphericalCenter(FPoint in, int steps);
-    FPos3D getSphericalCenter(int steps);
+    FPoint getSphereCenter(FPoint in, int steps);
+    FPos3D getSphereCenter(int steps);
 
     void setCenter(Center type, double x, double y, double z);
     void setCenter(Center type, FPoint position);
@@ -96,15 +96,15 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void setMassCenter(FPos3D position, MassCenter type);
     void setMassCenterAsZero(MassCenter type);
 
-    void setSpatialCenter(double x, double y, double z);
-    void setSpatialCenter(FPoint position);
-    void setSpatialCenter(FPos3D position);
-    void setSpatialCenterAsZero();
+    void setBoxCenter(double x, double y, double z);
+    void setBoxCenter(FPoint position);
+    void setBoxCenter(FPos3D position);
+    void setBoxCenterAsZero();
 
-    void setSphericalCenter(double x, double y, double z, int steps);
-    void setSphericalCenter(FPoint position, int steps);
-    void setSphericalCenter(FPos3D position, int steps);
-    void setSphericalCenterAsZero(int steps);
+    void setSphereCenter(double x, double y, double z, int steps);
+    void setSphereCenter(FPoint position, int steps);
+    void setSphereCenter(FPos3D position, int steps);
+    void setSphereCenterAsZero(int steps);
 
     void setPositionAsZero(FPoint center);
     void setPositionAsZero(FPos3D center);

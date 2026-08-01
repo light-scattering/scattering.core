@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FMeshTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FArrayMeshBasicTest {
 
@@ -185,7 +184,6 @@ public class FMeshTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core")
     class FArrayMeshCoreTest {
 
@@ -240,7 +238,6 @@ public class FMeshTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FArrayMeshAdvancedTest {
 

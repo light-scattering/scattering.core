@@ -22,7 +22,6 @@ public class FModelCCTunableTest {
 
     @Disabled
     @Nested
-    @Tag("Predefined")
     @DisplayName("Aggregation 3D - Predefined")
     class AggregationPredefinedTest {
 
@@ -68,7 +67,6 @@ public class FModelCCTunableTest {
 
     @Disabled
     @Nested
-    @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
     class AggregationHeavyTest {
 
@@ -144,7 +142,6 @@ public class FModelCCTunableTest {
     }
 
     @Nested
-    @Tag("Aggregation_3D")
     @DisplayName("Aggregation 3D")
     class Aggregation3DTest {
 
@@ -314,9 +311,9 @@ public class FModelCCTunableTest {
             fModelB.build();
             fModelC.build();
 
-            double rangeA = fAggregateA.getRadiusFrom(Center.SPHERICAL);
-            double rangeB = fAggregateB.getRadiusFrom(Center.SPHERICAL);
-            double rangeC = fAggregateC.getRadiusFrom(Center.SPHERICAL);
+            double rangeA = fAggregateA.getRadiusFrom(Center.SPHERE);
+            double rangeB = fAggregateB.getRadiusFrom(Center.SPHERE);
+            double rangeC = fAggregateC.getRadiusFrom(Center.SPHERE);
 
             assertTrue(rangeA < rangeB);
             assertTrue(rangeB < rangeC);
@@ -345,7 +342,6 @@ public class FModelCCTunableTest {
     }
 
     @Nested
-    @Tag("Aggregation_2D")
     @DisplayName("Aggregation 2D")
     class Aggregation2DTest {
 

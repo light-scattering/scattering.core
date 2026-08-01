@@ -218,7 +218,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
     }
 
     private void adjustParameters() {
-        this.aggregate.getCenter(this.center, Center.SPATIAL);
+        this.aggregate.getCenter(this.center, Center.BOX);
         this.distance = this.aggregate.getRadiusFrom(this.center);
     }
 

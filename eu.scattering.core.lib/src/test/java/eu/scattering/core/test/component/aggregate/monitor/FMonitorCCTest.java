@@ -27,19 +27,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FMonitorCCTest {
 
     @Nested
-    @Tag("Radius")
     @DisplayName("FMonitor radius")
     class FMonitorRadiusTest {
 
         @Test
-        @DisplayName("Spherical")
-        void radiusSpherical() {
+        @DisplayName("Sphere")
+        void radiusSphere() {
             int quantity = 100;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
-            FMonitorCCRadius fMonitor = factory.getFMonitorContext().cc().radius(Center.SPHERICAL);
+            FMonitorCCRadius fMonitor = factory.getFMonitorContext().cc().radius(Center.SPHERE);
 
             fModel.addStepMonitor(fMonitor);
 
@@ -49,14 +48,13 @@ public class FMonitorCCTest {
 
             double radiusFinal = radius.getRefCoreY().get(radius.size() - 1).mean();
 
-            double radiusFinalManual = fAggregate.getRadiusFrom(fAggregate.getCenter(Center.SPHERICAL));
+            double radiusFinalManual = fAggregate.getRadiusFrom(fAggregate.getCenter(Center.SPHERE));
 
             assertEquals(radiusFinalManual, radiusFinal, radiusFinalManual * 0.01);
         }
     }
 
     @Nested
-    @Tag("Radius_of_gyration")
     @DisplayName("FMonitor radius of gyration")
     class FMonitorRadiusOfGyrationTest {
 
@@ -164,7 +162,7 @@ public class FMonitorCCTest {
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
-            FMonitorCCRadiusOfGyration fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.COMPLEX);
+            FMonitorCCRadiusOfGyration fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.VOLUMETRIC);
             FMonitorCCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_06R1);
             FMonitorCCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY_06R1);
             FMonitorCCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);

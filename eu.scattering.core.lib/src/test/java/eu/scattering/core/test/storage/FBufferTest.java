@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FBufferTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Basic")
     class FArrayBasicTest {
 
@@ -237,7 +236,6 @@ public class FBufferTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core")
     class FArrayCoreTest {
 
@@ -291,7 +289,6 @@ public class FBufferTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Advanced")
     class FArrayAdvancedTest {
 

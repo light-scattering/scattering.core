@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FDraftTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FDraftBasicTest {
 

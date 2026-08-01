@@ -207,8 +207,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         FPoint headDir = this.pathB.getRefHead();
 
         while (true) {
-            aggA.getCenter(this.cAggA, Center.SPATIAL);
-            aggB.getCenter(this.cAggB, Center.SPATIAL);
+            aggA.getCenter(this.cAggA, Center.BOX);
+            aggB.getCenter(this.cAggB, Center.BOX);
 
             double rAggA = aggA.getRadiusFrom(this.cAggA) * 0.5;
             double rAggB = aggB.getRadiusFrom(this.cAggB) * 0.5;
@@ -239,8 +239,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         FPoint headDir = this.pathB.getRefHead();
 
         while (true) {
-            aggA.getCenter(this.cAggA, Center.SPATIAL);
-            aggB.getCenter(this.cAggB, Center.SPATIAL);
+            aggA.getCenter(this.cAggA, Center.BOX);
+            aggB.getCenter(this.cAggB, Center.BOX);
 
             double rAggA = aggA.getRadiusFrom(this.cAggA) * 0.5;
             double rAggB = aggB.getRadiusFrom(this.cAggB) * 0.5;

@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FQuaternionTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FQuaternionBasicTest {
 
@@ -241,7 +240,6 @@ public class FQuaternionTest {
     }
 
     @Nested
-    @Tag("Mutable")
     @DisplayName("Base mutable")
     class FQuaternionMutableTest {
 
@@ -1164,7 +1162,6 @@ public class FQuaternionTest {
     }
 
     @Nested
-    @Tag("Core")
     @DisplayName("Core features")
     class FQuaternionCoreTest {
 
@@ -1410,7 +1407,6 @@ public class FQuaternionTest {
     }
 
     @Nested
-    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FQuaternionAdvancedTest {
 
@@ -1779,7 +1775,6 @@ public class FQuaternionTest {
     }
 
     @Nested
-    @Tag("Extension")
     @DisplayName("Extension")
     class FQuaternionExtensionTest {
 

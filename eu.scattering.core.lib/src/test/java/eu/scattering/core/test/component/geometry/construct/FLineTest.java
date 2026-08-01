@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FLineTest {
 
     @Nested
-    @Tag("Basic")
     @DisplayName("Functionality")
     class FLineBasicTest {
 
