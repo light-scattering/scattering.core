@@ -4,7 +4,6 @@
 .gradletasknamecache
 gradle-app.setting
 
-# Ensure the Gradle Wrapper is strictly kept!
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
 
@@ -20,9 +19,11 @@ out/
 *.jar
 *.war
 *.ear
-# (Note: The exception for the gradle-wrapper.jar above prevents it from being ignored by the *.jar rule)
 
 # --- OS Specific / Temp Files ---
 .DS_Store
 Thumbs.db
 **.bkp
+
+# --- Other ---
+**/predefined.zip
