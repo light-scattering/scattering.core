@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Refactored and condensed the CLI metric argument strings (e.g., `cm`, `cs`, `cb`, `df-bc`) for improved usability.
 - Renamed several core API measurement methods to maintain strict 1:1 parity with the updated CLI terminology.
-- Expanded the main `README.md` to include historical API design rationale (FLAGE limitations vs. pre-allocation) and distinct sections for data serialization and exporting.
+- Expanded the main `README.md` to include historical API design rationale (limitations vs. pre-allocation) and distinct sections for data serialization and exporting.
 
 ### Removed
 - Unnecessary `@Tag` annotations across the library test suite to simplify test execution and maintenance.
