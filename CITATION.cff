@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+
+type: software
+title: "scattering.core"
+abstract: "Open-source software for the generation and analysis of synthetic fractal aggregates."
+keywords:
+  - "light scattering"
+  - "computational physics"
+  - "morphological analysis"
+  - "fractal aggregates"
+
+authors:
+  - family-names: Skorupski
+    given-names: Krzysztof
+    orcid: "https://orcid.org/0000-0002-4833-2819"
+
+message: >
+  If you use this software, please cite the associated manuscript below.
+  This publication is currently outdated, though core aggregation elements remain the same.
+  This citation will be updated soon with our upcoming manuscript.
+
+license: AGPL-3.0-only
+repository-code: "https://github.com/light-scattering/scattering.core"
+
+version: "0.3.0"
+date-released: 2026-08-04
+
+preferred-citation:
+  type: article
+  title: "A fast and accurate implementation of tunable algorithms used for generation of fractal-like aggregate models"
+  authors:
+    - family-names: Skorupski
+      given-names: Krzysztof
+      orcid: "https://orcid.org/0000-0002-4833-2819"
+    - family-names: Mroczka
+      given-names: Janusz
+    - family-names: Wriedt
+      given-names: Thomas
+    - family-names: Riefler
+      given-names: Norbert
+  journal: "Physica A"
+  year: 2014
+  volume: 404
+  start: 106
+  end: 117
+  doi: "10.1016/j.physa.2014.02.072"

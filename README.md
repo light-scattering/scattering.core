@@ -9,6 +9,7 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
 
 - [Background and scope](#background-and-scope)
 - [Development and AI transparency](#development-and-ai-transparency)
+- [How to cite](#how-to-cite)
 - [Project structure](#project-structure)
 - [Engine initialization](#engine-initialization)
 - [Computational parameters](#computational-parameters)
@@ -27,6 +28,7 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
         - [Kinetic methods](#kinetic-methods)
             - [PC aggregation](#particle-cluster-pc-aggregation)
             - [CC aggregation](#cluster-cluster-cc-aggregation)
+- [License](#license)
 
 ## Background and scope
 
@@ -43,6 +45,18 @@ During the later stages of development, maintaining the scientific correctness a
 To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. Furthermore, the generated code was only used as a baseline. Every single line within those marked methods was subsequently refactored, manually analyzed, and rigorously tested to ensure strict scientific accuracy.
 
 On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to heavily polish, structure, and rewrite my original text for better readability.
+
+## How to Cite
+
+This software is entirely open-source. While citations are by no means required, they are appreciated and help support the ongoing development of this project.
+
+If you use **scattering.core** in your research, please consider citing the foundational manuscript:
+
+**General usage (Aggregation core):**
+> K. Skorupski, J. Mroczka, T. Wriedt, and N. Riefler, "A fast and accurate implementation of tunable algorithms used for generation of fractal-like aggregate models," *Physica A*, vol. 404, pp. 106-117, 2014. DOI: [10.1016/j.physa.2014.02.072](https://doi.org/10.1016/j.physa.2014.02.072)
+
+> **Note:**
+> The publication above covers the core aggregation elements. An updated citation covering the latest analysis modules will be added once our upcoming manuscript is published.
 
 ## Project structure
 
@@ -618,3 +632,12 @@ String plotRaw = fMeta.getPythonRenderScript(FMetaCCPL.Plot.RAW);           // P
 // This is especially useful for scientific reproducibility.
 FConfigCCPL fConfigPreset = factory.getFConfigCCPL(FConfigCCPL.Preset.WINDOW);
 ```
+
+## License
+
+Copyright (C) 2026 Krzysztof Skorupski
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3.
+
+*For the full license text, please see the [LICENSE](LICENSE) file in this repository.*
