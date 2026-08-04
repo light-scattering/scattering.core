@@ -17,7 +17,12 @@ authors:
 message: >
   If you use this software, please cite the associated manuscript below.
   This publication is currently outdated, though core aggregation elements remain the same.
-  This citation will be updated soon with our upcoming manuscript.
+  This citation will be updated soon with the upcoming manuscript.
+
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21792211"
+    description: "The concept DOI for all versions of scattering.core"
 
 license: AGPL-3.0-only
 repository-code: "https://github.com/light-scattering/scattering.core"
