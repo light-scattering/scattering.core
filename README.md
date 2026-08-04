@@ -46,7 +46,7 @@ To maintain transparency, methods that originated from an LLM prompt are explici
 
 On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to heavily polish, structure, and rewrite my original text for better readability.
 
-## How to Cite
+## How to cite
 
 This software is entirely open-source. While citations are by no means required, they are appreciated and help support the ongoing development of this project.
 
