@@ -7,6 +7,14 @@ gradle-app.setting
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
 
+# --- Security (Gradle) ---
+local.properties
+gradle-local.properties
+
+# --- Security (GPG) ---
+*.gpg
+secring.gpg
+
 # --- IntelliJ IDEA / JetBrains ---
 .idea/
 *.iml
@@ -24,6 +32,3 @@ out/
 .DS_Store
 Thumbs.db
 **.bkp
-
-# --- Other ---
-**/predefined.zip
