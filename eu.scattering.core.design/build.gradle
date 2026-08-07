@@ -1,3 +1,7 @@
+plugins {
+    id "com.vanniktech.maven.publish"
+}
+
 dependencies {
     api 'org.json:json:20231013'
 }

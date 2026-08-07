@@ -28,17 +28,20 @@ def gitBranch = providers.exec {
     commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
 }.standardOutput.asText.map { it.trim() }.getOrElse("unknown")
 
+def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
+
 processResources {
-    inputs.property("gitHash", gitHash)
-    inputs.property("gitBranch", gitBranch)
     inputs.property("projectVersion", project.version)
+    inputs.property("gitBranch", gitBranch)
+    inputs.property("buildTime", buildTime)
+    inputs.property("gitHash", gitHash)
 
     filesMatching('**/version.properties') {
         expand(
                 'projectVersion': project.version,
                 'gitBranch': gitBranch,
                 'gitCommit': gitHash,
-                'buildTime': new Date().format("yyyy-MM-dd HH:mm:ss")
+                'buildTime': buildTime
         )
     }
 }

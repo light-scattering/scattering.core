@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+def rootProperties = new Properties()
+file('../../gradle.properties').withInputStream { rootProperties.load(it) }
+
+def targetGroup = rootProperties.getProperty('group')
+def targetVersion = rootProperties.getProperty('version')
+
+group = "${targetGroup}.example"
+version = targetVersion
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+boolean isProdTest = gradle.startParameter.taskNames.any { it.contains('testProd') }
+
+repositories {
+    if (!isProdTest) {
+        mavenLocal()
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation "${targetGroup}:eu.scattering.core.lib:${targetVersion}"
+    implementation "${targetGroup}:eu.scattering.core.design:${targetVersion}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.register('testDev') {
+    description = 'Runs tests pulling the library from mavenLocal()'
+    group = 'verification'
+    dependsOn 'clean', 'test'
+}
+
+tasks.register('testProd') {
+    description = 'Runs tests pulling the library STRICTLY from Maven Central'
+    group = 'verification'
+    dependsOn 'clean', 'test'
+}
