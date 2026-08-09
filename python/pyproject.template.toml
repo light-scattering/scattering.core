@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scatt-cli"
+version = "${projectVersion}"
+description = "Software for the generation and analysis of synthetic fractal aggregates"
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+requires-python = ">=3.8"
+dependencies = []
+keywords = [
+    "morphological analysis", 
+    "computational physics", 
+    "fractal aggregates", 
+    "light scattering", 
+    "science", 
+    "cli"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: Scientific/Engineering",
+]
+
+authors = [
+  { name = "Krzysztof Skorupski", email = "krzysztof.skorupski@scattering.eu" }
+]
+
+[project.urls]
+Homepage = "https://github.com/light-scattering/scattering.core"
+Changelog = "https://github.com/light-scattering/scattering.core/blob/master/CHANGELOG.md"
+Repository = "https://github.com/light-scattering/scattering.core.git"
+"Author ORCID" = "https://orcid.org/0000-0002-4833-2819"
+
+[project.scripts]
+scatt-cli = "scatt_cli.wrapper:run_cli"
+
+[tool.setuptools.package-data]
+"scatt_cli" = ["jars/*.jar"]

@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.gradleup.shadow' version '8.3.0'
 }
 
 dependencies {
@@ -44,4 +44,32 @@ processResources {
                 'buildTime': buildTime
         )
     }
+}
+
+tasks.register('generatePythonToml', Copy) {
+    group = 'build'
+    description = 'Generates pyproject.toml with the current Gradle project version.'
+
+    from rootProject.file('python/pyproject.template.toml')
+    into rootProject.file('python/')
+
+    rename 'pyproject.template.toml', 'pyproject.toml'
+
+    expand(
+        'projectVersion': project.version
+    )
+}
+
+tasks.register('syncJarToPython', Sync) {
+    group = 'build'
+    description = 'Syncs the shadow JAR to the Python wrapper, removing old versions.'
+
+    dependsOn shadowJar
+
+    from shadowJar.archiveFile
+    into rootProject.file('python/src/scatt_cli/jars')
+}
+
+tasks.named('shadowJar') {
+    finalizedBy 'syncJarToPython', 'generatePythonToml'
 }

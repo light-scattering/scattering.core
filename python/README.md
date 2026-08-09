@@ -1,0 +1,36 @@
+# scatt-cli
+
+This is the official Python command-line wrapper for the `scattering.core` scientific Java library.
+
+It provides a convenient way to install and execute the CLI directly from your Python environment or terminal using `pip`.
+
+## Requirements
+
+Because this package bundles and delegates commands to the underlying Java executable, you must have a **Java Runtime Environment (JRE)** (Java 21 or higher recommended) installed and accessible in your system's `PATH`.
+
+## Installation
+
+You can install the CLI directly from PyPI:
+
+```bash
+pip install scatt-cli
+```
+
+## Usage
+
+Once installed, the `scatt-cli` command is globally available in your terminal. You can pass any standard arguments directly to it:
+
+```bash
+scatt-cli --help
+```
+
+## Documentation
+
+This Python package is a thin wrapper maintained as part of the larger `scattering.core` monorepo. For comprehensive documentation, algorithmic details, and advanced usage examples, please refer to the main repository:
+
+* **[Project Documentation](https://github.com/light-scattering/scattering.core/blob/master/README.md)**
+* **[CLI-Specific Documentation](https://github.com/light-scattering/scattering.core/blob/master/eu.scattering.cli/README.md)**
+
+## License
+
+This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.

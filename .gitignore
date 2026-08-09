@@ -15,6 +15,16 @@ gradle-local.properties
 *.gpg
 secring.gpg
 
+# --- Python ---
+python/src/scatt_cli/jars/*.jar
+python/src/*.egg-info/
+python/pyproject.toml
+python/build/
+python/dist/
+python/**/__pycache__/
+python/**/*.py[cod]
+python/**/*$py.class
+
 # --- IntelliJ IDEA / JetBrains ---
 .idea/
 *.iml
