@@ -1,0 +1,49 @@
+def venvDir = file("venv")
+def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
+
+def venvPython = isWindows ? "${venvDir}/Scripts/python.exe" : "${venvDir}/bin/python"
+def venvCli = isWindows ? "${venvDir}/Scripts/scatt-cli.exe" : "${venvDir}/bin/scatt-cli"
+
+def systemCli = isWindows ? "scatt-cli.exe" : "scatt-cli"
+
+def rootProperties = new Properties()
+file('../../gradle.properties').withInputStream { rootProperties.load(it) }
+def targetVersion = rootProperties.getProperty('version')
+
+tasks.register('testDev', Exec) {
+    description = 'Runs tests against the locally installed package'
+    group = 'verification'
+
+    commandLine systemCli, '--version'
+}
+
+tasks.register('cleanProd', Delete) {
+    description = 'Deletes the testing virtual environment'
+    delete venvDir
+}
+
+tasks.register('createVenv', Exec) {
+    outputs.dir(venvDir)
+    commandLine 'python3', '-m', 'venv', 'venv'
+    mustRunAfter 'cleanProd'
+}
+
+tasks.register('installProd', Exec) {
+    dependsOn 'createVenv'
+
+    commandLine venvPython, '-m', 'pip', 'install',
+            '--index-url', 'https://test.pypi.org/simple/',
+            '--extra-index-url', 'https://pypi.org/simple',
+            "scatt-cli==${targetVersion}"
+}
+
+tasks.register('verifyProd', Exec) {
+    dependsOn 'installProd'
+    commandLine venvCli, '--version'
+}
+
+tasks.register('testProd') {
+    description = 'Runs tests pulling the package from TestPyPI'
+    group = 'verification'
+    dependsOn 'cleanProd', 'verifyProd'
+}

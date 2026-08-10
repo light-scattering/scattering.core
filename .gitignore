@@ -24,6 +24,7 @@ python/dist/
 python/**/__pycache__/
 python/**/*.py[cod]
 python/**/*$py.class
+isolated/consumer-pypi/venv/
 
 # --- IntelliJ IDEA / JetBrains ---
 .idea/
