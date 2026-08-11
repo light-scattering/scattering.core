@@ -2,23 +2,41 @@ plugins {
     id 'com.gradleup.shadow' version '8.3.0'
 }
 
+test {
+    useJUnitPlatform()
+
+    systemProperty "expected.app.version", rootProject.version
+
+    dependsOn tasks.named('shadowJar')
+}
+
 dependencies {
     implementation project(':eu.scattering.core.design')
     implementation project(':eu.scattering.core.lib')
 
     implementation 'info.picocli:picocli:4.7.7'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
+// --- Fat JAR ---
 
 jar {
     manifest {
-        attributes 'Main-Class': 'eu.scattering.cli.Scattering'
+        attributes 'Main-Class': 'eu.scattering.cli.ScatterCLI'
     }
 }
 
 shadowJar {
-    archiveFileName.set("scatt-cli-${project.version}.jar")
+    archiveFileName.set("scatter-cli-${project.version}.jar")
 }
+
+// --- Diagnostics ---
 
 def gitHash = providers.exec {
     commandLine 'git', 'rev-parse', '--short', 'HEAD'
@@ -46,6 +64,8 @@ processResources {
     }
 }
 
+// --- Python CLI ---
+
 tasks.register('generatePythonToml', Copy) {
     group = 'build'
     description = 'Generates pyproject.toml with the current Gradle project version.'
@@ -72,4 +92,26 @@ tasks.register('syncJarToPython', Sync) {
 
 tasks.named('shadowJar') {
     finalizedBy 'syncJarToPython', 'generatePythonToml'
+}
+
+// --- Repomix ---
+
+tasks.register('repomix', Exec) {
+    group = 'build'
+    description = 'Runs Repomix to bundle the src/main/java directory into the build folder.'
+
+    def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
+    def outputFile = layout.buildDirectory.file("repomix-output.xml").get().asFile.absolutePath
+
+    if (isWindows) {
+        executable = 'cmd'
+        args = ['/c', 'npx', 'repomix', 'src/main/java', '--output', outputFile]
+    } else {
+        executable = 'npx'
+        args = ['repomix', 'src/main/java', '--output', outputFile]
+    }
+
+    doFirst {
+        layout.buildDirectory.get().asFile.mkdirs()
+    }
 }

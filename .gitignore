@@ -26,6 +26,10 @@ python/**/*.py[cod]
 python/**/*$py.class
 isolated/consumer-pypi/venv/
 
+# --- Repomix ---
+
+**/repomix-output.xml
+
 # --- IntelliJ IDEA / JetBrains ---
 .idea/
 *.iml

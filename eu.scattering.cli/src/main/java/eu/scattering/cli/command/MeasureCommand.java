@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(
         name = "measure",
-        description = "Calculates morphological parameters",
+        description = "Calculates morphological parameters.",
         mixinStandardHelpOptions = true,
         usageHelpAutoWidth = true
 )
