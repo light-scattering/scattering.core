@@ -107,3 +107,74 @@ tasks.register('uninstallPackage', Exec) {
 
     commandLine 'python3', '-m', 'pip', 'uninstall', '-y', 'scatt-cli'
 }
+
+// --- Release ---
+
+tasks.register("verifyCitationVersion") {
+    group = "verification"
+    description = "Verifies that the version in CITATION.cff matches the project version."
+
+    def citationFile = file("CITATION.cff")
+
+    inputs.file(citationFile)
+    inputs.property("projectVersion", project.version.toString())
+
+    doLast {
+        if (!citationFile.exists()) {
+            throw new GradleException("CITATION.cff file not found at ${citationFile.absolutePath}")
+        }
+
+        def versionLine = citationFile.readLines().find { it.startsWith("version:") }
+        if (!versionLine) {
+            throw new GradleException("Could not find a 'version:' field in CITATION.cff")
+        }
+
+        def citationVersion = versionLine.replace("version:", "").replace("\"", "").replace("'", "").trim()
+        def currentVersion = project.version.toString()
+
+        if (citationVersion != currentVersion) {
+            throw new GradleException("Release blocked: Version mismatch!\n" +
+                    "  -> CITATION.cff version : '${citationVersion}'\n" +
+                    "  -> gradle.properties    : '${currentVersion}'")
+        }
+    }
+}
+
+tasks.register("verifyChangelogVersion") {
+    group = "verification"
+    description = "Verifies that the latest version in CHANGELOG.md matches the project version."
+
+    def changelogFile = file("CHANGELOG.md")
+
+    inputs.file(changelogFile)
+    inputs.property("projectVersion", project.version.toString())
+
+    doLast {
+        if (!changelogFile.exists()) {
+            throw new GradleException("CHANGELOG.md file not found at ${changelogFile.absolutePath}")
+        }
+
+        def versionLine = changelogFile.readLines().find { it.startsWith("## [") }
+        if (!versionLine) {
+            throw new GradleException("Could not find any release headings in ${changelogFile.name}")
+        }
+
+        def matcher = versionLine =~ /## \[([^\]]+)\]/
+        if (!matcher) {
+            throw new GradleException("Malformed release heading in ${changelogFile.name}: '${versionLine}'")
+        }
+
+        def changelogVersion = matcher[0][1]
+        def currentVersion = project.version.toString()
+
+        if (changelogVersion != currentVersion) {
+            throw new GradleException("Release blocked: Version mismatch!\n" +
+                    "  -> CHANGELOG.md latest version : '${changelogVersion}'\n" +
+                    "  -> gradle.properties           : '${currentVersion}'")
+        }
+    }
+}
+
+tasks.named("check") {
+    dependsOn("verifyCitationVersion", "verifyChangelogVersion")
+}
