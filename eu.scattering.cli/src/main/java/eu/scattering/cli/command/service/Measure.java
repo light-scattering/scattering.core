@@ -1,4 +1,4 @@
-package eu.scattering.cli.command;
+package eu.scattering.cli.command.service;
 
 import eu.scattering.cli.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatterFactory;

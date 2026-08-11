@@ -41,8 +41,6 @@ public class ScatterCLI {
             } catch (Exception e) {
                 System.err.println("Error reading info: " + e.getMessage());
             }
-
-            System.exit(0);
         }
     }
 

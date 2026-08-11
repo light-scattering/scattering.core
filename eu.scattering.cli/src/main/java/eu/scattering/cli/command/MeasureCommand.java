@@ -1,6 +1,7 @@
 package eu.scattering.cli.command;
 
-import eu.scattering.cli.aspect.FAggregateLoad;
+import eu.scattering.cli.aspect.GeometryLoad;
+import eu.scattering.cli.command.service.Measure;
 import eu.scattering.cli.type.FORMAT_INPUT;
 import eu.scattering.cli.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatterFactory;
@@ -104,7 +105,7 @@ public class MeasureCommand implements Callable<Integer> {
         try {
             ScatterFactory factory = ScatterFactoryDef.create();
 
-            FAggregate fAggregate = FAggregateLoad.load(factory, file, format)
+            FAggregate fAggregate = GeometryLoad.load(factory, file, format)
                     .orElseThrow(() -> new IllegalArgumentException("The geometry could not be parsed"));
 
             if (epsilon != ScatterCoreConfig.SHAPE_EPSILON) {

@@ -13,32 +13,22 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class FAggregateLoad {
+public class GeometryLoad {
 
-    public static Optional<FAggregate> load(ScatterFactory factory, String file, FORMAT_INPUT format) {
+    public static Optional<FAggregate> load(ScatterFactory factory, String file, FORMAT_INPUT format) throws IOException {
 
         return "-".equals(file) ? loadFromStreamConsole(factory, format) : loadFromStreamFile(factory, file, format);
     }
 
-    private static Optional<FAggregate> loadFromStreamConsole(ScatterFactory factory, FORMAT_INPUT format) {
+    private static Optional<FAggregate> loadFromStreamConsole(ScatterFactory factory, FORMAT_INPUT format) throws IOException {
 
-        try {
-            return loadFromStream(factory, System.in, format);
-        } catch (Exception e) {
-            System.err.println("Failed to read input: " + e.getMessage());
-
-            return Optional.empty();
-        }
+        return loadFromStream(factory, System.in, format);
     }
 
-    private static Optional<FAggregate> loadFromStreamFile(ScatterFactory factory, String file, FORMAT_INPUT format) {
+    private static Optional<FAggregate> loadFromStreamFile(ScatterFactory factory, String file, FORMAT_INPUT format) throws IOException {
 
         try (InputStream is = Files.newInputStream(Paths.get(file))) {
             return loadFromStream(factory, is, format);
-        } catch (Exception e) {
-            System.err.println("Failed to read input: " + e.getMessage());
-
-            return Optional.empty();
         }
     }
 
