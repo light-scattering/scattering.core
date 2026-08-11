@@ -5,3 +5,25 @@ plugins {
 dependencies {
     api 'org.json:json:20231013'
 }
+
+// --- Repomix ---
+
+tasks.register('repomix', Exec) {
+    group = 'build'
+    description = 'Runs Repomix to bundle the src/main/java directory into the build folder.'
+
+    def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
+    def outputFile = layout.buildDirectory.file("repomix-output.xml").get().asFile.absolutePath
+
+    if (isWindows) {
+        executable = 'cmd'
+        args = ['/c', 'npx', 'repomix', 'src/main/java', '--output', outputFile]
+    } else {
+        executable = 'npx'
+        args = ['repomix', 'src/main/java', '--output', outputFile]
+    }
+
+    doFirst {
+        layout.buildDirectory.get().asFile.mkdirs()
+    }
+}
