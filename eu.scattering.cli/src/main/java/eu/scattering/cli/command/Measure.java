@@ -13,104 +13,111 @@ import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 
-import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 public class Measure {
 
-    public static String measure(ScatterFactory factory, FAggregate aggregate, List<TYPE_METRIC> metrics) {
-        List<String> results = new ArrayList<>(metrics.size());
+    private static final Map<TYPE_METRIC, BiFunction<ScatterFactory, FAggregate, String>> REGISTRY = new EnumMap<>(TYPE_METRIC.class);
 
-        for (TYPE_METRIC metric : metrics) {
+    static {
+        REGISTRY.put(TYPE_METRIC.np, (factory, agg) -> getNp(agg));
+        REGISTRY.put(TYPE_METRIC.rp, Measure::getRp);
+        REGISTRY.put(TYPE_METRIC.rp__avg, (factory, agg) -> getRpAvg(agg));
+        REGISTRY.put(TYPE_METRIC.rp__std, (factory, agg) -> getRpStd(agg));
+        REGISTRY.put(TYPE_METRIC.rp__max, (factory, agg) -> getRpMax(agg));
+        REGISTRY.put(TYPE_METRIC.rp__min, (factory, agg) -> getRpMin(agg));
+        REGISTRY.put(TYPE_METRIC.conn, (factory, agg) -> isConnected(agg));
+        REGISTRY.put(TYPE_METRIC.conn_pt, (factory, agg) -> isPointConnected(agg));
+        REGISTRY.put(TYPE_METRIC.conn_non_ov, (factory, agg) -> inNonOverlapping(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_vol, Measure::getOverlapFactorParticleVolumetric);
+        REGISTRY.put(TYPE_METRIC.ov_p_vol__avg, (factory, agg) -> getOverlapFactorParticleVolumetricAvg(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_vol__std, (factory, agg) -> getOverlapFactorParticleVolumetricStd(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_vol__max, (factory, agg) -> getOverlapFactorParticleVolumetricMax(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_vol__min, (factory, agg) -> getOverlapFactorParticleVolumetricMin(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_num, Measure::getOverlapFactorParticleQuantitative);
+        REGISTRY.put(TYPE_METRIC.ov_p_num__avg, (factory, agg) -> getOverlapFactorParticleQuantitativeAvg(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_num__std, (factory, agg) -> getOverlapFactorParticleQuantitativeStd(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_num__max, (factory, agg) -> getOverlapFactorParticleQuantitativeMax(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_num__min, (factory, agg) -> getOverlapFactorParticleQuantitativeMin(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_lin, Measure::getOverlapFactorParticleLinear);
+        REGISTRY.put(TYPE_METRIC.ov_p_lin__avg, (factory, agg) -> getOverlapFactorParticleLinearAvg(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_lin__std, (factory, agg) -> getOverlapFactorParticleLinearStd(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_lin__max, (factory, agg) -> getOverlapFactorParticleLinearMax(agg));
+        REGISTRY.put(TYPE_METRIC.ov_p_lin__min, (factory, agg) -> getOverlapFactorParticleLinearMin(agg));
+        REGISTRY.put(TYPE_METRIC.ov_c_vol, Measure::getOverlapFactorClusterVolumetric);
+        REGISTRY.put(TYPE_METRIC.len, Measure::getLength);
+        REGISTRY.put(TYPE_METRIC.box, Measure::getBoundary);
+        REGISTRY.put(TYPE_METRIC.diam, (factory, agg) -> getDiameter(agg));
+        REGISTRY.put(TYPE_METRIC.len_x, (factory, agg) -> getLengthX(agg));
+        REGISTRY.put(TYPE_METRIC.len_y, (factory, agg) -> getLengthY(agg));
+        REGISTRY.put(TYPE_METRIC.len_z, (factory, agg) -> getLengthZ(agg));
+        REGISTRY.put(TYPE_METRIC.r_cm_adapt, Measure::getRadiusCmAdaptive);
+        REGISTRY.put(TYPE_METRIC.r_cm_mono, Measure::getRadiusCmSimpleMono);
+        REGISTRY.put(TYPE_METRIC.r_cm_poly, Measure::getRadiusCmSimplePoly);
+        REGISTRY.put(TYPE_METRIC.r_cm_mesh, Measure::getRadiusCmComplex);
+        REGISTRY.put(TYPE_METRIC.r_cs, Measure::getRadiusCs);
+        REGISTRY.put(TYPE_METRIC.r_cb, Measure::getRadiusCb);
+        REGISTRY.put(TYPE_METRIC.cm_adapt, Measure::getCmAdaptive);
+        REGISTRY.put(TYPE_METRIC.cm_mono, Measure::getCmSimpleMono);
+        REGISTRY.put(TYPE_METRIC.cm_poly, Measure::getCmSimplePoly);
+        REGISTRY.put(TYPE_METRIC.cm_mesh, Measure::getCmComplex);
+        REGISTRY.put(TYPE_METRIC.cs, Measure::getCs);
+        REGISTRY.put(TYPE_METRIC.cb, Measure::getCb);
+        REGISTRY.put(TYPE_METRIC.vol_adapt, (factory, agg) -> getVolumeAdaptive(agg));
+        REGISTRY.put(TYPE_METRIC.vol_sum, (factory, agg) -> getVolumeSimple(agg));
+        REGISTRY.put(TYPE_METRIC.vol_mesh, (factory, agg) -> getVolumeComplex(agg));
+        REGISTRY.put(TYPE_METRIC.srf_adapt, (factory, agg) -> getSurfaceAdaptive(agg));
+        REGISTRY.put(TYPE_METRIC.srf_sum, (factory, agg) -> getSurfaceSimple(agg));
+        REGISTRY.put(TYPE_METRIC.srf_mesh, (factory, agg) -> getSurfaceComplex(agg));
+        REGISTRY.put(TYPE_METRIC.r_vol_adapt, (factory, agg) -> getRadiusVolumeAdaptive(agg));
+        REGISTRY.put(TYPE_METRIC.r_vol_sum, (factory, agg) -> getRadiusVolumeSimple(agg));
+        REGISTRY.put(TYPE_METRIC.r_vol_mesh, (factory, agg) -> getRadiusVolumeComplex(agg));
+        REGISTRY.put(TYPE_METRIC.r_srf_adapt, (factory, agg) -> getRadiusSurfaceAdaptive(agg));
+        REGISTRY.put(TYPE_METRIC.r_srf_sum, (factory, agg) -> getRadiusSurfaceSimple(agg));
+        REGISTRY.put(TYPE_METRIC.r_srf_mesh, (factory, agg) -> getRadiusSurfaceComplex(agg));
+        REGISTRY.put(TYPE_METRIC.rg_mono, (factory, agg) -> getRgSimpleMono(agg));
+        REGISTRY.put(TYPE_METRIC.rg_mono_06r1, (factory, agg) -> getRgSimpleMono06R1(agg));
+        REGISTRY.put(TYPE_METRIC.rg_mono_10r2, (factory, agg) -> getRgSimpleMono10R2(agg));
+        REGISTRY.put(TYPE_METRIC.rg_poly, (factory, agg) -> getRgSimplePoly(agg));
+        REGISTRY.put(TYPE_METRIC.rg_poly_06r1, (factory, agg) -> getRgSimplePoly06R1(agg));
+        REGISTRY.put(TYPE_METRIC.rg_poly_10r2, (factory, agg) -> getRgSimplePoly10R2(agg));
+        REGISTRY.put(TYPE_METRIC.rg_mesh, (factory, agg) -> getRgComplex(agg));
+        REGISTRY.put(TYPE_METRIC.coord, Measure::getCoordinationNumber);
+        REGISTRY.put(TYPE_METRIC.coord__fun, Measure::getCoordinationNumberFunction);
+        REGISTRY.put(TYPE_METRIC.coord__avg, (factory, agg) -> getCoordinationNumberAvg(agg));
+        REGISTRY.put(TYPE_METRIC.coord__std, (factory, agg) -> getCoordinationNumberStd(agg));
+        REGISTRY.put(TYPE_METRIC.coord__max, (factory, agg) -> getCoordinationNumberMax(agg));
+        REGISTRY.put(TYPE_METRIC.coord__min, (factory, agg) -> getCoordinationNumberMin(agg));
+        REGISTRY.put(TYPE_METRIC.angle, Measure::getTripletAngle);
+        REGISTRY.put(TYPE_METRIC.angle__fun, Measure::getTripletAngleFunction);
+        REGISTRY.put(TYPE_METRIC.angle__avg, (factory, agg) -> getTripletAngleAvg(agg));
+        REGISTRY.put(TYPE_METRIC.angle__std, (factory, agg) -> getTripletAngleStd(agg));
+        REGISTRY.put(TYPE_METRIC.angle__max, (factory, agg) -> getTripletAngleMax(agg));
+        REGISTRY.put(TYPE_METRIC.angle__min, (factory, agg) -> getTripletAngleMin(agg));
+        REGISTRY.put(TYPE_METRIC.dist, Measure::getPairDistance);
+        REGISTRY.put(TYPE_METRIC.dist__fun, Measure::getPairDistanceFunction);
+        REGISTRY.put(TYPE_METRIC.dist__avg, (factory, agg) -> getPairDistanceAvg(agg));
+        REGISTRY.put(TYPE_METRIC.dist__std, (factory, agg) -> getPairDistanceStd(agg));
+        REGISTRY.put(TYPE_METRIC.dist__max, (factory, agg) -> getPairDistanceMax(agg));
+        REGISTRY.put(TYPE_METRIC.dist__min, (factory, agg) -> getPairDistanceMin(agg));
+        REGISTRY.put(TYPE_METRIC.df_bc, (factory, agg) -> getDfBoxCountingOptimized(agg));
+        REGISTRY.put(TYPE_METRIC.df_mr, (factory, agg) -> getDfMassRadiusRestricted(agg));
+        REGISTRY.put(TYPE_METRIC.df_dc, (factory, agg) -> getDfDensityCorrelationRestricted(agg));
 
-            results.add(switch (metric) {
-                case np -> getNp(aggregate);
-                case rp -> getRp(factory, aggregate);
-                case rp__avg -> getRpAvg(aggregate);
-                case rp__std -> getRpStd(aggregate);
-                case rp__max -> getRpMax(aggregate);
-                case rp__min -> getRpMin(aggregate);
-                case conn -> isConnected(aggregate);
-                case conn_pt -> isPointConnected(aggregate);
-                case conn_non_ov -> inNonOverlapping(aggregate);
-                case ov_p_vol -> getOverlapFactorParticleVolumetric(factory, aggregate);
-                case ov_p_vol__avg -> getOverlapFactorParticleVolumetricAvg(aggregate);
-                case ov_p_vol__std -> getOverlapFactorParticleVolumetricStd(aggregate);
-                case ov_p_vol__max -> getOverlapFactorParticleVolumetricMax(aggregate);
-                case ov_p_vol__min -> getOverlapFactorParticleVolumetricMin(aggregate);
-                case ov_p_num -> getOverlapFactorParticleQuantitative(factory, aggregate);
-                case ov_p_num__avg -> getOverlapFactorParticleQuantitativeAvg(aggregate);
-                case ov_p_num__std -> getOverlapFactorParticleQuantitativeStd(aggregate);
-                case ov_p_num__max -> getOverlapFactorParticleQuantitativeMax(aggregate);
-                case ov_p_num__min -> getOverlapFactorParticleQuantitativeMin(aggregate);
-                case ov_p_lin -> getOverlapFactorParticleLinear(factory, aggregate);
-                case ov_p_lin__avg -> getOverlapFactorParticleLinearAvg(aggregate);
-                case ov_p_lin__std -> getOverlapFactorParticleLinearStd(aggregate);
-                case ov_p_lin__max -> getOverlapFactorParticleLinearMax(aggregate);
-                case ov_p_lin__min -> getOverlapFactorParticleLinearMin(aggregate);
-                case ov_c_vol -> getOverlapFactorClusterVolumetric(factory, aggregate);
-                case len -> getLength(factory, aggregate);
-                case box -> getBoundary(factory, aggregate);
-                case diam -> getDiameter(aggregate);
-                case len_x -> getLengthX(aggregate);
-                case len_y -> getLengthY(aggregate);
-                case len_z -> getLengthZ(aggregate);
-                case r_cm_adapt -> getRadiusCmAdaptive(factory, aggregate);
-                case r_cm_mono -> getRadiusCmSimpleMono(factory, aggregate);
-                case r_cm_poly -> getRadiusCmSimplePoly(factory, aggregate);
-                case r_cm_mesh -> getRadiusCmComplex(factory, aggregate);
-                case r_cs -> getRadiusCs(factory, aggregate);
-                case r_cb -> getRadiusCb(factory, aggregate);
-                case cm_adapt -> getCmAdaptive(factory, aggregate);
-                case cm_mono -> getCmSimpleMono(factory, aggregate);
-                case cm_poly -> getCmSimplePoly(factory, aggregate);
-                case cm_mesh -> getCmComplex(factory, aggregate);
-                case cs -> getCs(factory, aggregate);
-                case cb -> getCb(factory, aggregate);
-                case vol_adapt -> getVolumeAdaptive(aggregate);
-                case vol_sum -> getVolumeSimple(aggregate);
-                case vol_mesh -> getVolumeComplex(aggregate);
-                case srf_adapt -> getSurfaceAdaptive(aggregate);
-                case srf_sum -> getSurfaceSimple(aggregate);
-                case srf_mesh -> getSurfaceComplex(aggregate);
-                case r_vol_adapt -> getRadiusVolumeAdaptive(aggregate);
-                case r_vol_sum -> getRadiusVolumeSimple(aggregate);
-                case r_vol_mesh -> getRadiusVolumeComplex(aggregate);
-                case r_srf_adapt -> getRadiusSurfaceAdaptive(aggregate);
-                case r_srf_sum -> getRadiusSurfaceSimple(aggregate);
-                case r_srf_mesh -> getRadiusSurfaceComplex(aggregate);
-                case rg_mono -> getRgSimpleMono(aggregate);
-                case rg_mono_06r1 -> getRgSimpleMono06R1(aggregate);
-                case rg_mono_10r2 -> getRgSimpleMono10R2(aggregate);
-                case rg_poly -> getRgSimplePoly(aggregate);
-                case rg_poly_06r1 -> getRgSimplePoly06R1(aggregate);
-                case rg_poly_10r2 -> getRgSimplePoly10R2(aggregate);
-                case rg_mesh -> getRgComplex(aggregate);
-                case coord -> getCoordinationNumber(factory, aggregate);
-                case coord__fun -> getCoordinationNumberFunction(factory, aggregate);
-                case coord__avg -> getCoordinationNumberAvg(aggregate);
-                case coord__std -> getCoordinationNumberStd(aggregate);
-                case coord__max -> getCoordinationNumberMax(aggregate);
-                case coord__min -> getCoordinationNumberMin(aggregate);
-                case angle -> getTripletAngle(factory, aggregate);
-                case angle__fun -> getTripletAngleFunction(factory, aggregate);
-                case angle__avg -> getTripletAngleAvg(aggregate);
-                case angle__std -> getTripletAngleStd(aggregate);
-                case angle__max -> getTripletAngleMax(aggregate);
-                case angle__min -> getTripletAngleMin(aggregate);
-                case dist -> getPairDistance(factory, aggregate);
-                case dist__fun -> getPairDistanceFunction(factory, aggregate);
-                case dist__avg -> getPairDistanceAvg(aggregate);
-                case dist__std -> getPairDistanceStd(aggregate);
-                case dist__max -> getPairDistanceMax(aggregate);
-                case dist__min -> getPairDistanceMin(aggregate);
-                case df_bc -> getDfBoxCountingOptimized(aggregate);
-                case df_mr -> getDfMassRadiusRestricted(aggregate);
-                case df_dc -> getDfDensityCorrelationRestricted(aggregate);
-            });
+        if (REGISTRY.size() != TYPE_METRIC.values().length) {
+            throw new IllegalStateException("Not all TYPE_METRIC values are mapped in the Measure registry!");
         }
+    }
 
-        return String.join(" ", results);
+    public static String measure(ScatterFactory factory, FAggregate aggregate, List<TYPE_METRIC> metrics) {
+
+        return metrics.stream()
+                .map(metric -> REGISTRY.get(metric).apply(factory, aggregate))
+                .collect(Collectors.joining(" "));
     }
 
     private static String getNp(FAggregate aggregate) {
