@@ -27,3 +27,10 @@ tasks.register('repomix', Exec) {
         layout.buildDirectory.get().asFile.mkdirs()
     }
 }
+
+// --- Clean ---
+
+tasks.named('clean') {
+
+    delete 'out'
+}

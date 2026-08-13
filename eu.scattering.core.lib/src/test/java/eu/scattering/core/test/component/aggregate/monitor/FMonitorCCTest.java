@@ -14,7 +14,6 @@ import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

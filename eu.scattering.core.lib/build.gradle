@@ -4,6 +4,8 @@ plugins {
 
 test {
     useJUnitPlatform()
+
+    systemProperty "expected.app.version", project.version
 }
 
 dependencies {
@@ -20,8 +22,32 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('clean') {
-    delete 'out'
+// --- Diagnostics ---
+
+def gitHash = providers.exec {
+    commandLine 'git', 'rev-parse', '--short', 'HEAD'
+}.standardOutput.asText.map { it.trim() }.getOrElse("unknown")
+
+def gitBranch = providers.exec {
+    commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+}.standardOutput.asText.map { it.trim() }.getOrElse("unknown")
+
+def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
+
+processResources {
+    inputs.property("projectVersion", project.version)
+    inputs.property("gitBranch", gitBranch)
+    inputs.property("buildTime", buildTime)
+    inputs.property("gitHash", gitHash)
+
+    filesMatching('**/version.properties') {
+        expand(
+                'projectVersion': project.version,
+                'gitBranch': gitBranch,
+                'gitCommit': gitHash,
+                'buildTime': buildTime
+        )
+    }
 }
 
 // --- Repomix ---
@@ -44,4 +70,11 @@ tasks.register('repomix', Exec) {
     doFirst {
         layout.buildDirectory.get().asFile.mkdirs()
     }
+}
+
+// --- Clean ---
+
+tasks.named('clean') {
+
+    delete 'out'
 }

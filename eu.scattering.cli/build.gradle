@@ -24,12 +24,6 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('clean') {
-    delete 'out'
-
-    dependsOn 'pythonClean'
-}
-
 // --- Fat JAR ---
 
 jar {
@@ -166,4 +160,12 @@ tasks.register('repomix', Exec) {
     doFirst {
         layout.buildDirectory.get().asFile.mkdirs()
     }
+}
+
+// --- Clean ---
+
+tasks.named('clean') {
+    delete 'out'
+
+    dependsOn('pythonClean', 'pythonPackageRemove')
 }

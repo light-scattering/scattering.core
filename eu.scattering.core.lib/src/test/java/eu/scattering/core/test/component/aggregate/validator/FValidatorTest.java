@@ -10,7 +10,6 @@ import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.epsilon;

@@ -41,15 +41,21 @@ tasks.named('test') {
 // --- Repo test ---
 
 tasks.register('testDev') {
-    description = 'Runs tests pulling the library from Maven Local'
-    group = 'verification'
+    description = 'Runs tests against the locally installed package'
+    group = 'repo'
 
     dependsOn 'clean', 'test'
 }
 
 tasks.register('testProd') {
-    description = 'Runs tests pulling the library STRICTLY from Maven Central'
-    group = 'verification'
+    description = 'Runs tests pulling the package from Maven Central'
+    group = 'repo'
 
     dependsOn 'clean', 'test'
+}
+
+// --- Clean ---
+
+tasks.named('clean') {
+    delete 'out'
 }
