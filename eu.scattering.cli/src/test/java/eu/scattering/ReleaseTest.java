@@ -11,10 +11,11 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("JAR version")
-public class VersionTest {
+@DisplayName("Release")
+public class ReleaseTest {
 
     @Test
+    @DisplayName("Version")
     void versionTest() throws Exception {
         String vrExpected = System.getProperty("expected.app.version");
 

@@ -24,6 +24,12 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+tasks.named('clean') {
+    delete 'out'
+
+    dependsOn 'pythonClean'
+}
+
 // --- Fat JAR ---
 
 jar {
@@ -66,12 +72,12 @@ processResources {
 
 // --- Python CLI ---
 
-tasks.register('generatePythonToml', Copy) {
-    group = 'build'
+tasks.register('pythonSetToml', Copy) {
+    group = 'wrapper'
     description = 'Generates pyproject.toml with the current Gradle project version.'
 
-    from rootProject.file('python/pyproject.template.toml')
-    into rootProject.file('python/')
+    from project.file('wrapper/python/pyproject.template.toml')
+    into project.file('wrapper/python/')
 
     rename 'pyproject.template.toml', 'pyproject.toml'
 
@@ -80,18 +86,64 @@ tasks.register('generatePythonToml', Copy) {
     )
 }
 
-tasks.register('syncJarToPython', Sync) {
-    group = 'build'
+tasks.register('pythonSetJar', Sync) {
+    group = 'wrapper'
     description = 'Syncs the shadow JAR to the Python wrapper, removing old versions.'
 
-    dependsOn shadowJar
+    dependsOn('shadowJar')
 
     from shadowJar.archiveFile
-    into rootProject.file('python/src/scatt_cli/jars')
+    into project.file('wrapper/python/src/scatter_cli/jars')
 }
 
-tasks.named('shadowJar') {
-    finalizedBy 'syncJarToPython', 'generatePythonToml'
+tasks.register('pythonPackageBuild', Exec) {
+    group = 'wrapper'
+    description = 'Builds the Python Scatter-CLI package.'
+    workingDir = 'wrapper/python'
+
+    dependsOn('pythonSetToml', 'pythonSetJar')
+
+    def pythonJarDir = file("wrapper/python/src/scatter_cli/jars")
+
+    doFirst {
+        if (!pythonJarDir.exists() || pythonJarDir.listFiles()?.findAll { it.name.endsWith('.jar') }?.isEmpty()) {
+            throw new GradleException("Cannot build Python package: No JAR found in '${pythonJarDir}'.")
+        }
+    }
+
+    commandLine 'python3', '-m', 'build'
+}
+
+tasks.register('pythonClean', Delete) {
+    group = 'wrapper'
+    description = 'Removes generated Python Scatter-CLI build artifacts.'
+
+    delete 'wrapper/python/build'
+    delete 'wrapper/python/dist'
+
+    delete 'wrapper/python/src/scatter_cli.egg-info'
+
+    delete 'wrapper/python/src/scatter_cli/jars'
+
+    delete 'wrapper/python/pyproject.toml'
+}
+
+tasks.register('pythonPackageAdd', Exec) {
+    group = 'wrapper'
+    description = 'Installs the Python Scatter-CLI package.'
+    workingDir = 'wrapper/python'
+
+    dependsOn('pythonPackageBuild')
+
+    commandLine 'python3', '-m', 'pip', 'install', '--force-reinstall', '.'
+}
+
+tasks.register('pythonPackageRemove', Exec) {
+    group = 'wrapper'
+    description = 'Uninstalls the Python Scatter-CLI package.'
+    workingDir = 'wrapper/python'
+
+    commandLine 'python3', '-m', 'pip', 'uninstall', '-y', 'scatter-cli'
 }
 
 // --- Repomix ---

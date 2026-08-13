@@ -3,7 +3,7 @@ requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "scatt-cli"
+name = "scatter-cli"
 version = "${projectVersion}"
 description = "Software for the generation and analysis of synthetic fractal aggregates"
 readme = "README.md"
@@ -36,7 +36,7 @@ Repository = "https://github.com/light-scattering/scattering.core.git"
 "Author ORCID" = "https://orcid.org/0000-0002-4833-2819"
 
 [project.scripts]
-scatt-cli = "scatt_cli.wrapper:run_cli"
+scatter-cli = "scatter_cli.wrapper:run_cli"
 
 [tool.setuptools.package-data]
-"scatt_cli" = ["jars/*.jar"]
+"scatter_cli" = ["jars/*.jar"]

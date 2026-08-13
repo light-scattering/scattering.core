@@ -4,12 +4,14 @@ import eu.scattering.cli.command.MeasureCommand;
 import eu.scattering.cli.util.VersionProvider;
 import picocli.CommandLine;
 
+import java.util.concurrent.Callable;
+
 @CommandLine.Command(name = "scatter-cli",
         mixinStandardHelpOptions = true,
         versionProvider = VersionProvider.class,
         subcommands = { MeasureCommand.class, CommandLine.HelpCommand.class},
         description = "The root command for Scatter-CLI morphological analysis.")
-public class ScatterCLI {
+public class ScatterCLI implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-h", "--help"},
@@ -25,12 +27,14 @@ public class ScatterCLI {
 
     @CommandLine.Option(
             names = {"--diagnostics"},
-            help = true,
             description = "Print build information and exit."
     )
-    public void printDiagnostics(boolean requested) {
+    boolean printDiagnostics;
 
-        if (requested) {
+    @Override
+    public Integer call() {
+
+        if (printDiagnostics) {
             try {
                 VersionProvider provider = new VersionProvider();
                 String[] infoLines = provider.getInfo();
@@ -40,9 +44,18 @@ public class ScatterCLI {
                 }
             } catch (Exception e) {
                 System.err.println("Error reading info: " + e.getMessage());
+
+                return 1;
             }
+
+            return 0;
         }
+
+        CommandLine.usage(this, System.out);
+
+        return 0;
     }
+
 
     public static void main(String[] args) {
         CommandLine cmd = new CommandLine(new ScatterCLI());

@@ -13,15 +13,15 @@ Because this package bundles and delegates commands to the underlying Java execu
 You can install the CLI directly from PyPI:
 
 ```bash
-pip install scatt-cli
+pip install scatter-cli
 ```
 
 ## Usage
 
-Once installed, the `scatt-cli` command is globally available in your terminal. You can pass any standard arguments directly to it:
+Once installed, the `scatter-cli` command is globally available in your terminal. You can pass any standard arguments directly to it:
 
 ```bash
-scatt-cli --help
+scatter-cli --help
 ```
 
 ## Documentation

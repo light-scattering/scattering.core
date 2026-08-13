@@ -30,6 +30,7 @@ dependencies {
     implementation "${targetGroup}:eu.scattering.core.design:${targetVersion}"
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -37,14 +38,18 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// --- Repo test ---
+
 tasks.register('testDev') {
-    description = 'Runs tests pulling the library from mavenLocal()'
+    description = 'Runs tests pulling the library from Maven Local'
     group = 'verification'
+
     dependsOn 'clean', 'test'
 }
 
 tasks.register('testProd') {
     description = 'Runs tests pulling the library STRICTLY from Maven Central'
     group = 'verification'
+
     dependsOn 'clean', 'test'
 }

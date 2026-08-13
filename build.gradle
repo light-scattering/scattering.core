@@ -71,43 +71,6 @@ subprojects {
     }
 }
 
-// --- Python wrapper ---
-
-def pythonProjectDir = file("${rootDir}/python")
-def pythonJarDir = file("${pythonProjectDir}/src/scatt_cli/jars")
-
-tasks.register('buildPackage', Exec) {
-    group = 'Python'
-    description = 'Builds the Python scatt-cli package (generates wheel and sdist).'
-    workingDir = pythonProjectDir
-
-    doFirst {
-        if (!pythonJarDir.exists() || pythonJarDir.listFiles()?.findAll { it.name.endsWith('.jar') }?.isEmpty()) {
-            throw new GradleException("Cannot build Python package: No JAR found in '${pythonJarDir}'.")
-        }
-    }
-
-    commandLine 'python3', '-m', 'build'
-}
-
-tasks.register('installPackage', Exec) {
-    group = 'Python'
-    description = 'Installs the scatt-cli Python package locally for testing.'
-    workingDir = pythonProjectDir
-
-    dependsOn('buildPackage')
-
-    commandLine 'python3', '-m', 'pip', 'install', '--force-reinstall', '.'
-}
-
-tasks.register('uninstallPackage', Exec) {
-    group = 'Python'
-    description = 'Uninstalls the scatt-cli Python package from the local environment.'
-    workingDir = pythonProjectDir
-
-    commandLine 'python3', '-m', 'pip', 'uninstall', '-y', 'scatt-cli'
-}
-
 // --- Release ---
 
 tasks.register("verifyCitationVersion") {
@@ -126,7 +89,7 @@ tasks.register("verifyCitationVersion") {
 
         def versionLine = citationFile.readLines().find { it.startsWith("version:") }
         if (!versionLine) {
-            throw new GradleException("Could not find a 'version:' field in CITATION.cff")
+            throw new GradleException("Could not find the 'version' field in CITATION.cff")
         }
 
         def citationVersion = versionLine.replace("version:", "").replace("\"", "").replace("'", "").trim()

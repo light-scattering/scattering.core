@@ -16,14 +16,15 @@ gradle-local.properties
 secring.gpg
 
 # --- Python ---
-python/src/scatt_cli/jars/*.jar
-python/src/*.egg-info/
-python/pyproject.toml
-python/build/
-python/dist/
-python/**/__pycache__/
-python/**/*.py[cod]
-python/**/*$py.class
+eu.scattering.cli/wrapper/python/src/scatt_cli/jars/*.jar
+eu.scattering.cli/wrapper/python/src/*.egg-info/
+eu.scattering.cli/wrapper/python/pyproject.toml
+eu.scattering.cli/wrapper/python/build/
+eu.scattering.cli/wrapper/python/dist/
+eu.scattering.cli/wrapper/python/**/__pycache__/
+eu.scattering.cli/wrapper/python/**/*.py[cod]
+eu.scattering.cli/wrapper/python/**/*$py.class
+
 isolated/consumer-pypi/venv/
 
 # --- Repomix ---
