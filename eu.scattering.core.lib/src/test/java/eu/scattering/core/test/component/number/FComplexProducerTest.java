@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static eu.scattering.core.test.Config.factory;
+import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)

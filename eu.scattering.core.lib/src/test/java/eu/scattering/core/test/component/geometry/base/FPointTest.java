@@ -12,7 +12,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.Collection;
 
-import static eu.scattering.core.test.Config.*;
+import static eu.scattering.core.test.TestConfig.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)

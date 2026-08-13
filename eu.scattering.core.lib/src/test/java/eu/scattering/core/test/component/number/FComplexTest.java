@@ -7,7 +7,7 @@ import eu.scattering.core.test.component.number.support.FComplexTestHelper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import static eu.scattering.core.test.Config.*;
+import static eu.scattering.core.test.TestConfig.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)

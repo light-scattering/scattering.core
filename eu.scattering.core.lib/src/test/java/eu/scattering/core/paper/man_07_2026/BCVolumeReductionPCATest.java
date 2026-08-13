@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import static eu.scattering.core.test.Config.factory;
+import static eu.scattering.core.test.TestConfig.factory;
 
 @Disabled
 @Tag("sandbox")

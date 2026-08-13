@@ -9,7 +9,7 @@ import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal;
 import org.junit.jupiter.api.*;
 
-import static eu.scattering.core.test.Config.factory;
+import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Statistics export")

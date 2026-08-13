@@ -11,7 +11,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static eu.scattering.core.test.Config.factory;
+import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FPlot")

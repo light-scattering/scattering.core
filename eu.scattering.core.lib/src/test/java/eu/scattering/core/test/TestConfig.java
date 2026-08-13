@@ -6,9 +6,9 @@ import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.impl.factory.ScatterFactoryDef;
 
-public final class Config {
+public final class TestConfig {
 
-    private Config() {}
+    private TestConfig() {}
 
     public static final double epsilon = 1E-8;
 

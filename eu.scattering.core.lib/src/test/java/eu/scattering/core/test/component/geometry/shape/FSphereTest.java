@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static eu.scattering.core.impl.ScatterCoreConfig.*;
-import static eu.scattering.core.test.Config.epsilon;
-import static eu.scattering.core.test.Config.factory;
+import static eu.scattering.core.test.TestConfig.epsilon;
+import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FSphere")

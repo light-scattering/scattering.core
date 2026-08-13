@@ -3,7 +3,7 @@ package eu.scattering.core.test.storage.transfer;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import static eu.scattering.core.test.Config.factory;
+import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 

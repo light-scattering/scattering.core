@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.aggregate.meta.df.structural.FMetaBC;
 import eu.scattering.core.design.statistics.base.FStat;
 import org.junit.jupiter.api.*;
 
-import static eu.scattering.core.test.Config.factory;
+import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @Disabled

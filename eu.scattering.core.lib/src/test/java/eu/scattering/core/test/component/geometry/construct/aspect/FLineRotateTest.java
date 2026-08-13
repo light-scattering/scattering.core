@@ -8,8 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import static eu.scattering.core.test.Config.factory;
-import static eu.scattering.core.test.Config.rot;
+import static eu.scattering.core.test.TestConfig.factory;
+import static eu.scattering.core.test.TestConfig.rot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Timeout(5)

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Timeout;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.scattering.core.test.Config.factory;
-import static eu.scattering.core.test.Config.proto;
+import static eu.scattering.core.test.TestConfig.factory;
+import static eu.scattering.core.test.TestConfig.proto;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
