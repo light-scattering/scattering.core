@@ -1,12 +1,12 @@
+import java.time.LocalDate
+
 plugins {
     id 'base'
     id "com.vanniktech.maven.publish" version "0.37.0" apply false
 }
 
-// --- Subprojects ---
-
 subprojects {
-    apply plugin: 'java-library'
+    apply plugin: 'java'
 
     group = rootProject.group
     version = rootProject.version
@@ -27,6 +27,26 @@ subprojects {
 
     repositories {
         mavenCentral()
+    }
+
+    tasks.register('repomix', Exec) {
+        group = 'build'
+        description = 'Runs Repomix to bundle the src/main/java directory into the build folder.'
+
+        def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
+        def outputFile = layout.buildDirectory.file("repomix-output.xml").get().asFile.absolutePath
+
+        if (isWindows) {
+            executable = 'cmd'
+            args = ['/c', 'npx', 'repomix', 'src/main/java', '--output', outputFile]
+        } else {
+            executable = 'npx'
+            args = ['repomix', 'src/main/java', '--output', outputFile]
+        }
+
+        doFirst {
+            layout.buildDirectory.get().asFile.mkdirs()
+        }
     }
 
     pluginManager.withPlugin("com.vanniktech.maven.publish") {
@@ -68,13 +88,54 @@ subprojects {
                 }
             }
         }
+
+        tasks.register('removeFromMavenLocal', Delete) {
+            group = 'publishing'
+            description = 'Removes the artifact from Maven Local'
+
+            doFirst {
+                if (!project.group || !project.name) {
+                    throw new GradleException("Missing group or name. Cannot safely delete from Maven Local.")
+                }
+            }
+
+            def groupPath = project.group.toString().replace('.', '/')
+            def mavenLocalDir = new File(
+                    System.getProperty('user.home'),
+                    ".m2/repository/${groupPath}/${project.name}"
+            )
+
+            delete mavenLocalDir
+        }
     }
 }
 
 // --- Release ---
 
-tasks.register("verifyCitationVersion") {
-    group = "verification"
+tasks.register('updateDateCitation') {
+    group = 'release'
+    description = 'Updates the date-released field in CITATION.cff to the current date.'
+
+    def citationFile = file("CITATION.cff")
+
+    doLast {
+        if (!citationFile.exists()) {
+            throw new GradleException("CITATION.cff file not found at ${citationFile.absolutePath}")
+        }
+
+        def currentDate = LocalDate.now().toString()
+
+        def updatedContent = citationFile.text.replaceAll(
+                /(?m)^date-released:.*$/,
+                "date-released: ${currentDate}"
+        )
+
+        citationFile.text = updatedContent
+    }
+}
+
+tasks.register("checkVersionCitation") {
+    group = "release"
     description = "Verifies that the version in CITATION.cff matches the project version."
 
     def citationFile = file("CITATION.cff")
@@ -103,8 +164,8 @@ tasks.register("verifyCitationVersion") {
     }
 }
 
-tasks.register("verifyChangelogVersion") {
-    group = "verification"
+tasks.register("checkVersionChangelog") {
+    group = "release"
     description = "Verifies that the latest version in CHANGELOG.md matches the project version."
 
     def changelogFile = file("CHANGELOG.md")
@@ -138,6 +199,61 @@ tasks.register("verifyChangelogVersion") {
     }
 }
 
-tasks.named("check") {
-    dependsOn("verifyCitationVersion", "verifyChangelogVersion")
+tasks.register("prepareCore", GradleBuild) {
+    group = 'release'
+    description = 'Process the ROOT project'
+
+    tasks = ['clean', 'checkVersionChangelog', 'checkVersionCitation', 'updateDateCitation']
+}
+
+tasks.register("prepareDesign", GradleBuild) {
+    group = 'release'
+    description = 'Process the Design project'
+
+    dir = file('eu.scattering.core.design')
+
+    tasks = ['publishToMavenLocal']
+}
+
+tasks.register("prepareLib", GradleBuild) {
+    group = 'release'
+    description = 'Process the LIB project'
+
+    dir = file('eu.scattering.core.lib')
+
+    tasks = ['test', 'publishToMavenLocal']
+}
+
+tasks.register("prepareCli", GradleBuild) {
+    group = 'release'
+    description = 'Process the CLI project'
+
+    dir = file('eu.scattering.cli')
+
+    tasks = ['shadowJar', 'test', 'pythonPackageAdd']
+}
+
+tasks.register("testRepositoryJava", GradleBuild) {
+    group = 'release'
+    description = 'Test the local Java repository'
+
+    dir = file('remote/consumer-maven-central')
+
+    tasks = ['testLocal']
+}
+
+tasks.register("testRepositoryPython", GradleBuild) {
+    group = 'release'
+    description = 'Test the local Python repository'
+
+    dir = file('remote/consumer-pypi')
+
+    tasks = ['testLocal']
+}
+
+tasks.register("buildRelease", GradleBuild) {
+    group = 'release'
+    description = 'Prepare the release'
+
+    tasks = ['prepareCore', 'prepareDesign', 'prepareLib', 'prepareCli', 'testRepositoryJava', 'testRepositoryPython']
 }

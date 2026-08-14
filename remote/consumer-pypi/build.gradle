@@ -27,7 +27,7 @@ tasks.register('venvCreate', Exec) {
 
 tasks.register('installWithPyPI', Exec) {
     description = 'Installs the target version of Scatter-CLI from TestPyPI'
-    group = 'repo'
+    group = 'build'
 
     dependsOn 'venvCreate'
 
@@ -39,16 +39,16 @@ tasks.register('installWithPyPI', Exec) {
 
 // --- Repo test ---
 
-tasks.register('testDev', Exec) {
+tasks.register('testLocal', Exec) {
     description = 'Runs tests against the locally installed package'
-    group = 'repo'
+    group = 'verification'
 
     commandLine systemCli, '--version'
 }
 
 tasks.register('testProd', Exec) {
     description = 'Runs tests pulling the package from TestPyPI'
-    group = 'repo'
+    group = 'verification'
 
     dependsOn 'installWithPyPI'
 
