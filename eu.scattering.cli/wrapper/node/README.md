@@ -1,8 +1,8 @@
 # scatter-cli
 
-This is the official Python command-line wrapper for the `scattering.core` scientific Java library.
+This is the official Node.js command-line wrapper for the `scattering.core` scientific Java library.
 
-It provides a convenient way to install and execute the CLI directly from your Python environment or terminal using `pip`.
+It provides a convenient way to install and execute the CLI directly from your Node.js environment or terminal using `npm`.
 
 ## Requirements
 
@@ -10,10 +10,10 @@ Because this package bundles and delegates commands to the underlying Java execu
 
 ## Installation
 
-You can install the CLI directly from PyPI:
+You can install the CLI directly from NPM:
 
 ```bash
-pip install scatter-cli
+npm install -g scatter-cli
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ scatter-cli --help
 
 ## Documentation
 
-This Python package is a thin wrapper maintained as part of the larger `scattering.core` monorepo. For comprehensive documentation, algorithmic details, and advanced usage examples, please refer to the main repository:
+This Node.js package is a thin wrapper maintained as part of the larger `scattering.core` monorepo. For comprehensive documentation, algorithmic details, and advanced usage examples, please refer to the main repository:
 
 * **[Project Documentation](https://github.com/light-scattering/scattering.core/blob/master/README.md)**
 * **[CLI-Specific Documentation](https://github.com/light-scattering/scattering.core/blob/master/eu.scattering.cli/README.md)**

@@ -25,6 +25,10 @@ eu.scattering.cli/wrapper/python/**/__pycache__/
 eu.scattering.cli/wrapper/python/**/*.py[cod]
 eu.scattering.cli/wrapper/python/**/*$py.class
 
+# --- Node.js ---
+eu.scattering.cli/wrapper/node/dist
+eu.scattering.cli/wrapper/node/package.json
+
 remote/consumer-pypi/venv/
 
 # --- Repomix ---
