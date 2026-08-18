@@ -29,8 +29,6 @@ eu.scattering.cli/wrapper/python/**/*$py.class
 eu.scattering.cli/wrapper/node/dist
 eu.scattering.cli/wrapper/node/package.json
 
-remote/consumer-pypi/venv/
-
 # --- Repomix ---
 
 **/repomix-output.xml

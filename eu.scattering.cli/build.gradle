@@ -30,7 +30,7 @@ test {
 
     systemProperty "expected.app.version", rootProject.version
 
-    dependsOn tasks.named('shadowJar')
+    dependsOn 'shadowJar'
 }
 
 // --- Diagnostics ---
@@ -63,6 +63,14 @@ processResources {
 
 // --- Wrapper / Python ---
 
+tasks.register("pythonVerify") {
+    group = 'wrapper'
+    description = 'Test the Python build.'
+
+    dependsOn 'pythonPackageTest'
+    finalizedBy 'pythonPackageRemove'
+}
+
 tasks.register('pythonSetTemplate', Copy) {
     group = 'wrapper'
     description = 'Generates pyproject.toml with the current Gradle project version.'
@@ -81,7 +89,7 @@ tasks.register('pythonSetJar', Sync) {
     group = 'wrapper'
     description = 'Syncs the shadow JAR to the Python wrapper, removing old versions.'
 
-    dependsOn('shadowJar')
+    dependsOn 'shadowJar'
 
     from shadowJar.archiveFile
     into project.file('wrapper/python/src/scatter_cli/jars')
@@ -92,7 +100,7 @@ tasks.register('pythonPackageBuild', Exec) {
     description = 'Builds the Python Scatter-CLI package.'
     workingDir = 'wrapper/python'
 
-    dependsOn('pythonSetTemplate', 'pythonSetJar')
+    dependsOn 'pythonSetTemplate', 'pythonSetJar'
 
     commandLine 'python3', '-m', 'build'
 }
@@ -116,7 +124,7 @@ tasks.register('pythonPackageAdd', Exec) {
     description = 'Installs the Python Scatter-CLI package.'
     workingDir = 'wrapper/python'
 
-    dependsOn('pythonPackageBuild')
+    dependsOn 'pythonPackageBuild'
 
     commandLine 'python3', '-m', 'pip', 'install', '--force-reinstall', '.'
 }
@@ -131,13 +139,58 @@ tasks.register('pythonPackageRemove', Exec) {
     ignoreExitValue = true
 }
 
+tasks.register('pythonPackageTest', Exec) {
+    group = 'wrapper'
+    description = 'Runs tests against the locally installed package.'
+
+    dependsOn 'pythonPackageAdd'
+
+    def cli = System.getProperty("os.name").toLowerCase().contains("windows") ? "scatter-cli.exe" : "scatter-cli"
+
+    commandLine cli, '--version'
+
+    def outputStream = new ByteArrayOutputStream()
+    standardOutput = outputStream
+
+    doLast {
+        def vrActual = outputStream.toString().trim()
+        def vrExpected = project.version.toString()
+
+        if (!vrActual.contains(vrExpected)) {
+            throw new GradleException("Version mismatch! Expected '${vrExpected}, got: '${vrActual}'")
+        }
+    }
+}
+
+tasks.register('pythonPackageTestPublished', Exec) {
+    group = 'wrapper'
+    description = 'Runs tests against the package from the PyPI registry.'
+
+    def pipx = System.getProperty("os.name").toLowerCase().contains("windows") ? "pipx.exe" : "pipx"
+
+    commandLine pipx, 'run', '--spec', "scatter-cli==${project.version}", 'scatter-cli', '--version'
+
+    def outputStream = new ByteArrayOutputStream()
+    standardOutput = outputStream
+
+    doLast {
+        def vrActual = outputStream.toString().trim()
+        def vrExpected = project.version.toString()
+
+        if (!vrActual.contains(vrExpected)) {
+            throw new GradleException("Version mismatch! Expected '${vrExpected}', got: '${vrActual}'")
+        }
+    }
+}
+
 // --- Wrapper / Node ---
 
-tasks.register("nodeVerify", GradleBuild) {
+tasks.register("nodeVerify") {
     group = 'wrapper'
     description = 'Test the Node.js build.'
 
-    tasks = ['nodeClean', 'nodePackageAdd', 'nodePackageTest', 'nodePackageRemove']
+    dependsOn 'nodePackageTest'
+    finalizedBy 'nodePackageRemove'
 }
 
 tasks.register('nodeSetTemplate', Copy) {
@@ -156,9 +209,9 @@ tasks.register('nodeSetTemplate', Copy) {
 
 tasks.register('nodeSetJar', Sync) {
     group = 'wrapper'
-    description = 'Syncs the shadow JAR to the Node wrapper, removing old versions.'
+    description = 'Syncs the shadow JAR to the Node.js wrapper, removing old versions.'
 
-    dependsOn('shadowJar')
+    dependsOn 'shadowJar'
 
     from shadowJar.archiveFile
     into project.file('wrapper/node/jars')
@@ -169,7 +222,7 @@ tasks.register('nodePackageBuild', Exec) {
     description = 'Builds the Node.js Scatter-CLI package.'
     workingDir = 'wrapper/node'
 
-    dependsOn('nodeSetTemplate', 'nodeSetJar')
+    dependsOn 'nodeSetTemplate', 'nodeSetJar'
 
     def dstDir = file('wrapper/node/dist')
 
@@ -184,7 +237,7 @@ tasks.register('nodePackageBuild', Exec) {
 
 tasks.register('nodeClean', Delete) {
     group = 'wrapper'
-    description = 'Removes generated Node Scatter-CLI build artifacts.'
+    description = 'Removes generated Node.js Scatter-CLI build artifacts.'
 
     delete 'wrapper/node/dist'
     delete 'wrapper/node/jars'
@@ -196,7 +249,7 @@ tasks.register('nodePackageAdd', Exec) {
     description = 'Installs the Node.js Scatter-CLI package.'
     workingDir = 'wrapper/node'
 
-    dependsOn('nodePackageBuild')
+    dependsOn 'nodePackageBuild'
 
     def dstDir = project.file('wrapper/node/dist')
     def tgzFile = new File(dstDir, "scatter-cli-${project.version}.tgz")
@@ -221,6 +274,8 @@ tasks.register('nodePackageTest', Exec) {
     group = 'wrapper'
     description = 'Runs tests against the locally installed package.'
 
+    dependsOn 'nodePackageAdd'
+
     def cli = System.getProperty("os.name").toLowerCase().contains("windows") ? "scatter-cli.cmd" : "scatter-cli"
 
     commandLine cli, '--version'
@@ -233,7 +288,7 @@ tasks.register('nodePackageTest', Exec) {
         def vrExpected = project.version.toString()
 
         if (!vrActual.contains(vrExpected)) {
-            throw new GradleException("Version mismatch! Expected version '${vrExpected}' to be in output, but got: '${vrActual}'")
+            throw new GradleException("Version mismatch! Expected '${vrExpected}', got: '${vrActual}'")
         }
     }
 }
@@ -245,6 +300,18 @@ tasks.register('nodePackageTestPublished', Exec) {
     def npx = System.getProperty("os.name").toLowerCase().contains("windows") ? "npx.cmd" : "npx"
 
     commandLine npx, '--yes', "scatter-cli@${project.version}", '--version'
+
+    def outputStream = new ByteArrayOutputStream()
+    standardOutput = outputStream
+
+    doLast {
+        def vrActual = outputStream.toString().trim()
+        def vrExpected = project.version.toString()
+
+        if (!vrActual.contains(vrExpected)) {
+            throw new GradleException("Version mismatch! Expected '${vrExpected}', got: '${vrActual}'")
+        }
+    }
 }
 
 // --- Clean ---
@@ -252,5 +319,5 @@ tasks.register('nodePackageTestPublished', Exec) {
 tasks.named('clean') {
     delete 'out'
 
-    dependsOn('pythonClean', 'pythonPackageRemove', 'nodeClean')
+    dependsOn 'pythonClean', 'pythonPackageRemove', 'nodeClean', 'nodePackageRemove'
 }

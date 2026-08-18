@@ -12,5 +12,5 @@ dependencies {
 tasks.named('clean') {
     delete 'out'
 
-    dependsOn('removeFromMavenLocal')
+    dependsOn 'removeFromMavenLocal'
 }

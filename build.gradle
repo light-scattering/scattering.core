@@ -33,6 +33,8 @@ subprojects {
         group = 'build'
         description = 'Runs Repomix to bundle the src/main/java directory into the build folder.'
 
+        dependsOn 'test'
+
         def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
         def outputFile = layout.buildDirectory.file("repomix-output.xml").get().asFile.absolutePath
 
@@ -112,28 +114,6 @@ subprojects {
 
 // --- Release ---
 
-tasks.register('updateDateCitation') {
-    group = 'release'
-    description = 'Updates the date-released field in CITATION.cff to the current date.'
-
-    def citationFile = file("CITATION.cff")
-
-    doLast {
-        if (!citationFile.exists()) {
-            throw new GradleException("CITATION.cff file not found at ${citationFile.absolutePath}")
-        }
-
-        def currentDate = LocalDate.now().toString()
-
-        def updatedContent = citationFile.text.replaceAll(
-                /(?m)^date-released:.*$/,
-                "date-released: ${currentDate}"
-        )
-
-        citationFile.text = updatedContent
-    }
-}
-
 tasks.register("checkVersionCitation") {
     group = "release"
     description = "Verifies that the version in CITATION.cff matches the project version."
@@ -199,61 +179,67 @@ tasks.register("checkVersionChangelog") {
     }
 }
 
-tasks.register("prepareCore", GradleBuild) {
+tasks.register('updateDataCitation') {
+    group = 'release'
+    description = 'Updates the date-released field in CITATION.cff to the current date.'
+
+    dependsOn 'checkVersionCitation', 'checkVersionChangelog'
+
+    def citationFile = file("CITATION.cff")
+
+    doLast {
+        if (!citationFile.exists()) {
+            throw new GradleException("CITATION.cff file not found at ${citationFile.absolutePath}")
+        }
+
+        def currentDate = LocalDate.now().toString()
+
+        def updatedContent = citationFile.text.replaceAll(
+                /(?m)^date-released:.*$/,
+                "date-released: ${currentDate}"
+        )
+
+        citationFile.text = updatedContent
+    }
+}
+
+tasks.register("prepareCore") {
     group = 'release'
     description = 'Process the ROOT project'
 
-    tasks = ['clean', 'checkVersionChangelog', 'checkVersionCitation', 'updateDateCitation']
+    dependsOn 'checkVersionChangelog', 'checkVersionCitation', 'updateDataCitation'
 }
 
-tasks.register("prepareDesign", GradleBuild) {
-    group = 'release'
-    description = 'Process the Design project'
-
-    dir = file('eu.scattering.core.design')
-
-    tasks = ['publishToMavenLocal']
-}
-
-tasks.register("prepareLib", GradleBuild) {
+tasks.register("prepareLib") {
     group = 'release'
     description = 'Process the LIB project'
 
-    dir = file('eu.scattering.core.lib')
-
-    tasks = ['test', 'publishToMavenLocal']
+    mustRunAfter 'clean'
+    dependsOn ':eu.scattering.core.design:publishToMavenLocal', ':eu.scattering.core.lib:publishToMavenLocal'
 }
 
-tasks.register("prepareCli", GradleBuild) {
+tasks.register("prepareCli") {
     group = 'release'
     description = 'Process the CLI project'
 
-    dir = file('eu.scattering.cli')
-
-    tasks = ['shadowJar', 'test', 'pythonPackageAdd']
+    mustRunAfter 'prepareLib'
+    dependsOn ':eu.scattering.cli:shadowJar', ':eu.scattering.cli:test', ':eu.scattering.cli:nodeVerify', ':eu.scattering.cli:pythonVerify'
 }
 
 tasks.register("testRepositoryJava", GradleBuild) {
     group = 'release'
     description = 'Test the local Java repository'
 
+    mustRunAfter 'prepareLib'
+
     dir = file('remote/consumer-maven-central')
 
     tasks = ['testLocal']
 }
 
-tasks.register("testRepositoryPython", GradleBuild) {
-    group = 'release'
-    description = 'Test the local Python repository'
-
-    dir = file('remote/consumer-pypi')
-
-    tasks = ['testLocal']
-}
-
-tasks.register("buildRelease", GradleBuild) {
+tasks.register("buildRelease") {
     group = 'release'
     description = 'Prepare the release'
 
-    tasks = ['prepareCore', 'prepareDesign', 'prepareLib', 'prepareCli', 'testRepositoryJava', 'testRepositoryPython']
+    dependsOn 'clean', 'prepareCore', 'prepareLib', 'prepareCli', 'testRepositoryJava'
 }
