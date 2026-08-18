@@ -51,6 +51,30 @@ processResources {
     }
 }
 
+// --- Remote / Java ---
+
+tasks.register('javaPackageTest', Exec) {
+    description = 'Runs tests against the locally installed package.'
+    group = 'remote'
+
+    workingDir = file('remote')
+
+    def gradlew = System.getProperty("os.name").toLowerCase().contains("windows") ? "gradlew.bat" : "./gradlew"
+
+    commandLine gradlew, 'packageTest'
+}
+
+tasks.register('javaPackageTestPublished', Exec) {
+    description = 'Runs tests against the package from the Maven Central repository.'
+    group = 'remote'
+
+    workingDir = file('remote')
+
+    def gradlew = System.getProperty("os.name").toLowerCase().contains("windows") ? "gradlew.bat" : "./gradlew"
+
+    commandLine gradlew, 'packageTestPublished'
+}
+
 // --- Clean ---
 
 tasks.named('clean') {

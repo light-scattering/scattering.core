@@ -16,7 +16,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-boolean isProdTest = gradle.startParameter.taskNames.any { it.contains('testProd') }
+boolean isProdTest = gradle.startParameter.taskNames.any { it.contains('javaPackageTestPublished') }
 
 repositories {
     if (!isProdTest) {
@@ -34,22 +34,22 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
 }
 
-// --- Repo test ---
+// --- Remote / Java ---
 
-tasks.register('testLocal') {
-    description = 'Runs tests against the locally installed package'
-    group = 'verification'
+tasks.register('packageTest') {
+    description = 'Runs tests against the locally installed package.'
+    group = 'remote'
 
     dependsOn 'clean', 'test'
 }
 
-tasks.register('testProd') {
-    description = 'Runs tests pulling the package from Maven Central'
-    group = 'verification'
+tasks.register('packageTestPublished') {
+    description = 'Runs tests against the package from the Maven Central repository.'
+    group = 'remote'
 
     dependsOn 'clean', 'test'
 }

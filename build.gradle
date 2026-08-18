@@ -163,12 +163,12 @@ tasks.register("checkVersionChangelog") {
             throw new GradleException("Could not find any release headings in ${changelogFile.name}")
         }
 
-        def matcher = versionLine =~ /## \[([^\]]+)\]/
-        if (!matcher) {
+        def matcher = versionLine =~ /## \[([^]]+)]/
+        if (!matcher.find()) {
             throw new GradleException("Malformed release heading in ${changelogFile.name}: '${versionLine}'")
         }
 
-        def changelogVersion = matcher[0][1]
+        def changelogVersion = matcher.group(1)
         def currentVersion = project.version.toString()
 
         if (changelogVersion != currentVersion) {
@@ -205,14 +205,14 @@ tasks.register('updateDataCitation') {
 
 tasks.register("prepareCore") {
     group = 'release'
-    description = 'Process the ROOT project'
+    description = 'Process the ROOT project.'
 
     dependsOn 'checkVersionChangelog', 'checkVersionCitation', 'updateDataCitation'
 }
 
 tasks.register("prepareLib") {
     group = 'release'
-    description = 'Process the LIB project'
+    description = 'Process the LIB project.'
 
     mustRunAfter 'clean'
     dependsOn ':eu.scattering.core.design:publishToMavenLocal', ':eu.scattering.core.lib:publishToMavenLocal'
@@ -228,18 +228,34 @@ tasks.register("prepareCli") {
 
 tasks.register("testRepositoryJava", GradleBuild) {
     group = 'release'
-    description = 'Test the local Java repository'
+    description = 'Test the local Java repository.'
 
     mustRunAfter 'prepareLib'
-
-    dir = file('remote/consumer-maven-central')
-
-    tasks = ['testLocal']
+    dependsOn ':eu.scattering.core.lib:javaPackageTest'
 }
 
-tasks.register("buildRelease") {
+tasks.register("verify") {
     group = 'release'
     description = 'Prepare the release'
 
     dependsOn 'clean', 'prepareCore', 'prepareLib', 'prepareCli', 'testRepositoryJava'
+}
+
+// --- Clean ---
+
+tasks.register('cleanRemote', Exec) {
+    group = 'build'
+    description = 'Cleans the isolated consumer project.'
+
+    workingDir = file('eu.scattering.core.lib/remote')
+
+    def gradlew = System.getProperty("os.name").toLowerCase().contains("windows") ? "gradlew.bat" : "./gradlew"
+
+    commandLine gradlew, 'clean'
+}
+
+tasks.named('clean', Delete) {
+    delete layout.buildDirectory
+
+    dependsOn 'cleanRemote'
 }
