@@ -1,6 +1,6 @@
 # Scattering Core CLI
 
-The Scattering Core (**ScatterCore**) CLI provides a standalone command-line interface for the highly optimized ScatterCore Java library.  In its current state, this CLI tool is designed specifically for the morphological analysis and executing fractal measurement methods on synthetic aggregates.
+The Scattering Core CLI provides a standalone command-line interface for the Scattering Core library.  In its current state, this CLI tool is designed specifically for the morphological analysis and executing fractal measurement methods on synthetic aggregates.
 
 > **Note:**
 > This documentation is actively being expanded.
@@ -9,36 +9,60 @@ The Scattering Core (**ScatterCore**) CLI provides a standalone command-line int
 
 ## Table of contents
 
-- [Project structure](#project-structure)
-- [Measure](#measure)
-  - [Help and available metrics](#help-and-available-metrics)
-  - [Key options](#key-options)
-  - [Input file](#input-file)
-  - [Precision and buffers](#precision-and-buffers)
-  - [Full example](#full-example)
+- [Getting started](#getting-started)
+  - [Java](#java)
+  - [Wrappers](#wrappers)
+- [Commands](#commands)
+  - [Measure](#measure)
+    - [Help and available metrics](#help-and-available-metrics)
+    - [Key options](#key-options)
+    - [Input file](#input-file)
+    - [Precision and buffers](#precision-and-buffers)
+    - [Full example](#full-example)
 
-## Project structure
+## Getting started
 
-The CLI is organized around specific subcommands. At the moment, only the `measure` module is implemented and available for use.
+You can run the CLI either directly via the Java archive or by using one of the wrappers.
 
-## Measure
+### Java
 
-The `measure` command calculates the morphological parameters of a loaded aggregate. To invoke it, type:
-
+To invoke the CLI directly using the Java runtime, type:
 ```bash
-java -jar scatt-cli.jar measure [options] [file]
+java -jar scatter-cli.jar <command> [options] [file]
 ```
 
-### Help and available metrics
+### Wrappers
+
+If you installed the CLI through package managers, the Java runtime execution is handled for you automatically. You can omit the `java -jar` prefix and simply use the global command:
+```bash
+scatter-cli <command> [options] [file]
+```
+
+For installation instructions and wrapper-specific documentation, please visit their respective repositories:
+* **[Node.js (NPM)](https://www.npmjs.com/package/@light-scattering/scatter-cli)**
+* **[Python (PyPI)](https://pypi.org/project/scatter-cli/)**
+
+## Commands
+
+The CLI is organized around specific commands. At the moment, only the `measure` module is implemented and available for use.
+
+### Measure
+
+The `measure` command calculates the morphological parameters of a loaded aggregate. To invoke it, type:
+```bash
+java -jar scatter-cli.jar measure [options] [file]
+```
+
+#### Help and available metrics
 
 To see a complete list of all available morphological parameters and command options, you can use the built-in help flag:
 ```bash
-java -jar scatt-cli.jar measure --help
+java -jar scatter-cli.jar measure --help
 ```
 
 This will output the documentation directly to your terminal, including a comma-separated list of every valid metric tag (e.g., `np`, `rp`, `df-bc`, etc.) that can be passed to the `--metrics` option.
 
-### Key options
+#### Key options
 
 - **`-m`, `--metrics`**: Defines the list of parameters to calculate. To perform multiple measurements simultaneously, separate the metric tags with a space. For example, to measure the three static fractal parameters, type:
 ```bash
@@ -49,11 +73,11 @@ measure --metrics df-bc df-mr df-dc
 measure --format multisphere
 ```
 
-### Input file
+#### Input file
 
 The final positional argument is the path to your input file. If omitted (or if `-` is provided), the CLI will read directly from standard input (`stdin`).
 
-### Precision and buffers
+#### Precision and buffers
 
 For fine-grained control over morphological calculations, you can configure the geometric tolerance (`epsilon`), grid resolution (`delta`), and pre-allocate memory buffers. These settings directly impact algorithms relying on point connectivity, precise overlap detection, and discrete volumetric meshes.
 
@@ -63,16 +87,16 @@ These parameters can be configured on the fly using command-line arguments durin
 *   **`-d, --delta`**: Discrete Tolerance (default: `1E-2`).
 *   **`-b, --buffer`**: Reusable data buffer.
 
-### Full example
+#### Full example
 
 A complete command to measure the fractal dimensions of a multisphere file named `aggregate.geo`:
 ```bash
-java -jar scatt-cli.jar measure --metrics df-bc df-mr df-dc --format multisphere aggregate.geo
-java -jar scatt-cli.jar measure -m df-bc df-mr df-dc -f multisphere aggregate.geo
+java -jar scatter-cli.jar measure --metrics df-bc df-mr df-dc --format multisphere aggregate.geo
+java -jar scatter-cli.jar measure -m df-bc df-mr df-dc -f multisphere aggregate.geo
 ```
 
 A complete command to measure the mass center using the mesh decomposition of a multisphere file named `aggregate.geo`:
 ```bash
-java -jar scatt-cli.jar measure --delta 0.5 --buffer 1000 --metrics cm-mesh --format multisphere aggregate.geo
-java -jar scatt-cli.jar measure -d 0.5 -b 1000 -m cm-mesh -f multisphere aggregate.geo
+java -jar scatter-cli.jar measure --delta 0.5 --buffer 1000 --metrics cm-mesh --format multisphere aggregate.geo
+java -jar scatter-cli.jar measure -d 0.5 -b 1000 -m cm-mesh -f multisphere aggregate.geo
 ```
