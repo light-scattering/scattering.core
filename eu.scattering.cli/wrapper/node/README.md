@@ -6,11 +6,11 @@ It provides a convenient way to install and execute the CLI directly from your N
 
 ## Requirements
 
-Because this package bundles and delegates commands to the underlying Java executable, you must have a **Java Runtime Environment** (version 21 or higher) installed and accessible in your system's `PATH`.
+Because this package bundles and delegates commands to the underlying Java executable, you must have JRE 21+ installed and accessible in your system's `PATH`.
 
 ## Installation
 
-You can install the CLI directly from `npm`:
+You can install the CLI directly from NPM:
 ```bash
 npm install -g @light-scattering/scatter-cli
 ```
@@ -33,7 +33,3 @@ This Node.js package is a thin wrapper maintained as part of the larger `scatter
 
 * **[Project Documentation](https://github.com/light-scattering/scattering.core/blob/master/README.md)**
 * **[CLI-Specific Documentation](https://github.com/light-scattering/scattering.core/blob/master/eu.scattering.cli/README.md)**
-
-## License
-
-This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.

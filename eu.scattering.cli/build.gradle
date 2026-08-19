@@ -183,6 +183,36 @@ tasks.register('pythonPackageTestRemote', Exec) {
     }
 }
 
+tasks.register('pythonPackagePublish', Exec) {
+    group = 'wrapper'
+    description = 'Publishes the package to the PyPI repository.'
+    workingDir = 'wrapper/python'
+
+    dependsOn 'pythonPackageBuild', 'pythonPackagePublishDryRun'
+
+    def token = findProperty('pypiToken')
+    if (token) {
+        environment 'TWINE_USERNAME', '__token__'
+        environment 'TWINE_PASSWORD', token
+    } else {
+        doFirst {
+            throw new GradleException("Cannot publish: 'pypiToken' is missing from ~/.gradle/gradle.properties")
+        }
+    }
+
+    commandLine 'python3', '-m', 'twine', 'upload', 'dist/*'
+}
+
+tasks.register('pythonPackagePublishDryRun', Exec) {
+    group = 'wrapper'
+    description = 'Simulates publishing by verifying the Python distribution metadata.'
+    workingDir = 'wrapper/python'
+
+    dependsOn 'pythonPackageBuild'
+
+    commandLine 'python3', '-m', 'twine', 'check', 'dist/*'
+}
+
 // --- Wrapper / Node ---
 
 tasks.register("nodeVerify") {
@@ -351,22 +381,6 @@ tasks.register('nodePackagePublish', Exec) {
     def npm = System.getProperty("os.name").toLowerCase().contains("windows") ? "npm.cmd" : "npm"
 
     commandLine npm, 'publish', '--access', 'public', "--//registry.npmjs.org/:_authToken=${token}"
-}
-
-tasks.register('nodePackageUnpublish', Exec) {
-    group = 'wrapper'
-    description = 'Removes the package from the NPM repository (works within 72 hours of publishing).'
-
-    def token = findProperty('npmToken')
-    if (!token) {
-        doFirst {
-            throw new GradleException("Cannot publish: 'npmToken' is missing from ~/.gradle/gradle.properties")
-        }
-    }
-
-    def npm = System.getProperty("os.name").toLowerCase().contains("windows") ? "npm.cmd" : "npm"
-
-    commandLine npm, 'unpublish', "@light-scattering/scatter-cli@${project.version}", '--force', "--//registry.npmjs.org/:_authToken=${token}"
 }
 
 // --- Clean ---
