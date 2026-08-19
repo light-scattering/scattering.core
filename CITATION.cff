@@ -28,7 +28,7 @@ license: AGPL-3.0-only
 repository-code: "https://github.com/light-scattering/scattering.core"
 
 version: "0.3.1"
-date-released: 2026-08-18
+date-released: 2026-08-19
 
 preferred-citation:
   type: article

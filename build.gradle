@@ -84,7 +84,6 @@ subprojects {
                     developer {
                         id = 'krzysztofskorupski'
                         name = 'Krzysztof Skorupski'
-                        email = 'krzysztof.skorupski@scattering.eu'
                         url = 'https://orcid.org/0000-0002-4833-2819'
                     }
                 }

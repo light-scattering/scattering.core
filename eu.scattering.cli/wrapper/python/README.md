@@ -6,12 +6,11 @@ It provides a convenient way to install and execute the CLI directly from your P
 
 ## Requirements
 
-Because this package bundles and delegates commands to the underlying Java executable, you must have a **Java Runtime Environment (JRE)** (Java 21 or higher recommended) installed and accessible in your system's `PATH`.
+Because this package bundles and delegates commands to the underlying Java executable, you must have a **Java Runtime Environment** (version 21 or higher) installed and accessible in your system's `PATH`.
 
 ## Installation
 
 You can install the CLI directly from PyPI:
-
 ```bash
 pip install scatter-cli
 ```
@@ -19,14 +18,13 @@ pip install scatter-cli
 ## Usage
 
 Once installed, the `scatter-cli` command is globally available in your terminal. You can pass any standard arguments directly to it:
-
 ```bash
 scatter-cli --help
 ```
 
 ## Documentation
 
-This Python package is a thin wrapper maintained as part of the larger `scattering.core` monorepo. For comprehensive documentation, algorithmic details, and advanced usage examples, please refer to the main repository:
+This Python package is a thin wrapper maintained as part of the larger `scattering.core` repository. For comprehensive documentation, algorithmic details, and advanced usage examples, please refer to:
 
 * **[Project Documentation](https://github.com/light-scattering/scattering.core/blob/master/README.md)**
 * **[CLI-Specific Documentation](https://github.com/light-scattering/scattering.core/blob/master/eu.scattering.cli/README.md)**

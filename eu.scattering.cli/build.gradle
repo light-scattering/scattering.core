@@ -162,7 +162,7 @@ tasks.register('pythonPackageTest', Exec) {
     }
 }
 
-tasks.register('pythonPackageTestPublished', Exec) {
+tasks.register('pythonPackageTestRemote', Exec) {
     group = 'wrapper'
     description = 'Runs tests against the package from the PyPI registry.'
 
@@ -252,7 +252,7 @@ tasks.register('nodePackageAdd', Exec) {
     dependsOn 'nodePackageBuild'
 
     def dstDir = project.file('wrapper/node/dist')
-    def tgzFile = new File(dstDir, "scatter-cli-${project.version}.tgz")
+    def tgzFile = new File(dstDir, "light-scattering-scatter-cli-${project.version}.tgz")
 
     def npmExe = System.getProperty("os.name").toLowerCase().contains("windows") ? 'npm.cmd' : 'npm'
 
@@ -265,7 +265,7 @@ tasks.register('nodePackageRemove', Exec) {
 
     def npmExe = System.getProperty("os.name").toLowerCase().contains("windows") ? 'npm.cmd' : 'npm'
 
-    commandLine npmExe, 'uninstall', '-g', 'scatter-cli'
+    commandLine npmExe, 'uninstall', '-g', '@light-scattering/scatter-cli'
 
     ignoreExitValue = true
 }
@@ -293,25 +293,80 @@ tasks.register('nodePackageTest', Exec) {
     }
 }
 
-tasks.register('nodePackageTestPublished', Exec) {
+tasks.register('nodePackageTestRemote', Exec) {
     group = 'wrapper'
     description = 'Runs tests against the package from the NPM registry.'
 
     def npx = System.getProperty("os.name").toLowerCase().contains("windows") ? "npx.cmd" : "npx"
 
-    commandLine npx, '--yes', "scatter-cli@${project.version}", '--version'
+    commandLine npx, '--yes', '--package', "@light-scattering/scatter-cli@${project.version}", 'scatter-cli', '--version'
 
-    def outputStream = new ByteArrayOutputStream()
-    standardOutput = outputStream
+    def outStream = new ByteArrayOutputStream()
+    def errStream = new ByteArrayOutputStream()
+
+    standardOutput = outStream
+    errorOutput = errStream
 
     doLast {
-        def vrActual = outputStream.toString().trim()
+        def err = errStream.toString().trim()
+        def vrActual = outStream.toString().trim()
         def vrExpected = project.version.toString()
 
+        if (!err.isEmpty() && vrActual.isEmpty()) {
+            throw new GradleException("NPX Error: ${err}")
+        }
+
         if (!vrActual.contains(vrExpected)) {
-            throw new GradleException("Version mismatch! Expected '${vrExpected}', got: '${vrActual}'")
+            throw new GradleException("Version mismatch!\nExpected: '${vrExpected}'\nGot stdout: '${vrActual}'\nGot stderr: '${err}'")
         }
     }
+}
+
+tasks.register('nodePackagePublishDryRun', Exec) {
+    group = 'wrapper'
+    description = 'Simulates publishing the package to the NPM repository.'
+    workingDir = 'wrapper/node'
+
+    dependsOn 'nodeSetTemplate', 'nodeSetJar'
+
+    def npm = System.getProperty("os.name").toLowerCase().contains("windows") ? "npm.cmd" : "npm"
+
+    commandLine npm, 'publish', '--dry-run', '--access', 'public'
+}
+
+tasks.register('nodePackagePublish', Exec) {
+    group = 'wrapper'
+    description = 'Publishes the package to the NPM repository.'
+    workingDir = 'wrapper/node'
+
+    dependsOn 'nodeSetTemplate', 'nodeSetJar'
+
+    def token = findProperty('npmToken')
+    if (!token) {
+        doFirst {
+            throw new GradleException("Cannot publish: 'npmToken' is missing from ~/.gradle/gradle.properties")
+        }
+    }
+
+    def npm = System.getProperty("os.name").toLowerCase().contains("windows") ? "npm.cmd" : "npm"
+
+    commandLine npm, 'publish', '--access', 'public', "--//registry.npmjs.org/:_authToken=${token}"
+}
+
+tasks.register('nodePackageUnpublish', Exec) {
+    group = 'wrapper'
+    description = 'Removes the package from the NPM repository (works within 72 hours of publishing).'
+
+    def token = findProperty('npmToken')
+    if (!token) {
+        doFirst {
+            throw new GradleException("Cannot publish: 'npmToken' is missing from ~/.gradle/gradle.properties")
+        }
+    }
+
+    def npm = System.getProperty("os.name").toLowerCase().contains("windows") ? "npm.cmd" : "npm"
+
+    commandLine npm, 'unpublish', "@light-scattering/scatter-cli@${project.version}", '--force', "--//registry.npmjs.org/:_authToken=${token}"
 }
 
 // --- Clean ---

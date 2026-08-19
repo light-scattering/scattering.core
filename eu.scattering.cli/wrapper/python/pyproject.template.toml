@@ -14,9 +14,7 @@ keywords = [
     "morphological analysis", 
     "computational physics", 
     "fractal aggregates", 
-    "light scattering", 
-    "science", 
-    "cli"
+    "light scattering"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -26,7 +24,7 @@ classifiers = [
 ]
 
 authors = [
-  { name = "Krzysztof Skorupski", email = "krzysztof.skorupski@scattering.eu" }
+  { name = "Krzysztof Skorupski" }
 ]
 
 [project.urls]

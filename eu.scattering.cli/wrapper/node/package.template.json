@@ -1,5 +1,5 @@
 {
-  "name": "scatter-cli",
+  "name": "@light-scattering/scatter-cli",
   "version": "${projectVersion}",
   "description": "Software for the generation and analysis of synthetic fractal aggregates",
   "type": "module",
@@ -7,27 +7,28 @@
   "bin": {
     "scatter-cli": "src/scatter-cli.js"
   },
+  "files": [
+    "src/",
+    "jars/"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
     "name": "Krzysztof Skorupski",
-    "email": "krzysztof.skorupski@scattering.eu",
     "url": "https://orcid.org/0000-0002-4833-2819"
   },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/light-scattering/scattering.core.git"
+    "url": "git+https://github.com/light-scattering/scattering.core.git"
   },
   "homepage": "https://github.com/light-scattering/scattering.core",
   "keywords": [
     "morphological analysis",
     "computational physics",
     "fractal aggregates",
-    "light scattering",
-    "science",
-    "cli"
+    "light scattering"
   ],
   "engines": {
     "node": ">=14.0.0"
