@@ -1,15 +1,24 @@
 # Scattering Core
 
-Scattering Core (**ScatterCore**) is a highly optimized Java library designed for the generation and morphological analysis of synthetic fractal aggregates.
+[![Maven Central](https://img.shields.io/maven-central/v/eu.scattering/eu.scattering.core.lib.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/eu.scattering/eu.scattering.core.lib)
+[![PyPI](https://img.shields.io/pypi/v/scatter-cli.svg?label=PyPI)](https://pypi.org/project/scatter-cli/)
+[![NPM](https://img.shields.io/npm/v/@light-scattering/scatter-cli.svg?label=NPM)](https://www.npmjs.com/package/@light-scattering/scatter-cli)
+
+Scattering Core is a highly optimized Java library designed for the generation and morphological analysis of synthetic fractal aggregates.
 
 > **Note:**
-> This documentation is actively being expanded. It currently focuses on the specific methods required to reproduce the findings of our recently submitted manuscript.
+> This documentation is actively being expanded. It currently focuses on the specific methods required to reproduce the findings of the recently submitted manuscript.
 
 ## Table of contents
 
+- [Ecosystem and installation](#ecosystem-and-installation)
+  - [Core library](#core-library)
+  - [CLI and wrappers](#cli-and-wrappers)
 - [Background and scope](#background-and-scope)
 - [Development and AI transparency](#development-and-ai-transparency)
-- [How to cite](#how-to-cite)
+- [Roadmap](#roadmap)
+  - [Web interface and containerization](#web-interface-and-containerization)
+  - [Modularization and licensing](#modularization-and-licensing)
 - [Project structure](#project-structure)
 - [Engine initialization](#engine-initialization)
 - [Computational parameters](#computational-parameters)
@@ -28,35 +37,94 @@ Scattering Core (**ScatterCore**) is a highly optimized Java library designed fo
         - [Kinetic methods](#kinetic-methods)
             - [PC aggregation](#particle-cluster-pc-aggregation)
             - [CC aggregation](#cluster-cluster-cc-aggregation)
+- [How to cite](#how-to-cite)
 - [License](#license)
+
+## Ecosystem and installation
+
+Depending on your workflow, you can interact with Scattering Core at three different levels: integrating the advanced core library, running the standalone Java CLI, or using a language-specific wrapper.
+
+### Core library
+
+The core library provides the most advanced and complete functionality. It is published to the Maven Central Repository and consists of two dependencies: `lib` and `design`.
+
+You can include them in your Java projects using Gradle or Maven by replacing `VERSION` with the latest release number:
+
+**Gradle:**
+
+```groovy
+implementation 'eu.scattering:eu.scattering.core.lib:VERSION'
+implementation 'eu.scattering:eu.scattering.core.design:VERSION'
+```
+
+**Maven:**
+
+```xml
+<dependency>
+    <groupId>eu.scattering</groupId>
+    <artifactId>eu.scattering.core.lib</artifactId>
+    <version>VERSION</version>
+</dependency>
+<dependency>
+    <groupId>eu.scattering</groupId>
+    <artifactId>eu.scattering.core.design</artifactId>
+    <version>VERSION</version>
+</dependency>
+```
+
+### CLI and wrappers
+
+While the core library offers complete programmatic control, there is also standalone Java CLI that offers simplified, ready-to-use functionality for common morphological analysis tasks.
+
+If you want to run this CLI from your terminal without manually handling Java archives, we provide official command-line wrappers for Node.js and Python. These wrappers automatically bundle and execute the underlying Java CLI for you:
+
+* **Node.js (NPM):** [`@light-scattering/scatter-cli`](https://www.npmjs.com/package/@light-scattering/scatter-cli)
+* **Python (PyPI):** [`scatter-cli`](https://pypi.org/project/scatter-cli/)
+
+For detailed instructions on using the command-line tools, please refer to the [CLI documentation](eu.scattering.cli/README.md).
+
+### CLI wrappers
+
+If you just want to run morphological analyses from your terminal without managing Java dependencies, you can use the standalone command-line wrappers for Node.js and Python.
+
+These wrappers handle the Java runtime execution for you and can be installed via your preferred package manager:
+* **[Node.js (NPM)](https://www.npmjs.com/package/@light-scattering/scatter-cli)**
+* **[Python (PyPI)](https://pypi.org/project/scatter-cli/)**
+
+For detailed instructions on using the CLI, please refer to the [CLI documentation](cli/README.md).
 
 ## Background and scope
 
-The core aggregation elements were built upon the foundation of my previous project, FLAGE (Fractal-Like Aggregate Generation Environment). However, ScatterCore is not a simple port - the entire codebase was rewritten almost from scratch to be modernized, optimized, and extensible.
+The core aggregation elements were built upon the foundation of my previous project, FLAGE (Fractal-Like Aggregate Generation Environment). However, is not a simple port - the entire codebase was rewritten almost from scratch to be modernized, optimized, and extensible.
 
-Because the project is massive, and I am currently the sole developer, this manual focuses strictly on high-level features, such as aggregation models and morphological analysis. Low-level mathematical primitives (like `FComplex`, `FPoint`, and `FVector`) are excluded from this guide. If you wish to utilize them in your own projects, please refer to the `design` module, where all public interfaces are clearly defined.
+Because the project is massive, and I am currently the sole developer, this manual focuses strictly on high-level features, such as aggregation models and morphological analysis. Low-level elements (like `FComplex`, `FPoint`, and `FVector`) are excluded from this guide. If you wish to utilize them in your own projects, please refer to the `design` module, where all interfaces are clearly defined.
 
 ## Development and AI transparency
 
-This project began several years ago, well before the LLM era. As a result, the architectural foundation was built the old-school way: through academic literature, official documentation, and Stack Overflow.
+This project began several years ago, well before the LLM era. As a result, the architectural foundation was built the old-school way: through academic literature, official documentation, and naturally Stack Overflow.
 
 During the later stages of development, maintaining the scientific correctness and cleanliness of the code remained the highest priority. AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as calculating the gyration tensor and performing PCA).
 
-To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. Furthermore, the generated code was only used as a baseline. Every single line within those marked methods was subsequently refactored, manually analyzed, and rigorously tested to ensure strict scientific accuracy.
+To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. Furthermore, the generated code was only used as a baseline. Every single line within those marked methods was subsequently refactored, manually analyzed, and tested to ensure strict scientific accuracy.
 
-On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to heavily polish, structure, and rewrite my original text for better readability.
+On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to polish, structure, and rewrite my original drafts for better readability. The same approach was applied to the wrappers and build tools (which are separate from the core Java library). While the AI was not used to write the code directly, the development of these peripheral elements followed modern workflows, utilizing the LLM as an assistant and interactive guide.
 
-## How to cite
+## Roadmap
 
-This software is entirely open-source. While citations are by no means required, they are appreciated and help support the ongoing development of this project.
+While Scattering Core is currently highly functional for the generation and morphological analysis of synthetic aggregates, it is an actively evolving project. My future development plans focus on two major areas: accessibility and architectural modularization.
 
-If you use **scattering.core** in your research, please consider citing the foundational manuscript:
+### Web interface and containerization
 
-**General usage (Aggregation core):**
-> K. Skorupski, J. Mroczka, T. Wriedt, and N. Riefler, "A fast and accurate implementation of tunable algorithms used for generation of fractal-like aggregate models," *Physica A*, vol. 404, pp. 106-117, 2014. DOI: [10.1016/j.physa.2014.02.072](https://doi.org/10.1016/j.physa.2014.02.072)
+To make the tool more accessible to users who prefer visual dashboards over command-line tools, I plan to develop a fully integrated graphical user interface (GUI). This initiative will include:
+* **REST API:** Developing a lightweight backend endpoint that exposes the core engine's capabilities.
+* **React frontend:** Building a modern, interactive web application to configure generation parameters, execute analysis tasks, and visualize the resulting 3D models.
+* **Docker deployment:** Packaging the entire stack into a single Docker container. This will allow anyone to spin up the complete GUI environment locally with a single command, without worrying about Java versions or node modules.
 
-> **Note:**
-> The publication above covers the core aggregation elements. An updated citation covering the latest analysis modules will be added once our upcoming manuscript is published.
+### Modularization and licensing
+
+Currently, the entire repository is published under the strong copyleft AGPLv3 license. However, to better support the wider open-source community, I plan to eventually extract the low-level utilities (such as `FPoint`, `FVector`, and statistical classes) into a separate, standalone library released under the permissive **MIT License**.
+
+This will allow researchers and developers to reuse these foundational components in their own projects without being bound by the AGPLv3. Until that split occurs, any external pull requests that modify these core utilities will require the contributor's consent to dual-license their additions, ensuring a smooth transition when the time comes.
 
 ## Project structure
 
@@ -632,6 +700,18 @@ String plotRaw = fMeta.getPythonRenderScript(FMetaCCPL.Plot.RAW);           // P
 // This is especially useful for scientific reproducibility.
 FConfigCCPL fConfigPreset = factory.getFConfigCCPL(FConfigCCPL.Preset.WINDOW);
 ```
+
+## How to cite
+
+This software is entirely open-source. While citations are by no means required, they are appreciated and help support the ongoing development of this project.
+
+If you use the software in your research, please consider citing the foundational manuscript:
+
+**General usage (Aggregation core):**
+> K. Skorupski, J. Mroczka, T. Wriedt, and N. Riefler, "A fast and accurate implementation of tunable algorithms used for generation of fractal-like aggregate models," *Physica A*, vol. 404, pp. 106-117, 2014. DOI: [10.1016/j.physa.2014.02.072](https://doi.org/10.1016/j.physa.2014.02.072)
+
+> **Note:**
+> The publication above covers the core aggregation elements. An updated citation covering the latest analysis modules will be added once our upcoming manuscript is published.
 
 ## License
 
