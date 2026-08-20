@@ -62,6 +62,11 @@ subprojects {
                 inceptionYear = '2020'
                 url = 'https://github.com/light-scattering/scattering.core'
 
+                organization {
+                    name = 'Light Scattering'
+                    url = 'https://github.com/light-scattering'
+                }
+
                 scm {
                     connection = 'scm:git:git://github.com/light-scattering/scattering.core.git'
                     developerConnection = 'scm:git:ssh://git@github.com/light-scattering/scattering.core.git'
@@ -85,6 +90,8 @@ subprojects {
                         id = 'krzysztofskorupski'
                         name = 'Krzysztof Skorupski'
                         url = 'https://orcid.org/0000-0002-4833-2819'
+                        roles = ['Lead Developer']
+                        timezone = 'Europe/Warsaw'
                     }
                 }
             }
