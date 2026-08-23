@@ -1,6 +1,6 @@
 # scatter-cli
 
-This is the official Node.js command-line wrapper for the `scattering.core` scientific Java library.
+The official Node.js command-line wrapper for the `scattering.core` scientific Java library.
 
 It provides a convenient way to install and execute the CLI directly from your Node.js environment or terminal using `npm`.
 

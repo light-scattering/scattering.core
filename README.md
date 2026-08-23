@@ -128,7 +128,7 @@ This will allow researchers and developers to reuse these foundational component
 
 ## Project structure
 
-The repository is divided into three base modules:
+The repository is currently divided into three base modules:
 
 *   **`design`** - Contains all public interfaces and serves primarily as API reference documentation.
 *   **`lib`** - Contains the core implementation of the design, including the main `ScatterCore` entry point.
@@ -232,7 +232,7 @@ You can reconstruct an `FAggregate` from a string representation. The default an
 ```java
 String data = "...";                                                // The serialized string data.
 
-var load = this.factory.getLoadAspect().getFAggregateContext();     // Retrieve the loading context for aggregates.
+var load = factory.getLoadAspect().getFAggregateContext();          // Retrieve the loading context for aggregates.
 
 FAggregate fAggregate = load.fromJSON(data);                        // Load from the default JSON format.     
 FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from an alternative format.
@@ -243,10 +243,10 @@ FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from
 For data storage, serialization, or transferring structures between processes, you can save aggregates into standard string formats. The JSON format is highly recommended as it strictly preserves all component properties.
 
 ```java
-var save = this.factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
+var save = factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
 
-String output = save.toJSON(this.aggregate);                        // The default, comprehensive JSON format.      
-String output = save.toBasic(this.aggregate, ExBasic.MULTISPHERE);  // Alternative formats.
+String output = save.toJSON(aggregate);                        // The default, comprehensive JSON format.      
+String output = save.toBasic(aggregate, ExBasic.MULTISPHERE);  // Alternative formats.
 ```
 
 **Exporting aggregates**
@@ -254,11 +254,11 @@ String output = save.toBasic(this.aggregate, ExBasic.MULTISPHERE);  // Alternati
 When preparing an aggregate for external applications (such as meshing, rendering, or interfacing with legacy software),  you can use specialized exporters tailored to those target environments.
 
 ```java
-var save = this.factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
+var save = factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
 
-String output = save.toFLAGE(this.aggregate);                       // Export to a format compatible with the FLAGE program.
-String output = save.toNGSolve(this.aggregate);                     // Export for volumetric mesh generation using NetGen/NGSolve. 
-String output = save.toPovRay(this.aggregate, ExPovRay.BOUNDARY);   // Export for high-quality 3D rendering using PovRay.
+String output = save.toFLAGE(aggregate);                       // Export to a format compatible with the FLAGE program.
+String output = save.toNGSolve(aggregate);                     // Export for volumetric mesh generation using NetGen/NGSolve. 
+String output = save.toPovRay(aggregate, ExPovRay.BOUNDARY);   // Export for high-quality 3D rendering using PovRay.
 ```
 
 ## Morphological analysis

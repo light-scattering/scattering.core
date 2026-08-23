@@ -1,6 +1,6 @@
 # scatter-cli
 
-This is the official Python command-line wrapper for the `scattering.core` scientific Java library.
+The official Python command-line wrapper for the `scattering.core` scientific Java library.
 
 It provides a convenient way to install and execute the CLI directly from your Python environment or terminal using `pip`.
 

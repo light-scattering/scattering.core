@@ -20,7 +20,7 @@ public interface FAggregateFactory extends FModelFactory, FMonitorFactory, FVali
     @Modificator
     FAggregate getRefFAggregate(FAssembly<Shape> refParticles);
     @Modificator
-    FAggregate getRefFAggregate(List<Shape> refParticles);
+    FAggregate getRefFAggregate(List<? extends Shape> refParticles);
 
     //--------------------------------------------------
 

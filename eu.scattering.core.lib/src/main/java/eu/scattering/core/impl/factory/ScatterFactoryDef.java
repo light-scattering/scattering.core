@@ -496,7 +496,7 @@ public final class ScatterFactoryDef implements ScatterFactory {
     }
 
     @Override
-    public FAggregate getRefFAggregate(List<Shape> refParticles) {
+    public FAggregate getRefFAggregate(List<? extends Shape> refParticles) {
 
         return FAggregateDef.create(this, refParticles);
     }

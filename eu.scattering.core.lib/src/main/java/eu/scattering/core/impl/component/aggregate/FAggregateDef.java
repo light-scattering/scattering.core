@@ -82,7 +82,7 @@ public class FAggregateDef implements FAggregate {
         return new FAggregateDef(factory, refParticles, null);
     }
 
-    public static FAggregate create(ScatterFactory factory, List<Shape> refParticles) {
+    public static FAggregate create(ScatterFactory factory, List<? extends Shape> refParticles) {
 
         return new FAggregateDef(factory, factory.getFAssembly(refParticles), null);
     }
