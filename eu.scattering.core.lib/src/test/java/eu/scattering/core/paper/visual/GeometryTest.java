@@ -2,16 +2,10 @@ package eu.scattering.core.paper.visual;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
-import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
-import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.design.utility.type.preset.ExPovRay;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
+import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +35,26 @@ public class GeometryTest {
         assertTrue(composite.isPointConnected());
 
         String visual = factory.getSaveAspect().getComponentContext().toPovRay(composite, ExPovRay.BOUNDARY);
+
+        assertFalse(visual.isEmpty());
+    }
+
+    @Test
+    void aggregateMultimodalTest() {
+        FPointProducer area = factory.getFPointProducer().withInSphere(100);
+
+        FSphereProducer particles = factory.getFSphereProducer()
+                .withProdCenterAndDistRadius(area, factory.getFRand().getFDist1DNormal(1.0, 0.1), 60)
+                .withProdCenterAndDistRadius(area, factory.getFRand().getFDist1DNormal(5.0, 0.5), 30)
+                .withProdCenterAndDistRadius(area, factory.getFRand().getFDist1DNormal(20, 2), 10)
+                .validateNoOverlap();
+
+        FAggregate geometry = factory.getRefFAggregate(particles.getListRandomized(250));
+
+        assertEquals(250, geometry.size());
+        assertTrue(geometry.isNonOverlapping());
+
+        String visual = factory.getSaveAspect().getComponentContext().toPovRay(geometry, ExPovRay.FREE);
 
         assertFalse(visual.isEmpty());
     }
