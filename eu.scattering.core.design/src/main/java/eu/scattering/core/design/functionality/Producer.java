@@ -12,4 +12,9 @@ public interface Producer<T> {
     List<T> getList();
     List<T> getListRandomized(int quantity);
     List<T> getListFixed(int quantity);
+
+    Producer<T> setRetriesLimited(int limit);
+    Producer<T> setRetriesInfinite();
+
+    Producer<T> setSkipOnFailure(boolean skip);
 }

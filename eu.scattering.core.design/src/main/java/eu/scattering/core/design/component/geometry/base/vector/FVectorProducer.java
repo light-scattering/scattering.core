@@ -22,6 +22,13 @@ public interface FVectorProducer extends Producer<FVector> {
     @Override
     Stream<FVector> stream();
 
+    @Override
+    FVectorProducer setRetriesLimited(int limit);
+    @Override
+    FVectorProducer setRetriesInfinite();
+    @Override
+    FVectorProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int weight);

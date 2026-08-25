@@ -227,6 +227,30 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
+    public FSphereProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FSphere> stream() {
 
         return this.processor.stream();

@@ -21,6 +21,13 @@ public interface FQuaternionProducer extends Producer<FQuaternion> {
     @Override
     Stream<FQuaternion> stream();
 
+    @Override
+    FQuaternionProducer setRetriesLimited(int limit);
+    @Override
+    FQuaternionProducer setRetriesInfinite();
+    @Override
+    FQuaternionProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FQuaternionProducer withCustomRule(Function<FQuaternionFactory, FQuaternion> function, int weight);

@@ -22,6 +22,13 @@ public interface FLineProducer extends Producer<FLine> {
     @Override
     Stream<FLine> stream();
 
+    @Override
+    FLineProducer setRetriesLimited(int limit);
+    @Override
+    FLineProducer setRetriesInfinite();
+    @Override
+    FLineProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FLineProducer withCustomRule(Function<FLineFactory, FLine> function, int weight);

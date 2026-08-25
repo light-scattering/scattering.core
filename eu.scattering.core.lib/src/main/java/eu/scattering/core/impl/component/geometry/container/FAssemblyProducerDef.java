@@ -73,6 +73,30 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
     }
 
     @Override
+    public FAssemblyProducer<T> setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FAssemblyProducer<T> setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FAssemblyProducer<T> setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FAssembly<T>> stream() {
 
         return this.processor.stream();

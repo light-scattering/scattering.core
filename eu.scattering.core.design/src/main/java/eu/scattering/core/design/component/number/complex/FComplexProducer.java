@@ -21,6 +21,13 @@ public interface FComplexProducer extends Producer<FComplex> {
     @Override
     Stream<FComplex> stream();
 
+    @Override
+    FComplexProducer setRetriesLimited(int limit);
+    @Override
+    FComplexProducer setRetriesInfinite();
+    @Override
+    FComplexProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FComplexProducer withCustomRule(Function<FComplexFactory, FComplex> function, int weight);

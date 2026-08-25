@@ -251,6 +251,30 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
+    public FVectorProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FVectorProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FVectorProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FVector> stream() {
 
         return this.processor.stream();

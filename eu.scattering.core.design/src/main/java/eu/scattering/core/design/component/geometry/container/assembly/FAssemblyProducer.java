@@ -22,6 +22,13 @@ public interface FAssemblyProducer<T extends Geometry> extends Producer<FAssembl
     @Override
     Stream<FAssembly<T>> stream();
 
+    @Override
+    FAssemblyProducer<T> setRetriesLimited(int limit);
+    @Override
+    FAssemblyProducer<T> setRetriesInfinite();
+    @Override
+    FAssemblyProducer<T> setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FAssemblyProducer<T> withCustomRule(Function<FAssemblyFactory, FAssembly<T>> function, int weight);

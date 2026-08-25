@@ -87,6 +87,36 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public FSphere setEpsilon(double epsilon) {
+        super.setEpsilon(epsilon);
+
+        return this;
+    }
+
+    @Override
+    public FSphere setDelta(double delta) {
+        super.setDelta(delta);
+
+        return this;
+    }
+
+    @Override
+    public FSphere setIndex(double index) {
+        super.setIndex(index);
+
+        return this;
+    }
+
+    @Override
+    public FSphere setMeta(String... meta) {
+        super.setMeta(meta);
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
     public FSphere set(JSONObject json) {
 
         if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
@@ -254,7 +284,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         json.put(JSON_CENTER, getRefCenter().toJSON());
         json.put(JSON_RADIUS, getRadius());
 
-        if (getCoatWidth().size() > 0) {
+        if (!getCoatWidth().isEmpty()) {
             for (int i = 0; i < getCoatWidth().size() ; i++) {
                 json.append(JSON_COATS, this.getCoatWidth(i));
             }
@@ -264,7 +294,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             json.put(JSON_INDEX, getIndex());
         }
 
-        if (!getMeta().equals("")) {
+        if (!getMeta().isEmpty()) {
             json.put(JSON_META, getMeta());
         }
 
@@ -392,7 +422,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         overlaps(shapes, arg);
         sortByDistCenter(arg);
 
-        return arg.size() > 0 ? arg.get(0) : null;
+        return !arg.isEmpty() ? arg.getFirst() : null;
     }
 
     @Override

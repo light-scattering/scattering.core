@@ -22,6 +22,13 @@ public interface FRayProducer extends Producer<FRay> {
     @Override
     Stream<FRay> stream();
 
+    @Override
+    FRayProducer setRetriesLimited(int limit);
+    @Override
+    FRayProducer setRetriesInfinite();
+    @Override
+    FRayProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FRayProducer withCustomRule(Function<FRayFactory, FRay> function, int weight);

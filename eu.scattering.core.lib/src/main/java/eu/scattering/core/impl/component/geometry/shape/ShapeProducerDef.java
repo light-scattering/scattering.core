@@ -70,6 +70,30 @@ public class ShapeProducerDef implements ShapeProducer {
     }
 
     @Override
+    public ShapeProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public ShapeProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public ShapeProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<Shape> stream() {
 
         return this.processor.stream();

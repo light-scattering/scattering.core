@@ -85,6 +85,30 @@ public class FPlaneProducerDef implements FPlaneProducer {
     }
 
     @Override
+    public FPlaneProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FPlaneProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FPlaneProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FPlane> stream() {
 
         return this.processor.stream();

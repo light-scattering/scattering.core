@@ -21,6 +21,9 @@ public class ProducerCoreDef<E> {
 
     private final FRandGenerator randomizer;
 
+    private int retries = 100;
+    private boolean skip = false;
+
     public ProducerCoreDef(FRandGenerator randomizer) {
 
         this.randomizer = randomizer;
@@ -54,25 +57,24 @@ public class ProducerCoreDef<E> {
     private E produce(Supplier<E> supplier) {
         validateState(0);
 
-        if (this.validations.size() == 0) {
+        if (this.validations.isEmpty()) {
             E candidate = supplier.get();
 
             for (var correction : this.corrections) {
-                correction.accept(candidate, randomizer);
+                correction.accept(candidate, this.randomizer);
             }
 
             return candidate;
         }
 
         int iteration = 0;
-        int maxIteration = 100;
 
         validation:
-        while (iteration++ < maxIteration) {
+        while (this.retries < 0 || iteration++ < this.retries) {
             E candidate = supplier.get();
 
             for (var correction : this.corrections) {
-                correction.accept(candidate, randomizer);
+                correction.accept(candidate, this.randomizer);
             }
 
             for (var validation : this.validations) {
@@ -97,7 +99,7 @@ public class ProducerCoreDef<E> {
             if (candidate != null) {
                 results.add(candidate);
             } else {
-                throw new IllegalStateException("Generation error");
+                throw new IllegalStateException("Production error");
             }
         }
     }
@@ -116,7 +118,7 @@ public class ProducerCoreDef<E> {
 
     private Supplier<E> getSupplierFixed() {
 
-        return this.records.get(0).getSupplier();
+        return this.records.getFirst().getSupplier();
     }
 
     private Supplier<E> getSupplierRandomized() {
@@ -136,6 +138,25 @@ public class ProducerCoreDef<E> {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    public void setRetriesLimited(int limit) {
+
+        if (limit < 0) {
+            throw new IllegalArgumentException("The number of retries must not be negative.");
+        }
+
+        this.retries = limit;
+    }
+
+    public void setRetriesInfinite() {
+
+        this.retries = -1;
+    }
+
+    public void setSkipOnFailure(boolean skip) {
+
+        this.skip = skip;
+    }
 
     public Stream<E> stream() {
         validateState(0);
@@ -186,7 +207,12 @@ public class ProducerCoreDef<E> {
             for (int i = 0; i < quantity; i++) {
                 produceAndAdd(getSupplier(), results, 1);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+
+            if (!this.skip) {
+                throw e;
+            }
+        }
 
         mutateResults(results);
 
@@ -257,12 +283,12 @@ public class ProducerCoreDef<E> {
     private void iterateLastTrim(List<E> results, int size) {
 
         for (int i = 0 ; i > size ; i--) {
-            results.remove(results.size() - 1);
+            results.removeLast();
         }
     }
 
     private void iterateLastExpand(List<E> results, int size) {
-        ProducerRecord record = this.records.get(this.records.size() - 1);
+        ProducerRecord record = this.records.getLast();
 
         produceAndAdd(record.getSupplier(), results, size);
     }
@@ -288,7 +314,7 @@ public class ProducerCoreDef<E> {
 
     private void mutateResults(List<E> results) {
 
-        if (this.mutations.size() > 0) {
+        if (!this.mutations.isEmpty()) {
             this.randomizer.shuffle(results);
 
             for (var mutation : this.mutations) {

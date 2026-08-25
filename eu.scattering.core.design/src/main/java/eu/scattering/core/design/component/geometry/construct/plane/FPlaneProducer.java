@@ -22,6 +22,13 @@ public interface FPlaneProducer extends Producer<FPlane> {
     @Override
     Stream<FPlane> stream();
 
+    @Override
+    FPlaneProducer setRetriesLimited(int limit);
+    @Override
+    FPlaneProducer setRetriesInfinite();
+    @Override
+    FPlaneProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FPlaneProducer withCustomRule(Function<FPlaneFactory, FPlane> function, int weight);

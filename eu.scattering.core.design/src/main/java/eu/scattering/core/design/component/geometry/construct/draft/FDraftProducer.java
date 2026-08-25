@@ -22,6 +22,13 @@ public interface FDraftProducer extends Producer<FDraft> {
     @Override
     Stream<FDraft> stream();
 
+    @Override
+    FDraftProducer setRetriesLimited(int limit);
+    @Override
+    FDraftProducer setRetriesInfinite();
+    @Override
+    FDraftProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FDraftProducer withCustomRule(Function<FDraftFactory, FDraft> function, int weight);

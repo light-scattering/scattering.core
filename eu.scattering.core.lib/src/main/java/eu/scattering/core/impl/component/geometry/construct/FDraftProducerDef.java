@@ -87,6 +87,30 @@ public class FDraftProducerDef implements FDraftProducer {
     }
 
     @Override
+    public FDraftProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FDraftProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FDraftProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FDraft> stream() {
 
         return this.processor.stream();

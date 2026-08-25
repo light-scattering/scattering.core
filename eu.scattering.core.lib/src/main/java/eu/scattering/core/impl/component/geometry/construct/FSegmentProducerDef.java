@@ -85,6 +85,30 @@ public class FSegmentProducerDef implements FSegmentProducer {
     }
 
     @Override
+    public FSegmentProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FSegmentProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FSegmentProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FSegment> stream() {
 
         return this.processor.stream();

@@ -1189,14 +1189,14 @@ public class FSphereProducerTest {
         List<FSphere> results = producer.getListFixed(2);
 
         Assertions.assertAll("Validate FSphere A",
-                () -> assertEquals("TEST", results.get(0).getMeta(),
+                () -> assertEquals("TEST", results.getFirst().getMeta(),
                         "The tag is erroneous")
         );
 
         Assertions.assertAll("Validate FSphere B",
                 () -> assertEquals("TEST", results.get(1).getMeta(),
                         "The tag is erroneous"),
-                () -> assertNotSame(results.get(0), results.get(1),
+                () -> assertNotSame(results.getFirst(), results.get(1),
                         "The reference should be different")
         );
     }
@@ -1224,7 +1224,7 @@ public class FSphereProducerTest {
         }
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }
@@ -1242,7 +1242,7 @@ public class FSphereProducerTest {
         List<FSphere> results = producer.getList();
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }
@@ -1260,7 +1260,7 @@ public class FSphereProducerTest {
         List<FSphere> results = producer.getListFixed(100);
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }
@@ -1273,12 +1273,13 @@ public class FSphereProducerTest {
         Producer<FPoint> center = factory.getFPointProducer(range);
 
         Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
-                .addValidation(((fSphere, results) -> fSphere.overlaps(results) == 0));
+                .addValidation(((fSphere, results) -> fSphere.overlaps(results) == 0))
+                .setSkipOnFailure(true);
 
         List<FSphere> results = producer.getListRandomized(100);
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }
@@ -1363,7 +1364,7 @@ public class FSphereProducerTest {
         }
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }

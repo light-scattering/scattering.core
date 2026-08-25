@@ -22,6 +22,13 @@ public interface FSegmentProducer extends Producer<FSegment> {
     @Override
     Stream<FSegment> stream();
 
+    @Override
+    FSegmentProducer setRetriesLimited(int limit);
+    @Override
+    FSegmentProducer setRetriesInfinite();
+    @Override
+    FSegmentProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     FSegmentProducer withCustomRule(Function<FSegmentFactory, FSegment> function, int weight);

@@ -27,6 +27,13 @@ public interface FSphereProducer extends Producer<FSphere> {
     @Override
     Stream<FSphere> stream();
 
+    @Override
+    FSphereProducer setRetriesLimited(int limit);
+    @Override
+    FSphereProducer setRetriesInfinite();
+    @Override
+    FSphereProducer setSkipOnFailure(boolean skip);
+
     FSphereProducer addMutation(Consumer<List<FSphere>> mutation);
 
     FSphereProducer addCorrection(BiConsumer<FSphere, FRandGenerator> correction);

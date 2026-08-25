@@ -18,6 +18,13 @@ public interface ShapeProducer extends Producer<Shape> {
     @Override
     Stream<Shape> stream();
 
+    @Override
+    ShapeProducer setRetriesLimited(int limit);
+    @Override
+    ShapeProducer setRetriesInfinite();
+    @Override
+    ShapeProducer setSkipOnFailure(boolean skip);
+
     // -------------------------------------------------------------------------------------------------
 
     ShapeProducer withProducer(Producer<? extends Shape> producer, int weight);

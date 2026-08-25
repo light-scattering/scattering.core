@@ -83,6 +83,30 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     }
 
     @Override
+    public FQuaternionProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FQuaternionProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FQuaternionProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FQuaternion> stream() {
 
         return this.processor.stream();

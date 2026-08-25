@@ -352,7 +352,7 @@ public class FPointProducerTest {
         FPoint resultB = producer.produce();
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertEquals(resultA.getMagnitude(), 0.01,
+                () -> assertEquals(0.01, resultA.getMagnitude(),
                         epsilon, "Position is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
@@ -369,7 +369,7 @@ public class FPointProducerTest {
         FPoint resultB = producer.produce();
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertEquals(resultA.getMagnitude(), 0.01,
+                () -> assertEquals(0.01, resultA.getMagnitude(),
                         epsilon, "Position is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
@@ -692,7 +692,7 @@ public class FPointProducerTest {
         FPoint fPointA = producer.produce();
 
         Assertions.assertAll("Validate FPoint A",
-                () -> assertEquals(fPointA.getDistance(center), 1,
+                () -> assertEquals(1, fPointA.getDistance(center),
                         EPSILON, "The position is erroneous")
         );
 
@@ -701,7 +701,7 @@ public class FPointProducerTest {
         FPoint fPointB = producer.produce();
 
         Assertions.assertAll("Validate FPoint B",
-                () -> assertEquals(fPointB.getDistance(center), 1,
+                () -> assertEquals(1, fPointB.getDistance(center),
                         EPSILON, "The position is erroneous"),
                 () -> assertNotSame(fPointA, fPointB,
                         "The reference should be different")
@@ -721,11 +721,11 @@ public class FPointProducerTest {
         List<FPoint> results = producer.getListFixed(2);
 
         Assertions.assertAll("Validate FPoint A",
-                () -> assertTrue(results.get(0).getX() > 0,
+                () -> assertTrue(results.getFirst().getX() > 0,
                         "The x value of FPoint A is erroneous"),
-                () -> assertTrue(results.get(0).getY() > 0,
+                () -> assertTrue(results.getFirst().getY() > 0,
                         "The y value of FPoint A is erroneous"),
-                () -> assertTrue(results.get(0).getZ() > 0,
+                () -> assertTrue(results.getFirst().getZ() > 0,
                         "The z value of FPoint A is erroneous")
         );
 
@@ -768,7 +768,7 @@ public class FPointProducerTest {
         }
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }
@@ -792,7 +792,7 @@ public class FPointProducerTest {
         List<FPoint> results = producer.getList();
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }
@@ -816,7 +816,7 @@ public class FPointProducerTest {
         List<FPoint> results = producer.getListFixed(100);
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }
@@ -835,12 +835,13 @@ public class FPointProducerTest {
                     }
 
                     return true;
-                });
+                })
+                .setSkipOnFailure(true);
 
         List<FPoint> results = producer.getListRandomized(100);
 
         Assertions.assertAll("Validate results",
-                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                () -> assertTrue(!results.isEmpty() && results.size() < 5,
                         "The number of generated elements is erroneous")
         );
     }

@@ -26,6 +26,13 @@ public interface FPointProducer extends Producer<FPoint> {
     @Override
     Stream<FPoint> stream();
 
+    @Override
+    FPointProducer setRetriesLimited(int limit);
+    @Override
+    FPointProducer setRetriesInfinite();
+    @Override
+    FPointProducer setSkipOnFailure(boolean skip);
+
     FPointProducer addMutation(Consumer<List<FPoint>> mutation);
 
     FPointProducer addValidation(BiFunction<FPoint, List<FPoint>, Boolean> validation);

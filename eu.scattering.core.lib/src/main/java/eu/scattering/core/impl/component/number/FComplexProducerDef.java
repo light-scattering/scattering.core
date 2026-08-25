@@ -83,6 +83,30 @@ public class FComplexProducerDef implements FComplexProducer {
     }
 
     @Override
+    public FComplexProducer setRetriesLimited(int limit) {
+
+        this.processor.setRetriesLimited(limit);
+
+        return this;
+    }
+
+    @Override
+    public FComplexProducer setRetriesInfinite() {
+
+        this.processor.setRetriesInfinite();
+
+        return this;
+    }
+
+    @Override
+    public FComplexProducer setSkipOnFailure(boolean skip) {
+
+        this.processor.setSkipOnFailure(skip);
+
+        return this;
+    }
+
+    @Override
     public Stream<FComplex> stream() {
 
         return this.processor.stream();
