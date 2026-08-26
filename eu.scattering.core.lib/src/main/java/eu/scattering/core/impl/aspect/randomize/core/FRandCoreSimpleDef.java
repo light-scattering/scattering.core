@@ -95,6 +95,12 @@ public class FRandCoreSimpleDef implements FRandCore {
     }
 
     @Override
+    public double nextGaussian() {
+
+        return this.random.nextGaussian();
+    }
+
+    @Override
     public double nextGaussian(double mean, double std) {
 
         return this.random.nextGaussian(mean, std);

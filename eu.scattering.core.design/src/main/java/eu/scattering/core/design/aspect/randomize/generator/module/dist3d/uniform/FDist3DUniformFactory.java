@@ -7,4 +7,11 @@ public interface FDist3DUniformFactory {
     FDist3DUniform getFDist3DUniform(double x1, double x2, double y1, double y2, double z1, double z2);
 
     FDist3DUniform getFDist3DUniform(FPairPos3D range);
+
+    // -------------------------------------------------------------------------------------------------
+
+    default FDist3DUniform getFDist3DUniform() {
+
+        return getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+    }
 }

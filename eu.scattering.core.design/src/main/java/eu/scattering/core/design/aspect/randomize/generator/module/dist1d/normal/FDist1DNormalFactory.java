@@ -3,4 +3,11 @@ package eu.scattering.core.design.aspect.randomize.generator.module.dist1d.norma
 public interface FDist1DNormalFactory {
 
     FDist1DNormal getFDist1DNormal(double mean, double std);
+
+    // -------------------------------------------------------------------------------------------------
+
+    default FDist1DNormal getFDist1DNormal() {
+
+        return getFDist1DNormal(0, 1);
+    }
 }

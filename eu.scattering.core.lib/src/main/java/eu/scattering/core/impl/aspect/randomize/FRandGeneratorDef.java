@@ -14,6 +14,7 @@ import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.unifor
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.joint.FDist3DJoint;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.fixed.FDist3DFixed;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.custom.FDist3DCustom;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.normal.FDist3DNormal;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.uniform.FDist3DUniform;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos2D;
@@ -120,6 +121,12 @@ public class FRandGeneratorDef implements FRandGenerator {
     public int nextInteger(int origin, int bound) {
 
         return this.core.nextInteger(origin, bound);
+    }
+
+    @Override
+    public double nextGaussian() {
+
+        return this.core.nextGaussian();
     }
 
     @Override
@@ -408,5 +415,11 @@ public class FRandGeneratorDef implements FRandGenerator {
     public FDist3DUniform getFDist3DUniform(FPairPos3D range) {
 
         return FDist3DUniformDef.create(this.factoryExt, this, range);
+    }
+
+    @Override
+    public FDist3DNormal getFDist3DNormal(double avg, double std) {
+
+        return FDist3DNormalDef.create(this.factoryExt, this, avg, std);
     }
 }
