@@ -396,6 +396,46 @@ public class FStatDef implements FStat {
     }
 
     @Override
+    public double covariance(FStat arg, boolean sample) {
+        int size = size();
+
+        if (size < 2) {
+            throw new IllegalStateException("The set must contain at least two elements");
+        }
+
+        if (size != arg.size()) {
+            throw new IllegalStateException("The two sets must consist of exactly the same number of elements");
+        }
+
+        double avgA = this.mean();
+        double avgB = arg.mean();
+
+        double sum = 0;
+        for (int i = 0 ; i < size ; i++) {
+            sum += (get(i) - avgA) * (arg.get(i) - avgB);
+        }
+
+        return sum / (sample ? (size - 1) : size);
+    }
+
+    @Override
+    public double correlation(FStat arg) {
+        double avgA = this.mean();
+        double avgB = arg.mean();
+
+        double stdA = this.std(true);
+        double stdB = arg.std(true);
+
+        if (stdA == 0 || stdB == 0) {
+            throw new IllegalStateException("The standard deviation of any set cannot be zero");
+        }
+
+        double covariance = covariance(arg, true);
+
+        return covariance / (stdA * stdB);
+    }
+
+    @Override
     public boolean allDistinct() {
 
         return getRefCore().stream().distinct().toList().size() == size();

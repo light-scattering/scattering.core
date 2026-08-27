@@ -61,6 +61,10 @@ public interface FStat extends Statistics<FStat>, Iterable<Double> {
     double kurtosisExcess(boolean sample);
     double kurtosisExcess(boolean sample, double mean, double std);
 
+    double covariance(FStat arg, boolean sample);
+
+    double correlation(FStat arg);
+
     double[] mode();
 
     boolean allDistinct();

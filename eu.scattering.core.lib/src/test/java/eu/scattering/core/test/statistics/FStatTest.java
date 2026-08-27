@@ -1542,6 +1542,61 @@ public class FStatTest {
         }
 
         @Test
+        @DisplayName("Covariance")
+        void covariance() {
+            FStat fStatA = factory.getFStat(1, 98, -5, 3, 2);
+            FStat fStatB = factory.getFStat(-1, 2, -3, 6, 9);
+
+            double covariance = fStatA.covariance(fStatB, true);
+
+            assertEquals(-2.8500, covariance, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Covariance - Exception")
+        void covarianceException() {
+            FStat fStatA = factory.getFStat();
+            FStat fStatB = factory.getFStat();
+
+            assertThrows(IllegalStateException.class, () -> fStatA.covariance(fStatB, true));
+
+            fStatA.add(1, 2, 3, 4, 5);
+            fStatB.add(1, 2, 3, 4, 5, 6);
+
+            assertThrows(IllegalStateException.class, () -> fStatA.covariance(fStatB, true));
+        }
+
+        @Test
+        @DisplayName("Correlation")
+        void correlation() {
+            FStat fStatA = factory.getFStat(1, 98, -5, 3, 2);
+            FStat fStatB = factory.getFStat(-1, 2, -3, 6, 9);
+
+            double correlation = fStatA.correlation(fStatB);
+
+            assertEquals(-0.01319, correlation, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Correlation - Exception")
+        void correlationException() {
+            FStat fStatA = factory.getFStat();
+            FStat fStatB = factory.getFStat();
+
+            assertThrows(IllegalStateException.class, () -> fStatA.correlation(fStatB));
+
+            fStatA.add(1, 2, 3, 4, 5);
+            fStatB.add(1, 2, 3, 4, 5, 6);
+
+            assertThrows(IllegalStateException.class, () -> fStatA.correlation(fStatB));
+
+            fStatB.clear();
+            fStatB.add(0, 0, 0, 0, 0);
+
+            assertThrows(IllegalStateException.class, () -> fStatA.correlation(fStatB));
+        }
+
+        @Test
         @DisplayName("To FPlot linear")
         void toFPlotLinear() {
             FStat fStat = factory.getFStat();
