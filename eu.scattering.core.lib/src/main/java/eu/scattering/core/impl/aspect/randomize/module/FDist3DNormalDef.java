@@ -43,33 +43,33 @@ public class FDist3DNormalDef implements FDist3DNormal {
     }
 
     @Override
-    public FDist3DNormal setAvg(double avgD0, double avgD1, double avgD2) {
+    public FDist3DNormal setAvg(double d0, double d1, double d2) {
 
-        this.avgD0 = avgD0;
-        this.avgD1 = avgD1;
-        this.avgD2 = avgD2;
+        this.avgD0 = d0;
+        this.avgD1 = d1;
+        this.avgD2 = d2;
 
         return this;
     }
 
     @Override
-    public FDist3DNormal setStd(double stdD0, double stdD1, double stdD2) {
+    public FDist3DNormal setStd(double d0, double d1, double d2) {
 
-        if (stdD0 <= 0) {
-            throw new IllegalArgumentException("The std X value must be greater than zero");
+        if (d0 <= 0) {
+            throw new IllegalArgumentException("The std d0 value must be greater than zero");
         }
 
-        if (stdD1 <= 0) {
-            throw new IllegalArgumentException("The std Y value must be greater than zero");
+        if (d1 <= 0) {
+            throw new IllegalArgumentException("The std d1 value must be greater than zero");
         }
 
-        if (stdD2 <= 0) {
-            throw new IllegalArgumentException("The std Z value must be greater than zero");
+        if (d2 <= 0) {
+            throw new IllegalArgumentException("The std d2 value must be greater than zero");
         }
 
-        this.stdD0 = stdD0;
-        this.stdD1 = stdD1;
-        this.stdD2 = stdD2;
+        this.stdD0 = d0;
+        this.stdD1 = d1;
+        this.stdD2 = d2;
 
         this.isDirty = true;
 
@@ -77,13 +77,13 @@ public class FDist3DNormalDef implements FDist3DNormal {
     }
 
     @Override
-    public FDist3DNormal setCorD01(double corD01) {
+    public FDist3DNormal setCorD01(double d01) {
 
-        if (corD01 < -1.0 || corD01 > 1.0) {
+        if (d01 < -1.0 || d01 > 1.0) {
             throw new IllegalArgumentException("Correlation must be between -1.0 and 1.0");
         }
 
-        this.corD01 = corD01;
+        this.corD01 = d01;
 
         this.isDirty = true;
 
@@ -91,13 +91,13 @@ public class FDist3DNormalDef implements FDist3DNormal {
     }
 
     @Override
-    public FDist3DNormal setCorD02(double corD02) {
+    public FDist3DNormal setCorD02(double d02) {
 
-        if (corD02 < -1.0 || corD02 > 1.0) {
+        if (d02 < -1.0 || d02 > 1.0) {
             throw new IllegalArgumentException("Correlation must be between -1.0 and 1.0");
         }
 
-        this.corD02 = corD02;
+        this.corD02 = d02;
 
         this.isDirty = true;
 
@@ -105,13 +105,13 @@ public class FDist3DNormalDef implements FDist3DNormal {
     }
 
     @Override
-    public FDist3DNormal setCorD12(double corD12) {
+    public FDist3DNormal setCorD12(double d12) {
 
-        if (corD12 < -1.0 || corD12 > 1.0) {
+        if (d12 < -1.0 || d12 > 1.0) {
             throw new IllegalArgumentException("Correlation must be between -1.0 and 1.0");
         }
 
-        this.corD12 = corD12;
+        this.corD12 = d12;
 
         this.isDirty = true;
 
@@ -198,7 +198,7 @@ public class FDist3DNormalDef implements FDist3DNormal {
     }
 
     private void validateCorrelation() {
-        double condition = (corD01 * corD01) + (corD12 * corD12) + (corD12 * corD12) - (2 * corD01 * corD02 * corD12);
+        double condition = (corD01 * corD01) + (corD02 * corD02) + (corD12 * corD12) - (2 * corD01 * corD02 * corD12);
 
         if (condition > 1) {
             throw new IllegalStateException("The correlation is invalid");

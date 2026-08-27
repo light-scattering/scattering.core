@@ -107,4 +107,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.config.df.kinetic.cc;
     exports eu.scattering.core.design.component.aggregate.meta.df.kinetic.cc;
     exports eu.scattering.core.design.aspect.randomize.generator.module.dist3d.normal;
+    exports eu.scattering.core.design.aspect.randomize.generator.module.dist2d.normal;
 }

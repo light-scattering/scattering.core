@@ -10,23 +10,23 @@ public class FDist3DUniformDef implements FDist3DUniform {
     private final TransferFactory factoryExt;
 
     private final FRandGenerator random;
-    private final double x1, x2, y1, y2, z1, z2;
+    private final double d0min, d0max, d1min, d1max, d2min, d2max;
 
-    private FDist3DUniformDef(TransferFactory factoryExt, FRandGenerator random, double x1, double x2, double y1, double y2, double z1, double z2) {
+    private FDist3DUniformDef(TransferFactory factoryExt, FRandGenerator random, double d0min, double d0max, double d1min, double d1max, double d2min, double d2max) {
         this.factoryExt = factoryExt;
 
         this.random = random;
-        this.x1 = x1;
-        this.x2 = x2;
-        this.y1 = y1;
-        this.y2 = y2;
-        this.z1 = z1;
-        this.z2 = z2;
+        this.d0min = d0min;
+        this.d0max = d0max;
+        this.d1min = d1min;
+        this.d1max = d1max;
+        this.d2min = d2min;
+        this.d2max = d2max;
     }
 
-    public static FDist3DUniform create(TransferFactory factoryExt, FRandGenerator random, double x1, double x2, double y1, double y2, double z1, double z2) {
+    public static FDist3DUniform create(TransferFactory factoryExt, FRandGenerator random, double d0min, double d0max, double d1min, double d1max, double d2min, double d2max) {
 
-        return new FDist3DUniformDef(factoryExt, random, x1, x2, y1, y2, z1, z2);
+        return new FDist3DUniformDef(factoryExt, random, d0min, d0max, d1min, d1max, d2min, d2max);
     }
 
     public static FDist3DUniform create(TransferFactory factoryExt, FRandGenerator random, FPairPos3D range) {
@@ -42,9 +42,9 @@ public class FDist3DUniformDef implements FDist3DUniform {
     public FPos3D produce() {
 
         return factoryExt.getFPos3D(
-                this.random.nextDouble(x1, x2),
-                this.random.nextDouble(y1, y2),
-                this.random.nextDouble(z1, z2)
+                this.random.nextDouble(d0min, d0max),
+                this.random.nextDouble(d1min, d1max),
+                this.random.nextDouble(d2min, d2max)
         );
     }
 
@@ -53,9 +53,9 @@ public class FDist3DUniformDef implements FDist3DUniform {
 
         validate(in);
 
-        in[0] = this.random.nextDouble(x1, x2);
-        in[1] = this.random.nextDouble(y1, y2);
-        in[2] = this.random.nextDouble(z1, z2);
+        in[0] = this.random.nextDouble(d0min, d0max);
+        in[1] = this.random.nextDouble(d1min, d1max);
+        in[2] = this.random.nextDouble(d2min, d2max);
     }
 
     private void validate(double[] in) {

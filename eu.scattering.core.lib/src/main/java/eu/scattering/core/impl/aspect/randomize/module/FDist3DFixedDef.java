@@ -7,19 +7,19 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 public class FDist3DFixedDef implements FDist3DFixed {
     private final TransferFactory factoryExt;
 
-    private final double x, y, z;
+    private final double d0, d1, d2;
 
-    private FDist3DFixedDef(TransferFactory factoryExt, double x, double y, double z) {
+    private FDist3DFixedDef(TransferFactory factoryExt, double d0, double d1, double d2) {
         this.factoryExt = factoryExt;
 
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.d0 = d0;
+        this.d1 = d1;
+        this.d2 = d2;
     }
 
-    public static FDist3DFixed create(TransferFactory factoryExt, double x, double y, double z) {
+    public static FDist3DFixed create(TransferFactory factoryExt, double d0, double d1, double d2) {
 
-        return new FDist3DFixedDef(factoryExt, x, y, z);
+        return new FDist3DFixedDef(factoryExt, d0, d1, d2);
     }
 
     public static FDist3DFixed create(TransferFactory factoryExt, FPos3D val) {
@@ -30,7 +30,7 @@ public class FDist3DFixedDef implements FDist3DFixed {
     @Override
     public FPos3D produce() {
 
-        return factoryExt.getFPos3D(this.x, this.y, this.z);
+        return factoryExt.getFPos3D(this.d0, this.d1, this.d2);
     }
 
     @Override
@@ -38,9 +38,9 @@ public class FDist3DFixedDef implements FDist3DFixed {
 
         validate(in);
 
-        in[0] = this.x;
-        in[1] = this.y;
-        in[2] = this.z;
+        in[0] = this.d0;
+        in[1] = this.d1;
+        in[2] = this.d2;
     }
 
     private void validate(double[] in) {

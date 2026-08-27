@@ -10,21 +10,21 @@ public class FDist2DUniformDef implements FDist2DUniform {
     private final TransferFactory factoryExt;
 
     private final FRandGenerator random;
-    private final double x1, x2, y1, y2;
+    private final double d0min, d0max, d1min, d1max;
 
-    private FDist2DUniformDef(TransferFactory factoryExt, FRandGenerator random, double x1, double x2, double y1, double y2) {
+    private FDist2DUniformDef(TransferFactory factoryExt, FRandGenerator random, double d0min, double d0max, double d1min, double d1max) {
         this.factoryExt = factoryExt;
 
         this.random = random;
-        this.x1 = x1;
-        this.x2 = x2;
-        this.y1 = y1;
-        this.y2 = y2;
+        this.d0min = d0min;
+        this.d0max = d0max;
+        this.d1min = d1min;
+        this.d1max = d1max;
     }
 
-    public static FDist2DUniform create(TransferFactory factoryExt, FRandGenerator random, double x1, double x2, double y1, double y2) {
+    public static FDist2DUniform create(TransferFactory factoryExt, FRandGenerator random, double d0min, double d0max, double d1min, double d1max) {
 
-        return new FDist2DUniformDef(factoryExt, random, x1, x2, y1, y2);
+        return new FDist2DUniformDef(factoryExt, random, d0min, d0max, d1min, d1max);
     }
 
     public static FDist2DUniform create(TransferFactory factoryExt, FRandGenerator random, FPairPos2D range) {
@@ -39,8 +39,8 @@ public class FDist2DUniformDef implements FDist2DUniform {
     public FPos2D produce() {
 
         return factoryExt.getFPos2D(
-                this.random.nextDouble(x1, x2),
-                this.random.nextDouble(y1, y2)
+                this.random.nextDouble(d0min, d0max),
+                this.random.nextDouble(d1min, d1max)
         );
     }
 
@@ -49,8 +49,8 @@ public class FDist2DUniformDef implements FDist2DUniform {
 
         validate(in);
 
-        in[0] = this.random.nextDouble(x1, x2);
-        in[1] = this.random.nextDouble(y1, y2);
+        in[0] = this.random.nextDouble(d0min, d0max);
+        in[1] = this.random.nextDouble(d1min, d1max);
     }
 
     private void validate(double[] in) {

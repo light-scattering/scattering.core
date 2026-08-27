@@ -10,6 +10,7 @@ import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.unifor
 import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.joint.FDist2DJoint;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.fixed.FDist2DFixed;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.custom.FDist2DCustom;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.normal.FDist2DNormal;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.uniform.FDist2DUniform;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.joint.FDist3DJoint;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.fixed.FDist3DFixed;
@@ -328,9 +329,9 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist1DFixed getFDist1DFixed(double x) {
+    public FDist1DFixed getFDist1DFixed(double d0) {
 
-        return FDist1DFixedDef.get(x);
+        return FDist1DFixedDef.get(d0);
     }
 
     @Override
@@ -340,9 +341,9 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist1DUniform getFDist1DUniform(double x1, double x2) {
+    public FDist1DUniform getFDist1DUniform(double d0min, double d0max) {
 
-        return FDist1DUniformDef.get(this, x1, x2);
+        return FDist1DUniformDef.get(this, d0min, d0max);
     }
 
     @Override
@@ -352,15 +353,15 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist2DJoint getFDist2DJoint(FDist1D dX, FDist1D dY) {
+    public FDist2DJoint getFDist2DJoint(FDist1D d0, FDist1D d1) {
 
-        return FDist2DJointDef.create(this.factoryExt, dX, dY);
+        return FDist2DJointDef.create(this.factoryExt, d0, d1);
     }
 
     @Override
-    public FDist2DFixed getFDist2DFixed(double x, double y) {
+    public FDist2DFixed getFDist2DFixed(double d0, double d1) {
 
-        return FDist2DFixedDef.create(this.factoryExt, x, y);
+        return FDist2DFixedDef.create(this.factoryExt, d0, d1);
     }
 
     @Override
@@ -370,9 +371,9 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist2DUniform getFDist2DUniform(double x1, double x2, double y1, double y2) {
+    public FDist2DUniform getFDist2DUniform(double d0min, double d0max, double d1min, double d1max) {
 
-        return FDist2DUniformDef.create(this.factoryExt, this, x1, x2, y1, y2);
+        return FDist2DUniformDef.create(this.factoryExt, this, d0min, d0max, d1min, d1max);
     }
 
     @Override
@@ -382,21 +383,27 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
+    public FDist2DNormal getFDist2DNormal(double avg, double std) {
+
+        return FDist2DNormalDef.create(this.factoryExt, this, avg, std);
+    }
+
+    @Override
     public FDist3DCustom getFDist3DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
         return FDist3DManualDef.create(this.factoryExt, this, consumer);
     }
 
     @Override
-    public FDist3DJoint getFDist3DJoint(FDist1D dX, FDist1D dY, FDist1D dZ) {
+    public FDist3DJoint getFDist3DJoint(FDist1D d0, FDist1D d1, FDist1D d2) {
 
-        return FDist3DJointDef.create(this.factoryExt, dX, dY, dZ);
+        return FDist3DJointDef.create(this.factoryExt, d0, d1, d2);
     }
 
     @Override
-    public FDist3DFixed getFDist3DFixed(double x, double y, double z) {
+    public FDist3DFixed getFDist3DFixed(double d0, double d1, double d2) {
 
-        return FDist3DFixedDef.create(this.factoryExt, x, y, z);
+        return FDist3DFixedDef.create(this.factoryExt, d0, d1, d2);
     }
 
     @Override
@@ -406,9 +413,9 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist3DUniform getFDist3DUniform(double x1, double x2, double y1, double y2, double z1, double z2) {
+    public FDist3DUniform getFDist3DUniform(double d0min, double d0max, double d1min, double d1max, double d2min, double d2max) {
 
-        return FDist3DUniformDef.create(this.factoryExt, this, x1, x2, y1, y2, z1, z2);
+        return FDist3DUniformDef.create(this.factoryExt, this, d0min, d0max, d1min, d1max, d2min, d2max);
     }
 
     @Override

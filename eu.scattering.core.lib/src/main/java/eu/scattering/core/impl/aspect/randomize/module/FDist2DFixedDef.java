@@ -7,18 +7,18 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 public class FDist2DFixedDef implements FDist2DFixed {
     private final TransferFactory factoryExt;
 
-    private final double x, y;
+    private final double d0, d1;
 
-    private FDist2DFixedDef(TransferFactory factoryExt, double x, double y) {
+    private FDist2DFixedDef(TransferFactory factoryExt, double d0, double d1) {
         this.factoryExt = factoryExt;
 
-        this.x = x;
-        this.y = y;
+        this.d0 = d0;
+        this.d1 = d1;
     }
 
-    public static FDist2DFixed create(TransferFactory factoryExt, double x, double y) {
+    public static FDist2DFixed create(TransferFactory factoryExt, double d0, double d1) {
 
-        return new FDist2DFixedDef(factoryExt, x, y);
+        return new FDist2DFixedDef(factoryExt, d0, d1);
     }
 
     public static FDist2DFixed create(TransferFactory factoryExt, FPos2D val) {
@@ -29,7 +29,7 @@ public class FDist2DFixedDef implements FDist2DFixed {
     @Override
     public FPos2D produce() {
 
-        return factoryExt.getFPos2D(this.x, this.y);
+        return factoryExt.getFPos2D(this.d0, this.d1);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class FDist2DFixedDef implements FDist2DFixed {
 
         validate(in);
 
-        in[0] = this.x;
-        in[1] = this.y;
+        in[0] = this.d0;
+        in[1] = this.d1;
     }
 
     private void validate(double[] in) {

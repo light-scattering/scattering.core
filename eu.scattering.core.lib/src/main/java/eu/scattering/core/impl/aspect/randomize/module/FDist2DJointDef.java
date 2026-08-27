@@ -8,26 +8,26 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 public class FDist2DJointDef implements FDist2DJoint {
     private final TransferFactory factoryExt;
 
-    private final FDist1D dX, dY;
+    private final FDist1D d0, d1;
 
-    private FDist2DJointDef(TransferFactory factoryExt, FDist1D dX, FDist1D dY) {
+    private FDist2DJointDef(TransferFactory factoryExt, FDist1D d0, FDist1D d1) {
         this.factoryExt = factoryExt;
 
-        this.dX = dX;
-        this.dY = dY;
+        this.d0 = d0;
+        this.d1 = d1;
     }
 
-    public static FDist2DJoint create(TransferFactory factoryExt, FDist1D dX, FDist1D dY) {
+    public static FDist2DJoint create(TransferFactory factoryExt, FDist1D d0, FDist1D d1) {
 
-        return new FDist2DJointDef(factoryExt, dX, dY);
+        return new FDist2DJointDef(factoryExt, d0, d1);
     }
 
     @Override
     public FPos2D produce() {
 
         return factoryExt.getFPos2D(
-                this.dX.produce(),
-                this.dY.produce()
+                this.d0.produce(),
+                this.d1.produce()
         );
     }
 
@@ -36,8 +36,8 @@ public class FDist2DJointDef implements FDist2DJoint {
 
         validate(in);
 
-        in[0] = this.dX.produce();
-        in[1] = this.dY.produce();
+        in[0] = this.d0.produce();
+        in[1] = this.d1.produce();
     }
 
     private void validate(double[] in) {

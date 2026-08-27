@@ -3,22 +3,22 @@ package eu.scattering.core.impl.aspect.randomize.module;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.fixed.FDist1DFixed;
 
 public class FDist1DFixedDef implements FDist1DFixed {
-    private final double x;
+    private final double d0;
 
-    private FDist1DFixedDef(double x) {
+    private FDist1DFixedDef(double d0) {
 
-        this.x = x;
+        this.d0 = d0;
     }
 
-    public static FDist1DFixed get(double x) {
+    public static FDist1DFixed get(double d0) {
 
-        return new FDist1DFixedDef(x);
+        return new FDist1DFixedDef(d0);
     }
 
     @Override
     public double produce() {
 
-        return this.x;
+        return this.d0;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class FDist1DFixedDef implements FDist1DFixed {
 
         validate(in);
 
-        in[0] = this.x;
+        in[0] = this.d0;
     }
 
     private void validate(double[] in) {

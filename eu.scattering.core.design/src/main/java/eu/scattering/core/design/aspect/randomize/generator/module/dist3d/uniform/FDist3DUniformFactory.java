@@ -4,14 +4,7 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D
 
 public interface FDist3DUniformFactory {
 
-    FDist3DUniform getFDist3DUniform(double x1, double x2, double y1, double y2, double z1, double z2);
+    FDist3DUniform getFDist3DUniform(double d0min, double d0max, double d1min, double d1max, double d2min, double d2max);
 
     FDist3DUniform getFDist3DUniform(FPairPos3D range);
-
-    // -------------------------------------------------------------------------------------------------
-
-    default FDist3DUniform getFDist3DUniform() {
-
-        return getFDist3DUniform(-1, 1, -1, 1, -1, 1);
-    }
 }

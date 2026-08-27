@@ -420,9 +420,6 @@ public class FStatDef implements FStat {
 
     @Override
     public double correlation(FStat arg) {
-        double avgA = this.mean();
-        double avgB = arg.mean();
-
         double stdA = this.std(true);
         double stdB = arg.std(true);
 
