@@ -46,18 +46,16 @@ Depending on your workflow, you can interact with Scattering Core at three diffe
 
 ### Core library
 
-The core library provides the most advanced and complete functionality. It is published to the Maven Central Repository and consists of two dependencies: `lib` and `design`.
+The core library provides the most advanced and complete functionality. It is published to the Maven Central Repository and consists of two dependencies. You can include them in your Java projects using Gradle or Maven by replacing `VERSION` with the latest release number:
 
-You can include them in your Java projects using Gradle or Maven by replacing `VERSION` with the latest release number:
-
-**Gradle:**
+**Gradle**
 
 ```groovy
 implementation 'eu.scattering:eu.scattering.core.lib:VERSION'
 implementation 'eu.scattering:eu.scattering.core.design:VERSION'
 ```
 
-**Maven:**
+**Maven**
 
 ```xml
 <dependency>
@@ -74,40 +72,39 @@ implementation 'eu.scattering:eu.scattering.core.design:VERSION'
 
 ### CLI and wrappers
 
-While the core library offers complete programmatic control, there is also standalone Java CLI that offers simplified, ready-to-use functionality for common morphological analysis tasks.
+While the core library offers complete programmatic control, there is also standalone Java CLI that offers simplified, ready-to-use functionality.
 
-If you want to run this CLI from your terminal without manually handling Java archives, we provide official command-line wrappers for Node.js and Python. These wrappers automatically bundle and execute the underlying Java CLI for you:
+If you want to run this CLI from your terminal without manually handling Java archives, there are command-line wrappers for Node.js and Python. These wrappers automatically bundle and execute the underlying Java CLI for you:
 
-* **Node.js (NPM):** [`@light-scattering/scatter-cli`](https://www.npmjs.com/package/@light-scattering/scatter-cli)
-* **Python (PyPI):** [`scatter-cli`](https://pypi.org/project/scatter-cli/)
+<table>
+  <tr>
+    <td><a href="https://www.npmjs.com/package/@light-scattering/scatter-cli">Node.js (NPM)</a></td>
+    <td><code>@light-scattering/scatter-cli</code></td>
+  </tr>
+  <tr>
+    <td><a href="https://pypi.org/project/scatter-cli/">Python (PyPI)</a></td>
+    <td><code>scatter-cli</code></td>
+  </tr>
+</table>
+
 
 For detailed instructions on using the command-line tools, please refer to the [CLI documentation](eu.scattering.cli/README.md).
-
-### CLI wrappers
-
-If you just want to run morphological analyses from your terminal without managing Java dependencies, you can use the standalone command-line wrappers for Node.js and Python.
-
-These wrappers handle the Java runtime execution for you and can be installed via your preferred package manager:
-* **[Node.js (NPM)](https://www.npmjs.com/package/@light-scattering/scatter-cli)**
-* **[Python (PyPI)](https://pypi.org/project/scatter-cli/)**
-
-For detailed instructions on using the CLI, please refer to the [CLI documentation](cli/README.md).
 
 ## Background and scope
 
 The core aggregation elements were built upon the foundation of my previous project, FLAGE (Fractal-Like Aggregate Generation Environment). However, is not a simple port - the entire codebase was rewritten almost from scratch to be modernized, optimized, and extensible.
 
-Because the project is massive, and I am currently the sole developer, this manual focuses strictly on high-level features, such as aggregation models and morphological analysis. Low-level elements (like `FComplex`, `FPoint`, and `FVector`) are excluded from this guide. If you wish to utilize them in your own projects, please refer to the `design` module, where all interfaces are clearly defined.
+Because the project is massive, and I am currently the sole developer, this manual focuses strictly on high-level features, such as aggregation models and morphological analysis. Low-level elements (like `FPoint` or `FVector`) are excluded from this guide. If you wish to utilize them in your own projects, please refer to the `design` module, where all interfaces are clearly defined.
 
 ## Development and AI transparency
 
 This project began several years ago, well before the LLM era. As a result, the architectural foundation was built the old-school way: through academic literature, official documentation, and naturally Stack Overflow.
 
-During the later stages of development, maintaining the scientific correctness and cleanliness of the code remained the highest priority. AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as calculating the gyration tensor and performing PCA).
+During the later stages of development, maintaining the scientific correctness and cleanliness of the code remained the highest priority. AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as calculating the gyration tensor or performing PCA).
 
 To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. Furthermore, the generated code was only used as a baseline. Every single line within those marked methods was subsequently refactored, manually analyzed, and tested to ensure strict scientific accuracy.
 
-On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to polish, structure, and rewrite my original drafts for better readability. The same approach was applied to the wrappers and build tools (which are separate from the core Java library). While the AI was not used to write the code directly, the development of these peripheral elements followed modern workflows, utilizing the LLM as an assistant and interactive guide.
+On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to polish, structure, and rewrite my original drafts for better readability. The same approach was applied to the wrappers and build tools (which are separate from the core library). While the AI was not used to write the code directly, the development of these peripheral elements followed modern workflows, utilizing the LLM as an assistant and interactive guide.
 
 ## Roadmap
 
@@ -116,23 +113,44 @@ While Scattering Core is currently highly functional for the generation and morp
 ### Web interface and containerization
 
 To make the tool more accessible to users who prefer visual dashboards over command-line tools, I plan to develop a fully integrated graphical user interface (GUI). This initiative will include:
-* **REST API:** Developing a lightweight backend endpoint that exposes the core engine's capabilities.
-* **React frontend:** Building a modern, interactive web application to configure generation parameters, execute analysis tasks, and visualize the resulting 3D models.
-* **Docker deployment:** Packaging the entire stack into a single Docker container. This will allow anyone to spin up the complete GUI environment locally with a single command, without worrying about Java versions or node modules.
+* **Frontend:** Building a modern React web application to configure generation parameters, execute analysis tasks, and visualize the resulting 3D models.
+* **Backend:** Developing a lightweight REST backend endpoint that exposes the core engine's capabilities.
+* **Docker:** Packaging the entire stack into a single Docker container. This will allow anyone to spin up the complete GUI environment locally with a single command, without worrying about Java versions or node modules.
 
 ### Modularization and licensing
 
-Currently, the entire repository is published under the strong copyleft AGPLv3 license. However, to better support the wider open-source community, I plan to eventually extract the low-level utilities (such as `FPoint`, `FVector`, and statistical classes) into a separate, standalone library released under the permissive **MIT License**.
-
-This will allow researchers and developers to reuse these foundational components in their own projects without being bound by the AGPLv3. Until that split occurs, any external pull requests that modify these core utilities will require the contributor's consent to dual-license their additions, ensuring a smooth transition when the time comes.
+Currently, the entire repository is published under the strong copyleft AGPLv3 license. However, to better support the wider open-source community, I plan to eventually extract the low-level utilities into a separate, standalone library released under the permissive **MIT License**. This will allow researchers and developers to reuse these foundational components in their own projects without being bound by the AGPLv3. Until that split occurs, any external pull requests that modify these core utilities will require the contributor's consent to dual-license their additions, ensuring a smooth transition when the time comes.
 
 ## Project structure
 
-The repository is currently divided into three base modules:
+The repository is divided into the following modules:
 
-*   **`design`** - Contains all public interfaces and serves primarily as API reference documentation.
-*   **`lib`** - Contains the core implementation of the design, including the main `ScatterCore` entry point.
-*   **`cli`** - Provides a command-line interface and is used to build a standalone, executable JAR file.
+<table>
+  <tr>
+    <td><code>design</code></td>
+    <td>Contains all public interfaces and serves primarily as API reference documentation.</td>
+  </tr>
+  <tr>
+    <td><code>lib</code></td>
+    <td>Contains the core implementation of the design, including the main entry point.</td>
+  </tr>
+  <tr>
+    <td><code>cli</code></td>
+    <td>Provides a command-line interface and is used to build a standalone, executable JAR file.</td>
+  </tr>
+  <tr>
+    <td><code>front</code></td>
+    <td>In progress...</td>
+  </tr>
+  <tr>
+    <td><code>back</code></td>
+    <td>In progress...</td>
+  </tr>
+  <tr>
+    <td><code>docker</code></td>
+    <td>In progress...</td>
+  </tr>
+</table>
 
 This manual focuses exclusively on the **`design`** and **`lib`** modules. The **`cli`** module is documented separately in its own project README file.
 
@@ -142,7 +160,8 @@ All generation and analysis operations begin with the `ScatterFactory`, which se
 
 **Reproducible mode**
 
-This mode requires a seed value. When a seed is provided, all subsequent operations are executed on a single thread and are fully deterministic. If you generate an aggregate or run an analysis using the same seed, the results will be identical every time.
+This mode requires a seed value. When it is provided, all subsequent operations are executed on a single thread and are fully deterministic. If you generate an aggregate or run an analysis using the same seed, the results will be identical every time.
+
 ```java
 // Initialize the factory with a specific seed for full reproducibility.
 ScatterFactory factory = ScatterCore.createFactory(123L);
@@ -157,6 +176,7 @@ ScatterFactory factory = ScatterCore.createFactory(-1L);
 If reproducibility is not required, you can initialize the factory without a seed. This mode utilizes a different, non-deterministic random generation strategy. As a result, it is extremely unlikely that the exact same aggregate structure will be generated twice.
 
 *(While current development strictly prioritizes mathematical correctness for research publication, the unseeded mode lays the architectural groundwork for multithreaded performance optimizations planned for a near-future release)*
+
 ```java
 // Initialize the factory for maximum multi-threaded performance.
 ScatterFactory factory = ScatterCore.createFactory();
@@ -164,39 +184,44 @@ ScatterFactory factory = ScatterCore.createFactory();
 
 ## Computational parameters
 
-To maintain high performance and numerical stability, the library relies on three configuration elements for calculations. They can be configured globally for the entire aggregate or fine-tuned for each individual particle:
-- *epsilon* (Continuous Tolerance): The continuous threshold used for mathematical calculations across the engine. While it can be used to evaluate physical rules (like overlaps or contacts), it applies broadly to any continuous numerical evaluation. Default is `10E-4`.
-- *delta* (Discrete Tolerance): The discrete threshold used for calculations. When operations require discretizing continuous space (such as mesh decomposition), this defines the element resolution. Default is `10E-2`.
-- *FBuffer* (Memory Management): A reusable data buffer required for heavy meshing and discrete operations. Recycling memory allocations across iterations prevents Garbage Collection (GC) overhead and maintains performance.
+Calculations rely on two core tolerances to maintain numerical stability. Both can be configured globally for an aggregate or fine-tuned per particle.
 
-Before running complex operations, you can configure your tolerances and inject a pre-allocated buffer into the aggregate:
+**Epsilon (continuous tolerance)**
+
+The positional threshold used for positioning 3D geometries.
+* **Default:** `1E-4`
+* **When to adjust:** Modify this when importing files or working with external algorithms to match their specific definitions of point contact and overlap.
+
 ```java
-// 1. Initialize and inject the reusable mesh buffer.
-int capacity = 1000;
-FBuffer<FBufferData> fBuffer = factory.getFBuffer(capacity);
-fAggregate.setRefFBuffer(fBuffer);
-
-// 2. Define the computational tolerances (defaults shown).
-double epsilon = 10E-4;
-double delta = 10E-2;
-
-// 3. Apply tolerances to the entire aggregate.
-fAggregate.setParticleEpsilon(epsilon);
-fAggregate.setParticleDelta(delta);
+fAggregate.setParticleEpsilon(1E-4);   // Apply tolerance to the entire aggregate.
+fParticle.setEpsilon(1E-4);            // Override tolerance for a single particle.
 ```
 
-If your operations require it, you can override these global parameters for specific particles:
+**Delta (discrete tolerance)**
+
+The threshold used for volumetric calculations. It defines the element resolution when operations require discretizing continuous space.
+* **Default:** `1E-2`
+* **When to adjust:** Unlike epsilon, there is no universal recommended value. Tune this based on the scale and complexity of the analyzed geometry.
+
 ```java
-// Apply specific tolerances to individual particles.
-for (var fShape : fAggregate) {
-    fShape.setEpsilon(10E-5);   // Stricter continuous tolerance.
-    fShape.setDelta(10E-3);     // Finer discrete resolution.
-}
+fAggregate.setParticleDelta(1E-2);      // Apply tolerance to the entire aggregate.
+fParticle.setDelta(1E-2);               // Override tolerance for a single particle     . 
+```
+
+**Memory buffering for discrete operations**
+
+Heavy discrete operations (like mesh decomposition) require a reusable data buffer to maintain high performance and prevent memory churn. You should allocate and inject an `FBuffer` into the aggregate before running these calculations:
+
+```java
+// Initialize and inject a pre-allocated reusable mesh buffer.
+FBuffer<FBufferData> fBuffer = factory.getFBuffer(1_000_000);
+fAggregate.setRefFBuffer(fBuffer);
 ```
 
 ## Generation algorithms
 
 To generate a synthetic Cluster-Cluster (CC) aggregate, you must first define its fundamental physical properties. In this step, the primary particles are pre-allocated in memory, resulting in an unassembled aggregate where particles are not yet spatially positioned.
+
 ```java
 int np = 1000;      // Number of primary particles.
 double rp = 1.0;    // Particle radius.
@@ -206,6 +231,7 @@ FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(np, r
 ```
 
 Next, define the aggregation algorithm and its morphological targets by configuring parameters such as the fractal dimension and the fractal prefactor. Once you bind this model to your unassembled aggregate, simply execute the build process to physically position the particles according to your constraints:
+
 ```java
 double df = 1.8;    // Target fractal dimension.
 double kf = 1.3;    // Target fractal prefactor.
@@ -221,11 +247,9 @@ This decoupled approach was designed to overcome limitations found in the previo
 
 ## Loading, saving, and exporting
 
-The library provides dedicated aspects for serializing aggregates and exporting them to various external formats. This allows you to save your generated structures, import existing ones, or export them for external visualization and mesh generation.
+The library provides dedicated aspects for serializing aggregates and exporting them to various external formats. This allows you to save your generated structures, import existing ones, or export them for external visualization.
 
-All contexts are accessed via the main `ScatterFactory` instance.
-
-**Loading aggregates**
+**Loading**
 
 You can reconstruct an `FAggregate` from a string representation. The default and most comprehensive format is JSON, which strictly preserves all component properties.
 
@@ -238,27 +262,27 @@ FAggregate fAggregate = load.fromJSON(data);                        // Load from
 FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from an alternative format.
 ```
 
-**Saving aggregates**
+**Saving**
 
 For data storage, serialization, or transferring structures between processes, you can save aggregates into standard string formats. The JSON format is highly recommended as it strictly preserves all component properties.
 
 ```java
-var save = factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
+var save = factory.getSaveAspect().getComponentContext();           // Retrieve the saving context for components (including aggregates).
 
-String output = save.toJSON(aggregate);                        // The default, comprehensive JSON format.      
-String output = save.toBasic(aggregate, ExBasic.MULTISPHERE);  // Alternative formats.
+String data = save.toJSON(aggregate);                               // Save to the default JSON format.      
+String data = save.toBasic(aggregate, ExBasic.MULTISPHERE);         // Save to an alternative format.
 ```
 
-**Exporting aggregates**
+**Exporting**
 
 When preparing an aggregate for external applications (such as meshing, rendering, or interfacing with legacy software),  you can use specialized exporters tailored to those target environments.
 
 ```java
-var save = factory.getSaveAspect().getComponentContext();      // Retrieve the saving/exporting context.
+var save = factory.getSaveAspect().getComponentContext();           // Retrieve the saving context for components (including aggregates).
 
-String output = save.toFLAGE(aggregate);                       // Export to a format compatible with the FLAGE program.
-String output = save.toNGSolve(aggregate);                     // Export for volumetric mesh generation using NetGen/NGSolve. 
-String output = save.toPovRay(aggregate, ExPovRay.BOUNDARY);   // Export for high-quality 3D rendering using PovRay.
+String data = save.toFLAGE(aggregate);                              // Export to a format compatible with the FLAGE software.
+String data = save.toNGSolve(aggregate);                            // Export for volumetric mesh generation using NetGen/NGSolve. 
+String data = save.toPovRay(aggregate, ExPovRay.BOUNDARY);          // Export for high-quality 3D rendering using PovRay.
 ```
 
 ## Morphological analysis
@@ -315,6 +339,7 @@ FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE)
 The `getOverlapFactor` method returns an `FStat` object, which provides statistical analysis over a collection of calculated values. The `OverlapFactor` enum dictates exactly how these values are generated:
 
 **Particle-Level Metrics**
+
 For these methods, the `FStat` collection contains exactly one element per primary particle in the aggregate:
 
 - **`PARTICLE_QUANTITATIVE`**: Returns the absolute count of overlaps (coordination number) for each particle.
@@ -322,11 +347,10 @@ For these methods, the `FStat` collection contains exactly one element per prima
 - **`PARTICLE_VOLUMETRIC`**: Evaluates the overlapping volume fraction for each particle. The formula is `1 - (Vn / Vt)`, where `Vt` is the particle's total volume and `Vn` is its strictly non-overlapping volume. This metric is governed by the `delta` parameter.
 
 **Cluster-Level Metrics**
+
 For these methods, the `FStat` collection contains elements corresponding to structural overlap layers, rather than individual particles:
 
 - **`CLUSTER_VOLUMETRIC`**: Evaluates the volume distribution across different intersection depths for the aggregate's overlapping regions. It returns the fraction of the total overlapped volume (`Vo`) shared by multiple particles. The distribution array starts at a depth of 2 particles: index `0` represents the volume fraction shared by exactly 2 particles (`V2 / Vo`), index `1` by 3 particles (`V3 / Vo`), and so on. The unshared volume is excluded from this calculation. This metric is governed by the `delta` parameter.
-
-> **Note:** Connectivity and point-based overlap metrics heavily depend on the `epsilon` tolerance parameter. When working with geometries generated by external algorithms or imported files, you may need to adjust `epsilon` to match their specific definitions of point contact and overlap. Conversely, all volumetric metrics depend on the `delta` parameter for mesh discretization.
 
 ### Linear measurements
 
@@ -350,6 +374,7 @@ The `Length` enum provides the following options for extracting specific dimensi
 You can also calculate the maximum spanning radius originating from a specific point. 
 This is useful when comparing different structural definitions of the aggregate. 
 The method is overloaded to accept various input formats:
+
 ```java
 // Calculates the spanning radius originating from explicitly defined raw coordinates.
 double radius = fAggregate.getRadiusFrom(0.0, 0.0, 0.0);
