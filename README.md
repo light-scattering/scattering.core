@@ -205,7 +205,7 @@ The threshold used for volumetric calculations. It defines the element resolutio
 
 ```java
 fAggregate.setParticleDelta(1E-2);      // Apply tolerance to the entire aggregate.
-fParticle.setDelta(1E-2);               // Override tolerance for a single particle     . 
+fParticle.setDelta(1E-2);               // Override tolerance for a single particle. 
 ```
 
 **Memory buffering for discrete operations**
@@ -220,30 +220,303 @@ fAggregate.setRefFBuffer(fBuffer);
 
 ## Generation algorithms
 
-To generate a synthetic Cluster-Cluster (CC) aggregate, you must first define its fundamental physical properties. In this step, the primary particles are pre-allocated in memory, resulting in an unassembled aggregate where particles are not yet spatially positioned.
+Aggregates can be constructed in two primary ways: **direct construction** (where particles are explicitly positioned by the developer) and **model-based generation** (where algorithms position particles dynamically).
+
+### Direct construction
+
+In this approach, you explicitly define the coordinates and geometry of each particle before assembling the aggregate:
 
 ```java
-int np = 1000;      // Number of primary particles.
-double rp = 1.0;    // Particle radius.
+// Explicitly define particles with specific center coordinates and radii.
+FSphere pA = factory.getFSphere(0, 0, 0, 1);
+FSphere pB = factory.getFSphere(2, 0, 0, 1);
 
-// Create an unassembled monodisperse aggregate.
-FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(np, rp);
+// Construct the aggregate from the predefined list.        
+FAggregate agg = factory.getRefFAggregate(List.of(pA, pB));
 ```
 
-Next, define the aggregation algorithm and its morphological targets by configuring parameters such as the fractal dimension and the fractal prefactor. Once you bind this model to your unassembled aggregate, simply execute the build process to physically position the particles according to your constraints:
+While this method is ideal when feeding in coordinates from external algorithms, writing it by hand is tedious and error-prone. To accelerate the process, the library provides built-in utilities for generating common geometric arrangements (note, that the available list of predefined geometries is frequently expanded).
 
 ```java
-double df = 1.8;    // Target fractal dimension.
-double kf = 1.3;    // Target fractal prefactor.
+double rp = 1;  // Particle radius
 
-// Bind the tunable CC model to the unassembled aggregate.
-var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+// Create a 1D line composed of 10 spherical particles.
+FAggregate d1 = factory.getFAggregateContext().geometry().d1(10, rp);
+// Create a 2D grid composed of 10x12 spherical particles.
+FAggregate d2 = factory.getFAggregateContext().geometry().d2(10, 12, rp);
+// Create a 3D lattice composed of 10x12x14 spherical particles.
+FAggregate d3 = factory.getFAggregateContext().geometry().d3(10, 12, 14, rp);
 
-// Build the aggregate.
-fModel.build();
+// Create a 2D hexagonal cluster limited by an outer radius of 20 units.
+FAggregate hex2 = factory.getFAggregateContext().geometry().d2Hex(20, rp);
+// Create a 3D hexagonal cluster limited by an outer radius of 30 units.
+FAggregate hex3 = factory.getFAggregateContext().geometry().d3Hex(30, rp);
 ```
 
-This decoupled approach was designed to overcome limitations found in the previous version of the software, where particles were generated randomly during the aggregation process itself. While that method worked fine for monodisperse aggregates, complex polydisperse structures (especially those featuring multimodal size distributions) lacked reproducibility. Each run resulted in geometries with vastly different morphological parameters. By pre-allocating the particles first, you can repeat the spatial assembly process multiple times while keeping the fundamental physical parameters (such as shape, mass, volume, and coating) strictly constant. This guarantees a much more precise comparison across different aggregation models. Naturally, a single aggregate can be reused and passed to multiple different models.
+For highly complex structural geometries the library offers advanced stochastic tools like Producers and Distributions. While a comprehensive guide to these features will be covered in an upcoming tutorial, below are two examples demonstrating how to construct a TiO2:Ag core-satellite composite and a multi-modal particle assembly:
+
+```java
+// Create the central particle (TiO2) and tag it. 
+// Tags connect geometries to their physical properties (e.g., refractive index).
+FSphere particleTiO2 = factory.getFSphere(36).setMeta("TiO2");
+
+// Configure a producer to generate the surrounding particles (Ag).
+FSphereProducer particleAg = factory.getFSphereProducer()
+        // GENERATORS: Define the initial placement and sizing.
+        // You can chain multiple predefined or custom generators. 
+        // Here, a predefined generator places centers on a sphere and assigns radii via a normal distribution.
+        .withProdCenterAndDistRadius(
+                factory.getFPointProducer().withOnSphere(36),
+                factory.getFRand().getFDist1DNormal(2.5, 0.2))
+        // CORRECTIONS: Apply spatial modifications to the generated geometry.
+        // You can apply multiple predefined or custom corrections. 
+        // Here, a custom lambda snaps each candidate into exact point-contact with the core.
+        .addCorrection((candidate, rand) ->
+                factory.getRandAspect().attachLinear(candidate, particleTiO2))
+        // VALIDATIONS: Enforce strict criteria the particle must pass to be accepted.
+        // You can require multiple predefined or custom validators.
+        // Here, a predefined validator rejects any candidate that overlaps with previously placed particles.
+        .validateNoOverlap()
+        // METADATA: Apply the corresponding tag to all generated instances.
+        .setMeta("Ag");
+
+// Generate an aggregate containing 250 Ag particles, then append the core TiO2 particle.
+FAggregate composite = factory.getRefFAggregate(particleAg.getListFixed(250));
+composite.addRefParticle(particleTiO2);
+
+// Export the finalized composite to a PovRay script for 3D visualization.
+String visual = factory.getSaveAspect().getComponentContext().toPovRay(composite, ExPovRay.FREE);
+```
+
+```java
+// Define the total number of particles to generate.
+int size = 2500;
+
+// Define a uniform 3D bounding box for spatial distribution.
+FDist3D rangeA = factory.getFRand().getFDist3DUniform(factory.getFPairPos3D(-200, -100, -100, 200, 100, 100));
+// Define a 3D normal distribution (centered at the origin by default) with custom standard deviations.
+FDist3D rangeB = factory.getFRand().getFDist3DNormal().setStd(50, 25, 25);
+
+// Configure a producer to generate particles using a weighted mix of generators.
+FSphereProducer particles = factory.getFSphereProducer()
+        // GENERATORS: Chain multiple predefined or custom generators with assigned selection weights.
+        // 90% probability: Place small particles (radius 1.0) uniformly within the bounding box.
+        .withDistCenterAndDistRadius(rangeA, factory.getFRand().getFDist1DNormal(1.0, 0.1), 90)
+        // 10% probability: Place intermediate particles (radius 5.0) clustered via the normal distribution.
+        .withDistCenterAndDistRadius(rangeB, factory.getFRand().getFDist1DNormal(5.0, 1), 10)
+        // VALIDATIONS: Enforce strict criteria candidates must pass to be accepted.
+        // Here, a predefined validator rejects any candidates that overlap with existing particles.
+        .validateNoOverlap()
+        // Overlap validation can frequently fail in dense clusters. This allows infinite regeneration attempts (default is 100).
+        .setRetriesInfinite();
+
+// Generate an aggregate of 2,500 particles drawn randomly based on the defined generator weights.
+FAggregate geometry = factory.getRefFAggregate(particles.getListRandomized(size));
+
+// Export the finalized geometry to a PovRay script for 3D visualization, including the visual boundary.
+String visual = factory.getSaveAspect().getComponentContext().toPovRay(geometry, ExPovRay.BOUNDARY);
+```
+
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="docs/assets/geoTiO2Ag.png" alt="TiO2:Ag composite" width="400"></td>
+      <td><img src="docs/assets/geoMultiModal.png" alt="Multimodal assembly" width="400"></td>
+    </tr>
+    <tr>
+      <td align="center"><em>Fig 1a: TiO2:Ag composite.</em></td>
+      <td align="center"><em>Fig 1b: Multimodal particle assembly.</em></td>
+    </tr>
+  </table>
+</div>
+
+### Model-based generation
+
+In this approach, you define the initial pool of particles, but their final spatial positions are determined entirely by an aggregation model.
+
+This decoupled architecture was designed to overcome a major limitation in previous software versions, where particles were generated during the aggregation process. While on-the-fly generation worked fine for monodisperse aggregates, complex polydisperse structures suffered from poor reproducibility, yielding vastly different morphological parameters on every run. By pre-allocating the particle pool first, you can run multiple spatial assemblies using the exact same underlying physical parameters. This guarantees highly precise comparisons across different aggregation models.
+
+To accelerate setup, the library includes built-in utilities for generating common initial distributions. These methods generate a dense pool of particles temporarily centered at the origin of the Cartesian grid, ready to be dispersed by a model. Keep in mind that any aggregate, even one constructed directly, can be fed into an aggregation model.
+
+```java
+// Generate an aggregate composed of 1,000 primary particles with a uniform radius of 1 unit.
+FAggregate mono = factory.getFAggregateContext().base().monodisperse(1_000, 1.0);
+// Generate an aggregate composed of 1,000 primary particles with radii following a normal distribution.
+FAggregate polyAgg = factory.getFAggregateContext().base().polydisperse(1_000, 1.0, 0.1);
+```
+
+To shape the geometry, you must define an aggregation model and bind it to your preliminary particle pool.
+
+```java
+// Create a preliminary pool of 10,000 primary particles with radii following a normal distribution.
+FAggregate aggregate = factory.getFAggregateContext().base().polydisperse(10_000, 1, 0.1);
+
+// Define a 3D ballistic CC aggregation model (3D is the default).
+FModelCC d3 = factory.getFModelContext().cc().ballistic(aggregate);
+
+// Define a 2D ballistic CC aggregation model. 
+// The first parameter of every model constructor is optional and defines the spatial dimensions.
+FModelCC d2 = factory.getFModelContext().cc().ballistic(Dimension.D2, aggregate);
+
+// Execute the 3D ballistic CC aggregation.
+d3.build();
+
+// Export the 3D visualization.
+String d3Visual = factory.getSaveAspect().getComponentContext().toPovRay(aggregate, ExPovRay.FREE);
+
+// Execute the 2D ballistic CC aggregation (reusing the same particle pool).
+d2.build();
+
+// Export the 2D visualization.
+String d2Visual = factory.getSaveAspect().getComponentContext().toPovRay(aggregate, ExPovRay.FREE);
+```
+
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="docs/assets/agg3DBallisticCC.png" alt="Ballistic CC 3D" width="400"></td>
+      <td><img src="docs/assets/agg2DBallisticCC.png" alt="Ballistic CC 2D" width="400"></td>
+    </tr>
+    <tr>
+      <td align="center"><em>Fig 2a: Visualization of a ballistic CC 3D aggregate.</em></td>
+      <td align="center"><em>Fig 2b: Visualization of a ballistic CC 2D aggregate.</em></td>
+    </tr>
+  </table>
+</div>
+
+Each model might contain individual configuration options, such as particle spawn ring, exclusion range, motion algorithm, etc. However, they will be described in more detain in an upcoming tutorial. This one focuses on basic features only. All models are divided into two main categories, namely Particle-Cluster (PC) and Cluster-Cluster (CC). Note, that all models have 3D and 2D variants.
+
+#### Particle-Cluster (PC) Models
+
+Particle-Cluster methods build aggregates by attaching a single particle at a time. While they produce geometries that are slightly less physically accurate than Cluster-Cluster (CC) methods, they provide a much wider spectrum of achievable fractal dimensions.
+
+```java
+// Create a preliminary pool of 1,000 monodisperse primary particles.
+FAggregate aggregate = factory.getFAggregateContext().base().monodisperse(1_000, 1);
+
+// Access the PC model factory context.
+FModelPCFactoryContext context = factory.getFModelContext().pc();
+
+// Initialize standard PC models.
+FModelPC rla = context.rla(aggregate);              // Reaction-Limited Aggregation.
+FModelPC dla = context.dla(aggregate);              // Diffusion-Limited Aggregation.
+FModelPC ballistic = context.ballistic(aggregate);  // Ballistic aggregation.
+
+// Initialize a tunable aggregation model.
+// This is the only model that accepts explicit fractal parameters (dimension and prefactor).
+FModelPC tunable = context.tunable(aggregate, 1.8, 1.3);
+```
+
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="docs/assets/pcRLA.png" alt="RLA" width="400"></td>
+      <td><img src="docs/assets/pcDLA.png" alt="DLA" width="400"></td>
+    </tr>
+    <tr>
+      <td align="center"><em>Fig 3a: RLA aggregate.</em></td>
+      <td align="center"><em>Fig 3b: DLA aggregate.</em></td>
+    </tr>
+    <tr>
+      <td><img src="docs/assets/pcBallistic.png" alt="Ballistic PC" width="400"></td>
+      <td><img src="docs/assets/pcTunable.png" alt="Tunable PC" width="400"></td>
+    </tr>
+    <tr>
+      <td align="center"><em>Fig 3c: PC ballistic aggregate.</em></td>
+      <td align="center"><em>Fig 3d: PC tunable aggregate.</em></td>
+    </tr>
+  </table>
+</div>
+
+**PC lifecycle control (validators, acceptors, and monitors)**
+
+You can tightly control the aggregation logic by attaching multiple evaluation hooks to PC models:
+
+Completion validators evaluate the final state of the aggregate.
+```java
+// If the fully generated geometry fails this condition, the entire aggregation process restarts.
+fModel.addCompletionValidator((cluster, iteration) ->
+        // Enforce a strict fractal dimension using the Mass-Radius algorithm.
+        cluster.getFractalDimension(FractalDimension.MR_RESTRICTED) > 2.5);
+```
+
+Step acceptors evaluate each individual particle as it attempts to attach.
+```java
+// If a candidate particle fails this condition, it is rejected and the attachment step repeats.
+fModel.addStepAcceptor((cluster, candidate) ->
+        // Constrain all attached particles to a specific spatial range.
+        candidate.getCenterX() > -10 && candidate.getCenterX() < 10);
+```
+
+Step monitors track dynamic data during the build process without altering the geometry.
+```java
+List<Double> diameters = new ArrayList<>();
+
+// Its task is to observe and record data across all stages of aggregation.
+fModel.addStepMonitor((cluster, particle) -> {
+    // Note on lifecycle stages:
+    // - First iteration: The cluster is null. The first particle is positioned but not yet clustered.
+    // - Final iteration: The particle is null. The cluster is fully assembled with no new candidates.
+    if (cluster != null) {
+        diameters.add(cluster.getDiameter());
+    }
+});
+```
+
+#### Cluster-Cluster (CC) Models
+
+Cluster-Cluster methods at each step of the aggregation process connect two clusters of exact (or similar) size to form a larger one. The procedure starts with generating small aggregates using the complementary PC method. Resulting geometries are more realistic, however, the aggregation process is more complex and extreme fractal dimensions are difficult to achieve. Also, while the growing PC cluster is stationary, CC clusters can be repositioned multiple times before the final geometry is complete.
+
+```java
+// Create a preliminary pool of 1,000 monodisperse primary particles.
+FAggregate aggregate = factory.getFAggregateContext().base().monodisperse(1_000, 1);
+
+// Access the CC model factory context.
+FModelCCFactoryContext context = factory.getFModelContext().cc();
+
+// Initialize standard CC models.
+FModelCC rlca = context.rla(aggregate);             // Reaction-Limited Cluster Aggregation.
+FModelCC dlca = context.dla(aggregate);             // Diffusion-Limited Cluster Aggregation.
+FModelCC ballistic = context.ballistic(aggregate);  // Ballistic aggregation.
+
+// Initialize a tunable aggregation model.
+// This is the only model that accepts explicit fractal parameters (dimension and prefactor).
+FModelCC tunable = context.tunable(aggregate, 1.8, 1.3);
+```
+
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="docs/assets/ccRLCA.png" alt="RLCA" width="400"></td>
+      <td><img src="docs/assets/ccDLCA.png" alt="DLCA" width="400"></td>
+    </tr>
+    <tr>
+      <td align="center"><em>Fig 4a: RLCA aggregate.</em></td>
+      <td align="center"><em>Fig 4b: DLCA aggregate.</em></td>
+    </tr>
+    <tr>
+      <td><img src="docs/assets/ccBallistic.png" alt="Ballistic CC" width="400"></td>
+      <td><img src="docs/assets/ccTunable.png" alt="Tunable CC" width="400"></td>
+    </tr>
+    <tr>
+      <td align="center"><em>Fig 4c: CC ballistic aggregate.</em></td>
+      <td align="center"><em>Fig 4d: CC tunable aggregate.</em></td>
+    </tr>
+  </table>
+</div>
+
+**CC lifecycle control (validators, acceptors, and monitors)**
+
+You can tightly control the aggregation logic by attaching multiple evaluation hooks to CC models:
+
+Completion validators evaluate the final state of the aggregate.
+```java
+// If the fully generated geometry fails this condition, the entire aggregation process restarts.
+fModel.addCompletionValidator((cluster, iteration) ->
+        // Enforce a strict fractal dimension using the Mass-Radius algorithm.
+        cluster.getFractalDimension(FractalDimension.MR_RESTRICTED) > 2.5);
+```
+
 
 ## Loading, saving, and exporting
 
