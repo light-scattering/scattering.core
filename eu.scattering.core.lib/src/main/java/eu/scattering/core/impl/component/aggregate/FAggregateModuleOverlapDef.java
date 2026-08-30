@@ -274,7 +274,7 @@ public class FAggregateModuleOverlapDef {
                     continue;
                 }
 
-                if (shapeA.repels(shapeB)) {
+                if (shapeA.misses(shapeB)) {
                     continue;
                 }
 

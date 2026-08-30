@@ -3562,40 +3562,40 @@ public class FSphereTest {
             }
 
             @Test
-            @DisplayName("Repels (epsilon) - same position")
-            void repelsEpsilonSamePosition() {
+            @DisplayName("Misses (epsilon) - same position")
+            void missesEpsilonSamePosition() {
                 Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
                         .setDelta(-1);
                 Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
                         .setDelta(-1);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertFalse(fSphereA.repels(fSphereB),
+                        () -> assertFalse(fSphereA.misses(fSphereB),
                                 "The spheres should not be distant"),
-                        () -> assertFalse(fSphereB.repels(fSphereA),
+                        () -> assertFalse(fSphereB.misses(fSphereA),
                                 "The spheres should not be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (epsilon) - distant")
-            void repelsEpsilonDistant() {
+            @DisplayName("Misses (epsilon) - distant")
+            void missesEpsilonDistant() {
                 Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
                         .setDelta(-1);
                 Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
                         .setDelta(-1);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertTrue(fSphereA.repels(fSphereB),
+                        () -> assertTrue(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertTrue(fSphereB.repels(fSphereA),
+                        () -> assertTrue(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (epsilon) - A")
-            void repelsEpsilonA() {
+            @DisplayName("Misses (epsilon) - A")
+            void missesEpsilonA() {
                 Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
                         .setDelta(-1);
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
@@ -3611,32 +3611,32 @@ public class FSphereTest {
                 fSphereB.translate(translation);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertFalse(fSphereA.repels(fSphereB),
+                        () -> assertFalse(fSphereA.misses(fSphereB),
                                 "The spheres should not be distant"),
-                        () -> assertFalse(fSphereB.repels(fSphereA),
+                        () -> assertFalse(fSphereB.misses(fSphereA),
                                 "The spheres should not be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (epsilon) - B")
-            void repelsEpsilonB() {
+            @DisplayName("Misses (epsilon) - B")
+            void missesEpsilonB() {
                 Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
                         .setDelta(-1);
                 Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
                         .setDelta(-1);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertTrue(fSphereA.repels(fSphereB),
+                        () -> assertTrue(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertTrue(fSphereB.repels(fSphereA),
+                        () -> assertTrue(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (epsilon) - C")
-            void repelsEpsilonC() {
+            @DisplayName("Misses (epsilon) - C")
+            void missesEpsilonC() {
                 Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
                         .setEpsilon(0.05)
                         .setDelta(-1);
@@ -3645,16 +3645,16 @@ public class FSphereTest {
                         .setDelta(-1);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertFalse(fSphereA.repels(fSphereB),
+                        () -> assertFalse(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertFalse(fSphereB.repels(fSphereA),
+                        () -> assertFalse(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (epsilon, min) - A")
-            void repelsEpsilonMinA() {
+            @DisplayName("Misses (epsilon, min) - A")
+            void missesEpsilonMinA() {
                 Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
                         .setEpsilon(1E-6)
                         .setDelta(-1);
@@ -3663,16 +3663,16 @@ public class FSphereTest {
                         .setDelta(-1);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertTrue(fSphereA.repels(fSphereB),
+                        () -> assertTrue(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertTrue(fSphereB.repels(fSphereA),
+                        () -> assertTrue(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (epsilon, min) - B")
-            void repelsEpsilonMinB() {
+            @DisplayName("Misses (epsilon, min) - B")
+            void missesEpsilonMinB() {
                 Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
                         .setEpsilon(1E-4)
                         .setDelta(-1);
@@ -3681,16 +3681,16 @@ public class FSphereTest {
                         .setDelta(-1);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertFalse(fSphereA.repels(fSphereB),
+                        () -> assertFalse(fSphereA.misses(fSphereB),
                                 "The spheres should not be distant"),
-                        () -> assertFalse(fSphereB.repels(fSphereA),
+                        () -> assertFalse(fSphereB.misses(fSphereA),
                                 "The spheres should not be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (delta) - same position")
-            void repelsDeltaSamePosition() {
+            @DisplayName("Misses (delta) - same position")
+            void missesDeltaSamePosition() {
                 Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
                         .setEpsilon(-1)
                         .setDelta(0.01);
@@ -3699,16 +3699,16 @@ public class FSphereTest {
                         .setDelta(0.01);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertFalse(fSphereA.repels(fSphereB),
+                        () -> assertFalse(fSphereA.misses(fSphereB),
                                 "The spheres should not be distant"),
-                        () -> assertFalse(fSphereB.repels(fSphereA),
+                        () -> assertFalse(fSphereB.misses(fSphereA),
                                 "The spheres should not be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (delta) - distant")
-            void repelsDeltaDistant() {
+            @DisplayName("Misses (delta) - distant")
+            void missesDeltaDistant() {
                 Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
                         .setEpsilon(-1)
                         .setDelta(0.01);
@@ -3717,16 +3717,16 @@ public class FSphereTest {
                         .setDelta(0.01);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertTrue(fSphereA.repels(fSphereB),
+                        () -> assertTrue(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertTrue(fSphereB.repels(fSphereA),
+                        () -> assertTrue(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (delta) - A")
-            void repelsDeltaA() {
+            @DisplayName("Misses (delta) - A")
+            void missesDeltaA() {
                 Shape fSphereA = factory.getFSphere(3 + 0.025, 0, 0, 1)
                         .setEpsilon(-1)
                         .setDelta(0.01);
@@ -3735,16 +3735,16 @@ public class FSphereTest {
                         .setDelta(0.01);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertTrue(fSphereA.repels(fSphereB),
+                        () -> assertTrue(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertTrue(fSphereB.repels(fSphereA),
+                        () -> assertTrue(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (delta) - B")
-            void repelsDeltaB() {
+            @DisplayName("Misses (delta) - B")
+            void missesDeltaB() {
                 Shape fSphereA = factory.getFSphere(3 - 0.025, 0, 0, 1)
                         .setEpsilon(-1)
                         .setDelta(0.01);
@@ -3753,16 +3753,16 @@ public class FSphereTest {
                         .setDelta(0.01);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertFalse(fSphereA.repels(fSphereB),
+                        () -> assertFalse(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertFalse(fSphereB.repels(fSphereA),
+                        () -> assertFalse(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (delta) - C")
-            void repelsDeltaC() {
+            @DisplayName("Misses (delta) - C")
+            void missesDeltaC() {
                 Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
                         .setEpsilon(-1)
                         .setDelta(0.005);
@@ -3771,16 +3771,16 @@ public class FSphereTest {
                         .setDelta(0.005);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertTrue(fSphereA.repels(fSphereB),
+                        () -> assertTrue(fSphereA.misses(fSphereB),
                                 "The spheres should be distant"),
-                        () -> assertTrue(fSphereB.repels(fSphereA),
+                        () -> assertTrue(fSphereB.misses(fSphereA),
                                 "The spheres should be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels (delta) - D")
-            void repelsDeltaD() {
+            @DisplayName("Misses (delta) - D")
+            void missesDeltaD() {
                 Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
                         .setEpsilon(-1)
                         .setDelta(0.05);
@@ -3789,16 +3789,16 @@ public class FSphereTest {
                         .setDelta(0.05);
 
                 Assertions.assertAll("Validate distance",
-                        () -> assertFalse(fSphereA.repels(fSphereB),
+                        () -> assertFalse(fSphereA.misses(fSphereB),
                                 "The spheres should not be distant"),
-                        () -> assertFalse(fSphereB.repels(fSphereA),
+                        () -> assertFalse(fSphereB.misses(fSphereA),
                                 "The spheres should not be distant")
                 );
             }
 
             @Test
-            @DisplayName("Repels, field")
-            void repelsField() {
+            @DisplayName("Misses, field")
+            void missesField() {
                 Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
 
                 Shape fSphereCopy = fSphereRef.copy();
@@ -3810,7 +3810,7 @@ public class FSphereTest {
                         List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
                 );
 
-                int count = fSphereRef.repels(fAssembly);
+                int count = fSphereRef.misses(fAssembly);
 
                 Assertions.assertAll("Validate distance",
                         () -> assertEquals(1, count,
@@ -3819,8 +3819,8 @@ public class FSphereTest {
             }
 
             @Test
-            @DisplayName("Repels, field, list")
-            void repelsFieldList() {
+            @DisplayName("Misses, field, list")
+            void missesFieldList() {
                 List<Shape> elements = new ArrayList<>();
 
                 Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
@@ -3834,7 +3834,7 @@ public class FSphereTest {
                         List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
                 );
 
-                int count = fSphereRef.repels(fAssembly, elements);
+                int count = fSphereRef.misses(fAssembly, elements);
 
                 Assertions.assertAll("Validate distance",
                         () -> assertEquals(1, count,
@@ -3845,17 +3845,17 @@ public class FSphereTest {
             }
 
             @Test
-            @DisplayName("Touches or repels")
-            void touchesOrRepels() {
+            @DisplayName("Touches or misses")
+            void touchesOrMisses() {
 
-                assertFalse(factory.getFSphere().touchesOrRepels(factory.getFSphere(1, 0, 0)));
-                assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(2, 0, 0)));
-                assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(3, 0, 0)));
+                assertFalse(factory.getFSphere().touchesOrMisses(factory.getFSphere(1, 0, 0)));
+                assertTrue(factory.getFSphere().touchesOrMisses(factory.getFSphere(2, 0, 0)));
+                assertTrue(factory.getFSphere().touchesOrMisses(factory.getFSphere(3, 0, 0)));
             }
 
             @Test
-            @DisplayName("Touches or repels, field")
-            void touchesOrRepelsField() {
+            @DisplayName("Touches or misses, field")
+            void touchesOrMissesField() {
                 Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
 
                 Shape fSphereCopy = fSphereRef.copy();
@@ -3867,7 +3867,7 @@ public class FSphereTest {
                         List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
                 );
 
-                int count = fSphereRef.touchesOrRepels(fAssembly);
+                int count = fSphereRef.touchesOrMisses(fAssembly);
 
                 Assertions.assertAll("Validate condition",
                         () -> assertEquals(2, count,
@@ -3876,8 +3876,8 @@ public class FSphereTest {
             }
 
             @Test
-            @DisplayName("Touches or repels, field, list")
-            void touchesOrRepelsFieldList() {
+            @DisplayName("Touches or misses, field, list")
+            void touchesOrMissesFieldList() {
                 List<Shape> elements = new ArrayList<>();
 
                 Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
@@ -3891,7 +3891,7 @@ public class FSphereTest {
                         List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
                 );
 
-                int count = fSphereRef.touchesOrRepels(fAssembly, elements);
+                int count = fSphereRef.touchesOrMisses(fAssembly, elements);
 
                 Assertions.assertAll("Validate condition",
                         () -> assertEquals(2, count,

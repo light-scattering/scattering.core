@@ -402,14 +402,14 @@ public abstract class ShapePresetDef implements Shape {
     //--- Module - Relation
 
     @Override
-    public boolean repels(Shape shape) {
+    public boolean misses(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
             throw new IllegalArgumentException("At least one precision parameter must be defined");
         }
 
         if (epsilon > 0) {
-            Relation relation = repelsEpsilon(shape);
+            Relation relation = missesEpsilon(shape);
 
             if (relation == Relation.TRUE) {
                 return true;
@@ -421,14 +421,14 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         if (delta > 0) {
-            return repelsDelta(shape);
+            return missesDelta(shape);
         }
 
         throw new IllegalStateException("The problem cannot be solved with direct equations");
     }
 
     @Override
-    public int repels(Iterable<? extends Shape> shapes, List<Shape> in) {
+    public int misses(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
         if (in != null) {
@@ -441,7 +441,7 @@ public abstract class ShapePresetDef implements Shape {
                 continue;
             }
 
-            if (repels(shape)) {
+            if (misses(shape)) {
                 count++;
 
                 if (in != null) {
@@ -453,7 +453,7 @@ public abstract class ShapePresetDef implements Shape {
         return count;
     }
 
-    protected Relation repelsEpsilon(Shape shape) {
+    protected Relation missesEpsilon(Shape shape) {
         double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() + epsilon;
@@ -473,7 +473,7 @@ public abstract class ShapePresetDef implements Shape {
         return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
-    protected boolean repelsDelta(Shape shape) {
+    protected boolean missesDelta(Shape shape) {
         FPairPos3D range = getOperationRange(shape);
 
         double offset = SHIFT_GEOMETRY ? delta * SHIFT_OFFSET : 0;
@@ -951,13 +951,13 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public boolean touchesOrRepels(Shape shape) {
+    public boolean touchesOrMisses(Shape shape) {
 
         return !overlaps(shape);
     }
 
     @Override
-    public int touchesOrRepels(Iterable<? extends Shape> shapes, List<Shape> in) {
+    public int touchesOrMisses(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
         if (in != null) {
@@ -985,7 +985,7 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public boolean touchesOrOverlaps(Shape shape) {
 
-        return !repels(shape);
+        return !misses(shape);
     }
 
     @Override
@@ -1002,7 +1002,7 @@ public abstract class ShapePresetDef implements Shape {
                 continue;
             }
 
-            if (!repels(shape)) {
+            if (!misses(shape)) {
                 count++;
 
                 if (in != null) {

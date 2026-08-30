@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface ShapeModuleRelation {
 
-    boolean repels(Shape shape);
-    int repels(Iterable<? extends Shape> shapes, List<Shape> in);
+    boolean misses(Shape shape);
+    int misses(Iterable<? extends Shape> shapes, List<Shape> in);
 
     boolean touches(Shape shape);
     int touches(Iterable<? extends Shape> shapes, List<Shape> in);
@@ -21,17 +21,17 @@ public interface ShapeModuleRelation {
 
     // -------------------------------------------------------------------------------------------------
 
-    boolean touchesOrRepels(Shape shape);
-    int touchesOrRepels(Iterable<? extends Shape> shapes, List<Shape> in);
+    boolean touchesOrMisses(Shape shape);
+    int touchesOrMisses(Iterable<? extends Shape> shapes, List<Shape> in);
 
     boolean touchesOrOverlaps(Shape shape);
     int touchesOrOverlaps(Iterable<? extends Shape> shapes, List<Shape> in);
 
     // -------------------------------------------------------------------------------------------------
 
-    default int repels(Iterable<? extends Shape> shapes) {
+    default int misses(Iterable<? extends Shape> shapes) {
 
-        return repels(shapes, null);
+        return misses(shapes, null);
     }
 
     default int touches(Iterable<? extends Shape> shapes) {
@@ -54,9 +54,9 @@ public interface ShapeModuleRelation {
         return intersects(shapes, null);
     }
 
-    default int touchesOrRepels(Iterable<? extends Shape> shapes) {
+    default int touchesOrMisses(Iterable<? extends Shape> shapes) {
 
-        return touchesOrRepels(shapes, null);
+        return touchesOrMisses(shapes, null);
     }
 
     default int touchesOrOverlaps(Iterable<? extends Shape> shapes) {
