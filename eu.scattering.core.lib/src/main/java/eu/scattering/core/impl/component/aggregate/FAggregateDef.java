@@ -592,9 +592,21 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public boolean deleteRefParticle(Shape particle) {
+    public boolean delRefParticle(Shape particle) {
 
-        return this.moduleSupport.deleteRefParticle(particle);
+        return this.moduleSupport.delRefParticle(particle);
+    }
+
+    @Override
+    public void addRefParticles(Shape... particles) {
+
+        this.moduleSupport.addRefParticles(particles);
+    }
+
+    @Override
+    public void addRefParticles(FAggregate... aggregates) {
+
+        this.moduleSupport.addRefParticles(aggregates);
     }
 
     @Override
@@ -685,6 +697,12 @@ public class FAggregateDef implements FAggregate {
     public void pca() {
 
         this.moduleSupport.pca();
+    }
+
+    @Override
+    public void clear() {
+
+        this.moduleSupport.clear();
     }
 
     @Override

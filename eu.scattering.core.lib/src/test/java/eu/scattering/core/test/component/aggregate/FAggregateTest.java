@@ -3218,6 +3218,24 @@ public class FAggregateTest {
         }
 
         @Test
+        @DisplayName("Clear")
+        void clear() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addRefParticles(fSphereA, fSphereB, fSphereC);
+
+            assertEquals(3, fAggregate.size());
+
+            fAggregate.clear();
+
+            assertEquals(0, fAggregate.size());
+        }
+
+        @Test
         @DisplayName("Add particles")
         void addParticles() {
             FAggregate fAggregate = factory.getFAggregate();
@@ -3236,7 +3254,7 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Add ref particle")
+        @DisplayName("Add reference particle")
         void addRefParticle() {
             FAggregate fAggregate = factory.getFAggregate();
 
@@ -3260,12 +3278,12 @@ public class FAggregateTest {
 
             fSphereA.setCenter(1, 2, 3);
 
-            assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(1, 2, 3, 1)));
+            assertTrue(fAggregate.getRefParticles().asList().getFirst().isExact(factory.getFSphere(1, 2, 3, 1)));
         }
 
         @Test
-        @DisplayName("Remove ref particle")
-        void removeRefParticle() {
+        @DisplayName("Delete reference particle")
+        void deleteRefParticle() {
             FAggregate fAggregate = factory.getFAggregate();
 
             FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
@@ -3276,15 +3294,62 @@ public class FAggregateTest {
             fAggregate.addRefParticle(fSphereB);
             fAggregate.addRefParticle(fSphereC);
 
-            boolean resultsA = fAggregate.deleteRefParticle(fSphereA);
+            boolean resultsA = fAggregate.delRefParticle(fSphereA);
 
-            boolean resultsEmpty = fAggregate.deleteRefParticle(fSphereA);
+            boolean resultsEmpty = fAggregate.delRefParticle(fSphereA);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(2, fAggregate.size()),
                     () -> assertTrue(resultsA),
                     () -> assertFalse(resultsEmpty)
             );
+        }
+
+        @Test
+        @DisplayName("Add reference particles from aggregates - Unique")
+        void addRefParticlesFromAggregatesUnique() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FAggregate fAggregate1 = factory.getFAggregate();
+            FAggregate fAggregate2 = factory.getFAggregate();
+
+            FSphere fSphere1A = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphere1B = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphere1C = factory.getFSphere(0, 0, 2, 1);
+
+            FSphere fSphere2A = factory.getFSphere(0, 0, 2, 2);
+            FSphere fSphere2B = factory.getFSphere(0, 2, 0, 2);
+            FSphere fSphere2C = factory.getFSphere(2, 0, 0, 2);
+
+            fAggregate1.addRefParticles(fSphere1A, fSphere1B, fSphere1C);
+            fAggregate2.addRefParticles(fSphere2A, fSphere2B, fSphere2C);
+
+            fAggregate.addRefParticles(fAggregate1, fAggregate2);
+
+            assertEquals(6, fAggregate.size());
+        }
+
+        @Test
+        @DisplayName("Add reference particles from aggregates - Duplicated")
+        void addRefParticlesFromAggregatesDuplicated() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FAggregate fAggregate1 = factory.getFAggregate();
+            FAggregate fAggregate2 = factory.getFAggregate();
+
+            FSphere fSphere1A = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphere1B = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphere1C = factory.getFSphere(0, 0, 2, 1);
+
+            FSphere fSphere2A = factory.getFSphere(0, 0, 2, 2);
+            FSphere fSphere2B = factory.getFSphere(0, 2, 0, 2);
+
+            fAggregate1.addRefParticles(fSphere1A, fSphere1B, fSphere1C);
+            fAggregate2.addRefParticles(fSphere2A, fSphere2B, fSphere1C);
+
+            fAggregate.addRefParticles(fAggregate1, fAggregate2);
+
+            assertEquals(5, fAggregate.size());
         }
 
         @Test

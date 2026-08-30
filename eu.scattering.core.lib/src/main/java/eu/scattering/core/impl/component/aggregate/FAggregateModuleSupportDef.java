@@ -26,6 +26,11 @@ public class FAggregateModuleSupportDef {
 
     // -------------------------------------------------------------------------------------------------
 
+    protected void clear() {
+
+        this.aggregate.getRefParticles().clear();
+    }
+
     protected void addParticles(Shape particle, double quantity) {
 
         for (int i = 0 ; i < quantity ; i++) {
@@ -38,9 +43,25 @@ public class FAggregateModuleSupportDef {
         return this.aggregate.getRefParticles().registerWithCheck(particle);
     }
 
-    protected boolean deleteRefParticle(Shape particle) {
+    protected boolean delRefParticle(Shape particle) {
 
         return this.aggregate.getRefParticles().deregisterWithCheck(particle);
+    }
+
+    protected void addRefParticles(Shape... particles) {
+
+        for (Shape particle : particles) {
+            addRefParticle(particle);
+        }
+    }
+
+    protected void addRefParticles(FAggregate... aggregates) {
+
+        for (FAggregate aggregate : aggregates) {
+            for (Shape particle : aggregate) {
+                addRefParticle(particle);
+            }
+        }
     }
 
     // -------------------------------------------------------------------------------------------------

@@ -199,9 +199,17 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void pca();
 
     @Modificator
+    void clear();
+
+    @Modificator
     boolean addRefParticle(Shape particle);
     @Modificator
-    boolean deleteRefParticle(Shape particle);
+    boolean delRefParticle(Shape particle);
+
+    @Modificator
+    void addRefParticles(Shape... particles);
+    @Modificator
+    void addRefParticles(FAggregate... aggregates);
 
     //--------------------------------------------------
 
