@@ -18,11 +18,12 @@ import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+//@Disabled
 @DisplayName("Geometry")
 public class GeometryTest {
 
@@ -79,32 +80,41 @@ public class GeometryTest {
 
     @Test
     void geometryManual() {
-        FAggregate aggregate = factory.getFAggregateContext().base().monodisperse(1000, 1);
+        FAggregate aggregate = factory.getFAggregateContext().base().monodisperse(30, 1);
 
         FModelCCBallistic model = factory.getFModelContext().cc().ballistic(aggregate);
 
+
+
         FAggregate container = factory.getFAggregate();
         model.addStepAcceptor((clusterA, clusterB) -> {
-            container.clear();
-            container.addRefParticles(clusterA, clusterB);
 
-            if (container.size() < 100) {
+            if (clusterA.size() + clusterB.size() < 100) {
                 return true;
             }
+
+            container.clear();
+            container.addRefParticles(clusterA, clusterB);
 
             return container.getFractalDimension(FractalDimension.DC_RESTRICTED) > 2;
         });
 
-//        FPlotBar diameter = factory.getFPlotBar();
-//        model.addStepMonitor((clusterA, clusterB) -> {
-//            if (clusterA != null)
-//            diameter.add(clusterA.size(), clusterA.getDiameter());
-//            if (clusterB != null)
-//            diameter.add(clusterB.size(), clusterB.getDiameter());
-//        });
 
-//        List<Double> growth = new ArrayList<>();
-//        model.addStepMonitor((agg, par) -> growth.add(agg.getDiameter()));
+
+
+        FPlotBar diameter = factory.getFPlotBar();
+        model.addStepMonitor((clusterA, clusterB, index) -> {
+
+            if (clusterA == null) {
+                return;
+            }
+
+            diameter.add(clusterA.size(), clusterA.getDiameter());
+
+            if (clusterB != null) {
+                diameter.add(clusterB.size(), clusterB.getDiameter());
+            }
+        });
 
         model.build();
 

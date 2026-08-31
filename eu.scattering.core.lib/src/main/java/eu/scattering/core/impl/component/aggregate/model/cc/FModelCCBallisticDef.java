@@ -9,12 +9,12 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
+import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.option.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public class FModelCCBallisticDef implements FModelCCBallistic {
@@ -24,7 +24,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
     private final Dimension dimension;
 
-    private final List<BiConsumer<FAggregate, FAggregate>> monitors;
+    private final List<TriConsumer<FAggregate, FAggregate, Integer>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
@@ -96,11 +96,14 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
             init();
 
+            int index = 0;
             while (this.fragments.size() > 1) {
-                buildStepVariantSymmetry();
+                buildStepVariantSymmetry(index++);
             }
 
-            this.monitors.forEach(e -> e.accept(this.aggregate, null));
+            for (var monitor : this.monitors) {
+                monitor.accept(this.aggregate, null, index);
+            }
 
             for (var validator : this.validators) {
                 if (validator.apply(this.aggregate, validation)) {
@@ -124,34 +127,34 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         buildFragments();
 
         for (FAggregate fragment : this.fragments) {
-            this.monitors.forEach(e -> e.accept(null, fragment));
+            this.monitors.forEach(e -> e.accept(null, fragment, -1));
         }
 
         shuffleFragments();
     }
 
-    private void buildStepVariantSymmetry() {
+    private void buildStepVariantSymmetry(int index) {
 
         if (this.symmetry) {
-            buildStepSymmetric();
+            buildStepSymmetric(index);
         } else {
-            buildStepRandom();
+            buildStepRandom(index);
         }
     }
 
-    private void buildStepSymmetric() {
+    private void buildStepSymmetric(int index) {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
             FAggregate aggB = this.fragments.get(i + 1);
 
-            buildStepCore(aggA, aggB);
+            buildStepCore(aggA, aggB, index);
         }
 
         buildStepCleanup();
     }
 
-    private void buildStepRandom() {
+    private void buildStepRandom(int index) {
         FAggregate aggA;
         FAggregate aggB;
 
@@ -160,12 +163,12 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             aggB = this.random.getFRand().getElement(this.fragments, false);
         } while (aggA == aggB);
 
-        buildStepCore(aggA, aggB);
+        buildStepCore(aggA, aggB, index);
 
         buildStepCleanup();
     }
 
-    private void buildStepCore(FAggregate aggA, FAggregate aggB) {
+    private void buildStepCore(FAggregate aggA, FAggregate aggB, int index) {
 
         step:
         while (true) {
@@ -178,7 +181,9 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
                 }
             }
 
-            this.monitors.forEach(e -> e.accept(aggA, aggB));
+            for (var monitor : this.monitors) {
+                monitor.accept(aggA, aggB, index);
+            }
 
             aggA.merge(aggB, true);
 
@@ -324,7 +329,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     }
 
     @Override
-    public void addStepMonitor(BiConsumer<FAggregate, FAggregate> monitor) {
+    public void addStepMonitor(TriConsumer<FAggregate, FAggregate, Integer> monitor) {
 
         this.monitors.add(monitor);
     }

@@ -4,6 +4,7 @@ import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.utility.lambda.TriConsumer;
 import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.option.Dimension;
 import eu.scattering.core.impl.factory.ScatterFactoryDef;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 
 import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -201,7 +201,7 @@ public class FModelCCTunableTest {
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                 if (aggA == null) {
                     fragments.incrementAndGet();
@@ -229,7 +229,7 @@ public class FModelCCTunableTest {
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                if (aggA != null) {
                    aggA.forEach(particles::add);
@@ -409,7 +409,7 @@ public class FModelCCTunableTest {
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                 if (aggA == null) {
                     fragments.incrementAndGet();
@@ -438,7 +438,7 @@ public class FModelCCTunableTest {
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                 if (aggA != null) {
                     aggA.forEach(particles::add);

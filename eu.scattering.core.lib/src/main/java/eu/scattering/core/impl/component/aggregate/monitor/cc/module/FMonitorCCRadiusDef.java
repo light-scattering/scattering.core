@@ -37,11 +37,13 @@ public class FMonitorCCRadiusDef implements FMonitorCCRadius {
     }
 
     @Override
-    public void accept(FAggregate aggA, FAggregate aggB) {
+    public void accept(FAggregate aggA, FAggregate aggB, Integer index) {
 
-        if (aggA == null || aggA.getRefParticles().size() == 0) {
+        if (index <= 0) {
             this.fPlotBar.clear();
-        } else {
+        }
+
+        if (aggA != null && aggA.getRefParticles().size() > 0) {
             aggA.getCenter(this.center, type);
 
             this.fPlotBar.add(aggA.size(), aggA.getRadiusFrom(this.center));

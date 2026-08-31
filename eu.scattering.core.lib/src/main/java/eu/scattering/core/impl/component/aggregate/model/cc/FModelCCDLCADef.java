@@ -16,7 +16,6 @@ import eu.scattering.core.design.utility.type.option.Dimension;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public class FModelCCDLCADef implements FModelCCDLCA {
@@ -26,7 +25,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private final Dimension dimension;
 
-    private final List<BiConsumer<FAggregate, FAggregate>> monitors;
+    private final List<TriConsumer<FAggregate, FAggregate, Integer>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
@@ -117,11 +116,14 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
             init();
 
+            int index = 0;
             while (this.fragments.size() > 1) {
-                buildStepVariantSymmetry();
+                buildStepVariantSymmetry(index++);
             }
 
-            this.monitors.forEach(e -> e.accept(this.aggregate, null));
+            for (var monitor : this.monitors) {
+                monitor.accept(this.aggregate, null, index);
+            }
 
             for (var validator : this.validators) {
                 if (validator.apply(this.aggregate, validation)) {
@@ -146,22 +148,22 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         buildFragments();
 
         for (FAggregate fragment : this.fragments) {
-            this.monitors.forEach(e -> e.accept(null, fragment));
+            this.monitors.forEach(e -> e.accept(null, fragment, -1));
         }
 
         shuffleFragments();
     }
 
-    private void buildStepVariantSymmetry() {
+    private void buildStepVariantSymmetry(int index) {
 
         if (this.symmetry) {
-            buildStepSymmetric();
+            buildStepSymmetric(index);
         } else {
-            buildStepRandom();
+            buildStepRandom(index);
         }
     }
 
-    private void buildStepSymmetric() {
+    private void buildStepSymmetric(int index) {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
@@ -198,7 +200,9 @@ public class FModelCCDLCADef implements FModelCCDLCA {
                         }
                     }
 
-                    this.monitors.forEach(e -> e.accept(aggA, aggB));
+                    for (var monitor : this.monitors) {
+                        monitor.accept(aggA, aggB, index);
+                    }
 
                     aggA.merge(aggB, true);
 
@@ -210,7 +214,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         buildStepCleanup();
     }
 
-    private void buildStepRandom() {
+    private void buildStepRandom(int index) {
         FAggregate aggA;
         FAggregate aggB;
 
@@ -219,12 +223,12 @@ public class FModelCCDLCADef implements FModelCCDLCA {
             aggB = this.random.getFRand().getElement(this.fragments, false);
         } while (aggA == aggB);
 
-        buildStepCore(aggA, aggB);
+        buildStepCore(aggA, aggB, index);
 
         buildStepCleanup();
     }
 
-    private void buildStepCore(FAggregate aggA, FAggregate aggB) {
+    private void buildStepCore(FAggregate aggA, FAggregate aggB, int index) {
 
         adjustParameters(aggA, aggB);
 
@@ -257,7 +261,9 @@ public class FModelCCDLCADef implements FModelCCDLCA {
                     }
                 }
 
-                this.monitors.forEach(e -> e.accept(aggA, aggB));
+                for (var monitor : this.monitors) {
+                    monitor.accept(aggA, aggB, index);
+                }
 
                 aggA.merge(aggB, true);
 
@@ -559,7 +565,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     }
 
     @Override
-    public void addStepMonitor(BiConsumer<FAggregate, FAggregate> monitor) {
+    public void addStepMonitor(TriConsumer<FAggregate, FAggregate, Integer> monitor) {
 
         this.monitors.add(monitor);
     }

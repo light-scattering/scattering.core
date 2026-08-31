@@ -2,9 +2,9 @@ package eu.scattering.core.design.component.aggregate.model.cc;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
+import eu.scattering.core.design.utility.lambda.TriConsumer;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public interface FModelCC extends FModel {
@@ -14,12 +14,12 @@ public interface FModelCC extends FModel {
 
     // -------------------------------------------------------------------------------------------------
 
-    void addStepMonitor(BiConsumer<FAggregate, FAggregate> monitor);
+    void addStepMonitor(TriConsumer<FAggregate, FAggregate, Integer> monitor);
     void addStepAcceptor(BiFunction<FAggregate, FAggregate, Boolean> acceptor);
 
     // -------------------------------------------------------------------------------------------------
 
-    default void addStepMonitor(Collection<BiConsumer<FAggregate, FAggregate>> monitors) {
+    default void addStepMonitor(Collection<TriConsumer<FAggregate, FAggregate, Integer>> monitors) {
 
         for (var monitor : monitors) {
             addStepMonitor(monitor);

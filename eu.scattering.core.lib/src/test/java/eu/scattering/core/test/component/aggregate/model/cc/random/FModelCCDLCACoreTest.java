@@ -14,7 +14,6 @@ import org.junit.jupiter.api.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 
 import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -200,7 +199,7 @@ public class FModelCCDLCACoreTest {
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                 if (aggA == null) {
                     fragments.incrementAndGet();
@@ -228,7 +227,7 @@ public class FModelCCDLCACoreTest {
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                if (aggA != null) {
                    aggA.forEach(particles::add);
@@ -374,7 +373,7 @@ public class FModelCCDLCACoreTest {
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                 if (aggA == null) {
                     fragments.incrementAndGet();
@@ -402,7 +401,7 @@ public class FModelCCDLCACoreTest {
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
 
                 if (aggA != null) {
                     aggA.forEach(particles::add);
