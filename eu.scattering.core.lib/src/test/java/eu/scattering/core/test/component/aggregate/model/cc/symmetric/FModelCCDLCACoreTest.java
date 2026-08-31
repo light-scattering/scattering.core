@@ -3,6 +3,7 @@ package eu.scattering.core.test.component.aggregate.model.cc.symmetric;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -12,8 +13,10 @@ import eu.scattering.core.impl.factory.ScatterFactoryDef;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,8 +43,8 @@ public class FModelCCDLCACoreTest {
             String json = fAggregate.toJSON().toString();
             String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
 
-            assertTrue(json.length() > 0);
-            assertTrue(model.length() > 0);
+            assertFalse(json.isEmpty());
+            assertFalse(model.isEmpty());
         }
 
         @Test
@@ -58,8 +61,8 @@ public class FModelCCDLCACoreTest {
             String json = fAggregate.toJSON().toString();
             String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
 
-            assertTrue(json.length() > 0);
-            assertTrue(model.length() > 0);
+            assertFalse(json.isEmpty());
+            assertFalse(model.isEmpty());
         }
     }
 
@@ -177,8 +180,8 @@ public class FModelCCDLCACoreTest {
         }
 
         @Test
-        @DisplayName("Monitor - A")
-        void monitorA() {
+        @DisplayName("Viewer")
+        void viewer() {
             int size = 28;
             int sizeFragment = 3;
 
@@ -187,22 +190,43 @@ public class FModelCCDLCACoreTest {
             fModel.setInternalSpawn(true);
 
             AtomicInteger fragments = new AtomicInteger(0);
-            AtomicInteger steps = new AtomicInteger(0);
 
-            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
+            Consumer<FAggregate> viewer = (fragment) -> fragments.incrementAndGet();
+            Consumer<FAggregate> validator = (fragment) -> assertTrue(fragment.size() > 0);
 
-                if (aggA == null) {
-                    fragments.incrementAndGet();
-                } else if (aggB != null) {
-                    steps.incrementAndGet();
-                }
-            };
-
-            fModel.addStepMonitor(monitor);
+            fModel.addFragmentViewer(List.of(viewer, validator));
             fModel.build();
 
             assertEquals(size / sizeFragment, fragments.get());
-            assertEquals(8, steps.get());
+        }
+
+        @Test
+        @DisplayName("Monitor - A")
+        void monitorA() {
+            int size = 28;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
+
+            AtomicInteger stepsCount = new AtomicInteger(0);
+            AtomicInteger stepsIndex = new AtomicInteger(0);
+
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
+                stepsCount.incrementAndGet();
+                stepsIndex.set(index);
+            };
+
+            TriConsumer<FAggregate, FAggregate, Integer> monitorDummyA = (aggA, aggB, index) -> {};
+            TriConsumer<FAggregate, FAggregate, Integer> monitorDummyB = (aggA, aggB, index) -> {};
+
+            fModel.addStepMonitor(monitor);
+            fModel.addStepMonitor(List.of(monitorDummyA, monitorDummyB));
+
+            fModel.build();
+
+            assertEquals(8, stepsCount.get() - 1);
+            assertEquals(8, stepsIndex.get());
         }
 
         @Test
@@ -344,8 +368,8 @@ public class FModelCCDLCACoreTest {
         }
 
         @Test
-        @DisplayName("Monitor - A")
-        void monitorA() {
+        @DisplayName("Viewer")
+        void viewer() {
             int size = 28;
             int sizeFragment = 3;
 
@@ -354,22 +378,43 @@ public class FModelCCDLCACoreTest {
             fModel.setInternalSpawn(true);
 
             AtomicInteger fragments = new AtomicInteger(0);
-            AtomicInteger steps = new AtomicInteger(0);
 
-            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
+            Consumer<FAggregate> viewer = (fragment) -> fragments.incrementAndGet();
+            Consumer<FAggregate> validator = (fragment) -> assertTrue(fragment.size() > 0);
 
-                if (aggA == null) {
-                    fragments.incrementAndGet();
-                } else if (aggB != null) {
-                    steps.incrementAndGet();
-                }
-            };
-
-            fModel.addStepMonitor(monitor);
+            fModel.addFragmentViewer(List.of(viewer, validator));
             fModel.build();
 
             assertEquals(size / sizeFragment, fragments.get());
-            assertEquals(8, steps.get());
+        }
+
+        @Test
+        @DisplayName("Monitor - A")
+        void monitorA() {
+            int size = 28;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
+
+            AtomicInteger stepsCount = new AtomicInteger(0);
+            AtomicInteger stepsIndex = new AtomicInteger(0);
+
+            TriConsumer<FAggregate, FAggregate, Integer> monitor = (aggA, aggB, index) -> {
+                stepsCount.incrementAndGet();
+                stepsIndex.set(index);
+            };
+
+            TriConsumer<FAggregate, FAggregate, Integer> monitorDummyA = (aggA, aggB, index) -> {};
+            TriConsumer<FAggregate, FAggregate, Integer> monitorDummyB = (aggA, aggB, index) -> {};
+
+            fModel.addStepMonitor(monitor);
+            fModel.addStepMonitor(List.of(monitorDummyA, monitorDummyB));
+
+            fModel.build();
+
+            assertEquals(8, stepsCount.get() - 1);
+            assertEquals(8, stepsIndex.get());
         }
 
         @Test

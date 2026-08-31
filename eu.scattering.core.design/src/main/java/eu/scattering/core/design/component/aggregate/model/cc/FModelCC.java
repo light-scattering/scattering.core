@@ -6,6 +6,7 @@ import eu.scattering.core.design.utility.lambda.TriConsumer;
 
 import java.util.Collection;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public interface FModelCC extends FModel {
 
@@ -16,6 +17,8 @@ public interface FModelCC extends FModel {
 
     void addStepMonitor(TriConsumer<FAggregate, FAggregate, Integer> monitor);
     void addStepAcceptor(BiFunction<FAggregate, FAggregate, Boolean> acceptor);
+
+    void addFragmentViewer(Consumer<FAggregate> monitor);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -30,6 +33,13 @@ public interface FModelCC extends FModel {
 
         for (var acceptor : acceptors) {
             addStepAcceptor(acceptor);
+        }
+    }
+
+    default void addFragmentViewer(Collection<Consumer<FAggregate>> viewers) {
+
+        for (var viewer : viewers) {
+            addFragmentViewer(viewer);
         }
     }
 }

@@ -100,14 +100,11 @@ public class GeometryTest {
         });
 
 
-
+        FPlotBar diameterA = factory.getFPlotBar();
+        model.addFragmentViewer((fragment) -> diameterA.add(fragment.size(), fragment.getDiameter()));
 
         FPlotBar diameter = factory.getFPlotBar();
         model.addStepMonitor((clusterA, clusterB, index) -> {
-
-            if (clusterA == null) {
-                return;
-            }
 
             diameter.add(clusterA.size(), clusterA.getDiameter());
 

@@ -15,7 +15,9 @@ import eu.scattering.core.design.utility.type.method.RadiusOfGyration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class FModelCCTunableDef implements FModelCCTunable {
     private static final int MAX_IT_SELECT = 100;
@@ -26,6 +28,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
     private final Dimension dimension;
 
+    private final List<Consumer<FAggregate>> viewers;
     private final List<TriConsumer<FAggregate, FAggregate, Integer>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
@@ -68,6 +71,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
         this.dimension = dimension;
 
+        this.viewers = new ArrayList<>();
         this.monitors = new ArrayList<>();
         this.acceptors = new ArrayList<>();
         this.validators = new ArrayList<>();
@@ -117,15 +121,15 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
             init();
 
-            int index = 0;
+            AtomicInteger index = new AtomicInteger(0);
             while (this.fragments.size() > 1) {
-                if (!buildStepVariantSymmetry(index++)) {
+                if (!buildStepVariantSymmetry(index)) {
                     continue generation;
                 }
             }
 
             for (var monitor : this.monitors) {
-                monitor.accept(this.aggregate, null, index);
+                monitor.accept(this.aggregate, null, index.get());
             }
 
             for (var validator : this.validators) {
@@ -151,13 +155,13 @@ public class FModelCCTunableDef implements FModelCCTunable {
         buildFragments();
 
         for (FAggregate fragment : this.fragments) {
-            this.monitors.forEach(e -> e.accept(null, fragment, -1));
+            this.viewers.forEach(e -> e.accept(fragment));
         }
 
         shuffleFragments();
     }
 
-    private boolean buildStepVariantSymmetry(int index) {
+    private boolean buildStepVariantSymmetry(AtomicInteger index) {
 
         if (this.symmetry) {
             return buildStepSymmetric(index);
@@ -166,7 +170,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
         }
     }
 
-    private boolean buildStepSymmetric(int index) {
+    private boolean buildStepSymmetric(AtomicInteger index) {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
@@ -185,7 +189,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
         return true;
     }
 
-    private boolean buildStepRandom(int index) {
+    private boolean buildStepRandom(AtomicInteger index) {
         FAggregate aggA;
         FAggregate aggB;
 
@@ -205,7 +209,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
         return true;
     }
 
-    private boolean buildStepCore(FAggregate aggA, FAggregate aggB, int index) {
+    private boolean buildStepCore(FAggregate aggA, FAggregate aggB, AtomicInteger index) {
         double distance = getMassCenterDistance(aggA, aggB);
 
         int iterations = 0;
@@ -253,8 +257,10 @@ public class FModelCCTunableDef implements FModelCCTunable {
             }
 
             for (var monitor : this.monitors) {
-                monitor.accept(aggA, aggB, index);
+                monitor.accept(aggA, aggB, index.get());
             }
+
+            index.set(index.get() + 1);
 
             aggA.merge(aggB, true);
 
@@ -390,6 +396,12 @@ public class FModelCCTunableDef implements FModelCCTunable {
     public void setSymmetry(boolean symmetry) {
 
         this.symmetry = symmetry;
+    }
+
+    @Override
+    public void addFragmentViewer(Consumer<FAggregate> viewer) {
+
+        this.viewers.add(viewer);
     }
 
     @Override

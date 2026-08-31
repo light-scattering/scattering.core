@@ -15,7 +15,9 @@ import eu.scattering.core.design.utility.type.option.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class FModelCCBallisticDef implements FModelCCBallistic {
     private static final int AGGREGATE_SIZE = 6;
@@ -24,6 +26,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
     private final Dimension dimension;
 
+    private final List<Consumer<FAggregate>> viewers;
     private final List<TriConsumer<FAggregate, FAggregate, Integer>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
@@ -54,6 +57,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
         this.dimension = dimension;
 
+        this.viewers = new ArrayList<>();
         this.monitors = new ArrayList<>();
         this.acceptors = new ArrayList<>();
         this.validators = new ArrayList<>();
@@ -96,13 +100,13 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
             init();
 
-            int index = 0;
+            AtomicInteger index = new AtomicInteger(0);
             while (this.fragments.size() > 1) {
-                buildStepVariantSymmetry(index++);
+                buildStepVariantSymmetry(index);
             }
 
             for (var monitor : this.monitors) {
-                monitor.accept(this.aggregate, null, index);
+                monitor.accept(this.aggregate, null, index.get());
             }
 
             for (var validator : this.validators) {
@@ -127,13 +131,13 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         buildFragments();
 
         for (FAggregate fragment : this.fragments) {
-            this.monitors.forEach(e -> e.accept(null, fragment, -1));
+            this.viewers.forEach(e -> e.accept(fragment));
         }
 
         shuffleFragments();
     }
 
-    private void buildStepVariantSymmetry(int index) {
+    private void buildStepVariantSymmetry(AtomicInteger index) {
 
         if (this.symmetry) {
             buildStepSymmetric(index);
@@ -142,7 +146,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         }
     }
 
-    private void buildStepSymmetric(int index) {
+    private void buildStepSymmetric(AtomicInteger index) {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
@@ -154,7 +158,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         buildStepCleanup();
     }
 
-    private void buildStepRandom(int index) {
+    private void buildStepRandom(AtomicInteger index) {
         FAggregate aggA;
         FAggregate aggB;
 
@@ -168,7 +172,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         buildStepCleanup();
     }
 
-    private void buildStepCore(FAggregate aggA, FAggregate aggB, int index) {
+    private void buildStepCore(FAggregate aggA, FAggregate aggB, AtomicInteger index) {
 
         step:
         while (true) {
@@ -182,8 +186,10 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             }
 
             for (var monitor : this.monitors) {
-                monitor.accept(aggA, aggB, index);
+                monitor.accept(aggA, aggB, index.get());
             }
+
+            index.set(index.get() + 1);
 
             aggA.merge(aggB, true);
 
@@ -326,6 +332,12 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     public void setSymmetry(boolean symmetry) {
 
         this.symmetry = symmetry;
+    }
+
+    @Override
+    public void addFragmentViewer(Consumer<FAggregate> viewer) {
+
+        this.viewers.add(viewer);
     }
 
     @Override
