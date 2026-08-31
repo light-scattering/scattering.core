@@ -50,6 +50,10 @@ public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration
         } else {
             this.fPlotBar.add(aggA.getRefParticles().size(), aggA.getRadiusOfGyration(radiusOfGyration));
         }
+
+        if (aggB != null && aggB.getRefParticles().size() > 0) {
+            this.fPlotBar.add(aggB.getRefParticles().size(), aggB.getRadiusOfGyration(radiusOfGyration));
+        }
     }
 
     // -------------------------------------------------------------------------------------------------
