@@ -1474,7 +1474,7 @@ public class FAssemblyTest {
 
             FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
 
-            FAssembly<FVector> results = fAssembly.scale(2);
+            FAssembly<FVector> results = fAssembly.scalePosition(2);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertEquals(3, fAssembly.size(),

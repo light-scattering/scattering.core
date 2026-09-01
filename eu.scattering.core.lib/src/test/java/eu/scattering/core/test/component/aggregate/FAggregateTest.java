@@ -3485,6 +3485,24 @@ public class FAggregateTest {
         }
 
         @Test
+        @DisplayName("Scale")
+        void scale() {
+            double scale = 3;
+
+            FAggregate fAggregate = factory.getFAggregateContext().geometry().d3(4, 5, 6);
+
+            assertTrue(fAggregate.isPointConnected());
+
+            fAggregate.scalePosition(scale);
+
+            assertFalse(fAggregate.isPointConnected());
+
+            fAggregate.scaleSize(scale);
+
+            assertTrue(fAggregate.isPointConnected());
+        }
+
+        @Test
         @DisplayName("Set radius with primitives")
         void setRadiusWithPrimitives() {
             int quantity = 100;

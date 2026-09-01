@@ -521,7 +521,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FAssembly<T> scale(double factor) {
+    public FAssembly<T> scalePosition(double factor) {
 
         this.fPoints.forEach(e -> e.mulFactor(factor));
 

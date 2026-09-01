@@ -393,7 +393,7 @@ public class FAggregateModuleGeometryDef {
 
         double factor = radius / radiusCurrent;
 
-        this.aggregate.getRefParticles().scale(factor);
+        this.aggregate.getRefParticles().scalePosition(factor);
         this.aggregate.getRefParticles().forEach(p -> p.setRadius(p.getRadius() * factor));
 
         this.aggregate.translate(x, y, z);

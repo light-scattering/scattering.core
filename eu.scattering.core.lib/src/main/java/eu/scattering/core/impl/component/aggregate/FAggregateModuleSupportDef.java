@@ -129,6 +129,16 @@ public class FAggregateModuleSupportDef {
         this.aggregate.getRefParticles().translate(offset);
     }
 
+    protected void scaleSize(double factor) {
+
+        this.aggregate.forEach(p -> p.scaleSize(factor));
+    }
+
+    protected void scalePosition(double factor) {
+
+        this.aggregate.getRefParticles().scalePosition(factor);
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     protected double project(FAggregate target, FVector dir) {

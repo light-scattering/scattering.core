@@ -694,6 +694,18 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public void scaleSize(double factor) {
+
+        this.moduleSupport.scaleSize(factor);
+    }
+
+    @Override
+    public void scalePosition(double factor) {
+
+        this.moduleSupport.scalePosition(factor);
+    }
+
+    @Override
     public void pca() {
 
         this.moduleSupport.pca();

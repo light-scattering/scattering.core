@@ -54,7 +54,7 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     FAssembly<T> translate(FPos3D base, double x, double y, double z);
     FAssembly<T> translate(FPos3D base, FPos3D head);
 
-    FAssembly<T> scale(double factor);
+    FAssembly<T> scalePosition(double factor);
 
     FPairPos3D getBoundary();
 

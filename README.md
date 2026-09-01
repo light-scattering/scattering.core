@@ -76,23 +76,16 @@ implementation 'eu.scattering:eu.scattering.core.design:VERSION'
 
 ### CLI and wrappers
 
-While the core library offers complete programmatic control, there is also standalone Java CLI that offers simplified, ready-to-use functionality.
+While the core library offers complete programmatic control, a standalone Java CLI provides simplified, ready-to-use functionality. To run this CLI from your terminal without manually handling Java archives, you can use the official Node.js or Python wrappers. These automatically bundle and execute the underlying Java tool.
 
-If you want to run this CLI from your terminal without manually handling Java archives, there are command-line wrappers for Node.js and Python. These wrappers automatically bundle and execute the underlying Java CLI for you:
+| Ecosystem   | Registry | Package                                                                                        |
+|-------------|----------|------------------------------------------------------------------------------------------------|
+| **Node.js** | NPM      | [`@light-scattering/scatter-cli`](https://www.npmjs.com/package/@light-scattering/scatter-cli) |
+| **Python**  | PyPI     | [`scatter-cli`](https://pypi.org/project/scatter-cli/)                                         |
 
-<table>
-  <tr>
-    <td><a href="https://www.npmjs.com/package/@light-scattering/scatter-cli">Node.js (NPM)</a></td>
-    <td><code>@light-scattering/scatter-cli</code></td>
-  </tr>
-  <tr>
-    <td><a href="https://pypi.org/project/scatter-cli/">Python (PyPI)</a></td>
-    <td><code>scatter-cli</code></td>
-  </tr>
-</table>
+*Note: There are no plans to introduce wrappers for additional languages at this time.*
 
-
-For detailed instructions on using the command-line tools, please refer to the [CLI documentation](eu.scattering.cli/README.md).
+For detailed setup and usage instructions, refer to the [CLI documentation](eu.scattering.cli/README.md).
 
 ## Background and scope
 
@@ -129,34 +122,15 @@ Currently, the entire repository is published under the strong copyleft AGPLv3 l
 
 The repository is divided into the following modules:
 
-<table>
-  <tr>
-    <td><code>design</code></td>
-    <td>Contains all public interfaces and serves primarily as API reference documentation.</td>
-  </tr>
-  <tr>
-    <td><code>lib</code></td>
-    <td>Contains the core implementation of the design, including the main entry point.</td>
-  </tr>
-  <tr>
-    <td><code>cli</code></td>
-    <td>Provides a command-line interface and is used to build a standalone, executable JAR file.</td>
-  </tr>
-  <tr>
-    <td><code>front</code></td>
-    <td>In progress...</td>
-  </tr>
-  <tr>
-    <td><code>back</code></td>
-    <td>In progress...</td>
-  </tr>
-  <tr>
-    <td><code>docker</code></td>
-    <td>In progress...</td>
-  </tr>
-</table>
+* **`design`** — Contains all public interfaces and serves primarily as API reference documentation.
+* **`lib`** — Contains the core implementation of the design, including the main entry point.
+* **`cli`** — Provides a command-line interface and is used to build a standalone, executable JAR file.
+* **`front`** — In progress...
+* **`back`** — In progress...
+* **`docker`** — In progress...
 
-This manual focuses exclusively on the **`design`** and **`lib`** modules. The **`cli`** module is documented separately in its own project README file.
+> **Note:** This manual focuses exclusively on the **`design`** and **`lib`** modules. The **`cli`** module is documented separately in its [own project README file](eu.scattering.cli/README.md).
+>
 
 ## Engine initialization
 

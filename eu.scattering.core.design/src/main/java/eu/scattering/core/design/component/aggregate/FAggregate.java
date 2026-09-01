@@ -195,6 +195,9 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     void rotate(FMatrix3x3D matrix);
 
+    void scaleSize(double factor);
+    void scalePosition(double factor);
+
     @LLM
     void pca();
 

@@ -1427,7 +1427,6 @@ public class FSphereTest {
                 double volRelErrLayer2 = factory.getStatisticsHelper().getRelErr(volActualLayer2, fLayer.get(2) * volUnit);
                 double volRelErrLayer3 = factory.getStatisticsHelper().getRelErr(volActualLayer3, fLayer.get(3) * volUnit);
 
-
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(volUnit, delta * delta * delta,
                                 epsilon, "The volume unit is erroneous"),
