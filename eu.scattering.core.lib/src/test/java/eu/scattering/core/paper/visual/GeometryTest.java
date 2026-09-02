@@ -14,21 +14,31 @@ public class GeometryTest {
 
     @Test
     void geometryManual() {
-        FAggregate geo = factory.getFAggregateContext().geometry().d3(4, 5, 6);
+        FAggregate tmp = factory.getFAggregate();
+        factory.monitors();
+        factory.validators();
+        factory.random().attachLinear2D(null, null);
+        factory.random().generator().getFDist1DManual(null);
+        factory.getFRand().getFDist1DManual(null);
 
-        assertTrue(geo.isPointConnected());
 
-        String resA = factory.getSaveAspect().getComponentContext().toPovRay(geo, ExPovRay.FREE);
+        factory.random().generator().nextDouble();
+        factory.getFRand().nextDouble();
+        factory.getFRand().getFDist1DManual(null);
 
-        geo.getRefParticles().scalePosition(3);
+
+        FAggregate geo = factory.aggregates().geometries().grid3D(4, 5, 6);
+        String resA = factory.save().components().toPovRay(geo, ExPovRay.FREE);
+
+        geo.scalePosition(3);
 
         assertFalse(geo.isPointConnected());
 
-        String resb = factory.getSaveAspect().getComponentContext().toPovRay(geo, ExPovRay.FREE);
+        String resb = factory.save().components().toPovRay(geo, ExPovRay.FREE);
 
-        geo.forEach(p -> p.scaleSize(3));
+        geo.scaleSize(3);
 
-        String resC = factory.getSaveAspect().getComponentContext().toPovRay(geo, ExPovRay.FREE);
+        String resC = factory.save().components().toPovRay(geo, ExPovRay.FREE);
 
         assertTrue(geo.isPointConnected());
 

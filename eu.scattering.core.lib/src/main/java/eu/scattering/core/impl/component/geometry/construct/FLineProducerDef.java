@@ -22,7 +22,7 @@ public class FLineProducerDef implements FLineProducer {
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndAspect.getFRand());
+        this.processor = new ProducerCoreDef<>(this.rndAspect.generator());
     }
 
     public static FLineProducer create(FLineFactory factory, FRandAspect randomizer) {

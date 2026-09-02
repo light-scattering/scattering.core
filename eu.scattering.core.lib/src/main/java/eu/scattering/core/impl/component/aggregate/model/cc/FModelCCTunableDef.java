@@ -77,7 +77,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
         this.validators = new ArrayList<>();
 
         this.factory = factory;
-        this.random = this.factory.getRandAspect();
+        this.random = this.factory.random();
 
         this.aggregate = aggregate;
 
@@ -194,8 +194,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
         FAggregate aggB;
 
         do {
-            aggA = this.random.getFRand().getElement(this.fragments, false);
-            aggB = this.random.getFRand().getElement(this.fragments, false);
+            aggA = this.random.generator().getElement(this.fragments, false);
+            aggB = this.random.generator().getElement(this.fragments, false);
         } while (aggA == aggB);
 
         boolean proceed = buildStepCore(aggA, aggB, index);
@@ -294,7 +294,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
         List<Shape> particles = this.aggregate.getRefParticles().asList();
 
-        this.random.getFRand().shuffle(particles);
+        this.random.generator().shuffle(particles);
 
         for (int i = 0 ; i < particles.size() ; i++) {
             this.fragments.get(i % this.fragments.size()).addRefParticle(particles.get(i));
@@ -310,13 +310,13 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
     private void shuffleFragments() {
 
-        this.random.getFRand().shuffle(this.fragments);
+        this.random.generator().shuffle(this.fragments);
     }
 
     private void buildFragments() {
 
         for (FAggregate fragment : this.fragments) {
-            FModelPCTunable model = factory.getFModelContext().pc().tunable(this.dimension, fragment, this.df, this.kf);
+            FModelPCTunable model = factory.models().pc().tunable(this.dimension, fragment, this.df, this.kf);
             model.setEarlyStageCorrection(this.correctionEarly);
 
             model.build();
@@ -372,8 +372,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
     private void moveCenterVariantDimension(double distance) {
 
         switch (this.dimension) {
-            case D3 -> this.centerTmp.add(this.random.getFRand().nextDoubleOnSphere(distance));
-            case D2 -> this.centerTmp.add(this.random.getFRand().nextDoubleOnCircle(distance), 0);
+            case D3 -> this.centerTmp.add(this.random.generator().nextDoubleOnSphere(distance));
+            case D2 -> this.centerTmp.add(this.random.generator().nextDoubleOnCircle(distance), 0);
         }
     }
 

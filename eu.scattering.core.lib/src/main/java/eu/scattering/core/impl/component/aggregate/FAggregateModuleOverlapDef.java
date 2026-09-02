@@ -208,7 +208,7 @@ public class FAggregateModuleOverlapDef {
             dummy.setRadius(shapeRef.getRadius());
             dummy.setCenter(shapeRef.getRefCenter());
 
-            factory.getRotAspect().rotRgAround(dummy.getRefCenter(), axis, angle);
+            factory.rotate().rotRgAround(dummy.getRefCenter(), axis, angle);
 
             for (Shape shapeArg : arg.getRefParticles()) {
                 if (dummy.overlaps(shapeArg)) {

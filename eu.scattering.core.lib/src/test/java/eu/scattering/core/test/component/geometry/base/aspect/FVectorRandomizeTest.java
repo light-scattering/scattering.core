@@ -27,7 +27,7 @@ public class FVectorRandomizeTest {
 
         double magnitude = fVector.getMagnitude();
 
-        factory.getRandAspect().onSphere(fVector);
+        factory.random().onSphere(fVector);
 
         Assertions.assertAll("Validate FPoint values",
                 () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
@@ -44,7 +44,7 @@ public class FVectorRandomizeTest {
     @DisplayName("Set on sphere (validate)")
     void setOnSphereValidate() {
         FVector fVector = TestHelper.getRandFVector();
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FVectorTestHelper.testReference(random::onSphere, fVector);
     }
@@ -58,7 +58,7 @@ public class FVectorRandomizeTest {
 
         double magnitude = fVector.getMagnitude();
 
-        factory.getRandAspect().inSphere(fVector);
+        factory.random().inSphere(fVector);
 
         Assertions.assertAll("Validate FPoint values",
                 () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
@@ -74,7 +74,7 @@ public class FVectorRandomizeTest {
     @DisplayName("Set in sphere (validate)")
     void setInSphereValidate() {
         FVector fVector = TestHelper.getRandFVector();
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FVectorTestHelper.testReference(random::inSphere, fVector);
     }
@@ -86,7 +86,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseInCircle(fPointIn, fVectorDir, radius);
 
@@ -109,7 +109,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseInCircle(fPointIn, fVectorDir, radius);
 
@@ -130,7 +130,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseOnCircle(fPointIn, fVectorDir, radius);
 
@@ -153,7 +153,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseOnCircle(fPointIn, fVectorDir, radius);
 
@@ -174,7 +174,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadInCircle(fPointIn, fVectorDir, radius);
 
@@ -197,7 +197,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadInCircle(fPointIn, fVectorDir, radius);
 
@@ -218,7 +218,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadOnCircle(fPointIn, fVectorDir, radius);
 
@@ -241,7 +241,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadOnCircle(fPointIn, fVectorDir, radius);
 
@@ -261,7 +261,7 @@ public class FVectorRandomizeTest {
         FPoint fPointIn = factory.getFPoint(1, -2, 3);
         FVector fVectorDir = factory.getFVector(0.001, 0.001, 0.001, 0.002, 0.002, 0.002);
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.onAxis(fPointIn, fVectorDir);
 
@@ -282,7 +282,7 @@ public class FVectorRandomizeTest {
         FPoint fPointIn = factory.getFPoint();
         FVector fVectorDir = TestHelper.getRandFVector();
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.onAxis(fPointIn, fVectorDir);
 

@@ -6,5 +6,5 @@ import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 
 public interface FRandAspect extends ComponentAspectRand, Aspect {
 
-    FRandGenerator getFRand();
+    FRandGenerator generator();
 }

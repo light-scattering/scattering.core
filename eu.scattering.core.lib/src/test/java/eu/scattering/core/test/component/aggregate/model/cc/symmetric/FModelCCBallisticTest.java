@@ -32,13 +32,13 @@ public class FModelCCBallisticTest {
         void results3DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModel fModel = factory.models().cc().ballistic(fAggregate);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -49,13 +49,13 @@ public class FModelCCBallisticTest {
         void results2DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModel fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -72,8 +72,8 @@ public class FModelCCBallisticTest {
         void results3DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().cc().ballistic(fAggregate);
 
             fModel.build();
 
@@ -87,8 +87,8 @@ public class FModelCCBallisticTest {
         void results3DB() {
             int size = 60000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().cc().ballistic(fAggregate);
 
             fModel.build();
 
@@ -102,8 +102,8 @@ public class FModelCCBallisticTest {
         void results2DA() {
             int size = 6000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -117,8 +117,8 @@ public class FModelCCBallisticTest {
         void results2DB() {
             int size = 10000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -137,8 +137,8 @@ public class FModelCCBallisticTest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().cc().ballistic(fAggregate);
 
             fModel.build();
 
@@ -154,13 +154,13 @@ public class FModelCCBallisticTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().cc().ballistic(fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelA = factoryA.models().cc().ballistic(fAggregateA);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().cc().ballistic(fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelB = factoryB.models().cc().ballistic(fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -174,8 +174,8 @@ public class FModelCCBallisticTest {
             int size = 28;
             int sizeFragment = 3;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(fAggregate);
 
             AtomicInteger fragments = new AtomicInteger(0);
 
@@ -193,8 +193,8 @@ public class FModelCCBallisticTest {
         void monitorA() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(fAggregate);
 
             AtomicInteger stepsCount = new AtomicInteger(0);
             AtomicInteger stepsIndex = new AtomicInteger(0);
@@ -221,8 +221,8 @@ public class FModelCCBallisticTest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -252,8 +252,8 @@ public class FModelCCBallisticTest {
         void acceptor() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -268,8 +268,8 @@ public class FModelCCBallisticTest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -285,8 +285,8 @@ public class FModelCCBallisticTest {
         void configuration() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCC fModel = factory.models().cc().ballistic(fAggregate);
 
             fModel.setSymmetry(true);
 
@@ -303,8 +303,8 @@ public class FModelCCBallisticTest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -324,13 +324,13 @@ public class FModelCCBallisticTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().cc().ballistic(Dimension.D2, fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelA = factoryA.models().cc().ballistic(Dimension.D2, fAggregateA);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().cc().ballistic(Dimension.D2, fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelB = factoryB.models().cc().ballistic(Dimension.D2, fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -344,8 +344,8 @@ public class FModelCCBallisticTest {
             int size = 28;
             int sizeFragment = 3;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             AtomicInteger fragments = new AtomicInteger(0);
 
@@ -363,8 +363,8 @@ public class FModelCCBallisticTest {
         void monitorA() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             AtomicInteger stepsCount = new AtomicInteger(0);
             AtomicInteger stepsIndex = new AtomicInteger(0);
@@ -391,8 +391,8 @@ public class FModelCCBallisticTest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -422,8 +422,8 @@ public class FModelCCBallisticTest {
         void acceptor() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -438,8 +438,8 @@ public class FModelCCBallisticTest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -455,8 +455,8 @@ public class FModelCCBallisticTest {
         void configuration() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCC fModel = factory.models().cc().ballistic(Dimension.D2, fAggregate);
 
             fModel.setSymmetry(true);
 

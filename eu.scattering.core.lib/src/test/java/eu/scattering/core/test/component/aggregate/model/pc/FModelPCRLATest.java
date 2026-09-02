@@ -31,13 +31,13 @@ public class FModelPCRLATest {
         void results3DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModel fModel = factory.models().pc().rla(fAggregate);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertTrue(json.length() > 0);
             assertTrue(model.length() > 0);
@@ -48,13 +48,13 @@ public class FModelPCRLATest {
         void results2DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModel fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertTrue(json.length() > 0);
             assertTrue(model.length() > 0);
@@ -71,8 +71,8 @@ public class FModelPCRLATest {
         void results3DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().pc().rla(fAggregate);
 
             fModel.build();
 
@@ -86,8 +86,8 @@ public class FModelPCRLATest {
         void results3DB() {
             int size = 10000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().pc().rla(fAggregate);
 
             fModel.build();
 
@@ -101,8 +101,8 @@ public class FModelPCRLATest {
         void results2DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -116,8 +116,8 @@ public class FModelPCRLATest {
         void results2DB() {
             int size = 10000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -136,8 +136,8 @@ public class FModelPCRLATest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().pc().rla(fAggregate);
 
             fModel.build();
 
@@ -153,13 +153,13 @@ public class FModelPCRLATest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().pc().rla(fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelA = factoryA.models().pc().rla(fAggregateA);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().pc().rla(fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelB = factoryB.models().pc().rla(fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -172,8 +172,8 @@ public class FModelPCRLATest {
         void monitorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(fAggregate);
 
             AtomicInteger quantity = new AtomicInteger(0);
 
@@ -197,8 +197,8 @@ public class FModelPCRLATest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -228,8 +228,8 @@ public class FModelPCRLATest {
         void acceptorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -244,8 +244,8 @@ public class FModelPCRLATest {
         void acceptorB() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(fAggregate);
 
             BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
                     shape.getCenterX() < 2 && shape.getCenterX() > -2;
@@ -263,8 +263,8 @@ public class FModelPCRLATest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -285,8 +285,8 @@ public class FModelPCRLATest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -302,13 +302,13 @@ public class FModelPCRLATest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().pc().rla(Dimension.D2, fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelA = factoryA.models().pc().rla(Dimension.D2, fAggregateA);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().pc().rla(Dimension.D2, fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModel fModelB = factoryB.models().pc().rla(Dimension.D2, fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -321,8 +321,8 @@ public class FModelPCRLATest {
         void monitorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             AtomicInteger quantity = new AtomicInteger(0);
 
@@ -346,8 +346,8 @@ public class FModelPCRLATest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -377,8 +377,8 @@ public class FModelPCRLATest {
         void acceptorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -393,8 +393,8 @@ public class FModelPCRLATest {
         void acceptorB() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
                     shape.getCenterX() < 2 && shape.getCenterX() > -2;
@@ -412,8 +412,8 @@ public class FModelPCRLATest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPC fModel = factory.models().pc().rla(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 

@@ -2,7 +2,7 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextGeometry;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextGeometries;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -12,7 +12,7 @@ import eu.scattering.core.design.functionality.Producer;
 
 import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
-public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryContextGeometry {
+public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryContextGeometries {
     private final ScatterFactory factory;
 
     private FAggregateFactoryContextGeometryDef(ScatterFactory factory) {
@@ -20,7 +20,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
         this.factory = factory;
     }
 
-    public static FAggregateFactoryContextGeometry create(ScatterFactory factory) {
+    public static FAggregateFactoryContextGeometries create(ScatterFactory factory) {
 
         return new FAggregateFactoryContextGeometryDef(factory);
     }
@@ -28,7 +28,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
     //--------------------------------------------------
 
     @Override
-    public FAggregate d1(int d1, double radius) {
+    public FAggregate grid1D(int d1, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
 
@@ -53,7 +53,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
     }
 
     @Override
-    public FAggregate d2(int d1, int d2, double radius) {
+    public FAggregate grid2D(int d1, int d2, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
 
@@ -80,7 +80,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
     }
 
     @Override
-    public FAggregate d3(int d1, int d2, int d3, double radius) {
+    public FAggregate grid3D(int d1, int d2, int d3, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
 
@@ -109,7 +109,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
     }
 
     @Override
-    public FAggregate d2Hex(double reach, double radius) {
+    public FAggregate hex2D(double reach, double radius) {
 
         if (reach < radius) {
             throw new IllegalArgumentException("The outer radius must must not be smaller than the particle radius");
@@ -149,7 +149,7 @@ public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryCon
     }
 
     @Override
-    public FAggregate d3Hex(double reach, double radius) {
+    public FAggregate hex3D(double reach, double radius) {
 
         if (reach < radius) {
             throw new IllegalArgumentException("The outer radius must must not be smaller than the particle radius");

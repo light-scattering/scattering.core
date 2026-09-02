@@ -58,8 +58,8 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
         this.acceptors = new ArrayList<>();
         this.validators = new ArrayList<>();
 
-        this.random = factory.getRandAspect();
-        this.rotation = factory.getRotAspect();
+        this.random = factory.random();
+        this.rotation = factory.rotate();
 
         this.aggregate = aggregate;
 
@@ -127,7 +127,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
     }
 
     private void initParticleA() {
-        Shape particle = this.random.getFRand().getElement(this.detached, true);
+        Shape particle = this.random.generator().getElement(this.detached, true);
 
         particle.setCenter(0, 0, 0);
 
@@ -141,7 +141,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
 
         step:
         while (true) {
-            Shape particle = this.random.getFRand().getElement(this.detached, false);
+            Shape particle = this.random.generator().getElement(this.detached, false);
 
             projectVariantDimension(particle);
 
@@ -175,7 +175,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
         FPoint headDir = this.pathDir.getRefHead();
 
         while (true) {
-            FPos3D pos3D = this.random.getFRand().nextDoubleOnSphere(4 * this.distance);
+            FPos3D pos3D = this.random.generator().nextDoubleOnSphere(4 * this.distance);
 
             baseRnd.set(0, 0, 0);
             headRnd.set(pos3D);
@@ -199,8 +199,8 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
         FPoint headDir = this.pathDir.getRefHead();
 
         while (true) {
-            FPos2D pos2D = this.random.getFRand().nextDoubleOnCircle(4 * this.distance);
-            double pos1D = this.random.getFRand().nextDouble(-this.distance, this.distance);
+            FPos2D pos2D = this.random.generator().nextDoubleOnCircle(4 * this.distance);
+            double pos1D = this.random.generator().nextDouble(-this.distance, this.distance);
 
             baseDir.set(pos2D, 0);
             headDir.set(pos1D, 0, 0);

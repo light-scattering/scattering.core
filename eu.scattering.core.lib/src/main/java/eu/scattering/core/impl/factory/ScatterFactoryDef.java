@@ -502,25 +502,25 @@ public final class ScatterFactoryDef implements ScatterFactory {
     }
 
     @Override
-    public FAggregateFactoryContext getFAggregateContext() {
+    public FAggregateFactoryContext aggregates() {
 
         return FAggregateFactoryContextDef.create(this);
     }
 
     @Override
-    public FModelFactoryContext getFModelContext() {
+    public FModelFactoryContext models() {
 
         return FModelFactoryContextDef.create(this);
     }
 
     @Override
-    public FMonitorFactoryContext getFMonitorContext() {
+    public FMonitorFactoryContext monitors() {
 
         return FMonitorFactoryContextDef.create(this);
     }
 
     @Override
-    public FValidatorFactoryContext getFValidatorContext() {
+    public FValidatorFactoryContext validators() {
 
         return FValidatorFactoryContextDef.create(this);
     }
@@ -638,31 +638,31 @@ public final class ScatterFactoryDef implements ScatterFactory {
     //--------------------------------------------------
 
     @Override
-    public FSaveAspect getSaveAspect() {
+    public FSaveAspect save() {
 
         return this.fAspectExport;
     }
 
     @Override
-    public FLoadAspect getLoadAspect() {
+    public FLoadAspect load() {
 
         return this.fAspectLoad;
     }
 
     @Override
-    public FProtoAspect getProtoAspect() {
+    public FProtoAspect prototype() {
 
         return this.fAspectProto;
     }
 
     @Override
-    public FRandAspect getRandAspect() {
+    public FRandAspect random() {
 
         return this.fAspectRand;
     }
 
     @Override
-    public FRotAspect getRotAspect() {
+    public FRotAspect rotate() {
 
         return this.fAspectRot;
     }

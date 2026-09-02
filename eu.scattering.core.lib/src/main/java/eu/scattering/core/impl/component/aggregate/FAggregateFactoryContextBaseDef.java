@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.aggregate;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal.FDist1DNormal;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextBase;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextTemplates;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -13,7 +13,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContextBase {
+public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContextTemplates {
     private final ScatterFactory factory;
 
     private FAggregateFactoryContextBaseDef(ScatterFactory factory) {
@@ -21,7 +21,7 @@ public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContext
         this.factory = factory;
     }
 
-    public static FAggregateFactoryContextBase create(ScatterFactory factory) {
+    public static FAggregateFactoryContextTemplates create(ScatterFactory factory) {
 
         return new FAggregateFactoryContextBaseDef(factory);
     }

@@ -21,7 +21,7 @@ public class FLoadAspectDef implements FLoadAspect {
     //--------------------------------------------------
 
     @Override
-    public FAggregateAspectLoad getFAggregateContext() {
+    public FAggregateAspectLoad aggregates() {
 
         return FAggregateAspectLoadDef.create(this.factory);
     }

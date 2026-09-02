@@ -68,7 +68,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
         this.acceptors = new ArrayList<>();
         this.validators = new ArrayList<>();
 
-        this.random = factory.getRandAspect();
+        this.random = factory.random();
 
         this.aggregate = aggregate;
 
@@ -142,7 +142,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
     }
 
     private void initParticleA() {
-        Shape particleA = this.random.getFRand().getElement(this.detached, true);
+        Shape particleA = this.random.generator().getElement(this.detached, true);
 
         particleA.setCenter(0, 0, 0);
 
@@ -152,7 +152,7 @@ public class FModelPCFilippovDef implements FModelPCTunable {
 
     private void initParticleB() {
         Shape particleA = this.attached.asList().getFirst();
-        Shape particleB = this.random.getFRand().getElement(this.detached, false);
+        Shape particleB = this.random.generator().getElement(this.detached, false);
 
         int iterations = 0;
 
@@ -181,15 +181,15 @@ public class FModelPCFilippovDef implements FModelPCTunable {
         double radius = particleA.getRadius() + particleB.getRadius();
 
         switch (this.dimension) {
-            case D3 -> particleB.setCenter(this.random.getFRand().nextDoubleOnSphere(radius));
-            case D2 -> particleB.setCenter(this.random.getFRand().nextDoubleOnCircle(radius), 0);
+            case D3 -> particleB.setCenter(this.random.generator().nextDoubleOnSphere(radius));
+            case D2 -> particleB.setCenter(this.random.generator().nextDoubleOnCircle(radius), 0);
         }
     }
 
     private boolean buildStep() {
         resetCenter();
 
-        Shape particle = this.random.getFRand().getElement(this.detached, false);
+        Shape particle = this.random.generator().getElement(this.detached, false);
 
         double radius = getExpectedDistance();
 
@@ -250,8 +250,8 @@ public class FModelPCFilippovDef implements FModelPCTunable {
     private void positionVariantDimension(Shape particle, double radius) {
 
         switch (this.dimension) {
-            case D3 -> particle.setCenter(this.random.getFRand().nextDoubleOnSphere(radius));
-            case D2 -> particle.setCenter(this.random.getFRand().nextDoubleOnCircle(radius), 0);
+            case D3 -> particle.setCenter(this.random.generator().nextDoubleOnSphere(radius));
+            case D2 -> particle.setCenter(this.random.generator().nextDoubleOnCircle(radius), 0);
         }
 
         particle.translate(this.center);

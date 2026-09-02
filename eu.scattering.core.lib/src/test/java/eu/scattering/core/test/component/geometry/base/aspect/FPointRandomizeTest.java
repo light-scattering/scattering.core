@@ -23,7 +23,7 @@ public class FPointRandomizeTest {
     void setRandomAngleValidateMagnitude() {
         double radius = Math.abs(rand.nextDouble());
 
-        FPoint fPoint = factory.getRandAspect().onSphere(factory.getFPoint(radius));
+        FPoint fPoint = factory.random().onSphere(factory.getFPoint(radius));
 
         assertEquals(radius, fPoint.getMagnitude(),
                 epsilon, "The radius is invalid");
@@ -35,14 +35,14 @@ public class FPointRandomizeTest {
         double radius = Math.abs(rand.nextDouble());
         FPoint fPoint = factory.getFPoint(radius);
 
-        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.getRandAspect().onSphere(fPoint));
+        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.random().onSphere(fPoint));
     }
 
     @Test
     @DisplayName("Set random angle (validate)")
     void setRandomAngleValidate() {
         FPoint fPoint = TestHelper.getRandFPoint();
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPointTestHelper.testReference(random::onSphere, fPoint);
     }
@@ -51,7 +51,7 @@ public class FPointRandomizeTest {
     @DisplayName("Set random position")
     void setRandomPosition() {
         FPoint fPoint = factory.getFPoint();
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.inRange(fPoint, factory.getFPairPos3D(
                 0.01, 0.01, 0.01, 0.02, 0.02, 0.02));
@@ -71,7 +71,7 @@ public class FPointRandomizeTest {
     @DisplayName("Set random position in sphere")
     void setRandomPositionInSphere() {
         FPoint fPoint = factory.getFPoint();
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.inSphere(fPoint, 0.01);
 
@@ -85,7 +85,7 @@ public class FPointRandomizeTest {
     @DisplayName("Set random position in sphere (self)")
     void setRandomPositionInSphereSelf() {
         FPoint fPoint = factory.getFPoint(1, 2, 3);
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         double magnitude = fPoint.getMagnitude();
 
@@ -101,7 +101,7 @@ public class FPointRandomizeTest {
     @DisplayName("Set random position on sphere")
     void setRandomPositionOnSphere() {
         FPoint fPoint = factory.getFPoint();
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.onSphere(fPoint, 0.01);
 
@@ -118,7 +118,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseInCircle(fPointIn, fPointDir, radius);
 
@@ -141,7 +141,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseInCircle(fPointIn, fPointDir, radius);
 
@@ -162,7 +162,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseOnCircle(fPointIn, fPointDir, radius);
 
@@ -185,7 +185,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToBaseOnCircle(fPointIn, fPointDir, radius);
 
@@ -206,7 +206,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadInCircle(fPointIn, fPointDir, radius);
 
@@ -229,7 +229,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadInCircle(fPointIn, fPointDir, radius);
 
@@ -250,7 +250,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadOnCircle(fPointIn, fPointDir, radius);
 
@@ -273,7 +273,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.ortToHeadOnCircle(fPointIn, fPointDir, radius);
 
@@ -293,7 +293,7 @@ public class FPointRandomizeTest {
         FPoint fPointIn = factory.getFPoint(1, -2, 3);
         FPoint fPointDir = factory.getFPoint(0.001, 0.001, 0.001);
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.onAxis(fPointIn, fPointDir);
 
@@ -313,7 +313,7 @@ public class FPointRandomizeTest {
         FPoint fPointIn = factory.getFPoint();
         FPoint fPointDir = TestHelper.getRandFPoint();
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.onAxis(fPointIn, fPointDir);
 
@@ -334,7 +334,7 @@ public class FPointRandomizeTest {
 
         double magnitude = fPointIn.getMagnitude();
 
-        FRandAspect random = factory.getRandAspect();
+        FRandAspect random = factory.random();
 
         FPoint results = random.onAxis(fPointIn);
 

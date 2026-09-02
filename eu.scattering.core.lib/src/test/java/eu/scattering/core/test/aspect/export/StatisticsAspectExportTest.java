@@ -36,7 +36,7 @@ public class StatisticsAspectExportTest {
         fStatA.setName("Stat A");
         fStatB.setName("Stat B");
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotlyHistogram(fStatMeta, fStatA, fStatB);
 
         Assertions.assertAll("Test values",
@@ -56,7 +56,7 @@ public class StatisticsAspectExportTest {
         fStatA.setName("Stat A");
         fStatB.setName("Stat B");
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotlyHistogram(fStatA, fStatB);
 
         Assertions.assertAll("Test values",
@@ -93,7 +93,7 @@ public class StatisticsAspectExportTest {
         fPlotInterpolated.setName("Interpolated");
         fPlotSimpleLinearRegression.setName("Linear regression");
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotly(fPlotMeta, fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
 
         Assertions.assertAll("Test values",
@@ -123,7 +123,7 @@ public class StatisticsAspectExportTest {
         fPlotInterpolated.setName("Interpolated");
         fPlotSimpleLinearRegression.setName("Linear regression");
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotly(fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
 
         Assertions.assertAll("Test values",
@@ -164,7 +164,7 @@ public class StatisticsAspectExportTest {
         fPlotB.add(5, 1);
         fPlotB.add(6, 3);
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotlyHistogram(fPlotMeta, fPlotA, fPlotB);
 
         Assertions.assertAll("Test values",
@@ -197,7 +197,7 @@ public class StatisticsAspectExportTest {
         fPlotB.add(5, 1);
         fPlotB.add(6, 3);
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotlyHistogram(fPlotA, fPlotB);
 
         Assertions.assertAll("Test values",
@@ -230,7 +230,7 @@ public class StatisticsAspectExportTest {
         fPlotBar.addRef(6, factory.getFStat(0, 1, 2));
         fPlotBar.addRef(8, factory.getFStat(-6, -5, -4));
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotly(fPlotBarMeta, fPlotBar);
 
         Assertions.assertAll("Test values",
@@ -254,7 +254,7 @@ public class StatisticsAspectExportTest {
         fPlotBar.addRef(6, factory.getFStat(0, 1, 2));
         fPlotBar.addRef(8, factory.getFStat(-6, -5, -4));
 
-        String script = factory.getSaveAspect().getStatisticsContext()
+        String script = factory.save().statistics()
                 .toPythonPlotly(fPlotBar);
 
         Assertions.assertAll("Test values",

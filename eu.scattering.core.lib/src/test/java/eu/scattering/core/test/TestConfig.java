@@ -13,7 +13,7 @@ public final class TestConfig {
     public static final double epsilon = 1E-8;
 
     public static final ScatterFactory factory = ScatterFactoryDef.create();
-    public static final FProtoAspect proto = factory.getProtoAspect();
+    public static final FProtoAspect proto = factory.prototype();
     public static final FRandGenerator rand = factory.getFRand();
-    public static final FRotAspect rot = factory.getRotAspect();
+    public static final FRotAspect rot = factory.rotate();
 }

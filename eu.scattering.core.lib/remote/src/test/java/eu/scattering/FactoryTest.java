@@ -16,7 +16,7 @@ public class FactoryTest {
     void getFactory() {
         ScatterFactory factory = ScatterCore.createFactory();
 
-        FAggregate fAggregate = factory.getFAggregateContext().geometry().d3(3, 4, 5);
+        FAggregate fAggregate = factory.aggregates().geometries().grid3D(3, 4, 5);
 
         assertEquals(60, fAggregate.size());
     }

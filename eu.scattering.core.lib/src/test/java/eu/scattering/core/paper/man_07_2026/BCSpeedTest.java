@@ -91,9 +91,9 @@ public class BCSpeedTest {
         }
 
         private void measureCore() {
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, 1);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();

@@ -2,8 +2,8 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
-import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextGeometry;
-import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextBase;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextGeometries;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextTemplates;
 
 public class FAggregateFactoryContextDef implements FAggregateFactoryContext {
     private final ScatterFactory factory;
@@ -21,13 +21,13 @@ public class FAggregateFactoryContextDef implements FAggregateFactoryContext {
     //--------------------------------------------------
 
     @Override
-    public FAggregateFactoryContextBase base() {
+    public FAggregateFactoryContextTemplates templates() {
 
         return FAggregateFactoryContextBaseDef.create(this.factory);
     }
 
     @Override
-    public FAggregateFactoryContextGeometry geometry() {
+    public FAggregateFactoryContextGeometries geometries() {
 
         return FAggregateFactoryContextGeometryDef.create(this.factory);
     }

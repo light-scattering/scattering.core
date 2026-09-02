@@ -24,16 +24,16 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Project 3D - Monodisperse")
     void project3DMonodisperse() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
+        FAggregate aggA = factory.aggregates().templates().monodisperse(25, 5);
+        FAggregate aggB = factory.aggregates().templates().monodisperse(25, 5);
 
-        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().ballistic(aggB);
+        FModelPC modelA = factory.models().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.models().pc().ballistic(aggB);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().project(aggA, aggB);
+        factory.random().project(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -43,16 +43,16 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Project 3D - Polydisperse")
     void project3DPolydisperse() {
-        FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+        FAggregate aggA = factory.aggregates().templates().polydisperse(25, 10, 1);
+        FAggregate aggB = factory.aggregates().templates().polydisperse(25, 10, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().ballistic(aggB);
+        FModelPC modelA = factory.models().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.models().pc().ballistic(aggB);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().project(aggA, aggB);
+        factory.random().project(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -62,16 +62,16 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Project 2D - Monodisperse")
     void project2DMonodisperse() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
+        FAggregate aggA = factory.aggregates().templates().monodisperse(25, 5);
+        FAggregate aggB = factory.aggregates().templates().monodisperse(25, 5);
 
-        FModelPC modelA = factory.getFModelContext().pc().ballistic(Dimension.D2, aggA);
-        FModelPC modelB = factory.getFModelContext().pc().ballistic(Dimension.D2, aggB);
+        FModelPC modelA = factory.models().pc().ballistic(Dimension.D2, aggA);
+        FModelPC modelB = factory.models().pc().ballistic(Dimension.D2, aggB);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().projectOnSurface(aggA, aggB);
+        factory.random().projectOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -85,16 +85,16 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Project 2D - Polydisperse")
     void project2DPolydisperse() {
-        FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+        FAggregate aggA = factory.aggregates().templates().polydisperse(25, 10, 1);
+        FAggregate aggB = factory.aggregates().templates().polydisperse(25, 10, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().ballistic(Dimension.D2, aggA);
-        FModelPC modelB = factory.getFModelContext().pc().ballistic(Dimension.D2, aggB);
+        FModelPC modelA = factory.models().pc().ballistic(Dimension.D2, aggA);
+        FModelPC modelB = factory.models().pc().ballistic(Dimension.D2, aggB);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().projectOnSurface(aggA, aggB);
+        factory.random().projectOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -108,16 +108,16 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Attach 3D - Monodisperse")
     void attach3DMonodisperse() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
+        FAggregate aggA = factory.aggregates().templates().monodisperse(25, 5);
+        FAggregate aggB = factory.aggregates().templates().monodisperse(25, 5);
 
-        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().tunable(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.models().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.models().pc().tunable(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().attach(aggA, aggB);
+        factory.random().attach(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -127,16 +127,16 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Attach 3D - Polydisperse")
     void attach3DPolydisperse() {
-        FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+        FAggregate aggA = factory.aggregates().templates().polydisperse(25, 10, 1);
+        FAggregate aggB = factory.aggregates().templates().polydisperse(25, 10, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().tunable(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.models().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.models().pc().tunable(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().attach(aggA, aggB);
+        factory.random().attach(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -146,16 +146,16 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Attach 2D")
     void attach2D() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
+        FAggregate aggA = factory.aggregates().templates().monodisperse(25, 1);
+        FAggregate aggB = factory.aggregates().templates().monodisperse(25, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().ballistic(Dimension.D2, aggA);
-        FModelPC modelB = factory.getFModelContext().pc().ballistic(Dimension.D2, aggB);
+        FModelPC modelA = factory.models().pc().ballistic(Dimension.D2, aggA);
+        FModelPC modelB = factory.models().pc().ballistic(Dimension.D2, aggB);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().attachOnSurface(aggA, aggB);
+        factory.random().attachOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -183,12 +183,12 @@ public class FAggregateRandomizeTest {
         FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
         FAggregate aggB = factory.getRefFAggregate(coreB);
 
-        factory.getRandAspect().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
+        factory.random().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
+        factory.random().rotate(aggA, aggB, cAggA, cAggB, 100);
 
         aggA.merge(aggB, true);
 
@@ -213,12 +213,12 @@ public class FAggregateRandomizeTest {
         FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
         FAggregate aggB = factory.getRefFAggregate(coreB);
 
-        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
+        factory.random().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
+        factory.random().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
 
         aggA.merge(aggB, true);
 
@@ -233,21 +233,21 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Rotate 3D (complex)")
     void rotateComplex3D() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
+        FAggregate aggA = factory.aggregates().templates().monodisperse(25, 1);
+        FAggregate aggB = factory.aggregates().templates().monodisperse(25, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().tunable(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.models().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.models().pc().tunable(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
+        factory.random().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
+        factory.random().rotate(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -257,21 +257,21 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Rotate 2D (complex)")
     void rotateComplex2D() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
+        FAggregate aggA = factory.aggregates().templates().monodisperse(25, 1);
+        FAggregate aggB = factory.aggregates().templates().monodisperse(25, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().tunable(Dimension.D2, aggA, 1.5, 1.2);
-        FModelPC modelB = factory.getFModelContext().pc().tunable(Dimension.D2, aggB, 1.5, 1.2);
+        FModelPC modelA = factory.models().pc().tunable(Dimension.D2, aggA, 1.5, 1.2);
+        FModelPC modelB = factory.models().pc().tunable(Dimension.D2, aggB, 1.5, 1.2);
 
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
+        factory.random().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
+        factory.random().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());

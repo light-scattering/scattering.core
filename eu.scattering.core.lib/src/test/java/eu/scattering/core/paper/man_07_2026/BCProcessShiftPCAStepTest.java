@@ -25,9 +25,9 @@ public class BCProcessShiftPCAStepTest {
             double df = 1.4;
             double kf = 1.5;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, 1);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
@@ -47,9 +47,9 @@ public class BCProcessShiftPCAStepTest {
             double df = 1.8;
             double kf = 1.3;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, 1);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
@@ -69,9 +69,9 @@ public class BCProcessShiftPCAStepTest {
             double df = 2.2;
             double kf = 0.8;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, 1);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
@@ -166,9 +166,9 @@ public class BCProcessShiftPCAStepTest {
             }
 
             private void measureCore() {
-                var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+                var fAggregate = factory.aggregates().templates().monodisperse(size, 1);
 
-                var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+                var fModel = factory.models().cc().tunable(fAggregate, df, kf);
                 fModel.setEarlyStageCorrection(true);
 
                 fModel.build();

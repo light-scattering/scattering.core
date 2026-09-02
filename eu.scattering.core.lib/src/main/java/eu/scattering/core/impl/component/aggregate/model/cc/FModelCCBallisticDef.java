@@ -64,8 +64,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
         this.factory = factory;
 
-        this.random = this.factory.getRandAspect();
-        this.rotation = factory.getRotAspect();
+        this.random = this.factory.random();
+        this.rotation = factory.rotate();
 
         this.cAggA = factory.getFPoint();
         this.cAggB = factory.getFPoint();
@@ -163,8 +163,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         FAggregate aggB;
 
         do {
-            aggA = this.random.getFRand().getElement(this.fragments, false);
-            aggB = this.random.getFRand().getElement(this.fragments, false);
+            aggA = this.random.generator().getElement(this.fragments, false);
+            aggB = this.random.generator().getElement(this.fragments, false);
         } while (aggA == aggB);
 
         buildStepCore(aggA, aggB, index);
@@ -227,7 +227,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             double distance = 10 * (rAggA + rAggB);
 
             baseRnd.set(0, 0, 0);
-            headRnd.set(this.random.getFRand().nextDoubleOnSphere(distance));
+            headRnd.set(this.random.generator().nextDoubleOnSphere(distance));
 
             aggA.getRefParticles().translate(this.cAggA, 0, 0, 0);
             aggB.getRefParticles().translate(this.cAggB, headRnd);
@@ -259,17 +259,17 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             double distance = 10 * (rAggA + rAggB);
 
             baseRnd.set(0, 0, 0);
-            headRnd.set(this.random.getFRand().nextDoubleOnCircle(distance), 0);
+            headRnd.set(this.random.generator().nextDoubleOnCircle(distance), 0);
 
             aggA.getRefParticles().translate(this.cAggA, 0, 0, 0);
             aggB.getRefParticles().translate(this.cAggB, headRnd);
 
-            baseDir.set(this.random.getFRand().nextDouble(-rAggB, rAggB), 0, 0);
+            baseDir.set(this.random.generator().nextDouble(-rAggB, rAggB), 0, 0);
             this.rotation.setRgAngle(baseDir, headRnd, Math.PI * 0.5);
 
             baseDir.add(headRnd);
 
-            headDir.set(this.random.getFRand().nextDouble(-rAggA, rAggA), 0, 0);
+            headDir.set(this.random.generator().nextDouble(-rAggA, rAggA), 0, 0);
             this.rotation.setRgAngle(headDir, headRnd, Math.PI * 0.5);
 
             double shift = aggB.project(aggA, this.pathB);
@@ -296,7 +296,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     private void buildFragments() {
 
         for (FAggregate fragment : this.fragments) {
-            factory.getFModelContext().pc().ballistic(this.dimension, fragment).build();
+            factory.models().pc().ballistic(this.dimension, fragment).build();
         }
 
         FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
@@ -310,7 +310,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
     private void shuffleFragments() {
 
-        this.random.getFRand().shuffle(this.fragments);
+        this.random.generator().shuffle(this.fragments);
     }
 
     private void removeFragments() {

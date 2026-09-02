@@ -3,7 +3,6 @@ package eu.scattering.core.test.component.aggregate.model.cc.random;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -34,15 +33,15 @@ public class FModelCCDLCACoreTest {
         void results3DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -53,15 +52,15 @@ public class FModelCCDLCACoreTest {
         void results2DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -78,8 +77,8 @@ public class FModelCCDLCACoreTest {
         void results3DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -95,8 +94,8 @@ public class FModelCCDLCACoreTest {
         void results3DB() {
             int size = 6000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -112,8 +111,8 @@ public class FModelCCDLCACoreTest {
         void results2DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -129,8 +128,8 @@ public class FModelCCDLCACoreTest {
         void results2DB() {
             int size = 6000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -151,8 +150,8 @@ public class FModelCCDLCACoreTest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -170,15 +169,15 @@ public class FModelCCDLCACoreTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModelA = factoryA.getFModelContext().cc().dlca(fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModelA = factoryA.models().cc().dlca(fAggregateA);
             fModelA.setSymmetry(false);
             fModelA.setInternalSpawn(true);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModelB = factoryB.getFModelContext().cc().dlca(fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModelB = factoryB.models().cc().dlca(fAggregateB);
             fModelB.setSymmetry(false);
             fModelB.setInternalSpawn(true);
 
@@ -194,8 +193,8 @@ public class FModelCCDLCACoreTest {
             int size = 28;
             int sizeFragment = 3;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -215,8 +214,8 @@ public class FModelCCDLCACoreTest {
         void monitorA() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -245,8 +244,8 @@ public class FModelCCDLCACoreTest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -278,8 +277,8 @@ public class FModelCCDLCACoreTest {
         void acceptor() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -296,8 +295,8 @@ public class FModelCCDLCACoreTest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -313,8 +312,8 @@ public class FModelCCDLCACoreTest {
         @Test
         @DisplayName("Configuration")
         void configuration() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-            FModelCCDLCA model = factory.getFModelContext().cc().dlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(10, 1);
+            FModelCCDLCA model = factory.models().cc().dlca(fAggregate);
 
             TriConsumer<FAggregate, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
@@ -343,8 +342,8 @@ public class FModelCCDLCACoreTest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -366,15 +365,15 @@ public class FModelCCDLCACoreTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModelA = factoryA.getFModelContext().cc().dlca(Dimension.D2, fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModelA = factoryA.models().cc().dlca(Dimension.D2, fAggregateA);
             fModelA.setSymmetry(false);
             fModelA.setInternalSpawn(true);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModelB = factoryB.getFModelContext().cc().dlca(Dimension.D2, fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModelB = factoryB.models().cc().dlca(Dimension.D2, fAggregateB);
             fModelB.setSymmetry(false);
             fModelB.setInternalSpawn(true);
 
@@ -390,8 +389,8 @@ public class FModelCCDLCACoreTest {
             int size = 28;
             int sizeFragment = 3;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -411,8 +410,8 @@ public class FModelCCDLCACoreTest {
         void monitorA() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -440,8 +439,8 @@ public class FModelCCDLCACoreTest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -473,8 +472,8 @@ public class FModelCCDLCACoreTest {
         void acceptor() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -491,8 +490,8 @@ public class FModelCCDLCACoreTest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCDLCA fModel = factory.models().cc().dlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
             fModel.setInternalSpawn(true);
 
@@ -508,8 +507,8 @@ public class FModelCCDLCACoreTest {
         @Test
         @DisplayName("Configuration")
         void configuration() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-            FModelCCDLCA model = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(10, 1);
+            FModelCCDLCA model = factory.models().cc().dlca(Dimension.D2, fAggregate);
 
             TriConsumer<FAggregate, FRandAspect, FPoint> movement = (aggregate, random, point) -> point.add(1, 2, 3);
 

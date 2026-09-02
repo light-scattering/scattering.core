@@ -973,20 +973,20 @@ public class FSphereProducerTest {
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer((factory, random) -> {
-            double x = random.getFRand().nextDouble();
-            double y = random.getFRand().nextDouble();
-            double z = random.getFRand().nextDouble();
-            double r = random.getFRand().nextDouble();
+            double x = random.generator().nextDouble();
+            double y = random.generator().nextDouble();
+            double z = random.generator().nextDouble();
+            double r = random.generator().nextDouble();
 
             return factory.getFSphere(x, y, z, r);
         });
 
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
                 .withCustomRule((factory, random) -> {
-                    double x = random.getFRand().nextDouble();
-                    double y = random.getFRand().nextDouble();
-                    double z = random.getFRand().nextDouble();
-                    double r = random.getFRand().nextDouble();
+                    double x = random.generator().nextDouble();
+                    double y = random.generator().nextDouble();
+                    double z = random.generator().nextDouble();
+                    double r = random.generator().nextDouble();
 
                     return factory.getFSphere(x, y, z, r);
                 });

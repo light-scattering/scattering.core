@@ -20,7 +20,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct simple 1D")
         void constructSimple1D() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().d1(11, 2);
+            FAggregate fAggregate = factory.aggregates().geometries().grid1D(11, 2);
 
             FPairPos3D boundary = fAggregate.getBoundary();
 
@@ -39,7 +39,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct simple 2D")
         void constructSimple2D() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().d2(5, 7, 2);
+            FAggregate fAggregate = factory.aggregates().geometries().grid2D(5, 7, 2);
 
             FPairPos3D boundary = fAggregate.getBoundary();
 
@@ -58,7 +58,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct simple 3D")
         void constructSimple3D() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().d3(5, 7, 9, 2);
+            FAggregate fAggregate = factory.aggregates().geometries().grid3D(5, 7, 9, 2);
 
             FPairPos3D boundary = fAggregate.getBoundary();
 
@@ -77,7 +77,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct hexagonal pack 2D")
         void constructHexagonal2D() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().d2Hex(25, 1);
+            FAggregate fAggregate = factory.aggregates().geometries().hex2D(25, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertTrue(fAggregate.getRefParticles().size() > 500),
@@ -88,7 +88,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct hexagonal pack 3D")
         void constructHexagonal3D() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().d3Hex(10, 1);
+            FAggregate fAggregate = factory.aggregates().geometries().hex3D(10, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertTrue(fAggregate.getRefParticles().size() > 500),
@@ -99,7 +99,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct full circle")
         void constructFullCircle() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().fullCircle(20, 1);
+            FAggregate fAggregate = factory.aggregates().geometries().fullCircle(20, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertTrue(fAggregate.getRefParticles().size() > 1000),
@@ -111,14 +111,14 @@ public class FAggregateFactoryTest {
         @DisplayName("Construct full circle - Fail")
         void constructFullCircleFail() {
 
-            assertThrows(IllegalArgumentException.class, () -> factory.getFAggregateContext().geometry().fullCircle(0, 1));
-            assertThrows(IllegalArgumentException.class, () -> factory.getFAggregateContext().geometry().fullCircle(5, -1));
+            assertThrows(IllegalArgumentException.class, () -> factory.aggregates().geometries().fullCircle(0, 1));
+            assertThrows(IllegalArgumentException.class, () -> factory.aggregates().geometries().fullCircle(5, -1));
         }
 
         @Test
         @DisplayName("Construct full sphere")
         void constructFullSphere() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().fullSphere(10, 1);
+            FAggregate fAggregate = factory.aggregates().geometries().fullSphere(10, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertTrue(fAggregate.getRefParticles().size() > 1000),
@@ -130,8 +130,8 @@ public class FAggregateFactoryTest {
         @DisplayName("Construct full sphere - Fail")
         void constructFullSphereFail() {
 
-            assertThrows(IllegalArgumentException.class, () -> factory.getFAggregateContext().geometry().fullSphere(0, 1));
-            assertThrows(IllegalArgumentException.class, () -> factory.getFAggregateContext().geometry().fullSphere(5, -1));
+            assertThrows(IllegalArgumentException.class, () -> factory.aggregates().geometries().fullSphere(0, 1));
+            assertThrows(IllegalArgumentException.class, () -> factory.aggregates().geometries().fullSphere(5, -1));
         }
     }
 
@@ -142,7 +142,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct monodisperse")
         void constructMono() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(100, 1);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(100, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),
@@ -155,7 +155,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct polydisperse")
         void constructPoly() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(100, 10, 1);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(100, 10, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),
@@ -168,7 +168,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct polydisperse (limited)")
         void constructPolyLimited() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(100, 10, 1, 1, 0.1);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(100, 10, 1, 1, 0.1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),

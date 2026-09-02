@@ -35,11 +35,11 @@ public class DFVisualTest {
             double kf = 1.3;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+            var fMonitor = factory.monitors().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
-            var fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().pc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
             fModel.addStepMonitor(fMonitor);
 
@@ -54,11 +54,11 @@ public class DFVisualTest {
             assertEquals(1.8, dimension, 0.25);
             assertFalse(plot.isEmpty());
 
-            String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
 
-            String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
         }
@@ -71,11 +71,11 @@ public class DFVisualTest {
             double kf = 1.3;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+            var fMonitor = factory.monitors().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
             fModel.addStepMonitor(fMonitor);
 
@@ -92,11 +92,11 @@ public class DFVisualTest {
             assertFalse(plotA.isEmpty());
             assertFalse(plotB.isEmpty());
 
-            String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
 
-            String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
         }
@@ -113,20 +113,20 @@ public class DFVisualTest {
             double kf = 1.3;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
 
             fAggregate.pca();
 
-            String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
 
-            String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.REFERENCE);
+            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.REFERENCE);
 
             assertFalse(model.isEmpty());
 
@@ -158,20 +158,20 @@ public class DFVisualTest {
             double kf = 1.3;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
 
             fAggregate.pca();
 
-            String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
 
-            String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.REFERENCE);
+            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.REFERENCE);
 
             assertFalse(model.isEmpty());
 
@@ -203,9 +203,9 @@ public class DFVisualTest {
             double kf = 1.3;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
@@ -222,15 +222,15 @@ public class DFVisualTest {
             assertTrue(diameter > 0);
             assertTrue(magnitude > 0);
 
-            String modelA = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String modelA = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(modelA.isEmpty());
 
-            String modelB = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOX_COUNTING);
+            String modelB = factory.save().components().toPovRay(fAggregate, ExPovRay.BOX_COUNTING);
 
             assertFalse(modelB.isEmpty());
 
-            String geometry = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
 
@@ -250,9 +250,9 @@ public class DFVisualTest {
         @Test
         @DisplayName("Geometry - Basic")
         void basic() {
-            FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
-            FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
-            FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
+            FAggregate fAggregate1d = factory.aggregates().geometries().grid1D(50);
+            FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
+            FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
             int particles1d = fAggregate1d.size();
             int particles2d = fAggregate2d.size();
@@ -262,21 +262,21 @@ public class DFVisualTest {
             assertTrue(particles2d > 0);
             assertTrue(particles3d > 0);
 
-            String fModel1d = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate1d, ExPovRay.BOUNDARY);
+            String fModel1d = factory.save().components().toPovRay(fAggregate1d, ExPovRay.BOUNDARY);
             assertFalse(fModel1d.isEmpty());
 
-            String fModel2d = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
+            String fModel2d = factory.save().components().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
             assertFalse(fModel2d.isEmpty());
 
-            String fModel3d = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
+            String fModel3d = factory.save().components().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
             assertFalse(fModel3d.isEmpty());
         }
 
         @Test
         @DisplayName("Geometry - Hexagonal")
         void hexagonal() {
-            FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
-            FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
+            FAggregate fAggregate2d = factory.aggregates().geometries().hex2D(30, 1);
+            FAggregate fAggregate3d = factory.aggregates().geometries().hex3D(20, 1);
 
             int particles2d = fAggregate2d.size();
             int particles3d = fAggregate3d.size();
@@ -284,10 +284,10 @@ public class DFVisualTest {
             assertTrue(particles2d > 0);
             assertTrue(particles3d > 0);
 
-            String fModel2d = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
+            String fModel2d = factory.save().components().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
             assertFalse(fModel2d.isEmpty());
 
-            String fModel3d = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
+            String fModel3d = factory.save().components().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
             assertFalse(fModel3d.isEmpty());
         }
     }
@@ -303,14 +303,14 @@ public class DFVisualTest {
             double kf = 1.5;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
 
-            String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
         }
@@ -323,14 +323,14 @@ public class DFVisualTest {
             double kf = 1.3;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
 
-            String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
         }
@@ -343,14 +343,14 @@ public class DFVisualTest {
             double kf = 0.8;
             double r = 1;
 
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, r);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, r);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
 
-            String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
         }

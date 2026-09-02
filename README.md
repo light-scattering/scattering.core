@@ -219,16 +219,16 @@ While this method is ideal when feeding in coordinates from external algorithms,
 double rp = 1;  // Particle radius
 
 // Create a 1D line composed of 10 spherical particles.
-FAggregate d1 = factory.getFAggregateContext().geometry().d1(10, rp);
+FAggregate d1 = factory.aggregates().geometries().grid1D(10, rp);
 // Create a 2D grid composed of 10x12 spherical particles.
-FAggregate d2 = factory.getFAggregateContext().geometry().d2(10, 12, rp);
+FAggregate d2 = factory.aggregates().geometries().grid2D(10, 12, rp);
 // Create a 3D lattice composed of 10x12x14 spherical particles.
-FAggregate d3 = factory.getFAggregateContext().geometry().d3(10, 12, 14, rp);
+FAggregate d3 = factory.aggregates().geometries().grid3D(10, 12, 14, rp);
 
 // Create a 2D hexagonal cluster limited by an outer radius of 20 units.
-FAggregate hex2 = factory.getFAggregateContext().geometry().d2Hex(20, rp);
+FAggregate hex2 = factory.aggregates().geometries().hex2D(20, rp);
 // Create a 3D hexagonal cluster limited by an outer radius of 30 units.
-FAggregate hex3 = factory.getFAggregateContext().geometry().d3Hex(30, rp);
+FAggregate hex3 = factory.aggregates().geometries().hex3D(30, rp);
 ```
 
 For highly complex structural geometries the library offers advanced stochastic tools like Producers and Distributions. While a comprehensive guide to these features will be covered in an upcoming tutorial, below are two examples demonstrating how to construct a TiO2:Ag core-satellite composite and a multi-modal particle assembly:
@@ -245,12 +245,12 @@ FSphereProducer particleAg = factory.getFSphereProducer()
         // Here, a predefined generator places centers on a sphere and assigns radii via a normal distribution.
         .withProdCenterAndDistRadius(
                 factory.getFPointProducer().withOnSphere(36),
-                factory.getFRand().getFDist1DNormal(2.5, 0.2))
+                factory.generator().getFDist1DNormal(2.5, 0.2))
         // CORRECTIONS: Apply spatial modifications to the generated geometry.
         // You can apply multiple predefined or custom corrections. 
         // Here, a custom lambda snaps each candidate into exact point-contact with the core.
-        .addCorrection((candidate, rand) ->
-                factory.getRandAspect().attachLinear(candidate, particleTiO2))
+        .addCorrection((candidate, rnd) ->
+                factory.generator().attachLinear(candidate, particleTiO2))
         // VALIDATIONS: Enforce strict criteria the particle must pass to be accepted.
         // You can require multiple predefined or custom validators.
         // Here, a predefined validator rejects any candidate that overlaps with previously placed particles.
@@ -263,7 +263,7 @@ FAggregate composite = factory.getRefFAggregate(particleAg.getListFixed(250));
 composite.addRefParticle(particleTiO2);
 
 // Export the finalized composite to a PovRay script for 3D visualization.
-String visual = factory.getSaveAspect().getComponentContext().toPovRay(composite, ExPovRay.FREE);
+String visual = factory.save().components().toPovRay(composite, ExPovRay.FREE);
 ```
 
 ```java
@@ -271,17 +271,17 @@ String visual = factory.getSaveAspect().getComponentContext().toPovRay(composite
 int size = 2500;
 
 // Define a uniform 3D bounding box for spatial distribution.
-FDist3D rangeA = factory.getFRand().getFDist3DUniform(factory.getFPairPos3D(-200, -100, -100, 200, 100, 100));
+FDist3D rangeA = factory.generator().getFDist3DUniform(factory.getFPairPos3D(-200, -100, -100, 200, 100, 100));
 // Define a 3D normal distribution (centered at the origin by default) with custom standard deviations.
-FDist3D rangeB = factory.getFRand().getFDist3DNormal().setStd(50, 25, 25);
+FDist3D rangeB = factory.generator().getFDist3DNormal().setStd(50, 25, 25);
 
 // Configure a producer to generate particles using a weighted mix of generators.
 FSphereProducer particles = factory.getFSphereProducer()
         // GENERATORS: Chain multiple predefined or custom generators with assigned selection weights.
         // 90% probability: Place small particles (radius 1.0) uniformly within the bounding box.
-        .withDistCenterAndDistRadius(rangeA, factory.getFRand().getFDist1DNormal(1.0, 0.1), 90)
+        .withDistCenterAndDistRadius(rangeA, factory.generator().getFDist1DNormal(1.0, 0.1), 90)
         // 10% probability: Place intermediate particles (radius 5.0) clustered via the normal distribution.
-        .withDistCenterAndDistRadius(rangeB, factory.getFRand().getFDist1DNormal(5.0, 1), 10)
+        .withDistCenterAndDistRadius(rangeB, factory.generator().getFDist1DNormal(5.0, 1), 10)
         // VALIDATIONS: Enforce strict criteria candidates must pass to be accepted.
         // Here, a predefined validator rejects any candidates that overlap with existing particles.
         .validateNoOverlap()
@@ -292,7 +292,7 @@ FSphereProducer particles = factory.getFSphereProducer()
 FAggregate geometry = factory.getRefFAggregate(particles.getListRandomized(size));
 
 // Export the finalized geometry to a PovRay script for 3D visualization, including the visual boundary.
-String visual = factory.getSaveAspect().getComponentContext().toPovRay(geometry, ExPovRay.BOUNDARY);
+String visual = factory.save().components().toPovRay(geometry, ExPovRay.BOUNDARY);
 ```
 
 <div align="center">
@@ -318,35 +318,35 @@ To accelerate setup, the library includes built-in utilities for generating comm
 
 ```java
 // Generate an aggregate composed of 1,000 primary particles with a uniform radius of 1 unit.
-FAggregate mono = factory.getFAggregateContext().base().monodisperse(1_000, 1.0);
+FAggregate mono = factory.aggregates().templates().monodisperse(1_000, 1.0);
 // Generate an aggregate composed of 1,000 primary particles with radii following a normal distribution.
-FAggregate polyAgg = factory.getFAggregateContext().base().polydisperse(1_000, 1.0, 0.1);
+FAggregate polyAgg = factory.aggregates().templates().polydisperse(1_000, 1.0, 0.1);
 ```
 
 To shape the geometry, you must define an aggregation model and bind it to your preliminary particle pool.
 
 ```java
 // Create a preliminary pool of 10,000 primary particles with radii following a normal distribution.
-FAggregate aggregate = factory.getFAggregateContext().base().polydisperse(10_000, 1, 0.1);
+FAggregate aggregate = factory.aggregates().templates().polydisperse(10_000, 1, 0.1);
 
 // Define a 3D ballistic CC aggregation model (3D is the default).
-FModelCC d3 = factory.getFModelContext().cc().ballistic(aggregate);
+FModelCC d3 = factory.models().cc().ballistic(aggregate);
 
 // Define a 2D ballistic CC aggregation model. 
 // The first parameter of every model constructor is optional and defines the spatial dimensions.
-FModelCC d2 = factory.getFModelContext().cc().ballistic(Dimension.D2, aggregate);
+FModelCC d2 = factory.models().cc().ballistic(Dimension.D2, aggregate);
 
 // Execute the 3D ballistic CC aggregation.
 d3.build();
 
 // Export the 3D visualization.
-String d3Visual = factory.getSaveAspect().getComponentContext().toPovRay(aggregate, ExPovRay.FREE);
+String d3Visual = factory.save().components().toPovRay(aggregate, ExPovRay.FREE);
 
 // Execute the 2D ballistic CC aggregation (reusing the same particle pool).
 d2.build();
 
 // Export the 2D visualization.
-String d2Visual = factory.getSaveAspect().getComponentContext().toPovRay(aggregate, ExPovRay.FREE);
+String d2Visual = factory.save().components().toPovRay(aggregate, ExPovRay.FREE);
 ```
 
 <div align="center">
@@ -370,10 +370,10 @@ Particle-Cluster methods build aggregates by attaching a single particle at a ti
 
 ```java
 // Create a preliminary pool of 1,000 monodisperse primary particles.
-FAggregate aggregate = factory.getFAggregateContext().base().monodisperse(1_000, 1);
+FAggregate aggregate = factory.aggregates().templates().monodisperse(1_000, 1);
 
 // Access the PC model factory context.
-FModelPCFactoryContext context = factory.getFModelContext().pc();
+FModelPCFactoryContext context = factory.models().pc();
 
 // Initialize standard PC models.
 FModelPC rla = context.rla(aggregate);              // Reaction-Limited Aggregation.
@@ -447,10 +447,10 @@ Cluster-Cluster methods at each step of the aggregation process connect two clus
 
 ```java
 // Create a preliminary pool of 1,000 monodisperse primary particles.
-FAggregate aggregate = factory.getFAggregateContext().base().monodisperse(1_000, 1);
+FAggregate aggregate = factory.aggregates().templates().monodisperse(1_000, 1);
 
 // Access the CC model factory context.
-FModelCCFactoryContext context = factory.getFModelContext().cc();
+FModelCCFactoryContext context = factory.models().cc();
 
 // Initialize standard CC models.
 FModelCC rlca = context.rla(aggregate);             // Reaction-Limited Cluster Aggregation.
@@ -554,7 +554,7 @@ You can reconstruct an `FAggregate` from a string representation. The default an
 ```java
 String data = "...";                                                // The serialized string data.
 
-var load = factory.getLoadAspect().getFAggregateContext();          // Retrieve the loading context for aggregates.
+var load = factory.load().aggregates();                             // Retrieve the loading context for aggregates.
 
 FAggregate fAggregate = load.fromJSON(data);                        // Load from the default JSON format.     
 FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from an alternative format.
@@ -565,7 +565,7 @@ FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from
 For data storage, serialization, or transferring structures between processes, you can save aggregates into standard string formats. The JSON format is highly recommended as it strictly preserves all component properties.
 
 ```java
-var save = factory.getSaveAspect().getComponentContext();           // Retrieve the saving context for components (including aggregates).
+var save = factory.save().components();                             // Retrieve the saving context for components (including aggregates).
 
 String data = save.toJSON(aggregate);                               // Save to the default JSON format.      
 String data = save.toBasic(aggregate, ExBasic.MULTISPHERE);         // Save to an alternative format.
@@ -576,7 +576,7 @@ String data = save.toBasic(aggregate, ExBasic.MULTISPHERE);         // Save to a
 When preparing an aggregate for external applications (such as meshing, rendering, or interfacing with legacy software),  you can use specialized exporters tailored to those target environments.
 
 ```java
-var save = factory.getSaveAspect().getComponentContext();           // Retrieve the saving context for components (including aggregates).
+var save = factory.save().components();                             // Retrieve the saving context for components (including aggregates).
 
 String data = save.toFLAGE(aggregate);                              // Export to a format compatible with the FLAGE software.
 String data = save.toNGSolve(aggregate);                            // Export for volumetric mesh generation using NetGen/NGSolve. 
@@ -934,19 +934,19 @@ Kinetic methods, on the other hand, require a monitor to be injected during the 
 
 ```java
 // Create an unassembled fractal aggregate model.
-var fAggregate = factory.getFAggregateContext().base().monodisperse(1000, 1.0);
+var fAggregate = factory.aggregates().templates().monodisperse(1000, 1.0);
 
 // Create a predefined monitor to capture the radius of gyration of the growing aggregate at each step.
 // The first parameter sets the calculation method.
 // The second (optional) parameter defines how many initial steps to skip.
-var fMonitor = factory.getFMonitorContext().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2, 5);
+var fMonitor = factory.monitors().pc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2, 5);
 
 // This skip excludes early generation stages where the geometry is too small to be considered a true fractal.
 // At very low particle counts, different calculation methods can yield inconsistent radii. 
 // Additionally, early correction procedures for compact aggregates can temporarily distort the radius of the position sphere.
 
 // Define the aggregation model and target fractal parameters.
-var fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.3);
+var fModel = factory.models().pc().tunable(fAggregate, 1.8, 1.3);
 
 // Add a monitor.
 fModel.addStepMonitor(fMonitor);
@@ -981,16 +981,16 @@ FConfigPCPL fConfigPreset = factory.getFConfigPCPL(FConfigPCPL.Preset.WINDOW);
 
 ```java
 // Create an unassembled fractal aggregate model.
-var fAggregate = factory.getFAggregateContext().base().monodisperse(1000, 1.0);
+var fAggregate = factory.aggregates().templates().monodisperse(1000, 1.0);
 
 // Create a predefined monitor for capturing the radius of gyration of the growing geometry at each iteration step.
 // The parameter sets the method used to calculate the radius of gyration.
-var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+var fMonitor = factory.monitors().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
 
 // The CC process merges already-generated PC clusters, eliminating the need for a skip parameter.
 
 // Define the aggregation model and target fractal parameters.
-FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.3);
+FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.3);
 
 // Add a monitor.
 fModel.addStepMonitor(fMonitor);

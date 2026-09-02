@@ -1240,7 +1240,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     private FRotAspect getFRotAspect() {
 
-        return factory.getRotAspect();
+        return factory.rotate();
     }
 
     // -------------------------------------------------------------------------------------------------

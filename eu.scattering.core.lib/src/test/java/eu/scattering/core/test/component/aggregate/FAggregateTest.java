@@ -167,7 +167,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Parse JSON - A")
         void parseJSONA() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(10, 1);
 
             JSONObject json = fAggregate.toJSON();
 
@@ -182,7 +182,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Parse JSON - B")
         void parseJSONB() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1).addFBuffer(10).addFMaterial();
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(10, 1).addFBuffer(10).addFMaterial();
             fAggregate.getRefFExtension().getRefFMaterial().setDensity("A", 3);
             fAggregate.getRefFExtension().getRefFMaterial().setDensity("B", 6);
             fAggregate.getRefFExtension().getRefFMaterial().setRefIndexRe("C", 3);
@@ -1662,7 +1662,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get diameter")
         void getDiameter() {
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().d1(10);
+            FAggregate fAggregate = factory.aggregates().geometries().grid1D(10);
 
             double diameter = fAggregate.getDiameter();
 
@@ -3120,8 +3120,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("Project, composite A")
         void projectCompositeA() {
-            FAggregate aggregateA = factory.getFAggregateContext().geometry().fullSphere(3);
-            FAggregate aggregateB = factory.getFAggregateContext().geometry().d2(5, 5);
+            FAggregate aggregateA = factory.aggregates().geometries().fullSphere(3);
+            FAggregate aggregateB = factory.aggregates().geometries().grid2D(5, 5);
 
             aggregateA.setParticleEpsilon(1);
 
@@ -3143,8 +3143,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("Project, composite B")
         void projectCompositeB() {
-            FAggregate aggregateA = factory.getFAggregateContext().geometry().d3(2, 3, 4);
-            FAggregate aggregateB = factory.getFAggregateContext().geometry().d3(3, 4, 5);
+            FAggregate aggregateA = factory.aggregates().geometries().grid3D(2, 3, 4);
+            FAggregate aggregateB = factory.aggregates().geometries().grid3D(3, 4, 5);
 
             aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
 
@@ -3164,8 +3164,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("Project with limit, composite A")
         void projectWithLimitCompositeA() {
-            FAggregate aggregateA = factory.getFAggregateContext().geometry().fullSphere(3);
-            FAggregate aggregateB = factory.getFAggregateContext().geometry().d2(5, 5);
+            FAggregate aggregateA = factory.aggregates().geometries().fullSphere(3);
+            FAggregate aggregateB = factory.aggregates().geometries().grid2D(5, 5);
 
             aggregateA.setParticleEpsilon(1);
 
@@ -3193,8 +3193,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("Project with limit, composite B")
         void projectWithLimitCompositeB() {
-            FAggregate aggregateA = factory.getFAggregateContext().geometry().d3(2, 3, 4);
-            FAggregate aggregateB = factory.getFAggregateContext().geometry().d3(3, 4, 5);
+            FAggregate aggregateA = factory.aggregates().geometries().grid3D(2, 3, 4);
+            FAggregate aggregateB = factory.aggregates().geometries().grid3D(3, 4, 5);
 
             aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
 
@@ -3489,7 +3489,7 @@ public class FAggregateTest {
         void scale() {
             double scale = 3;
 
-            FAggregate fAggregate = factory.getFAggregateContext().geometry().d3(4, 5, 6);
+            FAggregate fAggregate = factory.aggregates().geometries().grid3D(4, 5, 6);
 
             assertTrue(fAggregate.isPointConnected());
 
@@ -3508,8 +3508,8 @@ public class FAggregateTest {
             int quantity = 100;
             double size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
-            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(quantity, 10);
+            FModel fModel = factory.models().pc().tunable(fAggregate, 1.8, 1.6);
 
             fModel.build();
 
@@ -3540,8 +3540,8 @@ public class FAggregateTest {
             int quantity = 100;
             double size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
-            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(quantity, 10);
+            FModel fModel = factory.models().pc().tunable(fAggregate, 1.8, 1.6);
 
             fModel.build();
 
@@ -3572,8 +3572,8 @@ public class FAggregateTest {
             int quantity = 100;
             double size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
-            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(quantity, 10);
+            FModel fModel = factory.models().pc().tunable(fAggregate, 1.8, 1.6);
 
             fModel.build();
 
@@ -3604,8 +3604,8 @@ public class FAggregateTest {
             int quantity = 100;
             double size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
-            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(quantity, 10);
+            FModel fModel = factory.models().pc().tunable(fAggregate, 1.8, 1.6);
 
             fModel.build();
 
@@ -3653,8 +3653,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("PCA - Aggregate")
         void pcaAggregate() {
-            FAggregate aggregate = factory.getFAggregateContext().base().polydisperse(100, 10, 1);
-            FModel model = factory.getFModelContext().cc().ballistic(aggregate);
+            FAggregate aggregate = factory.aggregates().templates().polydisperse(100, 10, 1);
+            FModel model = factory.models().cc().ballistic(aggregate);
 
             model.build();
 
@@ -3704,9 +3704,9 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get box dimension - Basic geometry")
             void getBoxDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
+                FAggregate fAggregate1d = factory.aggregates().geometries().grid1D(50);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
                 double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BC_BASELINE);
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BC_BASELINE);
@@ -3720,8 +3720,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get box dimension - Basic geometry (asymmetric)")
             void getBoxDimensionBasicGeometryAsymmetric() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 17);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(15, 17, 19);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(15, 17);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(15, 17, 19);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BC_BASELINE);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BC_BASELINE);
@@ -3733,8 +3733,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get box dimension - Sphere")
             void getBoxDimensionSphereGeometry() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
+                FAggregate fAggregate2d = factory.aggregates().geometries().hex2D(30, 1);
+                FAggregate fAggregate3d = factory.aggregates().geometries().hex3D(20, 1);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BC_BASELINE);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BC_BASELINE);
@@ -3771,9 +3771,9 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Basic geometry")
             void getDensityDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
+                FAggregate fAggregate1d = factory.aggregates().geometries().grid1D(50);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
                 double dim1d = fAggregate1d.getFractalDimension(FractalDimension.DC_RESTRICTED);
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
@@ -3787,8 +3787,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Basic geometry (asymmetric)")
             void getDensityDimensionBasicGeometryAsymmetric() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 17);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(15, 17, 19);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(15, 17);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(15, 17, 19);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.DC_RESTRICTED);
@@ -3800,9 +3800,9 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Basic geometry (translated)")
             void getDensityDimensionBasicGeometryTranslated() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
+                FAggregate fAggregate1d = factory.aggregates().geometries().grid1D(50);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
                 fAggregate1d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
                 fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
@@ -3820,8 +3820,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get density dimension - Sphere")
             void getDensityDimensionSphereGeometry() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
+                FAggregate fAggregate2d = factory.aggregates().geometries().hex2D(30, 1);
+                FAggregate fAggregate3d = factory.aggregates().geometries().hex3D(20, 1);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.DC_RESTRICTED);
@@ -3858,9 +3858,9 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry")
             void getMassDimensionBasicGeometry() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
+                FAggregate fAggregate1d = factory.aggregates().geometries().grid1D(50);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
                 double dim1d = fAggregate1d.getFractalDimension(FractalDimension.MR_RESTRICTED);
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);
@@ -3874,8 +3874,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry (asymmetric)")
             void getMassDimensionBasicGeometryAsymmetric() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(15, 17);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(15, 17, 19);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(15, 17);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(15, 17, 19);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MR_RESTRICTED);
@@ -3887,9 +3887,9 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Basic geometry (translated)")
             void getMassDimensionBasicGeometryTranslated() {
-                FAggregate fAggregate1d = factory.getFAggregateContext().geometry().d1(50);
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2(25, 25);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3(20, 20, 20);
+                FAggregate fAggregate1d = factory.aggregates().geometries().grid1D(50);
+                FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
+                FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
                 fAggregate1d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
                 fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
@@ -3907,8 +3907,8 @@ public class FAggregateTest {
             @Test
             @DisplayName("Get mass dimension - Sphere")
             void getMassDimensionSphereGeometry() {
-                FAggregate fAggregate2d = factory.getFAggregateContext().geometry().d2Hex(30, 1);
-                FAggregate fAggregate3d = factory.getFAggregateContext().geometry().d3Hex(20, 1);
+                FAggregate fAggregate2d = factory.aggregates().geometries().hex2D(30, 1);
+                FAggregate fAggregate3d = factory.aggregates().geometries().hex3D(20, 1);
 
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);
                 double dim3d = fAggregate3d.getFractalDimension(FractalDimension.MR_RESTRICTED);
@@ -3926,7 +3926,7 @@ public class FAggregateTest {
             @DisplayName("Dimension 1.0")
             void df10() {
                 int size = 100;
-                FAggregate aggregate = factory.getFAggregateContext().geometry().d1(size);
+                FAggregate aggregate = factory.aggregates().geometries().grid1D(size);
 
                 double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
 
@@ -3941,7 +3941,7 @@ public class FAggregateTest {
             @DisplayName("Dimension 2.0")
             void df20() {
                 int size = 25;
-                FAggregate aggregate = factory.getFAggregateContext().geometry().d2Hex(size);
+                FAggregate aggregate = factory.aggregates().geometries().hex2D(size);
 
                 double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
 
@@ -3956,7 +3956,7 @@ public class FAggregateTest {
             @DisplayName("Dimension 3.0")
             void df30() {
                 int size = 15;
-                FAggregate aggregate = factory.getFAggregateContext().geometry().d3Hex(size);
+                FAggregate aggregate = factory.aggregates().geometries().hex3D(size);
 
                 double rg = aggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
 

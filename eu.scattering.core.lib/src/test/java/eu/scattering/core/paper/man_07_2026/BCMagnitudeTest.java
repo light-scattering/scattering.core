@@ -20,9 +20,9 @@ public class BCMagnitudeTest {
         double df = 1.8;
         double kf = 1.3;
 
-        var fAggregate = factory.getFAggregateContext().base().monodisperse(10000, 1);
+        var fAggregate = factory.aggregates().templates().monodisperse(10000, 1);
 
-        var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+        var fModel = factory.models().cc().tunable(fAggregate, df, kf);
         fModel.setEarlyStageCorrection(true);
 
         fModel.build();

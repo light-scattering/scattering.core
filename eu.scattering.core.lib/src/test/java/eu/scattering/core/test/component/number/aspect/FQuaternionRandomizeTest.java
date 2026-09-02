@@ -19,7 +19,7 @@ public class FQuaternionRandomizeTest {
         FQuaternion fQuaternion = factory.getFQuaternion();
         FPairPos4D range = factory.getFPairPos4D(0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2);
 
-        FQuaternion results = factory.getRandAspect().inRange(fQuaternion, range);
+        FQuaternion results = factory.random().inRange(fQuaternion, range);
 
         assertAll("Validate FComplex position",
                 () -> assertTrue(fQuaternion.getRe() > 0.1 && fQuaternion.getRe() < 0.2,

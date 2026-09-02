@@ -42,7 +42,7 @@ public class FSphereProducerDef implements FSphereProducer {
 
         this.factory = factory;
         this.randomizer = randomizer;
-        this.processor = new ProducerCoreDef<>(this.randomizer.getFRand());
+        this.processor = new ProducerCoreDef<>(this.randomizer.generator());
 
         this.processor.addMutation(MUTATION_ITERATION);
     }

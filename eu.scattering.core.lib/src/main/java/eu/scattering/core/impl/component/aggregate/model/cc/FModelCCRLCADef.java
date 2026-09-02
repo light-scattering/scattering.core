@@ -54,7 +54,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
         this.validators = new ArrayList<>();
 
         this.factory = factory;
-        this.random = this.factory.getRandAspect();
+        this.random = this.factory.random();
 
         this.aggregate = aggregate;
 
@@ -146,8 +146,8 @@ public class FModelCCRLCADef implements FModelCCRLCA {
         FAggregate aggB;
 
         do {
-            aggA = this.random.getFRand().getElement(this.fragments, false);
-            aggB = this.random.getFRand().getElement(this.fragments, false);
+            aggA = this.random.generator().getElement(this.fragments, false);
+            aggB = this.random.generator().getElement(this.fragments, false);
         } while (aggA == aggB);
 
         buildStepCore(aggA, aggB, index);
@@ -210,7 +210,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
     private void buildFragments() {
 
         for (FAggregate fragment : this.fragments) {
-            factory.getFModelContext().pc().rla(this.dimension, fragment).build();
+            factory.models().pc().rla(this.dimension, fragment).build();
         }
 
         FBuffer<FBufferData> buffer = this.aggregate.getRefFExtension().getRefFBuffer();
@@ -224,7 +224,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
 
     private void shuffleFragments() {
 
-        this.random.getFRand().shuffle(this.fragments);
+        this.random.generator().shuffle(this.fragments);
     }
 
     private void removeFragments() {

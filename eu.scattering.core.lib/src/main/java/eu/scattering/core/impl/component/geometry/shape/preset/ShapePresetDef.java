@@ -1487,7 +1487,7 @@ public abstract class ShapePresetDef implements Shape {
 
     protected FRotAspect getAspectRot() {
 
-        return factory.getRotAspect();
+        return factory.rotate();
     }
 
     protected CmpDistCenter getCacheCmpDistCenter() {

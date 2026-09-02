@@ -226,11 +226,11 @@ public class DFMethodComparisonTest {
         }
 
         private void measureCore() {
-            var fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            var fAggregate = factory.aggregates().templates().monodisperse(size, 1);
 
-            var fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+            var fModel = factory.models().cc().tunable(fAggregate, df, kf);
 
-            var fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
+            var fMonitor = factory.monitors().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO_10R2);
             fModel.addStepMonitor(fMonitor);
 
             fModel.build();

@@ -77,9 +77,9 @@ public class BCVolumeReductionPCATest {
     private void measure(Container container, double df, double kf) {
         int size = 1000;
 
-        FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+        FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
 
-        FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+        FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, df, kf);
         fModel.setEarlyStageCorrection(true);
 
         fModel.build();

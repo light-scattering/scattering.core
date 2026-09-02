@@ -25,19 +25,19 @@ public class FSaveAspectDef implements FSaveAspect {
     //--------------------------------------------------
 
     @Override
-    public StatisticsAspectSave getStatisticsContext() {
+    public StatisticsAspectSave statistics() {
 
         return StatisticsAspectSaveDef.create(this.factory);
     }
 
     @Override
-    public ComponentAspectSave getComponentContext() {
+    public ComponentAspectSave components() {
 
         return ComponentAspectSaveDef.create(this.factory);
     }
 
     @Override
-    public StorageAspectSave getStorageContext() {
+    public StorageAspectSave storage() {
 
         return StorageAspectSaveDef.create();
     }

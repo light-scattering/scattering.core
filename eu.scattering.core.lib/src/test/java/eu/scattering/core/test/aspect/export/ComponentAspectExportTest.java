@@ -33,11 +33,11 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
+        FModel modelRLA = factory.models().pc().rla(fAggregate);
 
         modelRLA.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toFLAGE(fAggregate);
+        String model = factory.save().components().toFLAGE(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -55,16 +55,16 @@ public class ComponentAspectExportTest {
     void exportJSON() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
+        FAggregate fAggregate = factory.aggregates().templates().polydisperse(quantity, 10, 1);
 
-        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
+        FModel modelRLA = factory.models().pc().rla(fAggregate);
 
         modelRLA.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toJSON(fAggregate);
+        String model = factory.save().components().toJSON(fAggregate);
         String[] modelSplit = model.split("\n");
 
-        FAggregate results = factory.getLoadAspect().getFAggregateContext().fromJSON(model);
+        FAggregate results = factory.load().aggregates().fromJSON(model);
 
         Assertions.assertAll("Validate model",
                 () -> assertEquals(1, modelSplit.length,
@@ -80,16 +80,16 @@ public class ComponentAspectExportTest {
     void exportBasicMultisphere() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
+        FAggregate fAggregate = factory.aggregates().templates().polydisperse(quantity, 10, 1);
 
-        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
+        FModel modelRLA = factory.models().pc().rla(fAggregate);
 
         modelRLA.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toBasic(fAggregate, ExBasic.MULTISPHERE);
+        String model = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
         String[] modelSplit = model.split("\n");
 
-        FAggregate results = factory.getLoadAspect().getFAggregateContext().fromBasic(model, ExBasic.MULTISPHERE);
+        FAggregate results = factory.load().aggregates().fromBasic(model, ExBasic.MULTISPHERE);
 
         Assertions.assertAll("Validate model",
                 () -> assertEquals(quantity, modelSplit.length,
@@ -118,11 +118,11 @@ public class ComponentAspectExportTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(core);
 
-        FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+        FModel fModel = factory.models().cc().rlca(fAggregate);
 
         fModel.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+        String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -151,11 +151,11 @@ public class ComponentAspectExportTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(core);
 
-        FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+        FModel fModel = factory.models().cc().rlca(fAggregate);
 
         fModel.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+        String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -184,11 +184,11 @@ public class ComponentAspectExportTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(core);
 
-        FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+        FModel fModel = factory.models().cc().rlca(fAggregate);
 
         fModel.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toPovRay(fAggregate, ExPovRay.RADIUS);
+        String model = factory.save().components().toPovRay(fAggregate, ExPovRay.RADIUS);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -210,11 +210,11 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
+        FModel modelRLA = factory.models().pc().rla(fAggregate);
 
         modelRLA.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -234,11 +234,11 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelRLA = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+        FModel modelRLA = factory.models().pc().rla(Dimension.D2, fAggregate);
 
         modelRLA.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -258,11 +258,11 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelBallistic = factory.getFModelContext().pc().ballistic(fAggregate);
+        FModel modelBallistic = factory.models().pc().ballistic(fAggregate);
 
         modelBallistic.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -282,11 +282,11 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelBallistic = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+        FModel modelBallistic = factory.models().pc().ballistic(Dimension.D2, fAggregate);
 
         modelBallistic.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -306,12 +306,12 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCTunable modelTunable = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.4);
+        FModelPCTunable modelTunable = factory.models().pc().tunable(fAggregate, 1.8, 1.4);
         modelTunable.setEarlyStageCorrection(true);
 
         modelTunable.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -331,12 +331,12 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCTunable modelTunable = factory.getFModelContext().pc().tunable(Dimension.D2, fAggregate, 1.3, 1.5);
+        FModelPCTunable modelTunable = factory.models().pc().tunable(Dimension.D2, fAggregate, 1.3, 1.5);
         modelTunable.setEarlyStageCorrection(true);
 
         modelTunable.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -356,10 +356,10 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCDLA modelDLA = factory.getFModelContext().pc().dla(fAggregate);
+        FModelPCDLA modelDLA = factory.models().pc().dla(fAggregate);
         modelDLA.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -379,10 +379,10 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCDLA modelDLA = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+        FModelPCDLA modelDLA = factory.models().pc().dla(Dimension.D2, fAggregate);
         modelDLA.build();
 
-        String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.save().components().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",

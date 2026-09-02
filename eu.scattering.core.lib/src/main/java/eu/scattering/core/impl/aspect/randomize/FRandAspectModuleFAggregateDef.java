@@ -106,11 +106,11 @@ public class FRandAspectModuleFAggregateDef {
             }
 
             double angleRef = getRotRefAngle(axis, cRef, cArg, particleArg, particleLoc, distance);
-            factory.getRotAspect().rotRgAround(ref, axis, angleRef);
-            factory.getRotAspect().rotRgAround(particleLoc, axis, angleRef);
+            factory.rotate().rotRgAround(ref, axis, angleRef);
+            factory.rotate().rotRgAround(particleLoc, axis, angleRef);
 
             double angleArg = getRotArgAngle(axis, cArg, particleArg, particleLoc);
-            factory.getRotAspect().rotRgAround(arg, axis, angleArg);
+            factory.rotate().rotRgAround(arg, axis, angleArg);
 
             if (ref.overlaps(arg)) {
                 continue;
@@ -269,11 +269,11 @@ public class FRandAspectModuleFAggregateDef {
 
             FPoint targetRef = factory.getFPoint();
             targetRef.set(core.nextDoubleInCircle(radiusRef), 0);
-            factory.getRotAspect().setRgAngle(targetRef, base, 0.5 * Math.PI);
+            factory.rotate().setRgAngle(targetRef, base, 0.5 * Math.PI);
 
             FPoint targetArg = factory.getFPoint();
             targetArg.set(core.nextDoubleInCircle(radiusArg), 0);
-            factory.getRotAspect().setRgAngle(targetArg, base, 0.5 * Math.PI);
+            factory.rotate().setRgAngle(targetArg, base, 0.5 * Math.PI);
 
             ref.getRefParticles().translate(base.toFPos3D());
 

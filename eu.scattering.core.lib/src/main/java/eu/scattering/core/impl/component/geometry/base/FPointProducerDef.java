@@ -27,7 +27,7 @@ public class FPointProducerDef implements FPointProducer {
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.rndGenerator = randomizer.getFRand();
+        this.rndGenerator = randomizer.generator();
         this.processor = new ProducerCoreDef<>(this.rndGenerator);
     }
 

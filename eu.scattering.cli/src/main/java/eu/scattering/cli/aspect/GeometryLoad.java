@@ -39,7 +39,7 @@ public class GeometryLoad {
     }
 
     private static Optional<FAggregate> loadFromString(ScatterFactory factory, String data, FORMAT_INPUT format) {
-        FAggregateAspectLoad load = factory.getLoadAspect().getFAggregateContext();
+        FAggregateAspectLoad load = factory.load().aggregates();
 
         return Optional.ofNullable(switch (format) {
             case JSON -> load.fromJSON(data);

@@ -31,14 +31,14 @@ public class FModelCCRLCATest {
         void results3DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -49,14 +49,14 @@ public class FModelCCRLCATest {
         void results2DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -73,8 +73,8 @@ public class FModelCCRLCATest {
         void results3DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
@@ -89,8 +89,8 @@ public class FModelCCRLCATest {
         void results3DB() {
             int size = 6000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
@@ -105,8 +105,8 @@ public class FModelCCRLCATest {
         void results2DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
@@ -121,8 +121,8 @@ public class FModelCCRLCATest {
         void results2DB() {
             int size = 6000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
@@ -142,8 +142,8 @@ public class FModelCCRLCATest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
@@ -160,14 +160,14 @@ public class FModelCCRLCATest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModelA = factoryA.getFModelContext().cc().rlca(fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModelA = factoryA.models().cc().rlca(fAggregateA);
             fModelA.setSymmetry(false);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModelB = factoryB.getFModelContext().cc().rlca(fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModelB = factoryB.models().cc().rlca(fAggregateB);
             fModelB.setSymmetry(false);
 
             fModelA.build();
@@ -182,8 +182,8 @@ public class FModelCCRLCATest {
             int size = 28;
             int sizeFragment = 3;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger fragments = new AtomicInteger(0);
@@ -202,8 +202,8 @@ public class FModelCCRLCATest {
         void monitorA() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger stepsCount = new AtomicInteger(0);
@@ -231,8 +231,8 @@ public class FModelCCRLCATest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
@@ -263,8 +263,8 @@ public class FModelCCRLCATest {
         void acceptor() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -280,8 +280,8 @@ public class FModelCCRLCATest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -298,8 +298,8 @@ public class FModelCCRLCATest {
         void configuration() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCC fModel = factory.models().cc().rlca(fAggregate);
 
             assertTrue(fModel.getSymmetry());
 
@@ -318,8 +318,8 @@ public class FModelCCRLCATest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             fModel.build();
@@ -340,14 +340,14 @@ public class FModelCCRLCATest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModelA = factoryA.getFModelContext().cc().rlca(Dimension.D2, fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModelA = factoryA.models().cc().rlca(Dimension.D2, fAggregateA);
             fModelA.setSymmetry(false);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModelB = factoryB.getFModelContext().cc().rlca(Dimension.D2, fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModelB = factoryB.models().cc().rlca(Dimension.D2, fAggregateB);
             fModelB.setSymmetry(false);
 
             fModelA.build();
@@ -362,8 +362,8 @@ public class FModelCCRLCATest {
             int size = 28;
             int sizeFragment = 3;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger fragments = new AtomicInteger(0);
@@ -382,8 +382,8 @@ public class FModelCCRLCATest {
         void monitorA() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger stepsCount = new AtomicInteger(0);
@@ -410,8 +410,8 @@ public class FModelCCRLCATest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
@@ -442,8 +442,8 @@ public class FModelCCRLCATest {
         void acceptor() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -459,8 +459,8 @@ public class FModelCCRLCATest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
             fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -477,8 +477,8 @@ public class FModelCCRLCATest {
         void configuration() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCC fModel = factory.models().cc().rlca(Dimension.D2, fAggregate);
 
             assertTrue(fModel.getSymmetry());
 

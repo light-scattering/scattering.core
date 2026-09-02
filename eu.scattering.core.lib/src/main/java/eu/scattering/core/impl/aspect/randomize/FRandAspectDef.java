@@ -43,7 +43,7 @@ public class FRandAspectDef implements FRandAspect {
     //--------------------------------------------------
 
     @Override
-    public FRandGenerator getFRand() {
+    public FRandGenerator generator() {
 
         return this.core;
     }
@@ -489,7 +489,7 @@ public class FRandAspectDef implements FRandAspect {
         int iterations = 0;
 
         while (iterations++ <= corrections) {
-            Shape candidate = getFRand().getElement(candidates, false);
+            Shape candidate = generator().getElement(candidates, false);
 
             if (in == candidate) {
                 continue;
@@ -522,7 +522,7 @@ public class FRandAspectDef implements FRandAspect {
 
             vectorRnd.moveBase(center);
 
-            this.factory.getRandAspect().ortToBaseInCircle(headDir, vectorRnd, radius);
+            this.factory.random().ortToBaseInCircle(headDir, vectorRnd, radius);
 
             baseDir.set(headRnd);
 
@@ -554,7 +554,7 @@ public class FRandAspectDef implements FRandAspect {
             baseDir.set(pos2D, 0);
             headDir.set(pos1D, 0, 0);
 
-            this.factory.getRotAspect().setRgAngle(headDir, baseDir, Math.PI * 0.5);
+            this.factory.rotate().setRgAngle(headDir, baseDir, Math.PI * 0.5);
 
             vectorDir.translate(center);
 

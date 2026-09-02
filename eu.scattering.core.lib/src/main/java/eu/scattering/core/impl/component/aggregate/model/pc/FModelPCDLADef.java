@@ -65,8 +65,8 @@ public class FModelPCDLADef implements FModelPCDLA {
         this.acceptors = new ArrayList<>();
         this.validators = new ArrayList<>();
 
-        this.rndEng = factory.getRandAspect();
-        this.rndGen = this.rndEng.getFRand();
+        this.rndEng = factory.random();
+        this.rndGen = this.rndEng.generator();
 
         this.aggregate = aggregate;
 

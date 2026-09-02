@@ -33,14 +33,14 @@ public class FModelPCDLACoreTest {
         void results3DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertTrue(json.length() > 0);
             assertTrue(model.length() > 0);
@@ -51,14 +51,14 @@ public class FModelPCDLACoreTest {
         void results2DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertTrue(json.length() > 0);
             assertTrue(model.length() > 0);
@@ -75,8 +75,8 @@ public class FModelPCDLACoreTest {
         void results3DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
@@ -91,8 +91,8 @@ public class FModelPCDLACoreTest {
         void results3DB() {
             int size = 10000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
@@ -107,8 +107,8 @@ public class FModelPCDLACoreTest {
         void results2DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
@@ -123,8 +123,8 @@ public class FModelPCDLACoreTest {
         void results2DB() {
             int size = 10000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
@@ -144,8 +144,8 @@ public class FModelPCDLACoreTest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
@@ -162,14 +162,14 @@ public class FModelPCDLACoreTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModelA = factoryA.getFModelContext().pc().dla(fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModelA = factoryA.models().pc().dla(fAggregateA);
             fModelA.setInternalSpawn(true);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModelB = factoryB.getFModelContext().pc().dla(fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModelB = factoryB.models().pc().dla(fAggregateB);
             fModelB.setInternalSpawn(true);
 
             fModelA.build();
@@ -183,8 +183,8 @@ public class FModelPCDLACoreTest {
         void monitorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             AtomicInteger quantity = new AtomicInteger(0);
@@ -209,8 +209,8 @@ public class FModelPCDLACoreTest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
@@ -241,8 +241,8 @@ public class FModelPCDLACoreTest {
         void acceptorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -258,8 +258,8 @@ public class FModelPCDLACoreTest {
         void acceptorB() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
@@ -278,8 +278,8 @@ public class FModelPCDLACoreTest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(fAggregate);
             fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -294,8 +294,8 @@ public class FModelPCDLACoreTest {
         @Test
         @DisplayName("Configuration")
         void configuration() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-            FModelPCDLA model = factory.getFModelContext().pc().dla(fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(10, 1);
+            FModelPCDLA model = factory.models().pc().dla(fAggregate);
 
             TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
@@ -322,8 +322,8 @@ public class FModelPCDLACoreTest {
         void results() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             fModel.build();
@@ -340,14 +340,14 @@ public class FModelPCDLACoreTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModelA = factoryA.getFModelContext().pc().dla(Dimension.D2, fAggregateA);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModelA = factoryA.models().pc().dla(Dimension.D2, fAggregateA);
             fModelA.setInternalSpawn(true);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModelB = factoryB.getFModelContext().pc().dla(Dimension.D2, fAggregateB);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModelB = factoryB.models().pc().dla(Dimension.D2, fAggregateB);
             fModelB.setInternalSpawn(true);
 
             fModelA.build();
@@ -361,8 +361,8 @@ public class FModelPCDLACoreTest {
         void monitorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             AtomicInteger quantity = new AtomicInteger(0);
@@ -387,8 +387,8 @@ public class FModelPCDLACoreTest {
         void monitorB() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
@@ -419,8 +419,8 @@ public class FModelPCDLACoreTest {
         void acceptorA() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -436,8 +436,8 @@ public class FModelPCDLACoreTest {
         void acceptorB() {
             int size = 10;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
@@ -456,8 +456,8 @@ public class FModelPCDLACoreTest {
         void validator() {
             int size = 28;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelPCDLA fModel = factory.models().pc().dla(Dimension.D2, fAggregate);
             fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
@@ -472,8 +472,8 @@ public class FModelPCDLACoreTest {
         @Test
         @DisplayName("Configuration")
         void configuration() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-            FModelPCDLA model = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(10, 1);
+            FModelPCDLA model = factory.models().pc().dla(Dimension.D2, fAggregate);
 
             TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 

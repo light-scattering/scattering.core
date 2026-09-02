@@ -22,7 +22,7 @@ public class FDraftProducerDef implements FDraftProducer {
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndAspect.getFRand());
+        this.processor = new ProducerCoreDef<>(this.rndAspect.generator());
     }
 
     public static FDraftProducer create(FDraftFactory factory, FRandAspect randomizer) {

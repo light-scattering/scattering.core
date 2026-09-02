@@ -2,5 +2,5 @@ package eu.scattering.core.design.component.aggregate.monitor;
 
 public interface FMonitorFactory {
 
-    FMonitorFactoryContext getFMonitorContext();
+    FMonitorFactoryContext monitors();
 }

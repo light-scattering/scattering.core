@@ -2,7 +2,6 @@ package eu.scattering.core.test.component.aggregate.model.cc.random;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.utility.lambda.TriConsumer;
@@ -33,15 +32,15 @@ public class FModelCCTunableTest {
         void results3DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -52,8 +51,8 @@ public class FModelCCTunableTest {
         void results2DA() {
             int size = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -61,7 +60,7 @@ public class FModelCCTunableTest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.getSaveAspect().getComponentContext().toNGSolve(fAggregate);
+            String model = factory.save().components().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -78,8 +77,8 @@ public class FModelCCTunableTest {
         void results3DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -95,8 +94,8 @@ public class FModelCCTunableTest {
         void results3DB() {
             int size = 6000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -112,8 +111,8 @@ public class FModelCCTunableTest {
         void results2DA() {
             int size = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -130,8 +129,8 @@ public class FModelCCTunableTest {
         void results2DB() {
             int size = 6000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -153,8 +152,8 @@ public class FModelCCTunableTest {
         void results() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -172,15 +171,15 @@ public class FModelCCTunableTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelA = factoryA.getFModelContext().cc().tunable(fAggregateA, 1.8, 1.6);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModelA = factoryA.models().cc().tunable(fAggregateA, 1.8, 1.6);
             fModelA.setSymmetry(false);
             fModelA.setEarlyStageCorrection(true);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelB = factoryB.getFModelContext().cc().tunable(fAggregateB, 1.8, 1.6);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModelB = factoryB.models().cc().tunable(fAggregateB, 1.8, 1.6);
             fModelB.setSymmetry(false);
             fModelB.setEarlyStageCorrection(true);
 
@@ -196,8 +195,8 @@ public class FModelCCTunableTest {
             int size = 32;
             int sizeFragment = 5;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -217,8 +216,8 @@ public class FModelCCTunableTest {
         void monitorA() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -247,8 +246,8 @@ public class FModelCCTunableTest {
         void monitorB() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -280,8 +279,8 @@ public class FModelCCTunableTest {
         void acceptor() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -298,8 +297,8 @@ public class FModelCCTunableTest {
         void validator() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
 
@@ -317,18 +316,18 @@ public class FModelCCTunableTest {
         void tunability() {
             int size = 32;
 
-            FAggregate fAggregateA = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModelA = factory.getFModelContext().cc().tunable(fAggregateA, 2.4, 1.0);
+            FAggregate fAggregateA = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModelA = factory.models().cc().tunable(fAggregateA, 2.4, 1.0);
             fModelA.setSymmetry(false);
             fModelA.setEarlyStageCorrection(true);
 
-            FAggregate fAggregateB = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModelB = factory.getFModelContext().cc().tunable(fAggregateB, 1.8, 1.6);
+            FAggregate fAggregateB = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModelB = factory.models().cc().tunable(fAggregateB, 1.8, 1.6);
             fModelB.setSymmetry(false);
             fModelB.setEarlyStageCorrection(true);
 
-            FAggregate fAggregateC = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModelC = factory.getFModelContext().cc().tunable(fAggregateC, 1.2, 2.2);
+            FAggregate fAggregateC = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModelC = factory.models().cc().tunable(fAggregateC, 1.2, 2.2);
             fModelC.setSymmetry(false);
             fModelC.setEarlyStageCorrection(true);
 
@@ -349,8 +348,8 @@ public class FModelCCTunableTest {
         void configuration() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(fAggregate, 1.8, 1.6);
 
             assertTrue(fModel.getSymmetry());
             assertFalse(fModel.getEarlyStageCorrection());
@@ -375,8 +374,8 @@ public class FModelCCTunableTest {
         void results() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -399,16 +398,16 @@ public class FModelCCTunableTest {
 
             ScatterFactory factoryA = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelA = factoryA.getFModelContext().cc().tunable(Dimension.D2, fAggregateA, 1.5, 1.5);
+            FAggregate fAggregateA = factoryA.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModelA = factoryA.models().cc().tunable(Dimension.D2, fAggregateA, 1.5, 1.5);
             fModelA.setSymmetry(false);
             fModelA.setEarlyStageCorrection(true);
             fModelA.setCorrection(true);
 
             ScatterFactory factoryB = ScatterFactoryDef.create(123);
 
-            FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelB = factoryB.getFModelContext().cc().tunable(Dimension.D2, fAggregateB, 1.5, 1.5);
+            FAggregate fAggregateB = factoryB.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModelB = factoryB.models().cc().tunable(Dimension.D2, fAggregateB, 1.5, 1.5);
             fModelB.setSymmetry(false);
             fModelB.setEarlyStageCorrection(true);
             fModelB.setCorrection(true);
@@ -425,8 +424,8 @@ public class FModelCCTunableTest {
             int size = 32;
             int sizeFragment = 5;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -447,8 +446,8 @@ public class FModelCCTunableTest {
         void monitorA() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -477,8 +476,8 @@ public class FModelCCTunableTest {
         void monitorB() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -511,8 +510,8 @@ public class FModelCCTunableTest {
         void acceptor() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -530,8 +529,8 @@ public class FModelCCTunableTest {
         void validator() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            FAggregate fAggregate = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setSymmetry(false);
             fModel.setEarlyStageCorrection(true);
             fModel.setCorrection(true);
@@ -550,14 +549,14 @@ public class FModelCCTunableTest {
         void tunability() {
             int size = 32;
 
-            FAggregate fAggregateB = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelB = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregateB, 1.8, 1.6);
+            FAggregate fAggregateB = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModelB = factory.models().cc().tunable(Dimension.D2, fAggregateB, 1.8, 1.6);
             fModelB.setSymmetry(false);
             fModelB.setEarlyStageCorrection(true);
             fModelB.setCorrection(true);
 
-            FAggregate fAggregateC = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelC = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregateC, 1.2, 2.2);
+            FAggregate fAggregateC = factory.aggregates().templates().polydisperse(size, 10, 1);
+            FModelCCTunable fModelC = factory.models().cc().tunable(Dimension.D2, fAggregateC, 1.2, 2.2);
             fModelC.setSymmetry(false);
             fModelC.setEarlyStageCorrection(true);
             fModelC.setCorrection(true);
@@ -576,8 +575,8 @@ public class FModelCCTunableTest {
         void configuration() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.aggregates().templates().monodisperse(size, 1);
+            FModelCCTunable fModel = factory.models().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.6);
 
             assertTrue(fModel.getSymmetry());
             assertFalse(fModel.getEarlyStageCorrection());
