@@ -624,12 +624,6 @@ public final class ScatterFactoryDef implements ScatterFactory {
     //--------------------------------------------------
 
     @Override
-    public FRandGenerator getFRand() {
-
-        return this.fRandGenerator;
-    }
-
-    @Override
     public FRotGenerator getFRot() {
 
         return this.fRotGenerator;

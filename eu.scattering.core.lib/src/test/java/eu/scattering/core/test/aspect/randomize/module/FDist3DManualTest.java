@@ -18,7 +18,7 @@ public class FDist3DManualTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DManual((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);
@@ -46,7 +46,7 @@ public class FDist3DManualTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DManual((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);
@@ -75,7 +75,7 @@ public class FDist3DManualTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DManual((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);

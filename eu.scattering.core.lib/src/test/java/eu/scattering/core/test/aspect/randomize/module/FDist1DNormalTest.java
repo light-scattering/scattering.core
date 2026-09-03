@@ -21,7 +21,7 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1D dist = random.getFDist1DNormal(mean, std);
 
         FStat fStat = factory.getFStat();
@@ -38,7 +38,7 @@ public class FDist1DNormalTest {
     @Test
     @DisplayName("Construct with parameters - Erroneous standard deviation")
     void constructWithParametersErroneousStd() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
 
         assertThrows(IllegalArgumentException.class, () -> random.getFDist1DNormal(10, -1));
     }
@@ -46,7 +46,7 @@ public class FDist1DNormalTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1D dist = random.getFDist1DNormal(10, 1);
 
         double[] arr = new double[1];
@@ -59,7 +59,7 @@ public class FDist1DNormalTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1D dist = random.getFDist1DNormal(10, 1);
 
         double[] arr = new double[0];
@@ -73,7 +73,7 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1DNormal dist = random.getFDist1DNormal(mean, std);
 
         dist.setCutoffMin(mean);
@@ -91,7 +91,7 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1DNormal dist = random.getFDist1DNormal(mean, std);
 
         dist.setCutoffMax(5);
@@ -105,7 +105,7 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1DNormal dist = random.getFDist1DNormal(mean, std);
 
         dist.setCutoffMax(mean);
@@ -123,7 +123,7 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1DNormal dist = random.getFDist1DNormal(mean, std);
 
         dist.setCutoffMin(15);

@@ -16,25 +16,25 @@ import java.util.List;
 import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FRandAspectModuleFAggregateDef {
-    private final FRandGenerator core;
+    private final FRandGenerator generator;
     private final ScatterFactory factory;
 
-    private FRandAspectModuleFAggregateDef(ScatterFactory factory) {
+    private FRandAspectModuleFAggregateDef(FRandGenerator generator, ScatterFactory factory) {
 
+        this.generator = generator;
         this.factory = factory;
-        this.core = factory.getFRand();
     }
 
-    protected static FRandAspectModuleFAggregateDef create(ScatterFactory factory) {
+    protected static FRandAspectModuleFAggregateDef create(FRandGenerator generator, ScatterFactory factory) {
 
-        return new FRandAspectModuleFAggregateDef(factory);
+        return new FRandAspectModuleFAggregateDef(generator, factory);
     }
 
     //--------------------------------------------------
 
     public void moveMassCenter(FAggregate ref, FAggregate arg, MassCenter type, double dist) {
-        FPoint position = ref.getMassCenter(factory.getFPoint(), type)
-                .add(core.nextDoubleOnSphere(dist));
+        FPoint position = ref.getMassCenter(this.factory.getFPoint(), type)
+                .add(this.generator.nextDoubleOnSphere(dist));
 
         arg.getRefParticles().translate(arg.getMassCenter(type), position);
     }
@@ -43,7 +43,7 @@ public class FRandAspectModuleFAggregateDef {
         isOnSurface(ref, arg);
 
         FPoint position = ref.getMassCenter(factory.getFPoint(), type)
-                .add(core.nextDoubleOnCircle(dist), 0);
+                .add(this.generator.nextDoubleOnCircle(dist), 0);
 
         arg.getRefParticles().translate(arg.getMassCenter(type), position);
     }
@@ -67,11 +67,11 @@ public class FRandAspectModuleFAggregateDef {
         List<Shape> candidatesRef = getRotRefCandidates(ref, arg, cRef, cArg, distance);
         List<Shape> candidatesArg = getRotArgCandidates(ref, arg, cRef, cArg, distance);
 
-        if (candidatesRef.size() == 0) {
+        if (candidatesRef.isEmpty()) {
             return false;
         }
 
-        if (candidatesArg.size() == 0) {
+        if (candidatesArg.isEmpty()) {
             return false;
         }
 
@@ -80,10 +80,10 @@ public class FRandAspectModuleFAggregateDef {
         int iterations = 0;
 
         while (iterations++ < (ref.size() + arg.size()) * corrections) {
-            FVector axis = factory.getFVector();
-            Shape particleRef = factory.getFSphere();
-            Shape particleArg = factory.getFSphere();
-            Shape particleLoc = factory.getFSphere(minRadius);
+            FVector axis = this.factory.getFVector();
+            Shape particleRef = this.factory.getFSphere();
+            Shape particleArg = this.factory.getFSphere();
+            Shape particleLoc = this.factory.getFSphere(minRadius);
 
             boolean progress;
 
@@ -106,11 +106,11 @@ public class FRandAspectModuleFAggregateDef {
             }
 
             double angleRef = getRotRefAngle(axis, cRef, cArg, particleArg, particleLoc, distance);
-            factory.rotate().rotRgAround(ref, axis, angleRef);
-            factory.rotate().rotRgAround(particleLoc, axis, angleRef);
+            this.factory.rotate().rotRgAround(ref, axis, angleRef);
+            this.factory.rotate().rotRgAround(particleLoc, axis, angleRef);
 
             double angleArg = getRotArgAngle(axis, cArg, particleArg, particleLoc);
-            factory.rotate().rotRgAround(arg, axis, angleArg);
+            this.factory.rotate().rotRgAround(arg, axis, angleArg);
 
             if (ref.overlaps(arg)) {
                 continue;
@@ -136,7 +136,7 @@ public class FRandAspectModuleFAggregateDef {
             }
         }
 
-        factory.getFRand().shuffle(candidates);
+        this.generator.shuffle(candidates);
 
         return candidates;
     }
@@ -155,7 +155,7 @@ public class FRandAspectModuleFAggregateDef {
             }
         }
 
-        factory.getFRand().shuffle(candidates);
+        this.generator.shuffle(candidates);
 
         return candidates;
     }
@@ -166,7 +166,7 @@ public class FRandAspectModuleFAggregateDef {
 
         axis.set(centerRef, particleLoc.getRefCenter());
 
-        double angleFinal = factory.getFTrigHelper().getAngle(sideA, dist, sideB);
+        double angleFinal = this.factory.getFTrigHelper().getAngle(sideA, dist, sideB);
         double angleCurrent = axis.getAngle(centerRef, centerArg);
 
         axis.setCrossProduct(centerRef, centerArg);
@@ -189,7 +189,7 @@ public class FRandAspectModuleFAggregateDef {
         double sideA = centerRef.getDistance(particleLoc.getRefCenter());
         double sideB = centerArg.getDistance(particleArg.getRefCenter());
 
-        return factory.getFTrigHelper().isValid(sideA, sideB, dist);
+        return this.factory.getFTrigHelper().isValid(sideA, sideB, dist);
     }
 
     //--------------------------------------------------
@@ -210,9 +210,9 @@ public class FRandAspectModuleFAggregateDef {
 
         double minRadius = arg.getFStatParticleRadius().min();
 
-        Shape particleRef = factory.getFSphere();
-        Shape particleArg = factory.getFSphere();
-        Shape particleLoc = factory.getFSphere(minRadius);
+        Shape particleRef = this.factory.getFSphere();
+        Shape particleArg = this.factory.getFSphere();
+        Shape particleLoc = this.factory.getFSphere(minRadius);
         while (true) {
             particleLoc.setRadius(minRadius);
 
@@ -250,9 +250,9 @@ public class FRandAspectModuleFAggregateDef {
     }
 
     private void projectUniversal(FAggregate ref, FAggregate arg, boolean is3D) {
-        FPoint base = factory.getFPoint();
-        FPoint head = factory.getFPoint();
-        FVector dir = factory.getRefFVector(base, head);
+        FPoint base = this.factory.getFPoint();
+        FPoint head = this.factory.getFPoint();
+        FVector dir = this.factory.getRefFVector(base, head);
 
         while (true) {
             ref.setPositionAsZero(ref.getBoxCenter());
@@ -262,18 +262,18 @@ public class FRandAspectModuleFAggregateDef {
             double radiusArg = arg.getRadiusFrom(Center.ORIGIN);
 
             if (is3D) {
-                base.set(core.nextDoubleOnSphere(10 * (radiusRef + radiusArg)));
+                base.set(generator.nextDoubleOnSphere(10 * (radiusRef + radiusArg)));
             } else {
-                base.set(core.nextDoubleOnCircle(10 * (radiusRef + radiusArg)), 0);
+                base.set(generator.nextDoubleOnCircle(10 * (radiusRef + radiusArg)), 0);
             }
 
-            FPoint targetRef = factory.getFPoint();
-            targetRef.set(core.nextDoubleInCircle(radiusRef), 0);
-            factory.rotate().setRgAngle(targetRef, base, 0.5 * Math.PI);
+            FPoint targetRef = this.factory.getFPoint();
+            targetRef.set(generator.nextDoubleInCircle(radiusRef), 0);
+            this.factory.rotate().setRgAngle(targetRef, base, 0.5 * Math.PI);
 
-            FPoint targetArg = factory.getFPoint();
-            targetArg.set(core.nextDoubleInCircle(radiusArg), 0);
-            factory.rotate().setRgAngle(targetArg, base, 0.5 * Math.PI);
+            FPoint targetArg = this.factory.getFPoint();
+            targetArg.set(generator.nextDoubleInCircle(radiusArg), 0);
+            this.factory.rotate().setRgAngle(targetArg, base, 0.5 * Math.PI);
 
             ref.getRefParticles().translate(base.toFPos3D());
 
@@ -292,20 +292,20 @@ public class FRandAspectModuleFAggregateDef {
 
         while (true) {
 
-            if (particles.size() == 0) {
+            if (particles.isEmpty()) {
                 throw new IllegalStateException("The particle reference pool is depleted");
             }
 
-            Shape candidate = factory.getFRand().getElement(particles, false);
+            Shape candidate = this.generator.getElement(particles, false);
 
             double radius = candidate.getRadius() + particleLoc.getRadius();
 
             for (int i = 0; i < maxPositions; i++) {
 
                 if (is3D) {
-                    particleLoc.setCenter(factory.getFRand().nextDoubleOnSphere(radius));
+                    particleLoc.setCenter(this.generator.nextDoubleOnSphere(radius));
                 } else {
-                    particleLoc.setCenter(factory.getFRand().nextDoubleOnCircle(radius), 0);
+                    particleLoc.setCenter(this.generator.nextDoubleOnCircle(radius), 0);
                 }
 
                 particleLoc.getRefCenter().add(candidate.getRefCenter());
@@ -325,12 +325,12 @@ public class FRandAspectModuleFAggregateDef {
     private boolean setTransArgCorrection(FAggregate ref, FAggregate arg, Shape particleRef, Shape particleArg, Shape particleLoc) {
         FPos3D initialParticleLoc = particleLoc.getRefCenter().toFPos3D();
 
-        FVector shift = factory.getFVector();
+        FVector shift = this.factory.getFVector();
 
-        Shape dummy = factory.getFSphere();
+        Shape dummy = this.factory.getFSphere();
 
         List<Shape> candidates = new ArrayList<>(arg.getRefParticles().asList());
-        factory.getFRand().shuffle(candidates);
+        this.generator.shuffle(candidates);
 
         for (Shape candidate : candidates) {
             particleLoc.setRadius(candidate.getRadius());
@@ -372,13 +372,13 @@ public class FRandAspectModuleFAggregateDef {
 
     private boolean setRotArgCorrection(FAggregate ref, List<Shape> particles, Shape particleRef, Shape particleArg, Shape particleLoc) {
 
-        if (particles.size() == 0) {
+        if (particles.isEmpty()) {
             throw new IllegalStateException("The particle argument pool is depleted");
         }
 
         FPos3D initialParticleLoc = particleLoc.getRefCenter().toFPos3D();
 
-        factory.getFRand().shuffle(particles);
+        this.generator.shuffle(particles);
 
         for (Shape candidate : particles) {
 

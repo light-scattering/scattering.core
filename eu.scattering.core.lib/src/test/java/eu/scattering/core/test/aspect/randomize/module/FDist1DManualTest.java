@@ -17,7 +17,7 @@ public class FDist1DManualTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1D dist = random.getFDist1DManual((rnd, arr) -> arr[0] = rnd.nextDouble(0.001, 0.002));
 
         double sum = 0;
@@ -32,7 +32,7 @@ public class FDist1DManualTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1D dist = random.getFDist1DManual((rnd, arr) -> arr[0] = rnd.nextDouble(0.001, 0.002));
 
         double sum = 0;
@@ -49,7 +49,7 @@ public class FDist1DManualTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist1D dist = random.getFDist1DManual((rnd, arr) -> arr[0] = rnd.nextDouble(0.001, 0.002));
 
         double[] arr = new double[0];

@@ -14,6 +14,6 @@ public final class TestConfig {
 
     public static final ScatterFactory factory = ScatterFactoryDef.create();
     public static final FProtoAspect proto = factory.prototype();
-    public static final FRandGenerator rand = factory.getFRand();
+    public static final FRandGenerator rand = factory.random().generator();
     public static final FRotAspect rot = factory.rotate();
 }

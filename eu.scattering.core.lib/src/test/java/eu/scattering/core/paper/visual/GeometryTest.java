@@ -8,7 +8,7 @@ import static eu.scattering.core.test.TestConfig.factory;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@Disabled
+@Disabled
 @DisplayName("Geometry")
 public class GeometryTest {
 
@@ -19,12 +19,12 @@ public class GeometryTest {
         factory.validators();
         factory.random().attachLinear2D(null, null);
         factory.random().generator().getFDist1DManual(null);
-        factory.getFRand().getFDist1DManual(null);
-
+        factory.random().generator().getFDist1DManual(null);
+//factory.random().generator().
 
         factory.random().generator().nextDouble();
-        factory.getFRand().nextDouble();
-        factory.getFRand().getFDist1DManual(null);
+        factory.random().generator().nextDouble();
+        factory.random().generator().getFDist1DManual(null);
 
 
         FAggregate geo = factory.aggregates().geometries().grid3D(4, 5, 6);

@@ -414,7 +414,7 @@ public class FPointProducerTest {
     @DisplayName("Preset distribution")
     void presetDistribution() {
         FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
-        FDist3D dist = factory.getFRand().getFDist3DUniform(range);
+        FDist3D dist = factory.random().generator().getFDist3DUniform(range);
         FPointProducer producer = factory.getFPointProducer()
                 .withDist(dist, 1);
 
@@ -437,7 +437,7 @@ public class FPointProducerTest {
     @DisplayName("Preset distribution (simple)")
     void presetDistributionSimple() {
         FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
-        FDist3D dist = factory.getFRand().getFDist3DUniform(range);
+        FDist3D dist = factory.random().generator().getFDist3DUniform(range);
         FPointProducer producer = factory.getFPointProducer()
                 .withDist(dist);
 
@@ -517,18 +517,18 @@ public class FPointProducerTest {
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
         Producer<FPoint> producerA = factoryA.getFPointProducer((factory) -> {
-            double x = factoryA.getFRand().nextDouble();
-            double y = factoryA.getFRand().nextDouble();
-            double z = factoryA.getFRand().nextDouble();
+            double x = factoryA.random().generator().nextDouble();
+            double y = factoryA.random().generator().nextDouble();
+            double z = factoryA.random().generator().nextDouble();
 
             return factory.getFPoint(x, y, z);
         });
 
         Producer<FPoint> producerB = factoryB.getFPointProducer()
                 .withCustomRule((factory) -> {
-                    double x = factoryB.getFRand().nextDouble();
-                    double y = factoryB.getFRand().nextDouble();
-                    double z = factoryB.getFRand().nextDouble();
+                    double x = factoryB.random().generator().nextDouble();
+                    double y = factoryB.random().generator().nextDouble();
+                    double z = factoryB.random().generator().nextDouble();
 
                     return factory.getFPoint(x, y, z);
                 });
@@ -582,8 +582,8 @@ public class FPointProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distA = factoryA.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distB = factoryB.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
 
         Producer<FPoint> producerA = factoryA.getFPointProducer(distA);
         Producer<FPoint> producerB = factoryB.getFPointProducer()

@@ -18,7 +18,7 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Construct with primitives")
     void constructWithPrimitives() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DUniform(1.1, 1.2, 3.1, 3.2, 5.1, 5.2);
 
         double sumX = 0;
@@ -42,7 +42,7 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Construct with FPairPos3D")
     void constructWithFPairPos3D() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DUniform(
                 factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
@@ -67,7 +67,7 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DUniform(
                 factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
@@ -93,7 +93,7 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DUniform(
                 factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 

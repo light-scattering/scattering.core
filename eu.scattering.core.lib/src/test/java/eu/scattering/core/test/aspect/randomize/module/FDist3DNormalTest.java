@@ -19,7 +19,7 @@ public class FDist3DNormalTest {
     @Test
     @DisplayName("Use configuration - Default")
     void useConfigurationDefault() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DNormal();
 
         FStat d0Axis = factory.getFStat();
@@ -78,7 +78,7 @@ public class FDist3DNormalTest {
     @Test
     @DisplayName("Use configuration - Custom")
     void useConfigurationCustom() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DNormal()
                 .setAvg(-1, 1, 10)
                 .setStd(0.5, 0.1, 2)
@@ -138,7 +138,7 @@ public class FDist3DNormalTest {
     @Test
     @DisplayName("Use configuration - Erroneous")
     void useConfigurationErroneous() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist3D dist = random.getFDist3DNormal()
                 .setCorD01(0.5)
                 .setCorD02(-0.7)

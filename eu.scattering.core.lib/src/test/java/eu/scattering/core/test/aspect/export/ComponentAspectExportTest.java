@@ -105,10 +105,10 @@ public class ComponentAspectExportTest {
     void exportPovRayRLCA3DPlain() {
         int quantity = 100;
 
-        FDist1D setDist1 = factory.getFRand().getFDist1DNormal(5, 0.5);
+        FDist1D setDist1 = factory.random().generator().getFDist1DNormal(5, 0.5);
         FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
 
-        FDist1D setDist2 = factory.getFRand().getFDist1DNormal(10, 1);
+        FDist1D setDist2 = factory.random().generator().getFDist1DNormal(10, 1);
         FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
 
         FAssembly<Shape> core = factory.getFAssembly();
@@ -138,10 +138,10 @@ public class ComponentAspectExportTest {
     void exportPovRayRLCA3DBox() {
         int quantity = 100;
 
-        FDist1D setDist1 = factory.getFRand().getFDist1DNormal(5, 0.5);
+        FDist1D setDist1 = factory.random().generator().getFDist1DNormal(5, 0.5);
         FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
 
-        FDist1D setDist2 = factory.getFRand().getFDist1DNormal(10, 1);
+        FDist1D setDist2 = factory.random().generator().getFDist1DNormal(10, 1);
         FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
 
         FAssembly<Shape> core = factory.getFAssembly();
@@ -171,10 +171,10 @@ public class ComponentAspectExportTest {
     void exportPovRayRLCA3DRadius() {
         int quantity = 100;
 
-        FDist1D setDist1 = factory.getFRand().getFDist1DNormal(5, 0.5);
+        FDist1D setDist1 = factory.random().generator().getFDist1DNormal(5, 0.5);
         FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
 
-        FDist1D setDist2 = factory.getFRand().getFDist1DNormal(10, 1);
+        FDist1D setDist2 = factory.random().generator().getFDist1DNormal(10, 1);
         FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
 
         FAssembly<Shape> core = factory.getFAssembly();

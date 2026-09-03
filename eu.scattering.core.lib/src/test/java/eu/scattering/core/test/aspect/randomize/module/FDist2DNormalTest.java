@@ -20,7 +20,7 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Default")
     void useConfigurationDefault() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist2D dist = random.getFDist2DNormal();
 
         FStat d0Axis = factory.getFStat();
@@ -70,7 +70,7 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Custom")
     void useConfigurationCustom() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist2D dist = random.getFDist2DNormal()
                 .setAvg(-0.5, 1)
                 .setStd(0.5, 0.1)
@@ -112,7 +112,7 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Erroneous")
     void useConfigurationErroneous() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
 
         assertThrows(IllegalArgumentException.class, () -> random.getFDist2DNormal().setCor(-1.5));
     }

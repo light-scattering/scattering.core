@@ -35,10 +35,10 @@ public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContext
             throw new IllegalArgumentException("The number of particles must be greater than zero");
         }
 
-        Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
+        Producer<FSphere> fProducer = this.factory.getFSphereProducer(radius);
+        FAssembly<Shape> fAssembly = this.factory.getFAssembly(fProducer.getListRandomized(quantity));
 
-        return FAggregateDef.create(factory, fAssembly);
+        return FAggregateDef.create(this.factory, fAssembly);
     }
 
     @Override
@@ -48,12 +48,12 @@ public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContext
             throw new IllegalArgumentException("The number of particles must be greater than zero");
         }
 
-        FDist1DNormal fDist = factory.getFRand().getFDist1DNormal(avg, std);
+        FDist1DNormal fDist = this.factory.random().generator().getFDist1DNormal(avg, std);
 
-        Producer<FSphere> fProducer = factory.getFSphereProducer(fDist);
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
+        Producer<FSphere> fProducer = this.factory.getFSphereProducer(fDist);
+        FAssembly<Shape> fAssembly = this.factory.getFAssembly(fProducer.getListRandomized(quantity));
 
-        return FAggregateDef.create(factory, fAssembly);
+        return FAggregateDef.create(this.factory, fAssembly);
     }
 
     @Override
@@ -63,12 +63,12 @@ public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContext
             throw new IllegalArgumentException("The number of particles must be greater than zero");
         }
 
-        FDist1DNormal fDist = factory.getFRand().getFDist1DNormal(avg, std);
+        FDist1DNormal fDist = this.factory.random().generator().getFDist1DNormal(avg, std);
 
-        Producer<FSphere> fProducer = factory.getFSphereProducer(fDist);
+        Producer<FSphere> fProducer = this.factory.getFSphereProducer(fDist);
 
         List<FSphere> candidates = new ArrayList<>(quantity);
-        FStat statistics = factory.getFStat();
+        FStat statistics = this.factory.getFStat();
 
         while (true) {
             candidates.clear();
@@ -84,8 +84,8 @@ public class FAggregateFactoryContextBaseDef implements FAggregateFactoryContext
             }
         }
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(candidates);
+        FAssembly<Shape> fAssembly = this.factory.getFAssembly(candidates);
 
-        return FAggregateDef.create(factory, fAssembly);
+        return FAggregateDef.create(this.factory, fAssembly);
     }
 }

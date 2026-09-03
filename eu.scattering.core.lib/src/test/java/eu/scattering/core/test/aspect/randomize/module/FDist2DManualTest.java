@@ -18,7 +18,7 @@ public class FDist2DManualTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist2D dist = random.getFDist2DManual((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);
@@ -41,7 +41,7 @@ public class FDist2DManualTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist2D dist = random.getFDist2DManual((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);
@@ -65,7 +65,7 @@ public class FDist2DManualTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRand();
+        FRandGenerator random = factory.random().generator();
         FDist2D dist = random.getFDist2DManual((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);

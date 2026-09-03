@@ -3125,7 +3125,7 @@ public class FAggregateTest {
 
             aggregateA.setParticleEpsilon(1);
 
-            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+            aggregateA.getRefParticles().translate(factory.random().generator().nextDoubleOnSphere(100));
 
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
@@ -3146,7 +3146,7 @@ public class FAggregateTest {
             FAggregate aggregateA = factory.aggregates().geometries().grid3D(2, 3, 4);
             FAggregate aggregateB = factory.aggregates().geometries().grid3D(3, 4, 5);
 
-            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+            aggregateA.getRefParticles().translate(factory.random().generator().nextDoubleOnSphere(100));
 
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
@@ -3169,7 +3169,7 @@ public class FAggregateTest {
 
             aggregateA.setParticleEpsilon(1);
 
-            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+            aggregateA.getRefParticles().translate(factory.random().generator().nextDoubleOnSphere(100));
 
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
@@ -3196,7 +3196,7 @@ public class FAggregateTest {
             FAggregate aggregateA = factory.aggregates().geometries().grid3D(2, 3, 4);
             FAggregate aggregateB = factory.aggregates().geometries().grid3D(3, 4, 5);
 
-            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+            aggregateA.getRefParticles().translate(factory.random().generator().nextDoubleOnSphere(100));
 
             FPoint centerA = factory.getFPoint();
             FPoint centerB = factory.getFPoint();
@@ -3804,9 +3804,9 @@ public class FAggregateTest {
                 FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
                 FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
-                fAggregate1d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
-                fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
-                fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
+                fAggregate1d.getRefParticles().translate(factory.random().generator().nextDoubleInSphere(5));
+                fAggregate2d.getRefParticles().translate(factory.random().generator().nextDoubleInSphere(5));
+                fAggregate3d.getRefParticles().translate(factory.random().generator().nextDoubleInSphere(5));
 
                 double dim1d = fAggregate1d.getFractalDimension(FractalDimension.DC_RESTRICTED);
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.DC_RESTRICTED);
@@ -3891,9 +3891,9 @@ public class FAggregateTest {
                 FAggregate fAggregate2d = factory.aggregates().geometries().grid2D(25, 25);
                 FAggregate fAggregate3d = factory.aggregates().geometries().grid3D(20, 20, 20);
 
-                fAggregate1d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
-                fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
-                fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
+                fAggregate1d.getRefParticles().translate(factory.random().generator().nextDoubleInSphere(5));
+                fAggregate2d.getRefParticles().translate(factory.random().generator().nextDoubleInSphere(5));
+                fAggregate3d.getRefParticles().translate(factory.random().generator().nextDoubleInSphere(5));
 
                 double dim1d = fAggregate1d.getFractalDimension(FractalDimension.MR_RESTRICTED);
                 double dim2d = fAggregate2d.getFractalDimension(FractalDimension.MR_RESTRICTED);

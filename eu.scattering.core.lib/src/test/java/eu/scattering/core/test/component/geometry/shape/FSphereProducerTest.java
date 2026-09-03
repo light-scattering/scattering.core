@@ -547,7 +547,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist radius")
     void presetDistRadius() {
-        FDist1D radius = factory.getFRand()
+        FDist1D radius = factory.random().generator()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
@@ -573,7 +573,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist radius (simple)")
     void presetDistRadiusSimple() {
-        FDist1D radius = factory.getFRand()
+        FDist1D radius = factory.random().generator()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
@@ -629,7 +629,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist center and fixed radius")
     void presetDistCenterAndFixedRadius() {
-        FDist3D center = factory.getFRand()
+        FDist3D center = factory.random().generator()
                 .getFDist3DManual((random, results) -> {
                     results[0] = 1.0;
                     results[1] = 2.0;
@@ -693,7 +693,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset center and dist radius")
     void presetCenterAndDistRadius() {
-        FDist1D radius = factory.getFRand()
+        FDist1D radius = factory.random().generator()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FPointProducer center = factory.getFPointProducer()
@@ -726,10 +726,10 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist center and dist radius")
     void presetDistCenterAndDistRadius() {
-        FDist1D radius = factory.getFRand()
+        FDist1D radius = factory.random().generator()
                 .getFDist1DUniform(epsilon, 0.001);
 
-        FDist3D center = factory.getFRand()
+        FDist3D center = factory.random().generator()
                 .getFDist3DManual((random, results) -> {
                     results[0] = 1.0;
                     results[1] = 2.0;
@@ -763,7 +763,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset center and dist radius (simple)")
     void presetCenterAndDistRadiusSimple() {
-        FDist1D radius = factory.getFRand()
+        FDist1D radius = factory.random().generator()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FPointProducer pCenter = factory.getFPointProducer()
@@ -938,20 +938,20 @@ public class FSphereProducerTest {
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer((factory) -> {
-            double x = factoryA.getFRand().nextDouble();
-            double y = factoryA.getFRand().nextDouble();
-            double z = factoryA.getFRand().nextDouble();
-            double r = factoryA.getFRand().nextDouble();
+            double x = factoryA.random().generator().nextDouble();
+            double y = factoryA.random().generator().nextDouble();
+            double z = factoryA.random().generator().nextDouble();
+            double r = factoryA.random().generator().nextDouble();
 
             return factory.getFSphere(x, y, z, r);
         });
 
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
                 .withCustomRule((factory) -> {
-                    double x = factoryB.getFRand().nextDouble();
-                    double y = factoryB.getFRand().nextDouble();
-                    double z = factoryB.getFRand().nextDouble();
-                    double r = factoryB.getFRand().nextDouble();
+                    double x = factoryB.random().generator().nextDouble();
+                    double y = factoryB.random().generator().nextDouble();
+                    double z = factoryB.random().generator().nextDouble();
+                    double r = factoryB.random().generator().nextDouble();
 
                     return factory.getFSphere(x, y, z, r);
                 });
@@ -1027,8 +1027,8 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist1D distA = factoryA.getFRand().getFDist1DUniform(1, 2);
-        FDist1D distB = factoryB.getFRand().getFDist1DUniform(1, 2);
+        FDist1D distA = factoryA.random().generator().getFDist1DUniform(1, 2);
+        FDist1D distB = factoryB.random().generator().getFDist1DUniform(1, 2);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
@@ -1050,8 +1050,8 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPA = factoryA.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
 
         Producer<FPoint> prodA = factoryA.getFPointProducer(distPA);
         Producer<FPoint> prodB = factoryB.getFPointProducer(distPB);
@@ -1076,14 +1076,14 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPA = factoryA.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
 
         Producer<FPoint> prodA = factoryA.getFPointProducer(distPA);
         Producer<FPoint> prodB = factoryB.getFPointProducer(distPB);
 
-        FDist1D distRA = factoryA.getFRand().getFDist1DUniform(1, 2);
-        FDist1D distRB = factoryB.getFRand().getFDist1DUniform(1, 2);
+        FDist1D distRA = factoryA.random().generator().getFDist1DUniform(1, 2);
+        FDist1D distRB = factoryB.random().generator().getFDist1DUniform(1, 2);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(prodA, distRA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
@@ -1105,8 +1105,8 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPA = factoryA.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, 5);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
@@ -1128,11 +1128,11 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPA = factoryA.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.random().generator().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
 
-        FDist1D distRA = factoryA.getFRand().getFDist1DUniform(1, 2);
-        FDist1D distRB = factoryB.getFRand().getFDist1DUniform(1, 2);
+        FDist1D distRA = factoryA.random().generator().getFDist1DUniform(1, 2);
+        FDist1D distRB = factoryB.random().generator().getFDist1DUniform(1, 2);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, distRA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
