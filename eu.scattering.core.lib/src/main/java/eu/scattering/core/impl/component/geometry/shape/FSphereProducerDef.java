@@ -6,8 +6,8 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
 import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 

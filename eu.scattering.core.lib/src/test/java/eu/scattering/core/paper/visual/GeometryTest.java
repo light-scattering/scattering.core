@@ -18,13 +18,12 @@ public class GeometryTest {
         factory.monitors();
         factory.validators();
         factory.random().attachLinear2D(null, null);
-        factory.random().generator().getFDist1DManual(null);
-        factory.random().generator().getFDist1DManual(null);
-//factory.random().generator().
+        factory.random().distributions().d1().custom(null);
+        factory.random().distributions().d1().custom(null);
 
         factory.random().generator().nextDouble();
         factory.random().generator().nextDouble();
-        factory.random().generator().getFDist1DManual(null);
+        factory.random().distributions().d1().custom(null);
 
 
         FAggregate geo = factory.aggregates().geometries().grid3D(4, 5, 6);

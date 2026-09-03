@@ -23,12 +23,12 @@ public class FAggregateFactoryContextDef implements FAggregateFactoryContext {
     @Override
     public FAggregateFactoryContextTemplates templates() {
 
-        return FAggregateFactoryContextBaseDef.create(this.factory);
+        return FAggregateFactoryContextTemplatesDef.create(this.factory);
     }
 
     @Override
     public FAggregateFactoryContextGeometries geometries() {
 
-        return FAggregateFactoryContextGeometryDef.create(this.factory);
+        return FAggregateFactoryContextGeometriesDef.create(this.factory);
     }
 }

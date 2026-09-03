@@ -1,7 +1,7 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -17,8 +17,8 @@ public class FDist1DFixedTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dist = random.getFDist1DFixed(5);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dist = random.d1().fixed(5);
 
         for (int i = 0 ; i < 10 ; i++) {
             assertEquals(5, dist.produce(),
@@ -29,8 +29,8 @@ public class FDist1DFixedTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dist = random.getFDist1DFixed(5);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dist = random.d1().fixed(5);
 
         double[] arr = new double[1];
         for (int i = 0 ; i < 10 ; i++) {
@@ -43,8 +43,8 @@ public class FDist1DFixedTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dist = random.getFDist1DFixed(5);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dist = random.d1().fixed(5);
 
         double[] arr = new double[0];
 

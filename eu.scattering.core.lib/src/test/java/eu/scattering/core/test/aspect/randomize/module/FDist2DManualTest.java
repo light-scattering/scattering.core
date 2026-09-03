@@ -1,7 +1,7 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.FDist2D;
+import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FDist2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +18,8 @@ public class FDist2DManualTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.random().generator();
-        FDist2D dist = random.getFDist2DManual((rnd, arr) -> {
+        FDistFactoryContext random = factory.random().distributions();
+        FDist2D dist = random.d2().custom((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);
         });
@@ -41,8 +41,8 @@ public class FDist2DManualTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.random().generator();
-        FDist2D dist = random.getFDist2DManual((rnd, arr) -> {
+        FDistFactoryContext random = factory.random().distributions();
+        FDist2D dist = random.d2().custom((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);
         });
@@ -65,8 +65,8 @@ public class FDist2DManualTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.random().generator();
-        FDist2D dist = random.getFDist2DManual((rnd, arr) -> {
+        FDistFactoryContext random = factory.random().distributions();
+        FDist2D dist = random.d2().custom((rnd, arr) -> {
             arr[0] = rnd.nextDouble(0.001, 0.002);
             arr[1] = rnd.nextDouble(3.001, 3.002);
         });

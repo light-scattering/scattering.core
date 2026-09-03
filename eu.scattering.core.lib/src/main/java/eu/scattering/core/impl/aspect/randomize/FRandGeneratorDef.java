@@ -2,21 +2,6 @@ package eu.scattering.core.impl.aspect.randomize;
 
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.randomize.generator.core.FRandCore;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.custom.FDist1DCustom;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.fixed.FDist1DFixed;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal.FDist1DNormal;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.uniform.FDist1DUniform;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.joint.FDist2DJoint;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.fixed.FDist2DFixed;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.custom.FDist2DCustom;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.normal.FDist2DNormal;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.uniform.FDist2DUniform;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.joint.FDist3DJoint;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.fixed.FDist3DFixed;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.custom.FDist3DCustom;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.normal.FDist3DNormal;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.uniform.FDist3DUniform;
 import eu.scattering.core.design.storage.transfer.TransferFactory;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos2D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
@@ -26,11 +11,10 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos4D;
 import eu.scattering.core.impl.aspect.randomize.core.FRandCoreOptimizedDef;
 import eu.scattering.core.impl.aspect.randomize.core.FRandCoreSimpleDef;
-import eu.scattering.core.impl.aspect.randomize.module.*;
+import eu.scattering.core.impl.aspect.randomize.distribution.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 public class FRandGeneratorDef implements FRandGenerator {
     private final TransferFactory factoryExt;
@@ -318,115 +302,5 @@ public class FRandGeneratorDef implements FRandGenerator {
         var d2 = distP2(this.posZero3D.getD2(), ref.getD2());
 
         return d0 + d1 + d2;
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FDist1DCustom getFDist1DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
-
-        return FDist1DManualDef.get(this, consumer);
-    }
-
-    @Override
-    public FDist1DFixed getFDist1DFixed(double d0) {
-
-        return FDist1DFixedDef.get(d0);
-    }
-
-    @Override
-    public FDist1DNormal getFDist1DNormal(double mean, double std) {
-
-        return FDist1DNormalDef.get(this, mean, std);
-    }
-
-    @Override
-    public FDist1DUniform getFDist1DUniform(double d0min, double d0max) {
-
-        return FDist1DUniformDef.get(this, d0min, d0max);
-    }
-
-    @Override
-    public FDist2DCustom getFDist2DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
-
-        return FDist2DManualDef.create(this.factoryExt, this, consumer);
-    }
-
-    @Override
-    public FDist2DJoint getFDist2DJoint(FDist1D d0, FDist1D d1) {
-
-        return FDist2DJointDef.create(this.factoryExt, d0, d1);
-    }
-
-    @Override
-    public FDist2DFixed getFDist2DFixed(double d0, double d1) {
-
-        return FDist2DFixedDef.create(this.factoryExt, d0, d1);
-    }
-
-    @Override
-    public FDist2DFixed getFDist2DFixed(FPos2D val) {
-
-        return FDist2DFixedDef.create(this.factoryExt, val);
-    }
-
-    @Override
-    public FDist2DUniform getFDist2DUniform(double d0min, double d0max, double d1min, double d1max) {
-
-        return FDist2DUniformDef.create(this.factoryExt, this, d0min, d0max, d1min, d1max);
-    }
-
-    @Override
-    public FDist2DUniform getFDist2DUniform(FPairPos2D range) {
-
-        return FDist2DUniformDef.create(this.factoryExt, this, range);
-    }
-
-    @Override
-    public FDist2DNormal getFDist2DNormal(double avg, double std) {
-
-        return FDist2DNormalDef.create(this.factoryExt, this, avg, std);
-    }
-
-    @Override
-    public FDist3DCustom getFDist3DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
-
-        return FDist3DManualDef.create(this.factoryExt, this, consumer);
-    }
-
-    @Override
-    public FDist3DJoint getFDist3DJoint(FDist1D d0, FDist1D d1, FDist1D d2) {
-
-        return FDist3DJointDef.create(this.factoryExt, d0, d1, d2);
-    }
-
-    @Override
-    public FDist3DFixed getFDist3DFixed(double d0, double d1, double d2) {
-
-        return FDist3DFixedDef.create(this.factoryExt, d0, d1, d2);
-    }
-
-    @Override
-    public FDist3DFixed getFDist3DFixed(FPos3D val) {
-
-        return FDist3DFixedDef.create(this.factoryExt, val);
-    }
-
-    @Override
-    public FDist3DUniform getFDist3DUniform(double d0min, double d0max, double d1min, double d1max, double d2min, double d2max) {
-
-        return FDist3DUniformDef.create(this.factoryExt, this, d0min, d0max, d1min, d1max, d2min, d2max);
-    }
-
-    @Override
-    public FDist3DUniform getFDist3DUniform(FPairPos3D range) {
-
-        return FDist3DUniformDef.create(this.factoryExt, this, range);
-    }
-
-    @Override
-    public FDist3DNormal getFDist3DNormal(double avg, double std) {
-
-        return FDist3DNormalDef.create(this.factoryExt, this, avg, std);
     }
 }

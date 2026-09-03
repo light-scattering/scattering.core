@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 

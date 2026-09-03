@@ -2,6 +2,7 @@ package eu.scattering.core.impl.aspect.randomize;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -15,6 +16,7 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos4D
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.MassCenter;
+import eu.scattering.core.impl.aspect.randomize.distribution.FDistFactoryContextDef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +24,19 @@ import java.util.List;
 import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FRandAspectDef implements FRandAspect {
-    private final FRandGenerator generator;
     private final ScatterFactory factory;
+    private final FRandGenerator generator;
+
+    private final FDistFactoryContext distributions;
 
     private final FRandAspectModuleFAggregateDef moduleFAggregate;
 
     private FRandAspectDef(FRandGenerator generator, ScatterFactory factory) {
 
-        this.generator = generator;
         this.factory = factory;
+        this.generator = generator;
+
+        this.distributions = FDistFactoryContextDef.create(generator, factory);
 
         this.moduleFAggregate = FRandAspectModuleFAggregateDef.create(generator, factory);
     }
@@ -46,6 +52,12 @@ public class FRandAspectDef implements FRandAspect {
     public FRandGenerator generator() {
 
         return this.generator;
+    }
+
+    @Override
+    public FDistFactoryContext distributions() {
+
+        return this.distributions;
     }
 
     @Override
@@ -482,7 +494,7 @@ public class FRandAspectDef implements FRandAspect {
         List<Shape> candidates = new ArrayList<>();
         in.getAttachSphericalCollisions(candidates, field, target.getCenter());
 
-        if (candidates.size() == 0) {
+        if (candidates.isEmpty()) {
             return false;
         }
 

@@ -1,8 +1,8 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,11 +19,11 @@ public class FDist3DJointTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
-        FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
-        FDist3D dist = random.getFDist3DJoint(dX, dY, dZ);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dX = random.d1().uniform(1.1, 1.2);
+        FDist1D dY = random.d1().uniform(-1.1, -1.2);
+        FDist1D dZ = random.d1().uniform(-0.1, 0.1);
+        FDist3D dist = random.d3().joint(dX, dY, dZ);
 
         for (int i = 0 ; i < 10 ; i++) {
             FPos3D res = dist.produce();
@@ -39,11 +39,11 @@ public class FDist3DJointTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
-        FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
-        FDist3D dist = random.getFDist3DJoint(dX, dY, dZ);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dX = random.d1().uniform(1.1, 1.2);
+        FDist1D dY = random.d1().uniform(-1.1, -1.2);
+        FDist1D dZ = random.d1().uniform(-0.1, 0.1);
+        FDist3D dist = random.d3().joint(dX, dY, dZ);
 
         double[] arr = new double[3];
         for (int i = 0 ; i < 10 ; i++) {
@@ -60,11 +60,11 @@ public class FDist3DJointTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
-        FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
-        FDist3D dist = random.getFDist3DJoint(dX, dY, dZ);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dX = random.d1().uniform(1.1, 1.2);
+        FDist1D dY = random.d1().uniform(-1.1, -1.2);
+        FDist1D dZ = random.d1().uniform(-0.1, 0.1);
+        FDist3D dist = random.d3().joint(dX, dY, dZ);
 
         double[] arr = new double[1];
 

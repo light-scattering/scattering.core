@@ -1,8 +1,8 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.FDist2D;
+import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FDist2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,10 +18,10 @@ public class FDist2DJointTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
-        FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist2D dist = random.getFDist2DJoint(dX, dY);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dX = random.d1().uniform(1.1, 1.2);
+        FDist1D dY = random.d1().uniform(-1.1, -1.2);
+        FDist2D dist = random.d2().joint(dX, dY);
 
         for (int i = 0 ; i < 10 ; i++) {
             FPos2D res = dist.produce();
@@ -35,10 +35,10 @@ public class FDist2DJointTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
-        FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist2D dist = random.getFDist2DJoint(dX, dY);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dX = random.d1().uniform(1.1, 1.2);
+        FDist1D dY = random.d1().uniform(-1.1, -1.2);
+        FDist2D dist = random.d2().joint(dX, dY);
 
         double[] arr = new double[2];
         for (int i = 0 ; i < 10 ; i++) {
@@ -53,10 +53,10 @@ public class FDist2DJointTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.random().generator();
-        FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
-        FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist2D dist = random.getFDist2DJoint(dX, dY);
+        FDistFactoryContext random = factory.random().distributions();
+        FDist1D dX = random.d1().uniform(1.1, 1.2);
+        FDist1D dY = random.d1().uniform(-1.1, -1.2);
+        FDist2D dist = random.d2().joint(dX, dY);
 
         double[] arr = new double[1];
 

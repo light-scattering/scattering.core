@@ -1,8 +1,7 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist2d.FDist2D;
-import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FDist2D;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import org.junit.jupiter.api.DisplayName;
@@ -20,13 +19,13 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Default")
     void useConfigurationDefault() {
-        FRandGenerator random = factory.random().generator();
-        FDist2D dist = random.getFDist2DNormal();
+        FDistFactoryContext random = factory.random().distributions();
+        FDist2D dist = random.d2().normal();
 
         FStat d0Axis = factory.getFStat();
         FStat d1Axis = factory.getFStat();
 
-        FPos2D dir = random.nextDoubleOnCircle(1);
+        FPos2D dir = factory.random().generator().nextDoubleOnCircle(1);
         FStat dirAxis = factory.getFStat();
 
         double[] valB = new double[3];
@@ -70,8 +69,8 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Custom")
     void useConfigurationCustom() {
-        FRandGenerator random = factory.random().generator();
-        FDist2D dist = random.getFDist2DNormal()
+        FDistFactoryContext random = factory.random().distributions();
+        FDist2D dist = random.d2().normal()
                 .setAvg(-0.5, 1)
                 .setStd(0.5, 0.1)
                 .setCor(0.75);
@@ -112,8 +111,8 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Erroneous")
     void useConfigurationErroneous() {
-        FRandGenerator random = factory.random().generator();
+        FDistFactoryContext random = factory.random().distributions();
 
-        assertThrows(IllegalArgumentException.class, () -> random.getFDist2DNormal().setCor(-1.5));
+        assertThrows(IllegalArgumentException.class, () -> random.d2().normal().setCor(-1.5));
     }
 }
