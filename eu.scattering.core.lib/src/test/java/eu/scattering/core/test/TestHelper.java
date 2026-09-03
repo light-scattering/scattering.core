@@ -91,7 +91,7 @@ public class TestHelper {
         while (true) {
             var candidate =  factory.getRefFSphere(
                     getRandFPoint(),
-                    factory.random().generator().nextDouble(EPSILON, range)
+                    factory.random().engine().nextDouble(EPSILON, range)
             );
 
             for (FSphere fSphere : exc) {

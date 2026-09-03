@@ -22,7 +22,7 @@ public class FSegmentProducerDef implements FSegmentProducer {
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndAspect.generator());
+        this.processor = new ProducerCoreDef<>(this.rndAspect.engine());
     }
 
     public static FSegmentProducer create(FSegmentFactory factory, FRandAspect randomizer) {

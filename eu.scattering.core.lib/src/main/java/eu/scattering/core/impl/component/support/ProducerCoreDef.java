@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.support;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +17,14 @@ public class ProducerCoreDef<E> {
 
     private final List<Consumer<List<E>>> mutations = new ArrayList<>();
     private final List<BiFunction<E, List<E>, Boolean>> validations = new ArrayList<>();
-    private final List<BiConsumer<E, FRandGenerator>> corrections = new ArrayList<>();
+    private final List<BiConsumer<E, FRandEngine>> corrections = new ArrayList<>();
 
-    private final FRandGenerator randomizer;
+    private final FRandEngine randomizer;
 
     private int retries = 100;
     private boolean skip = false;
 
-    public ProducerCoreDef(FRandGenerator randomizer) {
+    public ProducerCoreDef(FRandEngine randomizer) {
 
         this.randomizer = randomizer;
     }
@@ -44,7 +44,7 @@ public class ProducerCoreDef<E> {
         this.validations.add(validation);
     }
 
-    public void addCorrection(BiConsumer<E, FRandGenerator> correction) {
+    public void addCorrection(BiConsumer<E, FRandEngine> correction) {
 
         this.corrections.add(correction);
     }

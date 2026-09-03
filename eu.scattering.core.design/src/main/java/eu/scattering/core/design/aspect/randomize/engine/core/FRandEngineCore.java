@@ -1,0 +1,29 @@
+package eu.scattering.core.design.aspect.randomize.engine.core;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface FRandEngineCore {
+
+    Optional<Long> getSeed();
+
+    boolean nextBoolean();
+
+    double nextDouble();
+    double nextDouble(double origin, double bound);
+
+    int nextInteger();
+    int nextInteger(int origin, int bound);
+
+    long nextLong();
+    long nextLong(long origin, long bound);
+
+    // -------------------------------------------------------------------------------------------------
+
+    double nextGaussian();
+    double nextGaussian(double mean, double std);
+
+    // -------------------------------------------------------------------------------------------------
+
+    <T> void shuffle(List<T> in);
+}

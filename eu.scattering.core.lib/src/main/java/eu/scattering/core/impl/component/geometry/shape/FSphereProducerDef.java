@@ -5,9 +5,9 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
@@ -42,7 +42,7 @@ public class FSphereProducerDef implements FSphereProducer {
 
         this.factory = factory;
         this.randomizer = randomizer;
-        this.processor = new ProducerCoreDef<>(this.randomizer.generator());
+        this.processor = new ProducerCoreDef<>(this.randomizer.engine());
 
         this.processor.addMutation(MUTATION_ITERATION);
     }
@@ -87,7 +87,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withDistRadius(FDist1D radius, int weight) {
+    public FSphereProducer withDistRadius(FRandDist1D radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FSphere fSphere = factory.getFSphere();
@@ -103,7 +103,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withDistCenterAndFixRadius(FDist3D dCenter, double radius, int weight) {
+    public FSphereProducer withDistCenterAndFixRadius(FRandDist3D dCenter, double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> factory.getFSphere(dCenter.produce(), radius);
 
@@ -130,7 +130,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withDistCenterAndDistRadius(FDist3D dCenter, FDist1D radius, int weight) {
+    public FSphereProducer withDistCenterAndDistRadius(FRandDist3D dCenter, FRandDist1D radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> factory.getFSphere(dCenter.produce(), radius.produce());
 
@@ -140,7 +140,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withProdCenterAndDistRadius(Producer<FPoint> pCenter, FDist1D radius, int weight) {
+    public FSphereProducer withProdCenterAndDistRadius(Producer<FPoint> pCenter, FRandDist1D radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FPoint fPoint = pCenter.produce();
@@ -273,7 +273,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer addCorrection(BiConsumer<FSphere, FRandGenerator> correction) {
+    public FSphereProducer addCorrection(BiConsumer<FSphere, FRandEngine> correction) {
 
         this.processor.addCorrection(correction);
 

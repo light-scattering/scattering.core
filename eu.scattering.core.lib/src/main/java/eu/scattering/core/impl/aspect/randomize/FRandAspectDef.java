@@ -2,8 +2,10 @@ package eu.scattering.core.impl.aspect.randomize;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1DFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FRandDist2DFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3DFactoryContext;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -16,7 +18,9 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos4D
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.MassCenter;
-import eu.scattering.core.impl.aspect.randomize.distribution.FDistFactoryContextDef;
+import eu.scattering.core.impl.aspect.randomize.distribution.dist1D.FRandDist1DFactoryContextDef;
+import eu.scattering.core.impl.aspect.randomize.distribution.dist2D.FRandDist2DFactoryContextDef;
+import eu.scattering.core.impl.aspect.randomize.distribution.dist3D.FRandDist3DFactoryContextDef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,45 +29,64 @@ import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FRandAspectDef implements FRandAspect {
     private final ScatterFactory factory;
-    private final FRandGenerator generator;
 
-    private final FDistFactoryContext distributions;
+    private final FRandEngine engine;
+
+    private final FRandDist1DFactoryContext dist1D;
+    private final FRandDist2DFactoryContext dist2D;
+    private final FRandDist3DFactoryContext dist3D;
 
     private final FRandAspectModuleFAggregateDef moduleFAggregate;
 
-    private FRandAspectDef(FRandGenerator generator, ScatterFactory factory) {
+    private FRandAspectDef(FRandEngine engine, ScatterFactory factory) {
 
         this.factory = factory;
-        this.generator = generator;
+        this.engine = engine;
 
-        this.distributions = FDistFactoryContextDef.create(generator, factory);
+        this.dist1D = FRandDist1DFactoryContextDef.create(engine);
+        this.dist2D = FRandDist2DFactoryContextDef.create(engine, factory);
+        this.dist3D = FRandDist3DFactoryContextDef.create(engine, factory);
 
-        this.moduleFAggregate = FRandAspectModuleFAggregateDef.create(generator, factory);
+        this.moduleFAggregate = FRandAspectModuleFAggregateDef.create(engine, factory);
     }
 
-    public static FRandAspect create(FRandGenerator generator, ScatterFactory factory) {
+    public static FRandAspect create(FRandEngine engine, ScatterFactory factory) {
 
-        return new FRandAspectDef(generator, factory);
+        return new FRandAspectDef(engine, factory);
     }
 
     //--------------------------------------------------
 
     @Override
-    public FRandGenerator generator() {
+    public FRandEngine engine() {
 
-        return this.generator;
+        return this.engine;
     }
 
     @Override
-    public FDistFactoryContext distributions() {
+    public FRandDist1DFactoryContext dist1D() {
 
-        return this.distributions;
+        return this.dist1D;
     }
+
+    @Override
+    public FRandDist2DFactoryContext dist2D() {
+
+        return this.dist2D;
+    }
+
+    @Override
+    public FRandDist3DFactoryContext dist3D() {
+
+        return this.dist3D;
+    }
+
+    //--------------------------------------------------
 
     @Override
     public FComplex inRange(FComplex in, FPairPos2D range) {
 
-        in.applyStateFrom(generator.nextDouble2D(range));
+        in.applyStateFrom(engine.nextDouble2D(range));
 
         return in;
     }
@@ -71,7 +94,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FComplex inCircle(FComplex in, double radius) {
 
-        in.applyStateFrom(generator.nextDoubleInCircle(radius));
+        in.applyStateFrom(engine.nextDoubleInCircle(radius));
 
         return in;
     }
@@ -79,7 +102,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FComplex onCircle(FComplex in, double radius) {
 
-        in.applyStateFrom(generator.nextDoubleOnCircle(radius));
+        in.applyStateFrom(engine.nextDoubleOnCircle(radius));
 
         return in;
     }
@@ -87,7 +110,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FQuaternion inRange(FQuaternion in, FPairPos4D range) {
 
-        in.applyStateFrom(generator.nextDouble4D(range));
+        in.applyStateFrom(engine.nextDouble4D(range));
 
         return in;
     }
@@ -98,7 +121,7 @@ public class FRandAspectDef implements FRandAspect {
     public FPoint onSphere(FPoint in) {
         double radius = in.getMagnitude();
 
-        in.set(generator.nextDoubleOnSphere(radius));
+        in.set(engine.nextDoubleOnSphere(radius));
 
         return in;
     }
@@ -106,7 +129,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint inRange(FPoint in, FPairPos3D range) {
 
-        in.set(generator.nextDouble3D(range));
+        in.set(engine.nextDouble3D(range));
 
         return in;
     }
@@ -115,7 +138,7 @@ public class FRandAspectDef implements FRandAspect {
     public FPoint inSphere(FPoint in) {
         double radius = in.getMagnitude();
 
-        in.set(generator.nextDoubleInSphere(radius));
+        in.set(engine.nextDoubleInSphere(radius));
 
         return in;
     }
@@ -123,7 +146,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint inSphere(FPoint in, double radius) {
 
-        in.set(generator.nextDoubleInSphere(radius));
+        in.set(engine.nextDoubleInSphere(radius));
 
         return in;
     }
@@ -131,7 +154,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint onSphere(FPoint in, double radius) {
 
-        in.set(generator.nextDoubleOnSphere(radius));
+        in.set(engine.nextDoubleOnSphere(radius));
 
         return in;
     }
@@ -139,7 +162,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint onAxis(FPoint in) {
 
-        in.setMagnitude(generator.nextDouble(EPSILON, in.getMagnitude()));
+        in.setMagnitude(engine.nextDouble(EPSILON, in.getMagnitude()));
 
         return in;
     }
@@ -148,7 +171,7 @@ public class FRandAspectDef implements FRandAspect {
     public FPoint onAxis(FPoint in, FPoint axis) {
 
         in.set(axis);
-        in.setMagnitude(generator.nextDouble(EPSILON, axis.getMagnitude()));
+        in.setMagnitude(engine.nextDouble(EPSILON, axis.getMagnitude()));
 
         return in;
     }
@@ -156,7 +179,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint ortToBaseInCircle(FPoint in, FPoint dir, double radius) {
 
-        in.set(generator.nextDoubleInSphere(radius));
+        in.set(engine.nextDoubleInSphere(radius));
         in.setOrthogonal(dir);
 
         return in;
@@ -165,7 +188,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint ortToBaseOnCircle(FPoint in, FPoint dir, double radius) {
 
-        in.set(generator.nextDoubleOnSphere(radius));
+        in.set(engine.nextDoubleOnSphere(radius));
         in.setOrthogonal(dir);
 
         return in;
@@ -222,7 +245,7 @@ public class FRandAspectDef implements FRandAspect {
 
         in.set(axis.getRefHead());
         in.sub(axis.getRefBase());
-        in.setMagnitude(generator.nextDouble(EPSILON, in.getMagnitude()));
+        in.setMagnitude(engine.nextDouble(EPSILON, in.getMagnitude()));
         in.add(axis.getRefBase());
 
         return in;
@@ -231,7 +254,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint ortToBaseInCircle(FPoint in, FVector dir, double radius) {
 
-        in.set(generator.nextDoubleInSphere(radius));
+        in.set(engine.nextDoubleInSphere(radius));
 
         in.setOrthogonal(
                 dir.getHeadX() - dir.getBaseX(),
@@ -247,7 +270,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint ortToBaseOnCircle(FPoint in, FVector dir, double radius) {
 
-        in.set(generator.nextDoubleOnSphere(radius));
+        in.set(engine.nextDoubleOnSphere(radius));
 
         in.setOrthogonal(
                 dir.getHeadX() - dir.getBaseX(),
@@ -263,7 +286,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint ortToHeadInCircle(FPoint in, FVector dir, double radius) {
 
-        in.set(generator.nextDoubleInSphere(radius));
+        in.set(engine.nextDoubleInSphere(radius));
 
         in.setOrthogonal(
                 dir.getHeadX() - dir.getBaseX(),
@@ -279,7 +302,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FPoint ortToHeadOnCircle(FPoint in, FVector dir, double radius) {
 
-        in.set(generator.nextDoubleOnSphere(radius));
+        in.set(engine.nextDoubleOnSphere(radius));
 
         in.setOrthogonal(
                 dir.getHeadX() - dir.getBaseX(),
@@ -301,7 +324,7 @@ public class FRandAspectDef implements FRandAspect {
             return false;
         }
 
-        in.setCenter(this.generator.nextDoubleOnSphere((in.getRadius() + target.getRadius() * 2)));
+        in.setCenter(this.engine.nextDoubleOnSphere((in.getRadius() + target.getRadius() * 2)));
         in.translate(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
         return in.attachLinear(target);
@@ -314,7 +337,7 @@ public class FRandAspectDef implements FRandAspect {
             return false;
         }
 
-        FPos2D position = this.generator.nextDoubleOnCircle((in.getRadius() + target.getRadius() * 2));
+        FPos2D position = this.engine.nextDoubleOnCircle((in.getRadius() + target.getRadius() * 2));
 
         in.setCenter(position.getD0(), position.getD1(), 0);
         in.translate(target.getCenterX(), target.getCenterY(), target.getCenterZ());
@@ -379,7 +402,7 @@ public class FRandAspectDef implements FRandAspect {
 
         double dist = in.getDistCenter(x, y, z);
 
-        in.setCenter(this.generator.nextDoubleOnSphere(dist));
+        in.setCenter(this.engine.nextDoubleOnSphere(dist));
         in.translate(x, y, z);
 
         return in.attachSpherical(target, x, y, z);
@@ -394,7 +417,7 @@ public class FRandAspectDef implements FRandAspect {
 
         double dist = in.getDistCenter(x, y, z);
 
-        in.setCenter(this.generator.nextDoubleOnCircle(dist), 0);
+        in.setCenter(this.engine.nextDoubleOnCircle(dist), 0);
         in.translate(x, y, z);
 
         return in.attachSpherical(target, x, y, z);
@@ -501,7 +524,7 @@ public class FRandAspectDef implements FRandAspect {
         int iterations = 0;
 
         while (iterations++ <= corrections) {
-            Shape candidate = generator().getElement(candidates, false);
+            Shape candidate = engine().getElement(candidates, false);
 
             if (in == candidate) {
                 continue;
@@ -527,7 +550,7 @@ public class FRandAspectDef implements FRandAspect {
         FPoint headDir = vectorDir.getRefHead();
 
         for (int i = 0 ; i < corrections ; i++) {
-            FPos3D pos3D = this.factory.random().generator().nextDoubleOnSphere(4 * radius);
+            FPos3D pos3D = this.factory.random().engine().nextDoubleOnSphere(4 * radius);
 
             baseRnd.set(0, 0, 0);
             headRnd.set(pos3D);
@@ -560,8 +583,8 @@ public class FRandAspectDef implements FRandAspect {
         FPoint headDir = vectorDir.getRefHead();
 
         for (int i = 0 ; i < corrections ; i++) {
-            FPos2D pos2D = this.factory.random().generator().nextDoubleOnCircle(4 * radius);
-            double pos1D = this.factory.random().generator().nextDouble(-radius, radius);
+            FPos2D pos2D = this.factory.random().engine().nextDoubleOnCircle(4 * radius);
+            double pos1D = this.factory.random().engine().nextDouble(-radius, radius);
 
             baseDir.set(pos2D, 0);
             headDir.set(pos1D, 0, 0);

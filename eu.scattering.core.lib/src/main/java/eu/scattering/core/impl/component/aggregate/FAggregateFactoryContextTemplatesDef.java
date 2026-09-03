@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatterFactory;
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.normal.FDist1DNormal;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.normal.FRandDist1DNormal;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextTemplates;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -48,7 +48,7 @@ public class FAggregateFactoryContextTemplatesDef implements FAggregateFactoryCo
             throw new IllegalArgumentException("The number of particles must be greater than zero");
         }
 
-        FDist1DNormal fDist = this.factory.random().distributions().d1().normal(avg, std);
+        FRandDist1DNormal fDist = this.factory.random().dist1D().normal(avg, std);
 
         Producer<FSphere> fProducer = this.factory.getFSphereProducer(fDist);
         FAssembly<Shape> fAssembly = this.factory.getFAssembly(fProducer.getListRandomized(quantity));
@@ -63,7 +63,7 @@ public class FAggregateFactoryContextTemplatesDef implements FAggregateFactoryCo
             throw new IllegalArgumentException("The number of particles must be greater than zero");
         }
 
-        FDist1DNormal fDist = this.factory.random().distributions().d1().normal(avg, std);
+        FRandDist1DNormal fDist = this.factory.random().dist1D().normal(avg, std);
 
         Producer<FSphere> fProducer = this.factory.getFSphereProducer(fDist);
 

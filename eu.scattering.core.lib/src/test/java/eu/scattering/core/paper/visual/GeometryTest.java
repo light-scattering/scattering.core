@@ -17,13 +17,17 @@ public class GeometryTest {
         FAggregate tmp = factory.getFAggregate();
         factory.monitors();
         factory.validators();
-        factory.random().attachLinear2D(null, null);
-        factory.random().distributions().d1().custom(null);
-        factory.random().distributions().d1().custom(null);
 
-        factory.random().generator().nextDouble();
-        factory.random().generator().nextDouble();
-        factory.random().distributions().d1().custom(null);
+
+        factory.random().dist1D().custom(null);
+        factory.random().engine().nextDouble();
+
+        factory.random().attachLinear2D(null, null);
+        factory.random().onAxis(null);
+        factory.random().project(null, null);
+
+        factory.random().engine().nextDouble();
+        factory.random().dist1D().custom(null);
 
 
         FAggregate geo = factory.aggregates().geometries().grid3D(4, 5, 6);

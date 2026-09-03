@@ -1682,7 +1682,7 @@ public class FAssemblyTest {
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-            FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+            FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
             fAssembly.translate(offset);
 
@@ -1709,7 +1709,7 @@ public class FAssemblyTest {
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
 
-            FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+            FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
             fAssembly.translate(offset);
 

@@ -1,6 +1,6 @@
 package eu.scattering.core.test.component.geometry.shape;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -1209,7 +1209,7 @@ public class FSphereTest {
             void getLayerVolume() {
                 FSphere fSphere = factory.getFSphere();
 
-                fSphere.translate(factory.random().generator().nextDoubleInSphere(100));
+                fSphere.translate(factory.random().engine().nextDoubleInSphere(100));
 
                 double vol0 = 4 * Math.PI * Math.pow(1, 3) / 3;
 
@@ -1248,7 +1248,7 @@ public class FSphereTest {
             void getCoatVolume() {
                 FSphere fSphere = factory.getFSphere();
 
-                fSphere.translate(factory.random().generator().nextDoubleInSphere(100));
+                fSphere.translate(factory.random().engine().nextDoubleInSphere(100));
 
                 assertEquals(0, fSphere.getCoatVolume(),
                         epsilon, "The total coat volume is erroneous");
@@ -1304,7 +1304,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -1337,7 +1337,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -1379,7 +1379,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -1409,7 +1409,7 @@ public class FSphereTest {
                         .addCoat(1, 1, 1)
                         .setDelta(delta);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphere.translate(offset);
 
@@ -1454,7 +1454,7 @@ public class FSphereTest {
                         .addCoat(1, 1, 1)
                         .setDelta(delta);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphere.translate(offset);
 
@@ -1575,7 +1575,7 @@ public class FSphereTest {
             void getLayerSurface() {
                 FSphere fSphere = factory.getFSphere();
 
-                fSphere.translate(factory.random().generator().nextDoubleInSphere(100));
+                fSphere.translate(factory.random().engine().nextDoubleInSphere(100));
 
                 double srf0 = 4 * Math.PI * Math.pow(1, 2);
 
@@ -1611,7 +1611,7 @@ public class FSphereTest {
             void getCoatSurface() {
                 FSphere fSphere = factory.getFSphere();
 
-                fSphere.translate(factory.random().generator().nextDoubleInSphere(100));
+                fSphere.translate(factory.random().engine().nextDoubleInSphere(100));
 
                 assertEquals(0, fSphere.getCoatSurface(),
                         epsilon, "The total coat surface is erroneous");
@@ -1667,7 +1667,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -1700,7 +1700,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -1742,7 +1742,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -1772,7 +1772,7 @@ public class FSphereTest {
                         .addCoat(1, 1, 1)
                         .setDelta(delta);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphere.translate(offset);
 
@@ -1813,7 +1813,7 @@ public class FSphereTest {
                         .addCoat(1, 1, 1)
                         .setDelta(delta);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphere.translate(offset);
 
@@ -2080,7 +2080,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
 
@@ -2105,7 +2105,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(4.1));
 
@@ -2200,7 +2200,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
 
@@ -2227,7 +2227,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(4.1));
 
@@ -2400,7 +2400,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(5));
 
@@ -2425,7 +2425,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
 
@@ -2450,7 +2450,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6.01));
 
@@ -2577,7 +2577,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(5));
 
@@ -2604,7 +2604,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
 
@@ -2631,7 +2631,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6.01));
 
@@ -2788,7 +2788,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6));
 
@@ -2813,7 +2813,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
 
@@ -2838,7 +2838,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
 
@@ -2991,7 +2991,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.01);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6));
 
@@ -3018,7 +3018,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.01);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
 
@@ -3045,7 +3045,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.01);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
 
@@ -3186,7 +3186,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
 
@@ -3211,7 +3211,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
 
@@ -3236,7 +3236,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
 
@@ -3405,7 +3405,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
 
@@ -3432,7 +3432,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
 
@@ -3459,7 +3459,7 @@ public class FSphereTest {
                         .setEpsilon(-1)
                         .setDelta(0.005);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
 
@@ -3600,7 +3600,7 @@ public class FSphereTest {
                 Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
                         .setDelta(-1);
 
-                FRandGenerator rand = factory.random().generator();
+                FRandEngine rand = factory.random().engine();
 
                 fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
 
@@ -4102,7 +4102,7 @@ public class FSphereTest {
                         fSphere, fPoint0, fPoint1, fPoint2, fPoint3, fPointOut
                 ));
 
-                fAssembly.translate(factory.random().generator().nextDoubleInSphere(100));
+                fAssembly.translate(factory.random().engine().nextDoubleInSphere(100));
 
                 Assertions.assertAll("Validate positions",
                         () -> assertEquals(0, fSphere.locate(fPoint0),
@@ -4134,7 +4134,7 @@ public class FSphereTest {
                         fSphere, fPoint0, fPoint1, fPoint2, fPoint3, fPointOut
                 ));
 
-                fAssembly.translate(factory.random().generator().nextDoubleInSphere(100));
+                fAssembly.translate(factory.random().engine().nextDoubleInSphere(100));
 
                 Assertions.assertAll("Validate positions",
                         () -> assertEquals(0, fSphere.locate(fPoint0.toFPos3D()),
@@ -4165,7 +4165,7 @@ public class FSphereTest {
 
                 Shape fSphereArg = fSphereProducer.produce();
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4193,7 +4193,7 @@ public class FSphereTest {
 
                 Shape fSphereArg = fSphereProducer.produce();
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4221,7 +4221,7 @@ public class FSphereTest {
 
                 Shape fSphereArg = fSphereProducer.produce();
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4245,7 +4245,7 @@ public class FSphereTest {
                 Shape fSphereRef = factory.getFSphere(1);
                 Shape fSphereArg = factory.getFSphere(5);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4274,7 +4274,7 @@ public class FSphereTest {
 
                 Shape fSphereArg = fSphereProducer.produce();
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4305,7 +4305,7 @@ public class FSphereTest {
 
                 Shape fSphereArg = fSphereProducer.produce();
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4336,7 +4336,7 @@ public class FSphereTest {
 
                 Shape fSphereArg = fSphereProducer.produce();
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4367,7 +4367,7 @@ public class FSphereTest {
 
                 Shape fSphereArg = fSphereProducer.produce();
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4388,7 +4388,7 @@ public class FSphereTest {
                 Shape fSphereRef = factory.getFSphere(0, 1, 0, 1);
                 Shape fSphereArg = factory.getFSphere(0, 0.5, 0, 1);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4426,7 +4426,7 @@ public class FSphereTest {
                 Shape fSphereArg = TestHelper.getRandFSphere();
                 Shape fSphereRef = fSphereArg.copy().setRadius(1);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4445,7 +4445,7 @@ public class FSphereTest {
                 Shape fSphereRef = factory.getFSphere(1, 0, 0, 2);
                 Shape fSphereArg = factory.getFSphere(2, 2, 2, 1);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4466,7 +4466,7 @@ public class FSphereTest {
                 Shape fSphereRef = factory.getFSphere(1, 0, 0, 1);
                 Shape fSphereArg = factory.getFSphere(4, 4, 4, 1);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fSphereRef.translate(offset);
                 fSphereArg.translate(offset);
@@ -4577,7 +4577,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -4601,7 +4601,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -4626,7 +4626,7 @@ public class FSphereTest {
 
                 FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef));
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(1000);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(1000);
 
                 fAssembly.translate(offset);
 
@@ -4732,7 +4732,7 @@ public class FSphereTest {
 
                 FVector path = factory.getFVector(2, 3, -3, 1, 3, -3);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
                 fAssembly.translate(offset);
                 fSphereRef.translate(offset);
@@ -4763,7 +4763,7 @@ public class FSphereTest {
 
                 FVector path = factory.getFVector(2, 3, -3, 1, 3, -3);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
                 fAssembly.translate(offset);
                 fSphereRef.translate(offset);
@@ -4816,7 +4816,7 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere();
                 FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-                fSphereRef.setCenter(factory.random().generator().nextDoubleOnSphere(100));
+                fSphereRef.setCenter(factory.random().engine().nextDoubleOnSphere(100));
 
                 FVector path = factory.getFVector(10, 0, 0, 9, 0, 0);
 
@@ -4836,10 +4836,10 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere();
                 FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-                fSphereRef.setCenter(factory.random().generator().nextDoubleInSphere(100));
+                fSphereRef.setCenter(factory.random().engine().nextDoubleInSphere(100));
 
-                FPoint fRayBase = factory.getFPoint(factory.random().generator().nextDoubleOnSphere(10));
-                FPoint fRayHead = factory.getFPoint(factory.random().generator().nextDoubleInSphere(1.9));
+                FPoint fRayBase = factory.getFPoint(factory.random().engine().nextDoubleOnSphere(10));
+                FPoint fRayHead = factory.getFPoint(factory.random().engine().nextDoubleInSphere(1.9));
 
                 FVector path = factory.getRefFVector(fRayBase, fRayHead);
 
@@ -4859,7 +4859,7 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere();
                 FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-                fSphereRef.setCenter(factory.random().generator().nextDoubleInSphere(100));
+                fSphereRef.setCenter(factory.random().engine().nextDoubleInSphere(100));
 
                 FVector path = factory.getFVector(9, 0, 0, 10, 0, 0);
 
@@ -4877,7 +4877,7 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere();
                 FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-                fSphereRef.setCenter(factory.random().generator().nextDoubleInSphere(100));
+                fSphereRef.setCenter(factory.random().engine().nextDoubleInSphere(100));
 
                 FVector path = factory.getFVector(5, 0, 5, 0, 5, 0);
 
@@ -4901,7 +4901,7 @@ public class FSphereTest {
 
                 FVector path = factory.getFVector(10, 0, 0, 0, 0, 0);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
                 fAssembly.translate(offset);
                 path.translate(offset);
@@ -4932,7 +4932,7 @@ public class FSphereTest {
 
                 FVector path = factory.getFVector(10, 0, 0, 0, 0, 0);
 
-                FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+                FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
                 fAssembly.translate(offset);
                 path.translate(offset);
@@ -4967,8 +4967,8 @@ public class FSphereTest {
                         List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE, fSphereF)
                 );
 
-                FPoint fRayBase = factory.getFPoint(factory.random().generator().nextDoubleOnSphere(10));
-                FPoint fRayHead = factory.getFPoint(factory.random().generator().nextDoubleInSphere(2));
+                FPoint fRayBase = factory.getFPoint(factory.random().engine().nextDoubleOnSphere(10));
+                FPoint fRayHead = factory.getFPoint(factory.random().engine().nextDoubleInSphere(2));
 
                 FVector path = factory.getRefFVector(fRayBase, fRayHead);
 
@@ -5128,7 +5128,7 @@ public class FSphereTest {
                     fAssembly.register(fSphereZero);
                 }
 
-                FPoint fRayBase = factory.getFPoint(factory.random().generator().nextDoubleOnSphere(100));
+                FPoint fRayBase = factory.getFPoint(factory.random().engine().nextDoubleOnSphere(100));
                 FPoint fRayHead = factory.getFPoint();
 
                 FVector path = factory.getRefFVector(fRayBase, fRayHead);

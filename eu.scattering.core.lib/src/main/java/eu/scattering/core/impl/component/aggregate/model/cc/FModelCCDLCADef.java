@@ -225,8 +225,8 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         FAggregate aggB;
 
         do {
-            aggA = this.random.generator().getElement(this.fragments, false);
-            aggB = this.random.generator().getElement(this.fragments, false);
+            aggA = this.random.engine().getElement(this.fragments, false);
+            aggB = this.random.engine().getElement(this.fragments, false);
         } while (aggA == aggB);
 
         buildStepCore(aggA, aggB, index);
@@ -325,7 +325,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private void shuffleFragments() {
 
-        this.random.generator().shuffle(this.fragments);
+        this.random.engine().shuffle(this.fragments);
     }
 
     private void removeFragments() {
@@ -348,13 +348,13 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     private void setMovement2D() {
 
         this.movement = (aggregate, random, position) ->
-                position.set(this.random.generator().nextDoubleOnCircle(this.rp * this.fStep), 0);
+                position.set(this.random.engine().nextDoubleOnCircle(this.rp * this.fStep), 0);
     }
 
     private void setMovement3D() {
 
         this.movement = (aggregate, random, position) ->
-                position.set(this.random.generator().nextDoubleOnSphere(this.rp * this.fStep));
+                position.set(this.random.engine().nextDoubleOnSphere(this.rp * this.fStep));
     }
 
     private void positionVariantDimension(FAggregate aggA, FAggregate aggB) {
@@ -374,7 +374,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private void positionExternal2D(FAggregate aggB) {
 
-        tmpFPoint.set(this.random.generator().nextDoubleOnCircle(this.rSpawn), 0);
+        tmpFPoint.set(this.random.engine().nextDoubleOnCircle(this.rSpawn), 0);
         tmpFPoint.add(this.cAggA);
 
         aggB.getRefParticles().translate(this.cAggB, this.tmpFPoint);
@@ -384,7 +384,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private void positionExternal3D(FAggregate aggB) {
 
-        tmpFPoint.set(this.random.generator().nextDoubleOnSphere(this.rSpawn));
+        tmpFPoint.set(this.random.engine().nextDoubleOnSphere(this.rSpawn));
         tmpFPoint.add(this.cAggA);
 
         aggB.getRefParticles().translate(this.cAggB, this.tmpFPoint);
@@ -395,7 +395,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     private void positionInternal2D(FAggregate aggA, FAggregate aggB) {
 
         do {
-            tmpFPoint.set(this.random.generator().nextDoubleInCircle(this.rSpawn), 0);
+            tmpFPoint.set(this.random.engine().nextDoubleInCircle(this.rSpawn), 0);
             tmpFPoint.add(this.cAggA);
 
             aggB.getRefParticles().translate(this.cAggB, this.tmpFPoint);
@@ -408,7 +408,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     private void positionInternal3D(FAggregate aggA, FAggregate aggB) {
 
         do {
-            tmpFPoint.set(this.random.generator().nextDoubleInSphere(this.rSpawn));
+            tmpFPoint.set(this.random.engine().nextDoubleInSphere(this.rSpawn));
             tmpFPoint.add(this.cAggA);
 
             aggB.getRefParticles().translate(this.cAggB, this.tmpFPoint);

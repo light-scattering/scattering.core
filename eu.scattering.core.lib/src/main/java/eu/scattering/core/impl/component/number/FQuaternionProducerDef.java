@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.number;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -15,16 +15,16 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
 
     private final FQuaternionFactory factory;
     private final ProducerCoreDef<FQuaternion> processor;
-    private final FRandGenerator randomizer;
+    private final FRandEngine randomizer;
 
-    private FQuaternionProducerDef(FQuaternionFactory factory, FRandGenerator randomizer) {
+    private FQuaternionProducerDef(FQuaternionFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
         this.randomizer = randomizer;
         this.processor = new ProducerCoreDef<>(randomizer);
     }
 
-    public static FQuaternionProducer create(FQuaternionFactory factory, FRandGenerator randomizer) {
+    public static FQuaternionProducer create(FQuaternionFactory factory, FRandEngine randomizer) {
 
         return new FQuaternionProducerDef(factory, randomizer);
     }
@@ -38,7 +38,7 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     }
 
     @Override
-    public FQuaternionProducer withCustomRule(BiFunction<FQuaternionFactory, FRandGenerator, FQuaternion> function, int weight) {
+    public FQuaternionProducer withCustomRule(BiFunction<FQuaternionFactory, FRandEngine, FQuaternion> function, int weight) {
 
         this.processor.addConfig(() -> function.apply(factory, randomizer), weight);
 

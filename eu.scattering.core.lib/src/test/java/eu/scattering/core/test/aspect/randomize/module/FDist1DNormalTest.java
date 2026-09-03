@@ -1,8 +1,7 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.normal.FDist1DNormal;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.normal.FRandDist1DNormal;
 import eu.scattering.core.design.statistics.base.FStat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,8 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FDistFactoryContext random = factory.random().distributions();
-        FDist1D dist = random.d1().normal(mean, std);
+        var random = factory.random();
+        FRandDist1D dist = random.dist1D().normal(mean, std);
 
         FStat fStat = factory.getFStat();
 
@@ -38,16 +37,16 @@ public class FDist1DNormalTest {
     @Test
     @DisplayName("Construct with parameters - Erroneous standard deviation")
     void constructWithParametersErroneousStd() {
-        FDistFactoryContext random = factory.random().distributions();
+        var random = factory.random();
 
-        assertThrows(IllegalArgumentException.class, () -> random.d1().normal(10, -1));
+        assertThrows(IllegalArgumentException.class, () -> random.dist1D().normal(10, -1));
     }
 
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist1D dist = random.d1().normal(10, 1);
+        var random = factory.random();
+        FRandDist1D dist = random.dist1D().normal(10, 1);
 
         double[] arr = new double[1];
 
@@ -59,8 +58,8 @@ public class FDist1DNormalTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist1D dist = random.d1().normal(10, 1);
+        var random = factory.random();
+        FRandDist1D dist = random.dist1D().normal(10, 1);
 
         double[] arr = new double[0];
 
@@ -73,8 +72,8 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FDistFactoryContext random = factory.random().distributions();
-        FDist1DNormal dist = random.d1().normal(mean, std);
+        var random = factory.random();
+        FRandDist1DNormal dist = random.dist1D().normal(mean, std);
 
         dist.setCutoffMin(mean);
 
@@ -91,8 +90,8 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FDistFactoryContext random = factory.random().distributions();
-        FDist1DNormal dist = random.d1().normal(mean, std);
+        var random = factory.random();
+        FRandDist1DNormal dist = random.dist1D().normal(mean, std);
 
         dist.setCutoffMax(5);
 
@@ -105,8 +104,8 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FDistFactoryContext random = factory.random().distributions();
-        FDist1DNormal dist = random.d1().normal(mean, std);
+        var random = factory.random();
+        FRandDist1DNormal dist = random.dist1D().normal(mean, std);
 
         dist.setCutoffMax(mean);
 
@@ -123,8 +122,8 @@ public class FDist1DNormalTest {
         double mean = 10;
         double std = 1;
 
-        FDistFactoryContext random = factory.random().distributions();
-        FDist1DNormal dist = random.d1().normal(mean, std);
+        var random = factory.random();
+        FRandDist1DNormal dist = random.dist1D().normal(mean, std);
 
         dist.setCutoffMin(15);
 

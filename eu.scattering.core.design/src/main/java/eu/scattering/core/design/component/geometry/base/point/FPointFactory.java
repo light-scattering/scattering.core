@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.option.Location;
@@ -53,7 +53,7 @@ public interface FPointFactory {
         return getFPointProducer().withCustomRule(function);
     }
 
-    default FPointProducer getFPointProducer(FDist3D dist) {
+    default FPointProducer getFPointProducer(FRandDist3D dist) {
 
         return getFPointProducer().withDist(dist);
     }

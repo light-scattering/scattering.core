@@ -117,7 +117,7 @@ public class FModelPCRLADef implements FModelPCRLA {
     }
 
     private void initParticleA() {
-        Shape particle = this.random.generator().getElement(this.detached, true);
+        Shape particle = this.random.engine().getElement(this.detached, true);
 
         particle.setCenter(0, 0, 0);
 
@@ -129,11 +129,11 @@ public class FModelPCRLADef implements FModelPCRLA {
     }
 
     private boolean buildStep() {
-        Shape particle = this.random.generator().getElement(this.detached, false);
+        Shape particle = this.random.engine().getElement(this.detached, false);
 
         step:
         while (this.bases.size() != 0) {
-            int baseIndex = random.generator().nextInteger(0, this.bases.size());
+            int baseIndex = random.engine().nextInteger(0, this.bases.size());
             Shape base = this.bases.get(baseIndex);
 
             boolean isPositioned = attachVariantDimension(particle, base);

@@ -1,7 +1,6 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,8 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Construct with primitives")
     void constructWithPrimitives() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().uniform(1.1, 1.2, 3.1, 3.2, 5.1, 5.2);
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().uniform(1.1, 1.2, 3.1, 3.2, 5.1, 5.2);
 
         double sumX = 0;
         double sumY = 0;
@@ -42,8 +41,8 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Construct with FPairPos3D")
     void constructWithFPairPos3D() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().uniform(
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().uniform(
                 factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
         double sumX = 0;
@@ -67,8 +66,8 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().uniform(
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().uniform(
                 factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
         double sumX = 0;
@@ -93,8 +92,8 @@ public class FDist3DUniformTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().uniform(
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().uniform(
                 factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
         double[] arr = new double[2];

@@ -2,9 +2,9 @@ package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.functionality.Producer;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public interface FSphereProducer extends Producer<FSphere> {
 
     FSphereProducer addMutation(Consumer<List<FSphere>> mutation);
 
-    FSphereProducer addCorrection(BiConsumer<FSphere, FRandGenerator> correction);
+    FSphereProducer addCorrection(BiConsumer<FSphere, FRandEngine> correction);
 
     FSphereProducer addValidation(BiFunction<FSphere, List<FSphere>, Boolean> validation);
 
@@ -59,13 +59,13 @@ public interface FSphereProducer extends Producer<FSphere> {
     FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandAspect, FSphere> function, int weight);
 
     FSphereProducer withFixRadius(double radius, int weight);
-    FSphereProducer withDistRadius(FDist1D radius, int weight);
+    FSphereProducer withDistRadius(FRandDist1D radius, int weight);
 
-    FSphereProducer withDistCenterAndFixRadius(FDist3D dCenter, double radius, int weight);
-    FSphereProducer withDistCenterAndDistRadius(FDist3D dCenter, FDist1D radius, int weight);
+    FSphereProducer withDistCenterAndFixRadius(FRandDist3D dCenter, double radius, int weight);
+    FSphereProducer withDistCenterAndDistRadius(FRandDist3D dCenter, FRandDist1D radius, int weight);
 
     FSphereProducer withProdCenterAndFixRadius(Producer<FPoint> pCenter, double radius, int weight);
-    FSphereProducer withProdCenterAndDistRadius(Producer<FPoint> pCenter, FDist1D radius, int weight);
+    FSphereProducer withProdCenterAndDistRadius(Producer<FPoint> pCenter, FRandDist1D radius, int weight);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -84,17 +84,17 @@ public interface FSphereProducer extends Producer<FSphere> {
         return withFixRadius(radius, 1);
     }
 
-    default FSphereProducer withDistRadius(FDist1D radius) {
+    default FSphereProducer withDistRadius(FRandDist1D radius) {
 
         return withDistRadius(radius, 1);
     }
 
-    default FSphereProducer withDistCenterAndFixRadius(FDist3D dCenter, double radius) {
+    default FSphereProducer withDistCenterAndFixRadius(FRandDist3D dCenter, double radius) {
 
         return withDistCenterAndFixRadius(dCenter, radius, 1);
     }
 
-    default FSphereProducer withDistCenterAndDistRadius(FDist3D dCenter, FDist1D radius) {
+    default FSphereProducer withDistCenterAndDistRadius(FRandDist3D dCenter, FRandDist1D radius) {
 
         return withDistCenterAndDistRadius(dCenter, radius, 1);
     }
@@ -104,7 +104,7 @@ public interface FSphereProducer extends Producer<FSphere> {
         return withProdCenterAndFixRadius(pCenter, radius, 1);
     }
 
-    default FSphereProducer withProdCenterAndDistRadius(Producer<FPoint> pCenter, FDist1D radius) {
+    default FSphereProducer withProdCenterAndDistRadius(Producer<FPoint> pCenter, FRandDist1D radius) {
 
         return withProdCenterAndDistRadius(pCenter, radius, 1);
     }

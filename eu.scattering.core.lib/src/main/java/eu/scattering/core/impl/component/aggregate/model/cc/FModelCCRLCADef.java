@@ -146,8 +146,8 @@ public class FModelCCRLCADef implements FModelCCRLCA {
         FAggregate aggB;
 
         do {
-            aggA = this.random.generator().getElement(this.fragments, false);
-            aggB = this.random.generator().getElement(this.fragments, false);
+            aggA = this.random.engine().getElement(this.fragments, false);
+            aggB = this.random.engine().getElement(this.fragments, false);
         } while (aggA == aggB);
 
         buildStepCore(aggA, aggB, index);
@@ -224,7 +224,7 @@ public class FModelCCRLCADef implements FModelCCRLCA {
 
     private void shuffleFragments() {
 
-        this.random.generator().shuffle(this.fragments);
+        this.random.engine().shuffle(this.fragments);
     }
 
     private void removeFragments() {

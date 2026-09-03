@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.geometry.shape;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.ShapeProducer;
 import eu.scattering.core.design.functionality.Producer;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -23,14 +23,14 @@ public class ShapeProducerDef implements ShapeProducer {
 
     private final ProducerCoreDef<Shape> processor;
 
-    private ShapeProducerDef(FRandGenerator randomizer) {
+    private ShapeProducerDef(FRandEngine randomizer) {
 
         this.processor = new ProducerCoreDef<>(randomizer);
 
         this.processor.addMutation(MUTATION_ITERATION);
     }
 
-    public static ShapeProducer create(FRandGenerator randomizer) {
+    public static ShapeProducer create(FRandEngine randomizer) {
 
         return new ShapeProducerDef(randomizer);
     }

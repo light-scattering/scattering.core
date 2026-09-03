@@ -64,7 +64,7 @@ public class ShapeRandomizeTest {
         FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(10));
         fAssembly.register(fSphereCenter);
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fAssembly.translate(offset);
 
@@ -80,10 +80,10 @@ public class ShapeRandomizeTest {
     @Test
     @DisplayName("Attach spherical (single)")
     void attachSphericalSingle() {
-        FSphere fSphereRef = factory.getFSphere(factory.random().generator().nextDoubleInShell(8.01, 11.99));
-        FSphere fSphereArg = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(10));
+        FSphere fSphereRef = factory.getFSphere(factory.random().engine().nextDoubleInShell(8.01, 11.99));
+        FSphere fSphereArg = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(10));
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fSphereRef.translate(offset);
         fSphereArg.translate(offset);
@@ -100,10 +100,10 @@ public class ShapeRandomizeTest {
     @Test
     @DisplayName("Attach spherical (single) with FPoint")
     void attachSphericalSingleWithFPoint() {
-        FSphere fSphereRef = factory.getFSphere(factory.random().generator().nextDoubleInShell(8.01, 11.99));
-        FSphere fSphereArg = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(10));
+        FSphere fSphereRef = factory.getFSphere(factory.random().engine().nextDoubleInShell(8.01, 11.99));
+        FSphere fSphereArg = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(10));
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fSphereRef.translate(offset);
         fSphereArg.translate(offset);
@@ -120,10 +120,10 @@ public class ShapeRandomizeTest {
     @Test
     @DisplayName("Attach spherical (single) with FPos3D")
     void attachSphericalSingleWithFPos3D() {
-        FSphere fSphereRef = factory.getFSphere(factory.random().generator().nextDoubleInShell(8.01, 11.99));
-        FSphere fSphereArg = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(10));
+        FSphere fSphereRef = factory.getFSphere(factory.random().engine().nextDoubleInShell(8.01, 11.99));
+        FSphere fSphereArg = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(10));
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fSphereRef.translate(offset);
         fSphereArg.translate(offset);
@@ -140,8 +140,8 @@ public class ShapeRandomizeTest {
     @Test
     @DisplayName("Attach spherical")
     void attachSpherical() {
-        FSphere fSphereRef = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(5));
-        FSphere fSphereArg = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(5));
+        FSphere fSphereRef = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(5));
+        FSphere fSphereArg = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(5));
 
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
@@ -153,7 +153,7 @@ public class ShapeRandomizeTest {
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fAssembly.translate(offset);
 
@@ -170,8 +170,8 @@ public class ShapeRandomizeTest {
     @Test
     @DisplayName("Attach spherical with FPoint")
     void attachSphericalWithFPoint() {
-        FSphere fSphereRef = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(5));
-        FSphere fSphereArg = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(5));
+        FSphere fSphereRef = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(5));
+        FSphere fSphereArg = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(5));
 
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
@@ -183,7 +183,7 @@ public class ShapeRandomizeTest {
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fAssembly.translate(offset);
 
@@ -200,8 +200,8 @@ public class ShapeRandomizeTest {
     @Test
     @DisplayName("Attach spherical with FPos3D")
     void attachSphericalWithFPos3D() {
-        FSphere fSphereRef = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(5));
-        FSphere fSphereArg = factory.getFSphere(factory.random().generator().nextDoubleOnSphere(5));
+        FSphere fSphereRef = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(5));
+        FSphere fSphereArg = factory.getFSphere(factory.random().engine().nextDoubleOnSphere(5));
 
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
@@ -213,7 +213,7 @@ public class ShapeRandomizeTest {
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fAssembly.translate(offset);
 
@@ -231,7 +231,7 @@ public class ShapeRandomizeTest {
     @DisplayName("Attach linear and spherical")
     void attachLinearAndSpherical() {
         FSphere fSphereRef = factory.getFSphere();
-        FSphere fSphereArg = factory.getFSphere(factory.random().generator().nextDoubleInSphere(5));
+        FSphere fSphereArg = factory.getFSphere(factory.random().engine().nextDoubleInSphere(5));
 
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
@@ -243,7 +243,7 @@ public class ShapeRandomizeTest {
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fAssembly.translate(offset);
 
@@ -271,7 +271,7 @@ public class ShapeRandomizeTest {
 
         fAssembly.register(fSphereRef);
 
-        FPos3D offset = factory.random().generator().nextDoubleInSphere(100);
+        FPos3D offset = factory.random().engine().nextDoubleInSphere(100);
 
         fAssembly.translate(offset);
 
@@ -299,7 +299,7 @@ public class ShapeRandomizeTest {
 
         fAssembly.register(fSphereRef);
 
-        FPos3D offset = factory.getFPos3D(factory.random().generator().nextDoubleInCircle(100), 0);
+        FPos3D offset = factory.getFPos3D(factory.random().engine().nextDoubleInCircle(100), 0);
 
         double distance = factory.random()
                 .project2D(fSphereRef, offset, 10, fAssembly, 100);

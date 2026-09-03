@@ -1,7 +1,6 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -17,8 +16,8 @@ public class FDist3DFixedTest {
     @Test
     @DisplayName("Construct with primitives")
     void constructWithPrimitives() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().fixed(1, 2, 3);
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().fixed(1, 2, 3);
 
         for (int i = 0 ; i < 10 ; i++) {
             assertEquals(factory.getFPos3D(1, 2, 3), dist.produce(),
@@ -29,8 +28,8 @@ public class FDist3DFixedTest {
     @Test
     @DisplayName("Construct with FPos3D")
     void constructWithFPos3D() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().fixed(factory.getFPos3D(1, 2, 3));
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().fixed(factory.getFPos3D(1, 2, 3));
 
         for (int i = 0 ; i < 10 ; i++) {
             assertEquals(factory.getFPos3D(1, 2, 3), dist.produce(),
@@ -41,8 +40,8 @@ public class FDist3DFixedTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().fixed(factory.getFPos3D(1, 2, 3));
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().fixed(factory.getFPos3D(1, 2, 3));
 
         double[] arr = new double[3];
         for (int i = 0 ; i < 10 ; i++) {
@@ -59,8 +58,8 @@ public class FDist3DFixedTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().fixed(factory.getFPos3D(1, 2, 3));
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().fixed(factory.getFPos3D(1, 2, 3));
 
         double[] arr = new double[2];
 

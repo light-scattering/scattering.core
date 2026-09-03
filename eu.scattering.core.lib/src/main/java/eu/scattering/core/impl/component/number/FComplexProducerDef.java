@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.number;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexFactory;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -15,16 +15,16 @@ public class FComplexProducerDef implements FComplexProducer {
 
     private final FComplexFactory factory;
     private final ProducerCoreDef<FComplex> processor;
-    private final FRandGenerator randomizer;
+    private final FRandEngine randomizer;
 
-    private FComplexProducerDef(FComplexFactory factory, FRandGenerator randomizer) {
+    private FComplexProducerDef(FComplexFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
         this.randomizer = randomizer;
         this.processor = new ProducerCoreDef<>(randomizer);
     }
 
-    public static FComplexProducer create(FComplexFactory factory, FRandGenerator randomizer) {
+    public static FComplexProducer create(FComplexFactory factory, FRandEngine randomizer) {
 
         return new FComplexProducerDef(factory, randomizer);
     }
@@ -38,7 +38,7 @@ public class FComplexProducerDef implements FComplexProducer {
     }
 
     @Override
-    public FComplexProducer withCustomRule(BiFunction<FComplexFactory, FRandGenerator, FComplex> function, int weight) {
+    public FComplexProducer withCustomRule(BiFunction<FComplexFactory, FRandEngine, FComplex> function, int weight) {
 
         this.processor.addConfig(() -> function.apply(factory, randomizer), weight);
 

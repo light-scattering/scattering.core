@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.complex;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.design.functionality.Producer;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public interface FComplexProducer extends Producer<FComplex> {
     // -------------------------------------------------------------------------------------------------
 
     FComplexProducer withCustomRule(Function<FComplexFactory, FComplex> function, int weight);
-    FComplexProducer withCustomRule(BiFunction<FComplexFactory, FRandGenerator, FComplex> function, int weight);
+    FComplexProducer withCustomRule(BiFunction<FComplexFactory, FRandEngine, FComplex> function, int weight);
 
     FComplexProducer withZero(int weight);
 
@@ -42,7 +42,7 @@ public interface FComplexProducer extends Producer<FComplex> {
         return withCustomRule(function, 1);
     }
 
-    default FComplexProducer withCustomRule(BiFunction<FComplexFactory, FRandGenerator, FComplex> function) {
+    default FComplexProducer withCustomRule(BiFunction<FComplexFactory, FRandEngine, FComplex> function) {
 
         return withCustomRule(function, 1);
     }

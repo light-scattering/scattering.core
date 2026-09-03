@@ -4,8 +4,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
@@ -20,14 +20,14 @@ public class FPointProducerDef implements FPointProducer {
 
     private final FPointFactory factory;
     private final ProducerCoreDef<FPoint> processor;
-    private final FRandGenerator rndGenerator;
+    private final FRandEngine rndGenerator;
     private final FRandAspect rndAspect;
 
     private FPointProducerDef(FPointFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.rndGenerator = randomizer.generator();
+        this.rndGenerator = randomizer.engine();
         this.processor = new ProducerCoreDef<>(this.rndGenerator);
     }
 
@@ -104,7 +104,7 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer withDist(FDist3D dist, int weight) {
+    public FPointProducer withDist(FRandDist3D dist, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
                 factory.getFPoint().set(dist.produce());
 
@@ -186,7 +186,7 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer addCorrection(BiConsumer<FPoint, FRandGenerator> correction) {
+    public FPointProducer addCorrection(BiConsumer<FPoint, FRandEngine> correction) {
 
         this.processor.addCorrection(correction);
 

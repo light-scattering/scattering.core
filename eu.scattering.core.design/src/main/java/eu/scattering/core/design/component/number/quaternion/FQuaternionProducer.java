@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.quaternion;
 
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.design.functionality.Producer;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public interface FQuaternionProducer extends Producer<FQuaternion> {
     // -------------------------------------------------------------------------------------------------
 
     FQuaternionProducer withCustomRule(Function<FQuaternionFactory, FQuaternion> function, int weight);
-    FQuaternionProducer withCustomRule(BiFunction<FQuaternionFactory, FRandGenerator, FQuaternion> function, int weight);
+    FQuaternionProducer withCustomRule(BiFunction<FQuaternionFactory, FRandEngine, FQuaternion> function, int weight);
 
     FQuaternionProducer withZero(int weight);
 
@@ -42,7 +42,7 @@ public interface FQuaternionProducer extends Producer<FQuaternion> {
         return withCustomRule(function, 1);
     }
 
-    default FQuaternionProducer withCustomRule(BiFunction<FQuaternionFactory, FRandGenerator, FQuaternion> function) {
+    default FQuaternionProducer withCustomRule(BiFunction<FQuaternionFactory, FRandEngine, FQuaternion> function) {
 
         return withCustomRule(function, 1);
     }

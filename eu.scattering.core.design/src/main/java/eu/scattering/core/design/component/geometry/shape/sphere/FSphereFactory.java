@@ -1,8 +1,8 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -74,17 +74,17 @@ public interface FSphereFactory {
         return getFSphereProducer().withFixRadius(radius);
     }
 
-    default FSphereProducer getFSphereProducer(FDist1D radius) {
+    default FSphereProducer getFSphereProducer(FRandDist1D radius) {
 
         return getFSphereProducer().withDistRadius(radius);
     }
 
-    default FSphereProducer getFSphereProducer(FDist3D dCenter, double radius) {
+    default FSphereProducer getFSphereProducer(FRandDist3D dCenter, double radius) {
 
         return getFSphereProducer().withDistCenterAndFixRadius(dCenter, radius);
     }
 
-    default FSphereProducer getFSphereProducer(FDist3D dCenter, FDist1D radius) {
+    default FSphereProducer getFSphereProducer(FRandDist3D dCenter, FRandDist1D radius) {
 
         return getFSphereProducer().withDistCenterAndDistRadius(dCenter, radius);
     }
@@ -94,7 +94,7 @@ public interface FSphereFactory {
         return getFSphereProducer().withProdCenterAndFixRadius(pCenter, radius);
     }
 
-    default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, FDist1D radius) {
+    default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, FRandDist1D radius) {
 
         return getFSphereProducer().withProdCenterAndDistRadius(pCenter, radius);
     }

@@ -1,7 +1,6 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import org.junit.jupiter.api.DisplayName;
@@ -19,14 +18,14 @@ public class FDist3DNormalTest {
     @Test
     @DisplayName("Use configuration - Default")
     void useConfigurationDefault() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().normal();
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().normal();
 
         FStat d0Axis = factory.getFStat();
         FStat d1Axis = factory.getFStat();
         FStat d2Axis = factory.getFStat();
 
-        FPos3D dir = factory.random().generator().nextDoubleOnSphere(1);
+        FPos3D dir = factory.random().engine().nextDoubleOnSphere(1);
         FStat dirAxis = factory.getFStat();
 
         double[] valB = new double[3];
@@ -78,8 +77,8 @@ public class FDist3DNormalTest {
     @Test
     @DisplayName("Use configuration - Custom")
     void useConfigurationCustom() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().normal()
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().normal()
                 .setAvg(-1, 1, 10)
                 .setStd(0.5, 0.1, 2)
                 .setCorD01(0.5)
@@ -92,7 +91,7 @@ public class FDist3DNormalTest {
         FStat d2Axis = factory.getFStat();
 
         double[] valB = new double[3];
-        for (int i = 0 ; i < 5000 ; i++) {
+        for (int i = 0 ; i < 10000 ; i++) {
             FPos3D valA = dist.produce();
 
             d0Axis.add(valA.getD0());
@@ -138,12 +137,11 @@ public class FDist3DNormalTest {
     @Test
     @DisplayName("Use configuration - Erroneous")
     void useConfigurationErroneous() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist3D dist = random.d3().normal()
+        var random = factory.random();
+        FRandDist3D dist = random.dist3D().normal()
                 .setCorD01(0.5)
                 .setCorD02(-0.7)
                 .setCorD12(0.9);
-
 
         assertThrows(IllegalStateException.class, dist::produce);
     }

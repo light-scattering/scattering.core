@@ -2,7 +2,7 @@ package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -30,7 +30,7 @@ public class FModelPCDLADef implements FModelPCDLA {
 
     private TriConsumer<Shape, FRandAspect, FPoint> movement;
 
-    private final FRandGenerator rndGen;
+    private final FRandEngine rndGen;
     private final FRandAspect rndEng;
 
     private final FAggregate aggregate;
@@ -66,7 +66,7 @@ public class FModelPCDLADef implements FModelPCDLA {
         this.validators = new ArrayList<>();
 
         this.rndEng = factory.random();
-        this.rndGen = this.rndEng.generator();
+        this.rndGen = this.rndEng.engine();
 
         this.aggregate = aggregate;
 

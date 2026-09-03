@@ -1,7 +1,6 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
-import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FDist2D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FRandDist2D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -17,8 +16,8 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Construct with primitives")
     void constructWithPrimitives() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist2D dist = random.d2().fixed(1, 2);
+        var random = factory.random();
+        FRandDist2D dist = random.dist2D().fixed(1, 2);
 
         for (int i = 0 ; i < 10 ; i++) {
             assertEquals(factory.getFPos2D(1, 2), dist.produce(),
@@ -29,8 +28,8 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Construct with FPos2D")
     void constructWithFPos2D() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist2D dist = random.d2().fixed(factory.getFPos2D(1, 2));
+        var random = factory.random();
+        FRandDist2D dist = random.dist2D().fixed(factory.getFPos2D(1, 2));
 
         for (int i = 0 ; i < 10 ; i++) {
             assertEquals(factory.getFPos2D(1, 2), dist.produce(),
@@ -41,8 +40,8 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist2D dist = random.d2().fixed(factory.getFPos2D(1, 2));
+        var random = factory.random();
+        FRandDist2D dist = random.dist2D().fixed(factory.getFPos2D(1, 2));
 
         double[] arr = new double[2];
         for (int i = 0 ; i < 10 ; i++) {
@@ -57,8 +56,8 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist2D dist = random.d2().fixed(factory.getFPos2D(1, 2));
+        var random = factory.random();
+        FRandDist2D dist = random.dist2D().fixed(factory.getFPos2D(1, 2));
 
         double[] arr = new double[1];
 

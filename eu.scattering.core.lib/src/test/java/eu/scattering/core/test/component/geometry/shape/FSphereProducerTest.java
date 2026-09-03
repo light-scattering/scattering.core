@@ -5,8 +5,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3D;
 import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import eu.scattering.core.impl.factory.ScatterFactoryDef;
@@ -547,7 +547,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist radius")
     void presetDistRadius() {
-        FDist1D radius = factory.random().distributions().d1()
+        FRandDist1D radius = factory.random().dist1D()
                 .uniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
@@ -573,7 +573,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist radius (simple)")
     void presetDistRadiusSimple() {
-        FDist1D radius = factory.random().distributions().d1()
+        FRandDist1D radius = factory.random().dist1D()
                 .uniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
@@ -629,7 +629,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist center and fixed radius")
     void presetDistCenterAndFixedRadius() {
-        FDist3D center = factory.random().distributions().d3()
+        FRandDist3D center = factory.random().dist3D()
                 .custom((random, results) -> {
                     results[0] = 1.0;
                     results[1] = 2.0;
@@ -693,7 +693,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset center and dist radius")
     void presetCenterAndDistRadius() {
-        FDist1D radius = factory.random().distributions().d1()
+        FRandDist1D radius = factory.random().dist1D()
                 .uniform(epsilon, 0.001);
 
         FPointProducer center = factory.getFPointProducer()
@@ -726,10 +726,10 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist center and dist radius")
     void presetDistCenterAndDistRadius() {
-        FDist1D radius = factory.random().distributions().d1()
+        FRandDist1D radius = factory.random().dist1D()
                 .uniform(epsilon, 0.001);
 
-        FDist3D center = factory.random().distributions().d3()
+        FRandDist3D center = factory.random().dist3D()
                 .custom((random, results) -> {
                     results[0] = 1.0;
                     results[1] = 2.0;
@@ -763,7 +763,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset center and dist radius (simple)")
     void presetCenterAndDistRadiusSimple() {
-        FDist1D radius = factory.random().distributions().d1()
+        FRandDist1D radius = factory.random().dist1D()
                 .uniform(epsilon, 0.001);
 
         FPointProducer pCenter = factory.getFPointProducer()
@@ -938,20 +938,20 @@ public class FSphereProducerTest {
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer((factory) -> {
-            double x = factoryA.random().generator().nextDouble();
-            double y = factoryA.random().generator().nextDouble();
-            double z = factoryA.random().generator().nextDouble();
-            double r = factoryA.random().generator().nextDouble();
+            double x = factoryA.random().engine().nextDouble();
+            double y = factoryA.random().engine().nextDouble();
+            double z = factoryA.random().engine().nextDouble();
+            double r = factoryA.random().engine().nextDouble();
 
             return factory.getFSphere(x, y, z, r);
         });
 
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
                 .withCustomRule((factory) -> {
-                    double x = factoryB.random().generator().nextDouble();
-                    double y = factoryB.random().generator().nextDouble();
-                    double z = factoryB.random().generator().nextDouble();
-                    double r = factoryB.random().generator().nextDouble();
+                    double x = factoryB.random().engine().nextDouble();
+                    double y = factoryB.random().engine().nextDouble();
+                    double z = factoryB.random().engine().nextDouble();
+                    double r = factoryB.random().engine().nextDouble();
 
                     return factory.getFSphere(x, y, z, r);
                 });
@@ -973,20 +973,20 @@ public class FSphereProducerTest {
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer((factory, random) -> {
-            double x = random.generator().nextDouble();
-            double y = random.generator().nextDouble();
-            double z = random.generator().nextDouble();
-            double r = random.generator().nextDouble();
+            double x = random.engine().nextDouble();
+            double y = random.engine().nextDouble();
+            double z = random.engine().nextDouble();
+            double r = random.engine().nextDouble();
 
             return factory.getFSphere(x, y, z, r);
         });
 
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
                 .withCustomRule((factory, random) -> {
-                    double x = random.generator().nextDouble();
-                    double y = random.generator().nextDouble();
-                    double z = random.generator().nextDouble();
-                    double r = random.generator().nextDouble();
+                    double x = random.engine().nextDouble();
+                    double y = random.engine().nextDouble();
+                    double z = random.engine().nextDouble();
+                    double r = random.engine().nextDouble();
 
                     return factory.getFSphere(x, y, z, r);
                 });
@@ -1027,8 +1027,8 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist1D distA = factoryA.random().distributions().d1().uniform(1, 2);
-        FDist1D distB = factoryB.random().distributions().d1().uniform(1, 2);
+        FRandDist1D distA = factoryA.random().dist1D().uniform(1, 2);
+        FRandDist1D distB = factoryB.random().dist1D().uniform(1, 2);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
@@ -1050,8 +1050,8 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPA = factoryA.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPB = factoryB.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
 
         Producer<FPoint> prodA = factoryA.getFPointProducer(distPA);
         Producer<FPoint> prodB = factoryB.getFPointProducer(distPB);
@@ -1076,14 +1076,14 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPA = factoryA.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPB = factoryB.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
 
         Producer<FPoint> prodA = factoryA.getFPointProducer(distPA);
         Producer<FPoint> prodB = factoryB.getFPointProducer(distPB);
 
-        FDist1D distRA = factoryA.random().distributions().d1().uniform(1, 2);
-        FDist1D distRB = factoryB.random().distributions().d1().uniform(1, 2);
+        FRandDist1D distRA = factoryA.random().dist1D().uniform(1, 2);
+        FRandDist1D distRB = factoryB.random().dist1D().uniform(1, 2);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(prodA, distRA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
@@ -1105,8 +1105,8 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPA = factoryA.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPB = factoryB.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, 5);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
@@ -1128,11 +1128,11 @@ public class FSphereProducerTest {
         ScatterFactory factoryA = ScatterFactoryDef.create(seed);
         ScatterFactory factoryB = ScatterFactoryDef.create(seed);
 
-        FDist3D distPA = factoryA.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
-        FDist3D distPB = factoryB.random().distributions().d3().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPA = factoryA.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
+        FRandDist3D distPB = factoryB.random().dist3D().uniform(-1, 1, -1, 1, -1, 1);
 
-        FDist1D distRA = factoryA.random().distributions().d1().uniform(1, 2);
-        FDist1D distRB = factoryB.random().distributions().d1().uniform(1, 2);
+        FRandDist1D distRA = factoryA.random().dist1D().uniform(1, 2);
+        FRandDist1D distRB = factoryB.random().dist1D().uniform(1, 2);
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, distRA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()

@@ -5,7 +5,7 @@ import eu.scattering.core.design.aspect.save.FSaveAspect;
 import eu.scattering.core.design.aspect.load.FLoadAspect;
 import eu.scattering.core.design.aspect.prototype.FProtoAspect;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
@@ -91,7 +91,7 @@ import eu.scattering.core.impl.aspect.save.FSaveAspectDef;
 import eu.scattering.core.impl.aspect.load.FLoadAspectDef;
 import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
-import eu.scattering.core.impl.aspect.randomize.FRandGeneratorDef;
+import eu.scattering.core.impl.aspect.randomize.FRandEngineDef;
 import eu.scattering.core.impl.aspect.rotate.FRotAspectDef;
 import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.aspect.rotate.transfer.FRotQtDef;
@@ -145,7 +145,7 @@ import java.util.List;
 public final class ScatterFactoryDef implements ScatterFactory {
     private final GeometryParser fGeometryParser;
 
-    private final FRandGenerator fRandGenerator;
+    private final FRandEngine fRandGenerator;
     private final FRotGenerator fRotGenerator;
 
     private final FSaveAspect fAspectExport;
@@ -166,12 +166,12 @@ public final class ScatterFactoryDef implements ScatterFactory {
     private final FSphereHelper fSphereHelper;
 
     private ScatterFactoryDef() {
-        this.fRandGenerator = FRandGeneratorDef.create(this);
+        this.fRandGenerator = FRandEngineDef.create(this);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
     }
 
     private ScatterFactoryDef(long seed) {
-        this.fRandGenerator = FRandGeneratorDef.create(this, seed);
+        this.fRandGenerator = FRandEngineDef.create(this, seed);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
     }
 

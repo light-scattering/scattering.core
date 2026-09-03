@@ -1,6 +1,6 @@
 package eu.scattering.core.test.aspect.export;
 
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1D;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
@@ -105,10 +105,10 @@ public class ComponentAspectExportTest {
     void exportPovRayRLCA3DPlain() {
         int quantity = 100;
 
-        FDist1D setDist1 = factory.random().distributions().d1().normal(5, 0.5);
+        FRandDist1D setDist1 = factory.random().dist1D().normal(5, 0.5);
         FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
 
-        FDist1D setDist2 = factory.random().distributions().d1().normal(10, 1);
+        FRandDist1D setDist2 = factory.random().dist1D().normal(10, 1);
         FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
 
         FAssembly<Shape> core = factory.getFAssembly();
@@ -138,10 +138,10 @@ public class ComponentAspectExportTest {
     void exportPovRayRLCA3DBox() {
         int quantity = 100;
 
-        FDist1D setDist1 = factory.random().distributions().d1().normal(5, 0.5);
+        FRandDist1D setDist1 = factory.random().dist1D().normal(5, 0.5);
         FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
 
-        FDist1D setDist2 = factory.random().distributions().d1().normal(10, 1);
+        FRandDist1D setDist2 = factory.random().dist1D().normal(10, 1);
         FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
 
         FAssembly<Shape> core = factory.getFAssembly();
@@ -171,10 +171,10 @@ public class ComponentAspectExportTest {
     void exportPovRayRLCA3DRadius() {
         int quantity = 100;
 
-        FDist1D setDist1 = factory.random().distributions().d1().normal(5, 0.5);
+        FRandDist1D setDist1 = factory.random().dist1D().normal(5, 0.5);
         FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
 
-        FDist1D setDist2 = factory.random().distributions().d1().normal(10, 1);
+        FRandDist1D setDist2 = factory.random().dist1D().normal(10, 1);
         FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
 
         FAssembly<Shape> core = factory.getFAssembly();

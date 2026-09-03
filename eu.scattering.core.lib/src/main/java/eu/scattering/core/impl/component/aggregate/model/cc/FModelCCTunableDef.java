@@ -194,8 +194,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
         FAggregate aggB;
 
         do {
-            aggA = this.random.generator().getElement(this.fragments, false);
-            aggB = this.random.generator().getElement(this.fragments, false);
+            aggA = this.random.engine().getElement(this.fragments, false);
+            aggB = this.random.engine().getElement(this.fragments, false);
         } while (aggA == aggB);
 
         boolean proceed = buildStepCore(aggA, aggB, index);
@@ -294,7 +294,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
         List<Shape> particles = this.aggregate.getRefParticles().asList();
 
-        this.random.generator().shuffle(particles);
+        this.random.engine().shuffle(particles);
 
         for (int i = 0 ; i < particles.size() ; i++) {
             this.fragments.get(i % this.fragments.size()).addRefParticle(particles.get(i));
@@ -310,7 +310,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
     private void shuffleFragments() {
 
-        this.random.generator().shuffle(this.fragments);
+        this.random.engine().shuffle(this.fragments);
     }
 
     private void buildFragments() {
@@ -372,8 +372,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
     private void moveCenterVariantDimension(double distance) {
 
         switch (this.dimension) {
-            case D3 -> this.centerTmp.add(this.random.generator().nextDoubleOnSphere(distance));
-            case D2 -> this.centerTmp.add(this.random.generator().nextDoubleOnCircle(distance), 0);
+            case D3 -> this.centerTmp.add(this.random.engine().nextDoubleOnSphere(distance));
+            case D2 -> this.centerTmp.add(this.random.engine().nextDoubleOnCircle(distance), 0);
         }
     }
 

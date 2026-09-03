@@ -22,7 +22,7 @@ public class FRayProducerDef implements FRayProducer {
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndAspect.generator());
+        this.processor = new ProducerCoreDef<>(this.rndAspect.engine());
     }
 
     public static FRayProducer create(FRayFactory factory, FRandAspect randomizer) {

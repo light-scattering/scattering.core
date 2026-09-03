@@ -22,7 +22,7 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndAspect.generator());
+        this.processor = new ProducerCoreDef<>(this.rndAspect.engine());
     }
 
     public static <U extends Geometry> FAssemblyProducer<U> create(FAssemblyFactory factory, FRandAspect randomizer) {

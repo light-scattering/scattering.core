@@ -1,7 +1,6 @@
 package eu.scattering.core.test.aspect.randomize.module;
 
-import eu.scattering.core.design.aspect.randomize.distribution.FDistFactoryContext;
-import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FDist2D;
+import eu.scattering.core.design.aspect.randomize.distribution.dist2d.FRandDist2D;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos2D;
 import org.junit.jupiter.api.DisplayName;
@@ -19,13 +18,13 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Default")
     void useConfigurationDefault() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist2D dist = random.d2().normal();
+        var random = factory.random();
+        FRandDist2D dist = random.dist2D().normal();
 
         FStat d0Axis = factory.getFStat();
         FStat d1Axis = factory.getFStat();
 
-        FPos2D dir = factory.random().generator().nextDoubleOnCircle(1);
+        FPos2D dir = factory.random().engine().nextDoubleOnCircle(1);
         FStat dirAxis = factory.getFStat();
 
         double[] valB = new double[3];
@@ -69,8 +68,8 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Custom")
     void useConfigurationCustom() {
-        FDistFactoryContext random = factory.random().distributions();
-        FDist2D dist = random.d2().normal()
+        var random = factory.random();
+        FRandDist2D dist = random.dist2D().normal()
                 .setAvg(-0.5, 1)
                 .setStd(0.5, 0.1)
                 .setCor(0.75);
@@ -111,8 +110,8 @@ public class FDist2DNormalTest {
     @Test
     @DisplayName("Use configuration - Erroneous")
     void useConfigurationErroneous() {
-        FDistFactoryContext random = factory.random().distributions();
+        var random = factory.random();
 
-        assertThrows(IllegalArgumentException.class, () -> random.d2().normal().setCor(-1.5));
+        assertThrows(IllegalArgumentException.class, () -> random.dist2D().normal().setCor(-1.5));
     }
 }

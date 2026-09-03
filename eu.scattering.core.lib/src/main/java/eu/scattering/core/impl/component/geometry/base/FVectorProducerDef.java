@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -18,14 +18,14 @@ public class FVectorProducerDef implements FVectorProducer {
 
     private final FVectorFactory factory;
     private final ProducerCoreDef<FVector> processor;
-    private final FRandGenerator rndGenerator;
+    private final FRandEngine rndGenerator;
     private final FRandAspect rndAspect;
 
     private FVectorProducerDef(FVectorFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
         this.rndAspect = randomizer;
-        this.rndGenerator = randomizer.generator();
+        this.rndGenerator = randomizer.engine();
         this.processor = new ProducerCoreDef<>(this.rndGenerator);
     }
 
