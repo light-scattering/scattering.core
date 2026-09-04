@@ -22,9 +22,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.randomize.distribution.dist3d;
     exports eu.scattering.core.design.aspect.randomize.engine;
     exports eu.scattering.core.design.aspect.randomize;
-    exports eu.scattering.core.design.aspect.rotate.generator;
-    exports eu.scattering.core.design.aspect.rotate.transfer.variant;
-    exports eu.scattering.core.design.aspect.rotate.transfer;
     exports eu.scattering.core.design.aspect.rotate;
     exports eu.scattering.core.design.aspect.save;
     exports eu.scattering.core.design.component.aggregate.extension;
@@ -110,4 +107,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.randomize.distribution.dist2d.normal;
     exports eu.scattering.core.design.aspect.randomize.distribution;
     exports eu.scattering.core.design.aspect.randomize.mutation;
+    exports eu.scattering.core.design.aspect.rotate.state;
+    exports eu.scattering.core.design.aspect.rotate.mutation;
 }

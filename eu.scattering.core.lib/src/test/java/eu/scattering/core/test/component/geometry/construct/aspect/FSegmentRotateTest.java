@@ -22,7 +22,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(0, -1, 0, 0, 5, 0));
 
-        rot.rotQtAround(fVector, fSegment, Math.PI * 0.5);
+        rot.mutate().rotQtAround(fVector, fSegment, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                 "The position of the rotated FVector is erroneous");
@@ -34,7 +34,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(0, -1, 0, 0, 5, 0));
 
-        rot.rotQtAround(fVector, fSegment, -(Math.PI * 0.5));
+        rot.mutate().rotQtAround(fVector, fSegment, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
                 "The position of the rotated FVector is erroneous");
@@ -46,7 +46,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(-2, 2, 0, 0, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rot.rotQtAround(fVector, fSegment, Math.PI);
+        rot.mutate().rotQtAround(fVector, fSegment, Math.PI);
 
         assertTrue(fVector.isSimilar(-2, 2, 0, 0, -2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -58,7 +58,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(0, 2, 0, 2, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rot.rotQtAround(fVector, fSegment, Math.PI);
+        rot.mutate().rotQtAround(fVector, fSegment, Math.PI);
 
         assertTrue(fVector.isSimilar(0, -2, 0, 2, 2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -71,7 +71,7 @@ public class FSegmentRotateTest {
         FSegment fSegment = factory.getRefFSegment(factory.getFVector());
 
         Assertions.assertThrows(IllegalStateException.class,
-                () -> rot.rotQtAround(fVector, fSegment, Math.PI * 0.5),
+                () -> rot.mutate().rotQtAround(fVector, fSegment, Math.PI * 0.5),
                 "The direction of the FSegment is not defined");
     }
 
@@ -81,7 +81,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(0, -1, 0, 0, 5, 0));
 
-        rot.rotRgAround(fVector, fSegment, Math.PI * 0.5);
+        rot.mutate().rotRgAround(fVector, fSegment, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                 "The position of the rotated FVector is erroneous");
@@ -93,7 +93,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(0, -1, 0, 0, 5, 0));
 
-        rot.rotRgAround(fVector, fSegment, -(Math.PI * 0.5));
+        rot.mutate().rotRgAround(fVector, fSegment, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
                 "The position of the rotated FVector is erroneous");
@@ -105,7 +105,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(-2, 2, 0, 0, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rot.rotRgAround(fVector, fSegment, Math.PI);
+        rot.mutate().rotRgAround(fVector, fSegment, Math.PI);
 
         assertTrue(fVector.isSimilar(-2, 2, 0, 0, -2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -117,7 +117,7 @@ public class FSegmentRotateTest {
         FVector fVector = factory.getFVector(0, 2, 0, 2, 2, 0);
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rot.rotRgAround(fVector, fSegment, Math.PI);
+        rot.mutate().rotRgAround(fVector, fSegment, Math.PI);
 
         assertTrue(fVector.isSimilar(0, -2, 0, 2, 2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -130,7 +130,7 @@ public class FSegmentRotateTest {
         FSegment fSegment = factory.getRefFSegment(factory.getFVector());
 
         Assertions.assertThrows(IllegalStateException.class,
-                () -> rot.rotRgAround(fVector, fSegment, Math.PI * 0.5),
+                () -> rot.mutate().rotRgAround(fVector, fSegment, Math.PI * 0.5),
                 "The direction of the FSegment is not defined");
     }
 }

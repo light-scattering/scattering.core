@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.aspect.randomize.transformation;
+package eu.scattering.core.impl.aspect.randomize.mutation;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
@@ -27,7 +27,6 @@ public class FRandMutationDef implements FRandMutation {
     private final FRandEngine engine;
 
     private final FRandMutationModuleFAggregateDef moduleFAggregate;
-
 
     private FRandMutationDef(FRandEngine engine, ScatterFactory factory) {
 
@@ -470,7 +469,7 @@ public class FRandMutationDef implements FRandMutation {
             baseDir.set(pos2D, 0);
             headDir.set(pos1D, 0, 0);
 
-            this.factory.rotate().setRgAngle(headDir, baseDir, Math.PI * 0.5);
+            this.factory.rotate().mutate().setRgAngle(headDir, baseDir, Math.PI * 0.5);
 
             vectorDir.translate(center);
 

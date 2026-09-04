@@ -371,7 +371,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         double angle = super.getFTrigHelper().getAngle(sideB, sideA, sideC);
 
-        super.getAspectRot().setRgAngleBaseCommon(fVectorAxis, target.getCenter(), angle);
+        super.getAspectRot().mutate().setRgAngleBaseCommon(fVectorAxis, target.getCenter(), angle);
 
         this.setCenter(fVectorAxis.getRefHead());
 
@@ -768,11 +768,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
            if (!axisRef.isNearZeroLength() && !axisArg.isNearZeroLength() && !axisRef.isParallel(axisArg)) {
                if (axisRef.isAntiParallel(axisArg)) {
-                   getFRotAspect().rotRgAround(dummy.getRefCenter(), axis.getRefOrigin(), Math.PI);
+                   getFRotAspect().mutate().rotRgAround(dummy.getRefCenter(), axis.getRefOrigin(), Math.PI);
                } else {
                    double angle = -axisRef.getAngle(axisArg);
 
-                   getFRotAspect().rotRgAround(dummy.getRefCenter(), axisArg.setCrossProduct(axisRef), angle);
+                   getFRotAspect().mutate().rotRgAround(dummy.getRefCenter(), axisArg.setCrossProduct(axisRef), angle);
                }
            }
 

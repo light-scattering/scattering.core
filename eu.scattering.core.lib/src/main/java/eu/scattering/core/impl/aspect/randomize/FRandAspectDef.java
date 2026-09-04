@@ -10,11 +10,11 @@ import eu.scattering.core.design.aspect.randomize.mutation.FRandMutation;
 import eu.scattering.core.impl.aspect.randomize.distribution.dist1D.FRandDist1DFactoryContextDef;
 import eu.scattering.core.impl.aspect.randomize.distribution.dist2D.FRandDist2DFactoryContextDef;
 import eu.scattering.core.impl.aspect.randomize.distribution.dist3D.FRandDist3DFactoryContextDef;
-import eu.scattering.core.impl.aspect.randomize.transformation.FRandMutationDef;
+import eu.scattering.core.impl.aspect.randomize.mutation.FRandMutationDef;
 
 public class FRandAspectDef implements FRandAspect {
     private final FRandEngine engine;
-    private final FRandMutation transform;
+    private final FRandMutation mutate;
 
     private final FRandDist1DFactoryContext dist1D;
     private final FRandDist2DFactoryContext dist2D;
@@ -24,7 +24,7 @@ public class FRandAspectDef implements FRandAspect {
 
         this.engine = engine;
 
-        this.transform = FRandMutationDef.create(engine, factory);
+        this.mutate = FRandMutationDef.create(engine, factory);
 
         this.dist1D = FRandDist1DFactoryContextDef.create(engine);
         this.dist2D = FRandDist2DFactoryContextDef.create(engine, factory);
@@ -47,7 +47,7 @@ public class FRandAspectDef implements FRandAspect {
     @Override
     public FRandMutation mutate() {
 
-        return this.transform;
+        return this.mutate;
     }
 
     @Override

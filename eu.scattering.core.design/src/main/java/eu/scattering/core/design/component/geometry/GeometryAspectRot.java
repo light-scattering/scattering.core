@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry;
 
-import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
+import eu.scattering.core.design.aspect.rotate.state.FRotState;
 import eu.scattering.core.design.component.geometry.construct.ConstructAspectRot;
 import eu.scattering.core.design.component.geometry.base.BaseAspectRot;
 import eu.scattering.core.design.component.geometry.container.ContainerAspectRot;
@@ -12,5 +12,5 @@ public interface GeometryAspectRot extends
         ContainerAspectRot,
         ShapeAspectRot {
 
-    Geometry rot(Geometry in, FRotQt core);
+    Geometry rot(Geometry in, FRotState core);
 }

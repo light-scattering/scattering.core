@@ -17,11 +17,13 @@ public class GeometryTest {
     void geometryManual() {
         FAggregate agg = factory.aggregates().templates().monodisperse(1000, 1);
 
-        FModel model = factory.models().cc().ballistic(agg);
+        factory.models().cc().ballistic(agg).build();
 
-        model.build();
+
 
         String res = factory.save().components().toPovRay(agg, ExPovRay.FREE);
+
+
 
         System.out.println("ll");
     }

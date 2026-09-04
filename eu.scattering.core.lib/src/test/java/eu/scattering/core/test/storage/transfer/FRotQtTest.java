@@ -1,6 +1,6 @@
 package eu.scattering.core.test.storage.transfer;
 
-import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
+import eu.scattering.core.design.aspect.rotate.state.FRotState;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos4D;
@@ -38,7 +38,7 @@ public class FRotQtTest {
 
             FMatrix3x3D matrix = factory.getFMatrix3x3D(matrixTemplate);
 
-            FRotQt dto = factory.getFRotQt(qt, offset, matrix);
+            FRotState dto = factory.rotate().state().fromComponents(qt, offset, matrix);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(qt, dto.getQuaternion(), "The quaternion is incorrect"),
@@ -73,11 +73,11 @@ public class FRotQtTest {
 
             FMatrix3x3D matrix = factory.getFMatrix3x3D(matrixTemplate);
 
-            FRotQt dtoOrigin = factory.getFRotQt(qt, offset, matrix);
+            FRotState dtoOrigin = factory.rotate().state().fromComponents(qt, offset, matrix);
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
-            FRotQt dtoCopy = factory.getFRotQt(jsonOrigin);
+            FRotState dtoCopy = factory.rotate().state().fromJSON(jsonOrigin);
 
             assertEquals(dtoOrigin, dtoCopy, "The parsed JSON object is erroneous");
         }

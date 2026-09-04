@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
-import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
+import eu.scattering.core.design.aspect.rotate.state.FRotState;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 public interface FPointAspectRot {
@@ -21,5 +21,5 @@ public interface FPointAspectRot {
     FPoint rotQtAround(FPoint in, FPoint ref, double angle);
     FPoint rotQtAround(FPoint in, FPos3D ref, double angle);
 
-    FPoint rotQt(FPoint in, FRotQt qt);
+    FPoint rotQt(FPoint in, FRotState qt);
 }

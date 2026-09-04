@@ -7,8 +7,6 @@ import eu.scattering.core.design.aspect.prototype.FProtoAspect;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
-import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
-import eu.scattering.core.design.aspect.rotate.transfer.variant.FRotQt;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
 import eu.scattering.core.design.component.aggregate.config.df.kinetic.cc.FConfigCCPL;
@@ -93,8 +91,6 @@ import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandEngineDef;
 import eu.scattering.core.impl.aspect.rotate.FRotAspectDef;
-import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
-import eu.scattering.core.impl.aspect.rotate.transfer.FRotQtDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.config.*;
@@ -146,7 +142,6 @@ public final class ScatterFactoryDef implements ScatterFactory {
     private final GeometryParser fGeometryParser;
 
     private final FRandEngine fRandGenerator;
-    private final FRotGenerator fRotGenerator;
 
     private final FSaveAspect fAspectExport;
     private final FLoadAspect fAspectLoad;
@@ -179,10 +174,8 @@ public final class ScatterFactoryDef implements ScatterFactory {
         this.fAspectExport = FSaveAspectDef.create(this);
         this.fAspectLoad = FLoadAspectDef.create(this);
 
-        this.fRotGenerator = FRotProcessorDef.create(this);
-
         this.fAspectProto = FProtoAspectDef.create();
-        this.fAspectRot = FRotAspectDef.create(this.fRotGenerator );
+        this.fAspectRot = FRotAspectDef.create(this);
 
         this.fTrigHelper = FTrigHelperDef.create(this);
         this.fStatHelper = FStatHelperDef.create();
@@ -619,14 +612,6 @@ public final class ScatterFactoryDef implements ScatterFactory {
     public FMetaMR getFMetaMR() {
 
         return FMetaMRDef.create();
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FRotGenerator getFRot() {
-
-        return this.fRotGenerator;
     }
 
     //--------------------------------------------------
@@ -1070,18 +1055,6 @@ public final class ScatterFactoryDef implements ScatterFactory {
     }
 
     //--------------------------------------------------
-
-    @Override
-    public FRotQt getFRotQt(FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
-
-        return FRotQtDef.create(qt, offset, matrix);
-    }
-
-    @Override
-    public FRotQt getFRotQt(JSONObject json) {
-
-        return FRotQtDef.create(this, json);
-    }
 
     @Override
     public FBufferData getFBufferData(StorageFactory factory, String tag, int layer) {
