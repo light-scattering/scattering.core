@@ -109,4 +109,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.randomize.distribution.dist3d.normal;
     exports eu.scattering.core.design.aspect.randomize.distribution.dist2d.normal;
     exports eu.scattering.core.design.aspect.randomize.distribution;
+    exports eu.scattering.core.design.aspect.randomize.mutation;
 }

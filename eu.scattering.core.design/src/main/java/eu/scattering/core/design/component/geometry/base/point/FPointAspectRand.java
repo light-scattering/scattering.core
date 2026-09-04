@@ -5,23 +5,23 @@ import eu.scattering.core.design.utility.annotation.Fragment;
 
 public interface FPointAspectRand {
 
-    FPoint inRange(FPoint in, FPairPos3D range);
+    FPoint withinRange(FPoint in, FPairPos3D range);
 
-    FPoint inSphere(FPoint in);
-    FPoint inSphere(FPoint in, double radius);
+    FPoint intoSphere(FPoint in);
+    FPoint intoSphere(FPoint in, double radius);
 
-    FPoint onSphere(FPoint in);
-    FPoint onSphere(FPoint in, double radius);
+    FPoint ontoSphere(FPoint in);
+    FPoint ontoSphere(FPoint in, double radius);
 
-    FPoint onAxis(FPoint in);
-    FPoint onAxis(FPoint in, FPoint axis);
+    FPoint ontoAxis(FPoint in);
+    FPoint ontoAxis(FPoint in, FPoint axis);
 
     @Fragment
-    FPoint ortToBaseInCircle(FPoint in, FPoint dir, double radius);
+    FPoint intoCircleOrthogonalToBase(FPoint in, FPoint dir, double radius);
     @Fragment
-    FPoint ortToBaseOnCircle(FPoint in, FPoint dir, double radius);
+    FPoint ontoCircleOrthogonalToBase(FPoint in, FPoint dir, double radius);
     @Fragment
-    FPoint ortToHeadInCircle(FPoint in, FPoint dir, double radius);
+    FPoint intoCircleOrthogonalToHead(FPoint in, FPoint dir, double radius);
     @Fragment
-    FPoint ortToHeadOnCircle(FPoint in, FPoint dir, double radius);
+    FPoint ontoCircleOrthogonalToHead(FPoint in, FPoint dir, double radius);
 }

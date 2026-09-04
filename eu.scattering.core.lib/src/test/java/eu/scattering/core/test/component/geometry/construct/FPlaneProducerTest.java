@@ -299,7 +299,7 @@ public class FPlaneProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fPlane.getRefOrigin());
+            aspect.mutate().ontoSphere(fPlane.getRefOrigin());
 
             return fPlane;
         }, 1);
@@ -330,7 +330,7 @@ public class FPlaneProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fPlane.getRefOrigin());
+            aspect.mutate().ontoSphere(fPlane.getRefOrigin());
 
             return fPlane;
         });

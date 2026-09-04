@@ -4,5 +4,5 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos4D
 
 public interface FQuaternionAspectRand {
 
-    FQuaternion inRange(FQuaternion in, FPairPos4D range);
+    FQuaternion withinRange(FQuaternion in, FPairPos4D range);
 }

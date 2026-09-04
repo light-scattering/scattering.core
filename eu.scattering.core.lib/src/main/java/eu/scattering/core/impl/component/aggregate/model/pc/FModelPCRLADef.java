@@ -79,7 +79,7 @@ public class FModelPCRLADef implements FModelPCRLA {
 
             init();
 
-            while (this.detached.size() != 0) {
+            while (!this.detached.isEmpty()) {
                 if (!buildStep()) {
                     continue generation;
                 }
@@ -132,7 +132,7 @@ public class FModelPCRLADef implements FModelPCRLA {
         Shape particle = this.random.engine().getElement(this.detached, false);
 
         step:
-        while (this.bases.size() != 0) {
+        while (!this.bases.isEmpty()) {
             int baseIndex = random.engine().nextInteger(0, this.bases.size());
             Shape base = this.bases.get(baseIndex);
 
@@ -167,8 +167,8 @@ public class FModelPCRLADef implements FModelPCRLA {
     private boolean attachVariantDimension(Shape particle, Shape base) {
 
         return switch (this.dimension) {
-            case D3 -> random.attachLinear(particle, base, this.attached, MAX_IT_CORRECTIONS);
-            case D2 -> random.attachLinear2D(particle, base, this.attached, MAX_IT_CORRECTIONS);
+            case D3 -> random.mutate().attachLinear(particle, base, this.attached, MAX_IT_CORRECTIONS);
+            case D2 -> random.mutate().attachLinearOnPlane(particle, base, this.attached, MAX_IT_CORRECTIONS);
         };
     }
 

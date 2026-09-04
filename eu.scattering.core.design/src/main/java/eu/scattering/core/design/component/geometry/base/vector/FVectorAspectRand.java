@@ -5,17 +5,17 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 
 public interface FVectorAspectRand {
 
-    FVector inSphere(FVector in);
-    FVector onSphere(FVector in);
+    FVector intoSphere(FVector in);
+    FVector ontoSphere(FVector in);
 
-    FPoint onAxis(FPoint in, FVector axis);
+    FPoint ontoAxis(FPoint in, FVector axis);
 
     @Fragment
-    FPoint ortToBaseInCircle(FPoint in, FVector dir, double radius);
+    FPoint intoCircleOrthogonalToBase(FPoint in, FVector dir, double radius);
     @Fragment
-    FPoint ortToBaseOnCircle(FPoint in, FVector dir, double radius);
+    FPoint ontoCircleOrthogonalToBase(FPoint in, FVector dir, double radius);
     @Fragment
-    FPoint ortToHeadInCircle(FPoint in, FVector dir, double radius);
+    FPoint intoCircleOrthogonalToHead(FPoint in, FVector dir, double radius);
     @Fragment
-    FPoint ortToHeadOnCircle(FPoint in, FVector dir, double radius);
+    FPoint ontoCircleOrthogonalToHead(FPoint in, FVector dir, double radius);
 }

@@ -279,8 +279,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
     private boolean rotateVariantDimension(FAggregate aggA, FAggregate aggB) {
 
         return switch (this.dimension) {
-            case D3 -> this.random.rotate(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
-            case D2 -> this.random.rotateOnSurface(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
+            case D3 -> this.random.mutate().rotate(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
+            case D2 -> this.random.mutate().rotateOnPlane(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
         };
     }
 

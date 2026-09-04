@@ -260,8 +260,8 @@ public class FModelPCFilippovDef implements FModelPCTunable {
     private boolean attachVariantDimension(Shape particle, Shape target) {
 
         return switch (this.dimension) {
-            case D3 -> this.random.attachSpherical(particle, target, this.center, this.attached, MAX_IT_CORRECTION);
-            case D2 -> this.random.attachSpherical2D(particle, target, this.center, this.attached, MAX_IT_CORRECTION);
+            case D3 -> this.random.mutate().attachSpherical(particle, target, this.center, this.attached, MAX_IT_CORRECTION);
+            case D2 -> this.random.mutate().attachSphericalOnPlane(particle, target, this.center, this.attached, MAX_IT_CORRECTION);
         };
     }
 

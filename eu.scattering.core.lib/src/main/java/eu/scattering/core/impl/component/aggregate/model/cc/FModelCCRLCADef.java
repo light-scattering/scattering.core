@@ -189,8 +189,8 @@ public class FModelCCRLCADef implements FModelCCRLCA {
     private void attachVariantDimension(FAggregate aggA, FAggregate aggB) {
 
         switch (this.dimension) {
-            case D3 -> this.random.attach(aggA, aggB);
-            case D2 -> this.random.attachOnSurface(aggA, aggB);
+            case D3 -> this.random.mutate().attach(aggB, aggA);
+            case D2 -> this.random.mutate().attachOnPlane(aggB, aggA);
         }
     }
 

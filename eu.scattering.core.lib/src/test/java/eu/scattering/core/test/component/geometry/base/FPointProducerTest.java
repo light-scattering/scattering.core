@@ -464,7 +464,7 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, aspect) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            return aspect.onSphere(factory.getFPoint(lengthCurrent));
+            return aspect.mutate().ontoSphere(factory.getFPoint(lengthCurrent));
         }, 1);
 
         FPoint resultA = producer.produce();
@@ -490,7 +490,7 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, aspect) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            return aspect.onSphere(factory.getFPoint(lengthCurrent));
+            return aspect.mutate().ontoSphere(factory.getFPoint(lengthCurrent));
         });
 
         FPoint resultA = producer.produce();

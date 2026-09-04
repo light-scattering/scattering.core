@@ -299,7 +299,7 @@ public class FDraftProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fDraft.getRefOrigin());
+            aspect.mutate().ontoSphere(fDraft.getRefOrigin());
 
             return fDraft;
         }, 1);
@@ -330,7 +330,7 @@ public class FDraftProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fDraft.getRefOrigin());
+            aspect.mutate().ontoSphere(fDraft.getRefOrigin());
 
             return fDraft;
         });

@@ -26,7 +26,7 @@ public class ShapeRandomizeTest {
         FSphere fSphereRef = factory.getFSphere();
         FSphere fSphereArg = TestHelper.getRandFSphere();
 
-        boolean results = factory.random().attachLinear(fSphereRef, fSphereArg);
+        boolean results = factory.random().mutate().attachLinear(fSphereRef, fSphereArg);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -39,7 +39,7 @@ public class ShapeRandomizeTest {
     void attachLinearSingleSameElement() {
         FSphere fSphereRef = factory.getFSphere();
 
-        boolean results = factory.random().attachLinear(fSphereRef, fSphereRef);
+        boolean results = factory.random().mutate().attachLinear(fSphereRef, fSphereRef);
 
         Assertions.assertAll("Validate position",
                 () -> assertFalse(results)
@@ -68,7 +68,7 @@ public class ShapeRandomizeTest {
 
         fAssembly.translate(offset);
 
-        boolean results = factory.random().attachLinear(fSphereRef, fSphereCenter, fAssembly, 100);
+        boolean results = factory.random().mutate().attachLinear(fSphereRef, fSphereCenter, fAssembly, 100);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -89,7 +89,7 @@ public class ShapeRandomizeTest {
         fSphereArg.translate(offset);
 
         boolean results = factory.random()
-                .attachSpherical(fSphereRef, fSphereArg, offset.getD0(), offset.getD1(), offset.getD2());
+                .mutate().attachSpherical(fSphereRef, fSphereArg, offset.getD0(), offset.getD1(), offset.getD2());
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -109,7 +109,7 @@ public class ShapeRandomizeTest {
         fSphereArg.translate(offset);
 
         boolean results = factory.random()
-                .attachSpherical(fSphereRef, fSphereArg, factory.getFPoint(offset));
+                .mutate().attachSpherical(fSphereRef, fSphereArg, factory.getFPoint(offset));
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -129,7 +129,7 @@ public class ShapeRandomizeTest {
         fSphereArg.translate(offset);
 
         boolean results = factory.random()
-                .attachSpherical(fSphereRef, fSphereArg, offset);
+                .mutate().attachSpherical(fSphereRef, fSphereArg, offset);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -158,7 +158,7 @@ public class ShapeRandomizeTest {
         fAssembly.translate(offset);
 
         boolean results = factory.random()
-                .attachSpherical(fSphereRef, fSphereArg, offset.getD0(), offset.getD1(), offset.getD2(), fAssembly, 100);
+                .mutate().attachSpherical(fSphereRef, fSphereArg, offset.getD0(), offset.getD1(), offset.getD2(), fAssembly, 100);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -188,7 +188,7 @@ public class ShapeRandomizeTest {
         fAssembly.translate(offset);
 
         boolean results = factory.random()
-                .attachSpherical(fSphereRef, fSphereArg, factory.getFPoint(offset), fAssembly, 100);
+                .mutate().attachSpherical(fSphereRef, fSphereArg, factory.getFPoint(offset), fAssembly, 100);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -218,7 +218,7 @@ public class ShapeRandomizeTest {
         fAssembly.translate(offset);
 
         boolean results = factory.random()
-                .attachSpherical(fSphereRef, fSphereArg, offset, fAssembly, 100);
+                .mutate().attachSpherical(fSphereRef, fSphereArg, offset, fAssembly, 100);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -248,7 +248,7 @@ public class ShapeRandomizeTest {
         fAssembly.translate(offset);
 
         boolean results = factory.random()
-                .attachLinearAndSpherical(fSphereRef, fSphereArg, fAssembly, 100);
+                .mutate().attachLinearAndSpherical(fSphereRef, fSphereArg, fAssembly, 100);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(results),
@@ -276,7 +276,7 @@ public class ShapeRandomizeTest {
         fAssembly.translate(offset);
 
         double distance = factory.random()
-                .project(fSphereRef, offset, 10, fAssembly, 100);
+                .mutate().project(fSphereRef, offset, 10, fAssembly, 100);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(distance >= 0),
@@ -302,7 +302,7 @@ public class ShapeRandomizeTest {
         FPos3D offset = factory.getFPos3D(factory.random().engine().nextDoubleInCircle(100), 0);
 
         double distance = factory.random()
-                .project2D(fSphereRef, offset, 10, fAssembly, 100);
+                .mutate().projectOnPlane(fSphereRef, offset, 10, fAssembly, 100);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(0, fSphereRef.getRefCenter().getZ(), epsilon),

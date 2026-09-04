@@ -299,7 +299,7 @@ public class FRayProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fRay.getRefOrigin());
+            aspect.mutate().ontoSphere(fRay.getRefOrigin());
 
             return fRay;
         }, 1);
@@ -330,7 +330,7 @@ public class FRayProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fRay.getRefOrigin());
+            aspect.mutate().ontoSphere(fRay.getRefOrigin());
 
             return fRay;
         });

@@ -15,8 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static eu.scattering.core.test.TestConfig.factory;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FAggregateRandom")
 public class FAggregateRandomizeTest {
@@ -33,7 +32,14 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().project(aggA, aggB);
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        factory.random().mutate().project(aggA, aggB);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -52,7 +58,14 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().project(aggA, aggB);
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        factory.random().mutate().project(aggA, aggB);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -71,7 +84,14 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().projectOnSurface(aggA, aggB);
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        factory.random().mutate().projectOnPlane(aggA, aggB);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -94,7 +114,14 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().projectOnSurface(aggA, aggB);
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        factory.random().mutate().projectOnPlane(aggA, aggB);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -117,7 +144,16 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().attach(aggA, aggB);
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        FAggregate aggARef = factory.random().mutate().attach(aggA, aggB);
+
+        assertSame(aggA, aggARef);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertTrue(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -136,7 +172,16 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().attach(aggA, aggB);
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        FAggregate aggARef = factory.random().mutate().attach(aggA, aggB);
+
+        assertSame(aggA, aggARef);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertTrue(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -155,7 +200,16 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().attachOnSurface(aggA, aggB);
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        FAggregate aggARef = factory.random().mutate().attachOnPlane(aggA, aggB);
+
+        assertSame(aggA, aggARef);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertTrue(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -175,6 +229,7 @@ public class FAggregateRandomizeTest {
 
         FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
         FAggregate aggA = factory.getRefFAggregate(coreA);
+        FAggregate aggACopy = aggA.copy(true);
 
         Shape shapeB1 = factory.getFSphere(0, 0, 0, 1);
         Shape shapeB2 = factory.getFSphere(2, 0, 0, 1);
@@ -182,13 +237,24 @@ public class FAggregateRandomizeTest {
 
         FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
         FAggregate aggB = factory.getRefFAggregate(coreB);
+        FAggregate aggBCopy = aggB.copy(true);
 
-        factory.random().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
+        FAggregate aggARef = factory.random().mutate().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
+
+        assertSame(aggA, aggARef);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertTrue(aggBCopy.isExact(aggB));
+
+        aggACopy = aggA.copy(true);
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.random().rotate(aggA, aggB, cAggA, cAggB, 100);
+        factory.random().mutate().rotate(aggA, aggB, cAggA, cAggB, 100);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
 
         aggA.merge(aggB, true);
 
@@ -205,6 +271,7 @@ public class FAggregateRandomizeTest {
 
         FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
         FAggregate aggA = factory.getRefFAggregate(coreA);
+        FAggregate aggACopy = aggA.copy(true);
 
         Shape shapeB1 = factory.getFSphere(0, 0, 0, 1);
         Shape shapeB2 = factory.getFSphere(2, 0, 0, 1);
@@ -212,13 +279,24 @@ public class FAggregateRandomizeTest {
 
         FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
         FAggregate aggB = factory.getRefFAggregate(coreB);
+        FAggregate aggBCopy = aggB.copy(true);
 
-        factory.random().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
+        FAggregate aggARef = factory.random().mutate().moveMassCenterOnPlane(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
+
+        assertSame(aggA, aggARef);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertTrue(aggBCopy.isExact(aggB));
+
+        aggACopy = aggA.copy(true);
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.random().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
+        factory.random().mutate().rotateOnPlane(aggA, aggB, cAggA, cAggB, 100);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
 
         aggA.merge(aggB, true);
 
@@ -242,12 +320,26 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        FAggregate aggARef = factory.random().mutate().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
+
+        assertSame(aggA, aggARef);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertTrue(aggBCopy.isExact(aggB));
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.random().rotate(aggA, aggB, cAggA, cAggB, 100);
+        aggACopy = aggA.copy(true);
+
+        factory.random().mutate().rotate(aggA, aggB, cAggA, cAggB, 100);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());
@@ -266,12 +358,26 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.random().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
+        FAggregate aggACopy = aggA.copy(true);
+        FAggregate aggBCopy = aggB.copy(true);
+
+        FAggregate aggARef = factory.random().mutate().moveMassCenterOnPlane(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
+
+        assertSame(aggA, aggARef);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertTrue(aggBCopy.isExact(aggB));
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
-        factory.random().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
+        aggACopy = aggA.copy(true);
+
+        factory.random().mutate().rotateOnPlane(aggA, aggB, cAggA, cAggB, 100);
+
+        assertFalse(aggACopy.isExact(aggA));
+        assertFalse(aggBCopy.isExact(aggB));
+
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isConnected());

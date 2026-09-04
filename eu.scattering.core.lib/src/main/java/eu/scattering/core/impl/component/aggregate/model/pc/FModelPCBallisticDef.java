@@ -182,7 +182,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
 
             this.pathRnd.moveBase(this.center);
 
-            this.random.ortToBaseInCircle(headDir, this.pathRnd, this.distance);
+            this.random.mutate().intoCircleOrthogonalToBase(headDir, this.pathRnd, this.distance);
 
             baseDir.set(headRnd);
 

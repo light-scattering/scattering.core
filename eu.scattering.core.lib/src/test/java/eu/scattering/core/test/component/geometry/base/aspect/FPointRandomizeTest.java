@@ -23,7 +23,7 @@ public class FPointRandomizeTest {
     void setRandomAngleValidateMagnitude() {
         double radius = Math.abs(rand.nextDouble());
 
-        FPoint fPoint = factory.random().onSphere(factory.getFPoint(radius));
+        FPoint fPoint = factory.random().mutate().ontoSphere(factory.getFPoint(radius));
 
         assertEquals(radius, fPoint.getMagnitude(),
                 epsilon, "The radius is invalid");
@@ -35,7 +35,7 @@ public class FPointRandomizeTest {
         double radius = Math.abs(rand.nextDouble());
         FPoint fPoint = factory.getFPoint(radius);
 
-        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.random().onSphere(fPoint));
+        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.random().mutate().ontoSphere(fPoint));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class FPointRandomizeTest {
         FPoint fPoint = TestHelper.getRandFPoint();
         FRandAspect random = factory.random();
 
-        FPointTestHelper.testReference(random::onSphere, fPoint);
+        FPointTestHelper.testReference(p -> random.mutate().ontoSphere(p), fPoint);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class FPointRandomizeTest {
         FPoint fPoint = factory.getFPoint();
         FRandAspect random = factory.random();
 
-        FPoint results = random.inRange(fPoint, factory.getFPairPos3D(
+        FPoint results = random.mutate().withinRange(fPoint, factory.getFPairPos3D(
                 0.01, 0.01, 0.01, 0.02, 0.02, 0.02));
 
         Assertions.assertAll("Validate position",
@@ -73,7 +73,7 @@ public class FPointRandomizeTest {
         FPoint fPoint = factory.getFPoint();
         FRandAspect random = factory.random();
 
-        FPoint results = random.inSphere(fPoint, 0.01);
+        FPoint results = random.mutate().intoSphere(fPoint, 0.01);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fPoint.getMagnitude() < 0.01, "The magnitude is incorrect"),
@@ -89,7 +89,7 @@ public class FPointRandomizeTest {
 
         double magnitude = fPoint.getMagnitude();
 
-        FPoint results = random.inSphere(fPoint);
+        FPoint results = random.mutate().intoSphere(fPoint);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fPoint.getMagnitude() < magnitude, "The magnitude is incorrect"),
@@ -103,7 +103,7 @@ public class FPointRandomizeTest {
         FPoint fPoint = factory.getFPoint();
         FRandAspect random = factory.random();
 
-        FPoint results = random.onSphere(fPoint, 0.01);
+        FPoint results = random.mutate().ontoSphere(fPoint, 0.01);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(0.01, fPoint.getMagnitude(), epsilon, "The position is incorrect"),
@@ -120,10 +120,10 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToBaseInCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().intoCircleOrthogonalToBase(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
-                () -> assertEquals(fPointIn.getZ(), 0,
+                () -> assertEquals(0, fPointIn.getZ(),
                         epsilon, "The position is erroneous"),
                 () -> assertTrue(fPointIn.isOrthogonal(fPointDir),
                         "The elements should be orthogonal"),
@@ -143,7 +143,7 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToBaseInCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().intoCircleOrthogonalToBase(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fPointIn.isOrthogonal(fPointDir),
@@ -164,10 +164,10 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToBaseOnCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().ontoCircleOrthogonalToBase(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
-                () -> assertEquals(fPointIn.getZ(), 0,
+                () -> assertEquals(0, fPointIn.getZ(),
                         epsilon, "The position is erroneous"),
                 () -> assertTrue(fPointIn.isOrthogonal(fPointDir),
                         "The elements should be orthogonal"),
@@ -187,7 +187,7 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToBaseOnCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().ontoCircleOrthogonalToBase(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fPointIn.isOrthogonal(fPointDir),
@@ -208,10 +208,10 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToHeadInCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().intoCircleOrthogonalToHead(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
-                () -> assertEquals(fPointIn.getZ(), 1,
+                () -> assertEquals(1, fPointIn.getZ(),
                         epsilon, "The position is erroneous"),
                 () -> assertTrue(factory.getFVector(fPointDir, fPointIn).isOrthogonalBaseZero(fPointDir),
                         "The elements should be orthogonal"),
@@ -231,7 +231,7 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToHeadInCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().intoCircleOrthogonalToHead(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(factory.getFVector(fPointDir, fPointIn).isOrthogonalBaseZero(fPointDir),
@@ -252,10 +252,10 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToHeadOnCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().ontoCircleOrthogonalToHead(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
-                () -> assertEquals(fPointIn.getZ(), 1,
+                () -> assertEquals(1, fPointIn.getZ(),
                         epsilon, "The position is erroneous"),
                 () -> assertTrue(factory.getFVector(fPointDir, fPointIn).isOrthogonalBaseZero(fPointDir),
                         "The elements should be orthogonal"),
@@ -275,7 +275,7 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.ortToHeadOnCircle(fPointIn, fPointDir, radius);
+        FPoint results = random.mutate().ontoCircleOrthogonalToHead(fPointIn, fPointDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(factory.getFVector(fPointDir, fPointIn).isOrthogonalBaseZero(fPointDir),
@@ -295,7 +295,7 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.onAxis(fPointIn, fPointDir);
+        FPoint results = random.mutate().ontoAxis(fPointIn, fPointDir);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fPointIn.isParallel(fPointDir),
@@ -315,7 +315,7 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.onAxis(fPointIn, fPointDir);
+        FPoint results = random.mutate().ontoAxis(fPointIn, fPointDir);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fPointIn.isParallel(fPointDir),
@@ -336,7 +336,7 @@ public class FPointRandomizeTest {
 
         FRandAspect random = factory.random();
 
-        FPoint results = random.onAxis(fPointIn);
+        FPoint results = random.mutate().ontoAxis(fPointIn);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fPointIn.isParallel(1, -2, 3),

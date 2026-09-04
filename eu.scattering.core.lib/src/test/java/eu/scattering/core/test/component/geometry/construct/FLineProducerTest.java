@@ -299,7 +299,7 @@ public class FLineProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fLine.getRefOrigin());
+            aspect.mutate().ontoSphere(fLine.getRefOrigin());
 
             return fLine;
         }, 1);
@@ -330,7 +330,7 @@ public class FLineProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fLine.getRefOrigin());
+            aspect.mutate().ontoSphere(fLine.getRefOrigin());
 
             return fLine;
         });

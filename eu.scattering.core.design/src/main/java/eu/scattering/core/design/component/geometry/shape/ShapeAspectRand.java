@@ -23,13 +23,13 @@ public interface ShapeAspectRand extends FSphereAspectRand {
 
     //--------------------------------------------------
 
-    boolean attachLinear2D(Shape in, Shape target);
-    boolean attachLinear2D(Shape in, Shape target, Iterable<? extends Shape> field, int corrections);
+    boolean attachLinearOnPlane(Shape in, Shape target);
+    boolean attachLinearOnPlane(Shape in, Shape target, Iterable<? extends Shape> field, int corrections);
 
-    boolean attachSpherical2D(Shape in, Shape target, double x, double y, double z);
+    boolean attachSphericalOnPlane(Shape in, Shape target, double x, double y, double z);
 
-    boolean attachSpherical2D(Shape in, Shape target, double x, double y, double z, Iterable<? extends Shape> field, int corrections);
-    boolean attachSpherical2D(Shape in, Shape target, FPoint center, Iterable<? extends Shape> field, int corrections);
+    boolean attachSphericalOnPlane(Shape in, Shape target, double x, double y, double z, Iterable<? extends Shape> field, int corrections);
+    boolean attachSphericalOnPlane(Shape in, Shape target, FPoint center, Iterable<? extends Shape> field, int corrections);
 
-    double project2D(Shape in, FPos3D center, double radius, Iterable<? extends Shape> field, int corrections);
+    double projectOnPlane(Shape in, FPos3D center, double radius, Iterable<? extends Shape> field, int corrections);
 }

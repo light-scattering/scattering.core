@@ -800,7 +800,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factoryLocal, aspect) -> {
                     FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-                    aspect.onSphere(fPoint);
+                    aspect.mutate().ontoSphere(fPoint);
 
                     return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
                 }, 1);
@@ -827,7 +827,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factoryLocal, aspect) -> {
                     FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-                    aspect.onSphere(fPoint);
+                    aspect.mutate().ontoSphere(fPoint);
 
                     return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
                 });

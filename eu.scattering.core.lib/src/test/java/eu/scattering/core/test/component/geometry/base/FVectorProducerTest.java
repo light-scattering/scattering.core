@@ -749,7 +749,7 @@ public class FVectorProducerTest {
     void produceWithAspect() {
         FVectorProducer producer = factory.getFVectorProducer()
                 .withCustomRule((factory, aspect) ->
-                        aspect.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)), 1);
+                        aspect.mutate().ontoSphere(factory.getFVector(1, 2, 3, 2, 2, 3)), 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -771,7 +771,7 @@ public class FVectorProducerTest {
     void produceWithAspectSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
                 .withCustomRule((factory, aspect) ->
-                        aspect.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)));
+                        aspect.mutate().ontoSphere(factory.getFVector(1, 2, 3, 2, 2, 3)));
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();

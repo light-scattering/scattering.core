@@ -299,7 +299,7 @@ public class FSegmentProducerTest {
                     2, 2, 3
             );
 
-            aspect.onSphere(fSegment.getRefOrigin());
+            aspect.mutate().ontoSphere(fSegment.getRefOrigin());
 
             return fSegment;
         });

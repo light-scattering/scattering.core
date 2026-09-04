@@ -232,8 +232,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             aggA.getRefParticles().translate(this.cAggA, 0, 0, 0);
             aggB.getRefParticles().translate(this.cAggB, headRnd);
 
-            this.random.ortToBaseInCircle(headDir, this.pathA, rAggA);
-            this.random.ortToHeadInCircle(baseDir, this.pathA, rAggB);
+            this.random.mutate().intoCircleOrthogonalToBase(headDir, this.pathA, rAggA);
+            this.random.mutate().intoCircleOrthogonalToHead(baseDir, this.pathA, rAggB);
 
             double shift = aggB.project(aggA, this.pathB);
 
