@@ -8,7 +8,7 @@ import java.util.function.Function;
 public interface FComplexAspectProto {
 
     @Facade
-    FComplex applyWithFixedState(FComplex in, Consumer<FComplex> action);
+    FComplex withFixedState(FComplex in, Consumer<FComplex> action);
 
     @Facade
     double toDoubleWithFixedState(FComplex in, Function<FComplex, Double> action);

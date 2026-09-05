@@ -8,7 +8,7 @@ import java.util.function.Function;
 public interface FQuaternionAspectProto {
 
     @Facade
-    FQuaternion applyWithFixedState(FQuaternion in, Consumer<FQuaternion> action);
+    FQuaternion withFixedState(FQuaternion in, Consumer<FQuaternion> action);
 
     @Facade
     double toDoubleWithFixedState(FQuaternion in, Function<FQuaternion, Double> action);

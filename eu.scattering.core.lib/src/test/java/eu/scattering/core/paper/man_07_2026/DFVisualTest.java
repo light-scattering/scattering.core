@@ -54,11 +54,11 @@ public class DFVisualTest {
             assertEquals(1.8, dimension, 0.25);
             assertFalse(plot.isEmpty());
 
-            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
 
-            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
         }
@@ -92,11 +92,11 @@ public class DFVisualTest {
             assertFalse(plotA.isEmpty());
             assertFalse(plotB.isEmpty());
 
-            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
 
-            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
         }
@@ -122,11 +122,11 @@ public class DFVisualTest {
 
             fAggregate.pca();
 
-            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
 
-            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.REFERENCE);
+            String model = factory.save().toPovRay(fAggregate, ExPovRay.REFERENCE);
 
             assertFalse(model.isEmpty());
 
@@ -167,11 +167,11 @@ public class DFVisualTest {
 
             fAggregate.pca();
 
-            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
 
-            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.REFERENCE);
+            String model = factory.save().toPovRay(fAggregate, ExPovRay.REFERENCE);
 
             assertFalse(model.isEmpty());
 
@@ -222,15 +222,15 @@ public class DFVisualTest {
             assertTrue(diameter > 0);
             assertTrue(magnitude > 0);
 
-            String modelA = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String modelA = factory.save().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(modelA.isEmpty());
 
-            String modelB = factory.save().components().toPovRay(fAggregate, ExPovRay.BOX_COUNTING);
+            String modelB = factory.save().toPovRay(fAggregate, ExPovRay.BOX_COUNTING);
 
             assertFalse(modelB.isEmpty());
 
-            String geometry = factory.save().components().toBasic(fAggregate, ExBasic.MULTISPHERE);
+            String geometry = factory.save().toBasic(fAggregate, ExBasic.MULTISPHERE);
 
             assertFalse(geometry.isEmpty());
 
@@ -262,13 +262,13 @@ public class DFVisualTest {
             assertTrue(particles2d > 0);
             assertTrue(particles3d > 0);
 
-            String fModel1d = factory.save().components().toPovRay(fAggregate1d, ExPovRay.BOUNDARY);
+            String fModel1d = factory.save().toPovRay(fAggregate1d, ExPovRay.BOUNDARY);
             assertFalse(fModel1d.isEmpty());
 
-            String fModel2d = factory.save().components().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
+            String fModel2d = factory.save().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
             assertFalse(fModel2d.isEmpty());
 
-            String fModel3d = factory.save().components().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
+            String fModel3d = factory.save().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
             assertFalse(fModel3d.isEmpty());
         }
 
@@ -284,10 +284,10 @@ public class DFVisualTest {
             assertTrue(particles2d > 0);
             assertTrue(particles3d > 0);
 
-            String fModel2d = factory.save().components().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
+            String fModel2d = factory.save().toPovRay(fAggregate2d, ExPovRay.BOUNDARY);
             assertFalse(fModel2d.isEmpty());
 
-            String fModel3d = factory.save().components().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
+            String fModel3d = factory.save().toPovRay(fAggregate3d, ExPovRay.BOUNDARY);
             assertFalse(fModel3d.isEmpty());
         }
     }
@@ -310,7 +310,7 @@ public class DFVisualTest {
 
             fModel.build();
 
-            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
         }
@@ -330,7 +330,7 @@ public class DFVisualTest {
 
             fModel.build();
 
-            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
         }
@@ -350,7 +350,7 @@ public class DFVisualTest {
 
             fModel.build();
 
-            String model = factory.save().components().toPovRay(fAggregate, ExPovRay.BOUNDARY);
+            String model = factory.save().toPovRay(fAggregate, ExPovRay.BOUNDARY);
 
             assertFalse(model.isEmpty());
         }

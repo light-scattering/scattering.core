@@ -24,7 +24,7 @@ public class FQuaternionPrototypeTest {
 
         List<Double> intermediate = new ArrayList<>();
 
-        FQuaternion fComplexRes = proto.applyWithFixedState(fQuaternion,
+        FQuaternion fComplexRes = proto.withFixedState(fQuaternion,
                 p -> intermediate.add(p.setRe(1).setI(2).setJ(3).setK(4).getMagnitude()));
 
         Assertions.assertAll("Validate FComplex values",

@@ -108,4 +108,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.randomize.mutation;
     exports eu.scattering.core.design.aspect.rotate.state;
     exports eu.scattering.core.design.aspect.rotate.mutation;
+    exports eu.scattering.core.design.aspect.load.aggregate;
 }

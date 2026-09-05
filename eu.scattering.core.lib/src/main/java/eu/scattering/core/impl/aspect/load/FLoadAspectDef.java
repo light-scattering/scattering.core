@@ -2,8 +2,8 @@ package eu.scattering.core.impl.aspect.load;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.load.FLoadAspect;
-import eu.scattering.core.design.component.aggregate.FAggregateAspectLoad;
-import eu.scattering.core.impl.component.aggregate.FAggregateAspectLoadDef;
+import eu.scattering.core.design.aspect.load.aggregate.FAggregateLoader;
+import eu.scattering.core.impl.component.aggregate.FAggregateLoaderDef;
 
 public class FLoadAspectDef implements FLoadAspect {
     private final ScatterFactory factory;
@@ -21,8 +21,8 @@ public class FLoadAspectDef implements FLoadAspect {
     //--------------------------------------------------
 
     @Override
-    public FAggregateAspectLoad aggregates() {
+    public FAggregateLoader aggregate() {
 
-        return FAggregateAspectLoadDef.create(this.factory);
+        return FAggregateLoaderDef.create(this.factory);
     }
 }

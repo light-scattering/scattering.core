@@ -3,7 +3,7 @@ package eu.scattering.cli.aspect;
 import eu.scattering.cli.type.FORMAT_INPUT;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.FAggregateAspectLoad;
+import eu.scattering.core.design.component.aggregate.FAggregateLoader;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class GeometryLoad {
     }
 
     private static Optional<FAggregate> loadFromString(ScatterFactory factory, String data, FORMAT_INPUT format) {
-        FAggregateAspectLoad load = factory.load().aggregates();
+        FAggregateLoader load = factory.load().aggregate();
 
         return Optional.ofNullable(switch (format) {
             case JSON -> load.fromJSON(data);

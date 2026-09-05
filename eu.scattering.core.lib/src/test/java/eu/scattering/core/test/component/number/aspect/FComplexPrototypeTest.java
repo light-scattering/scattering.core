@@ -23,7 +23,7 @@ public class FComplexPrototypeTest {
 
         List<Double> intermediate = new ArrayList<>();
 
-        FComplex fComplexRes = proto.applyWithFixedState(fComplex,
+        FComplex fComplexRes = proto.withFixedState(fComplex,
                 p -> intermediate.add(p.setRe(2).setIm(2).getMagnitude()));
 
         Assertions.assertAll("Validate FComplex values",

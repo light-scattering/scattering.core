@@ -39,7 +39,7 @@ public class FModelCCRLCATest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.save().components().toNGSolve(fAggregate);
+            String model = factory.save().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -56,7 +56,7 @@ public class FModelCCRLCATest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.save().components().toNGSolve(fAggregate);
+            String model = factory.save().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());

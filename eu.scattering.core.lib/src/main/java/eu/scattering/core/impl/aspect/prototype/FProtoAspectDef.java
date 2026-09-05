@@ -21,7 +21,7 @@ public class FProtoAspectDef implements FProtoAspect {
     //--------------------------------------------------
 
     @Override
-    public FComplex applyWithFixedState(FComplex in, Consumer<FComplex> action) {
+    public FComplex withFixedState(FComplex in, Consumer<FComplex> action) {
         double memoRe = in.getRe();
         double memoIm = in.getIm();
 
@@ -57,7 +57,7 @@ public class FProtoAspectDef implements FProtoAspect {
     //--------------------------------------------------
 
     @Override
-    public FQuaternion applyWithFixedState(FQuaternion in, Consumer<FQuaternion> action) {
+    public FQuaternion withFixedState(FQuaternion in, Consumer<FQuaternion> action) {
         double memoRe = in.getRe();
         double memoI = in.getI();
         double memoJ = in.getJ();

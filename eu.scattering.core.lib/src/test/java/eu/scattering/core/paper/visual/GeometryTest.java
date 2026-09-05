@@ -6,6 +6,8 @@ import eu.scattering.core.design.aspect.randomize.mutation.FRandMutation;
 import eu.scattering.core.design.aspect.rotate.mutation.FRotMutate;
 import eu.scattering.core.design.aspect.rotate.state.FRotState;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.utility.type.preset.ExBasic;
+import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.TestConfig.factory;
@@ -26,6 +28,12 @@ public class GeometryTest {
         FRandDist3DFactory oi = factory.random().dist3D();
 
 
+        factory.save().toPovRay(agg, ExPovRay.FREE);
+        factory.save().toJSON(agg);
+//        factory.save().toCLI(null);
+        factory.save().toBasic(agg, ExBasic.MULTISPHERE);
+
+        factory.load().aggregate().fromBasic("", ExBasic.MULTISPHERE);
 
         FRandMutation x = factory.random().mutate();
 

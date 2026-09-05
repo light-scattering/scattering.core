@@ -5,11 +5,5 @@ import eu.scattering.core.design.component.ComponentAspectSave;
 import eu.scattering.core.design.statistics.StatisticsAspectSave;
 import eu.scattering.core.design.storage.StorageAspectSave;
 
-public interface FSaveAspect extends Aspect {
-
-    StorageAspectSave storage();
-
-    ComponentAspectSave components();
-
-    StatisticsAspectSave statistics();
+public interface FSaveAspect extends StorageAspectSave, ComponentAspectSave, StatisticsAspectSave, Aspect {
 }

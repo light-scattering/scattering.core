@@ -148,8 +148,7 @@ public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration
         results.setName("Effective R<sub>g</sub>")
                 .setRefMeta(metaPlotResults);
 
-        return  factory.save().statistics()
-                .toPythonPlotly(metaGlobal, approximation, results);
+        return  factory.save().toPythonPlotly(metaGlobal, approximation, results);
     }
 
     private String plotRaw() {
@@ -176,7 +175,6 @@ public class FMonitorCCRadiusOfGyrationDef implements FMonitorCCRadiusOfGyration
                 .setRangeShow(true)
                 .setErrorShow(false);
 
-        return  factory.save().statistics()
-                .toPythonPlotly(metaGlobal, results);
+        return  factory.save().toPythonPlotly(metaGlobal, results);
     }
 }

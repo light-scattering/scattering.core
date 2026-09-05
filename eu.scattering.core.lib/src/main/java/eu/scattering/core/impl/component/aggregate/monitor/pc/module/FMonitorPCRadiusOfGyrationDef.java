@@ -151,7 +151,6 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
         results.setName("Averaged data")
                 .setRefMeta(metaPlotResults);
 
-        return  factory.save().statistics()
-                .toPythonPlotly(metaGlobal, approximation, results);
+        return  factory.save().toPythonPlotly(metaGlobal, approximation, results);
     }
 }

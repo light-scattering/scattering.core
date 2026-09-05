@@ -41,10 +41,10 @@ public class FModelPCDLAShellTest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.save().components().toNGSolve(fAggregate);
+            String model = factory.save().toNGSolve(fAggregate);
 
-            assertTrue(json.length() > 0);
-            assertTrue(model.length() > 0);
+            assertFalse(json.isEmpty());
+            assertFalse(model.isEmpty());
         }
 
         @Test
@@ -58,10 +58,10 @@ public class FModelPCDLAShellTest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.save().components().toNGSolve(fAggregate);
+            String model = factory.save().toNGSolve(fAggregate);
 
-            assertTrue(json.length() > 0);
-            assertTrue(model.length() > 0);
+            assertFalse(json.isEmpty());
+            assertFalse(model.isEmpty());
         }
     }
 
