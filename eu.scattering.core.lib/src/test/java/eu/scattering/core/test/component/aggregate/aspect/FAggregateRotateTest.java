@@ -29,7 +29,7 @@ public class FAggregateRotateTest {
 
         FVector fVectorRef = factory.getFVector(0, 1, 0);
 
-        FAggregate results = rot.mutate().rotRgAround(fAggregate, fVectorRef, Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundRg(fAggregate, fVectorRef, Math.PI * 0.5);
 
         assertAll("Validate rotation",
             () -> assertSame(fAggregate, results),
@@ -48,7 +48,7 @@ public class FAggregateRotateTest {
 
         FVector fVectorRef = factory.getFVector(0, 1, 0);
 
-        FAggregate results = rot.mutate().rotRgAround(fAggregate, fVectorRef, -Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundRg(fAggregate, fVectorRef, -Math.PI * 0.5);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),
@@ -70,7 +70,7 @@ public class FAggregateRotateTest {
         double angle = Math.abs(rand.nextDouble() % Math.PI);
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.mutate().rotRgAround(fAggregate, fVectorRef, angle),
+                () -> rot.mutate().aroundRg(fAggregate, fVectorRef, angle),
                 "The direction of the provided FVector is not defined");
     }
 
@@ -82,7 +82,7 @@ public class FAggregateRotateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(List.of(fSphereA, fSphereB));
 
-        FAggregate results = rot.mutate().rotRgAround(fAggregate, 0, 0, 0, 0, 1, 0, Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundRg(fAggregate, 0, 0, 0, 0, 1, 0, Math.PI * 0.5);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),
@@ -101,7 +101,7 @@ public class FAggregateRotateTest {
 
         FPairPos3D fPairPos3D = factory.getFPairPos3D(0, 0, 0, 0, 1, 0);
 
-        FAggregate results = rot.mutate().rotRgAround(fAggregate, fPairPos3D, Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundRg(fAggregate, fPairPos3D, Math.PI * 0.5);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),
@@ -120,7 +120,7 @@ public class FAggregateRotateTest {
 
         FVector fVectorRef = factory.getFVector(0, 1, 0);
 
-        FAggregate results = rot.mutate().rotQtAround(fAggregate, fVectorRef, Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundQt(fAggregate, fVectorRef, Math.PI * 0.5);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),
@@ -139,7 +139,7 @@ public class FAggregateRotateTest {
 
         FVector fVectorRef = factory.getFVector(0, 1, 0);
 
-        FAggregate results = rot.mutate().rotQtAround(fAggregate, fVectorRef, -Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundQt(fAggregate, fVectorRef, -Math.PI * 0.5);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),
@@ -156,7 +156,7 @@ public class FAggregateRotateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(List.of(fSphereA, fSphereB));
 
-        FAggregate results = rot.mutate().rotQtAround(fAggregate, 0, 0, 0, 0, 1, 0, Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundQt(fAggregate, 0, 0, 0, 0, 1, 0, Math.PI * 0.5);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),
@@ -175,7 +175,7 @@ public class FAggregateRotateTest {
 
         FPairPos3D fPairPos3D = factory.getFPairPos3D(0, 0, 0, 0, 1, 0);
 
-        FAggregate results = rot.mutate().rotQtAround(fAggregate, fPairPos3D, Math.PI * 0.5);
+        FAggregate results = rot.mutate().aroundQt(fAggregate, fPairPos3D, Math.PI * 0.5);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),
@@ -194,7 +194,7 @@ public class FAggregateRotateTest {
 
         FRotState qt = factory.rotate().state().aroundAxis(factory.getFVector(0, 2, 0).toFPairPos3D(), Math.PI * 0.5);
 
-        FAggregate results = rot.mutate().rotQt(fAggregate, qt);
+        FAggregate results = rot.mutate().apply(fAggregate, qt);
 
         assertAll("Validate rotation",
                 () -> assertSame(fAggregate, results),

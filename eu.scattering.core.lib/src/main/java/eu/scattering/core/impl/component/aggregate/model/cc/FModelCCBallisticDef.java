@@ -265,12 +265,12 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             aggB.getRefParticles().translate(this.cAggB, headRnd);
 
             baseDir.set(this.random.engine().nextDouble(-rAggB, rAggB), 0, 0);
-            this.rotation.mutate().setRgAngle(baseDir, headRnd, Math.PI * 0.5);
+            this.rotation.mutate().setAngleRg(baseDir, headRnd, Math.PI * 0.5);
 
             baseDir.add(headRnd);
 
             headDir.set(this.random.engine().nextDouble(-rAggA, rAggA), 0, 0);
-            this.rotation.mutate().setRgAngle(headDir, headRnd, Math.PI * 0.5);
+            this.rotation.mutate().setAngleRg(headDir, headRnd, Math.PI * 0.5);
 
             double shift = aggB.project(aggA, this.pathB);
 

@@ -5,21 +5,21 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 
 public interface FPointAspectRot {
 
-    FPoint setRgAngle(FPoint in, double x, double y, double z, double angle);
-    FPoint setRgAngle(FPoint in, FPoint ref, double angle);
-    FPoint setRgAngle(FPoint in, FPos3D ref, double angle);
+    FPoint setAngleRg(FPoint in, double x, double y, double z, double angle);
+    FPoint setAngleRg(FPoint in, FPoint ref, double angle);
+    FPoint setAngleRg(FPoint in, FPos3D ref, double angle);
 
-    FPoint rotRgAround(FPoint in, double x, double y, double z, double angle);
-    FPoint rotRgAround(FPoint in, FPoint ref, double angle);
-    FPoint rotRgAround(FPoint in, FPos3D ref, double angle);
+    FPoint aroundRg(FPoint in, double x, double y, double z, double angle);
+    FPoint aroundRg(FPoint in, FPoint ref, double angle);
+    FPoint aroundRg(FPoint in, FPos3D ref, double angle);
 
-    FPoint setQtAngle(FPoint in, double x, double y, double z, double angle);
-    FPoint setQtAngle(FPoint in, FPoint ref, double angle);
-    FPoint setQtAngle(FPoint in, FPos3D ref, double angle);
+    FPoint setAngleQt(FPoint in, double x, double y, double z, double angle);
+    FPoint setAngleQt(FPoint in, FPoint ref, double angle);
+    FPoint setAngleQt(FPoint in, FPos3D ref, double angle);
 
-    FPoint rotQtAround(FPoint in, double x, double y, double z, double angle);
-    FPoint rotQtAround(FPoint in, FPoint ref, double angle);
-    FPoint rotQtAround(FPoint in, FPos3D ref, double angle);
+    FPoint aroundQt(FPoint in, double x, double y, double z, double angle);
+    FPoint aroundQt(FPoint in, FPoint ref, double angle);
+    FPoint aroundQt(FPoint in, FPos3D ref, double angle);
 
-    FPoint rotQt(FPoint in, FRotState qt);
+    FPoint apply(FPoint in, FRotState qt);
 }

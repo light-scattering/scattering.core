@@ -205,7 +205,7 @@ public class FRotTest {
         double angle = rand.nextDouble() % (2 * Math.PI);
         FRotState rotor = factory.rotate().state().aroundAxis(TestHelper.getRandFPoint().toFPos3D(), angle);
 
-        factory.rotate().mutate().rotQt(fPoint, rotor);
+        factory.rotate().mutate().apply(fPoint, rotor);
 
         assertEquals(length, fPoint.getMagnitude(), epsilon, "The magnitude is invalid");
     }
@@ -216,7 +216,7 @@ public class FRotTest {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
         FRotState rotor = factory.rotate().state().aroundAxis(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 0.5);
 
-        factory.rotate().mutate().rotQt(fPoint, rotor);
+        factory.rotate().mutate().apply(fPoint, rotor);
 
         assertTrue(factory.getFPoint(0, -1, 0).isSimilar(fPoint), "The position is invalid");
 
@@ -228,7 +228,7 @@ public class FRotTest {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
         FRotState rotor = factory.rotate().state().aroundAxis(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 1.5);
 
-        factory.rotate().mutate().rotQt(fPoint, rotor);
+        factory.rotate().mutate().apply(fPoint, rotor);
 
         assertTrue(factory.getFPoint(0, 1, 0).isSimilar(fPoint), "The position is invalid");
 
@@ -240,7 +240,7 @@ public class FRotTest {
         FPoint fPoint = factory.getFPoint(1, 1, 1);
         FRotState rotor = factory.rotate().state().aroundAxis(factory.getFPoint(-1, 1, 0).toFPos3D(), Math.PI);
 
-        factory.rotate().mutate().rotQt(fPoint, rotor);
+        factory.rotate().mutate().apply(fPoint, rotor);
 
         assertTrue(factory.getFPoint(-1, -1, -1).isSimilar(fPoint), "The position is invalid");
     }

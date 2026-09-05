@@ -22,7 +22,7 @@ public class FPointRotateTest {
     void rotateRgWithPrimitivesZero() {
         FPoint fPoint = factory.getFPoint(0, 0, 0);
 
-        rot.mutate().rotRgAround(fPoint, 1, 0, 0, Math.PI / 2);
+        rot.mutate().aroundRg(fPoint, 1, 0, 0, Math.PI / 2);
 
         assertTrue(factory.getFPoint(0, 0, 0).isSimilar(fPoint),
                 "The FPoint position is incorrect");
@@ -33,7 +33,7 @@ public class FPointRotateTest {
     void rotateRgWithPrimitivesSimplePositiveA() {
         FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-        rot.mutate().rotRgAround(fPoint, 1, 1, 0, Math.PI / 2);
+        rot.mutate().aroundRg(fPoint, 1, 1, 0, Math.PI / 2);
 
         assertTrue(factory.getFPoint(1, 1, -Math.sqrt(2)).isSimilar(fPoint),
                 "The FPoint position is incorrect");
@@ -44,7 +44,7 @@ public class FPointRotateTest {
     void rotateRgWithPrimitivesSimplePositiveB() {
         FPoint fPoint = factory.getFPoint(2, 2, 0);
 
-        rot.mutate().rotRgAround(fPoint, 5, 0, 0, Math.PI / 2);
+        rot.mutate().aroundRg(fPoint, 5, 0, 0, Math.PI / 2);
 
         assertTrue(factory.getFPoint(2, 0, -2).isSimilar(fPoint),
                 "The FPoint position is incorrect");
@@ -55,7 +55,7 @@ public class FPointRotateTest {
     void rotateRgWithPrimitivesSimpleNegativeA() {
         FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-        rot.mutate().rotRgAround(fPoint, 1, 1, 0, -Math.PI / 2);
+        rot.mutate().aroundRg(fPoint, 1, 1, 0, -Math.PI / 2);
 
         assertTrue(factory.getFPoint(1, 1, Math.sqrt(2)).isSimilar(fPoint),
                 "The FPoint position is incorrect");
@@ -66,7 +66,7 @@ public class FPointRotateTest {
     void rotateRgWithPrimitivesSimpleNegativeB() {
         FPoint fPoint = factory.getFPoint(2, 2, 0);
 
-        rot.mutate().rotRgAround(fPoint, 5, 0, 0, -Math.PI / 2);
+        rot.mutate().aroundRg(fPoint, 5, 0, 0, -Math.PI / 2);
 
         assertTrue(factory.getFPoint(2, 0, 2).isSimilar(fPoint),
                 "The FPoint position is incorrect");
@@ -78,7 +78,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(1, 1, 0);
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.mutate().rotRgAround(fPoint, 0, 0, 0, Math.PI),
+                () -> rot.mutate().aroundRg(fPoint, 0, 0, 0, Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -87,7 +87,7 @@ public class FPointRotateTest {
     void rotateRgWithPrimitivesValidate() {
         FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-        FPointTestHelper.testReference(p -> rot.mutate().rotRgAround(p, 4, 5, 6, Math.PI), fPoint);
+        FPointTestHelper.testReference(p -> rot.mutate().aroundRg(p, 4, 5, 6, Math.PI), fPoint);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(5, 1, 0);
         FPoint fPointRef = factory.getFPoint(0, 5, 0);
 
-        rot.mutate().rotRgAround(fPointArg, fPointRef, Math.PI / 2);
+        rot.mutate().aroundRg(fPointArg, fPointRef, Math.PI / 2);
 
         assertTrue(factory.getFPoint(0, 1, 5).isSimilar(fPointArg),
                 "The FPoint position is incorrect");
@@ -108,7 +108,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(2, 2, 0);
         FPoint fPointRef = factory.getFPoint(0, 0, 3);
 
-        rot.mutate().rotRgAround(fPointArg, fPointRef, Math.PI / 2);
+        rot.mutate().aroundRg(fPointArg, fPointRef, Math.PI / 2);
 
         assertTrue(factory.getFPoint(2, -2, 0).isSimilar(fPointArg),
                 "The FPoint position is incorrect");
@@ -120,7 +120,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(5, 1, 0);
         FPoint fPointRef = factory.getFPoint(0, 5, 0);
 
-        rot.mutate().rotRgAround(fPointArg, fPointRef, -Math.PI / 2);
+        rot.mutate().aroundRg(fPointArg, fPointRef, -Math.PI / 2);
 
         assertTrue(factory.getFPoint(0, 1, -5).isSimilar(fPointArg),
                 "The FPoint position is incorrect");
@@ -132,7 +132,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(2, 2, 0);
         FPoint fPointRef = factory.getFPoint(0, 0, 3);
 
-        rot.mutate().rotRgAround(fPointArg, fPointRef, -Math.PI / 2);
+        rot.mutate().aroundRg(fPointArg, fPointRef, -Math.PI / 2);
 
         assertTrue(factory.getFPoint(-2, 2, 0).isSimilar(fPointArg),
                 "The FPoint position is incorrect");
@@ -145,7 +145,7 @@ public class FPointRotateTest {
         FPoint fPointRef = factory.getFPoint();
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.mutate().rotRgAround(fPointArg, fPointRef, Math.PI),
+                () -> rot.mutate().aroundRg(fPointArg, fPointRef, Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -156,7 +156,7 @@ public class FPointRotateTest {
         FPoint fPointRef = TestHelper.getRandFPoint(fPointArg);
 
         FPointTestHelper.testReference(
-                (a, b) -> rot.mutate().rotRgAround(a, b, Math.PI), fPointRef, fPointArg);
+                (a, b) -> rot.mutate().aroundRg(a, b, Math.PI), fPointRef, fPointArg);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(5, 1, 0);
         FPos3D fPos3D = factory.getFPoint(0, 5, 0).toFPos3D();
 
-        FPoint result = rot.mutate().rotRgAround(fPoint, fPos3D, Math.PI / 2);
+        FPoint result = rot.mutate().aroundRg(fPoint, fPos3D, Math.PI / 2);
 
         assertTrue(factory.getFPoint(0, 1, 5).isSimilar(fPoint),
                 "The FPoint position is incorrect");
@@ -179,7 +179,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(2, 2, 0);
         FPos3D fPos3D = factory.getFPoint(0, 0, 3).toFPos3D();
 
-        FPoint result = rot.mutate().rotRgAround(fPoint, fPos3D, Math.PI / 2);
+        FPoint result = rot.mutate().aroundRg(fPoint, fPos3D, Math.PI / 2);
 
         assertTrue(factory.getFPoint(2, -2, 0).isSimilar(fPoint),
                 "The FPoint position is incorrect");
@@ -192,7 +192,7 @@ public class FPointRotateTest {
     void setRgAngleWithPrimitivesSimpleA() {
         FPoint fPoint = factory.getFPoint(2, 0, 0);
 
-        rot.mutate().setRgAngle(fPoint, 0, 5, 0, Math.PI * 0.25);
+        rot.mutate().setAngleRg(fPoint, 0, 5, 0, Math.PI * 0.25);
 
         double position = 2 / Math.sqrt(2);
 
@@ -209,7 +209,7 @@ public class FPointRotateTest {
     void setRgAngleWithPrimitivesSimpleB() {
         FPoint fPoint = factory.getFPoint(2, 2, 0);
 
-        rot.mutate().setRgAngle(fPoint, 5, 0, 0, Math.PI * 0.5);
+        rot.mutate().setAngleRg(fPoint, 5, 0, 0, Math.PI * 0.5);
 
         double position = 2 * Math.sqrt(2);
 
@@ -226,7 +226,7 @@ public class FPointRotateTest {
     void setRgAngleWithPrimitivesSimpleNegativePosition() {
         FPoint fPoint = factory.getFPoint(-3, 0, 0);
 
-        rot.mutate().setRgAngle(fPoint, 0, 2, 0, Math.PI * 0.25);
+        rot.mutate().setAngleRg(fPoint, 0, 2, 0, Math.PI * 0.25);
 
         double position = 3 / Math.sqrt(2);
 
@@ -243,7 +243,7 @@ public class FPointRotateTest {
     void setRgAngleWithPrimitivesSimpleNegativeAngle() {
         FPoint fPoint = factory.getFPoint(3, 0, 0);
 
-        rot.mutate().setRgAngle(fPoint, 0, 2, 0, -Math.PI * 0.25);
+        rot.mutate().setAngleRg(fPoint, 0, 2, 0, -Math.PI * 0.25);
 
         double position = 3 / Math.sqrt(2);
 
@@ -267,7 +267,7 @@ public class FPointRotateTest {
         double magnitude = fPoint.getMagnitude();
         double angle = rand.nextDouble() % (Math.PI);
 
-        rot.mutate().setRgAngle(fPoint, opX, opY, opZ, angle);
+        rot.mutate().setAngleRg(fPoint, opX, opY, opZ, angle);
 
         Assertions.assertAll("Validate angle",
                 () -> assertEquals(magnitude, fPoint.getMagnitude(),
@@ -283,7 +283,7 @@ public class FPointRotateTest {
         FPoint fPoint = TestHelper.getRandFPoint();
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.mutate().setRgAngle(fPoint, 0, 0, 0, Math.PI),
+                () -> rot.mutate().setAngleRg(fPoint, 0, 0, 0, Math.PI),
                 "The axis is not defined");
     }
 
@@ -293,7 +293,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(1, 2, 3);
 
         Assertions.assertThrows(IllegalStateException.class,
-                () -> rot.mutate().setRgAngle(fPoint, 1, 2, 3, Math.PI),
+                () -> rot.mutate().setAngleRg(fPoint, 1, 2, 3, Math.PI),
                 "The axes are similar");
     }
 
@@ -302,7 +302,7 @@ public class FPointRotateTest {
     void setAngleWithPrimitivesValidate() {
         FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-        FPointTestHelper.testReference(p -> rot.mutate().setRgAngle(p, 4, 5, 6, Math.PI), fPoint);
+        FPointTestHelper.testReference(p -> rot.mutate().setAngleRg(p, 4, 5, 6, Math.PI), fPoint);
     }
 
     @Test
@@ -311,7 +311,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(2, 0, 0);
         FPoint fPointRef = factory.getFPoint(0, 5, 0);
 
-        rot.mutate().setRgAngle(fPointArg, fPointRef, Math.PI * 0.25);
+        rot.mutate().setAngleRg(fPointArg, fPointRef, Math.PI * 0.25);
 
         double position = 2 / Math.sqrt(2);
 
@@ -329,7 +329,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(2, 2, 0);
         FPoint fPointRef = factory.getFPoint(5, 0, 0);
 
-        rot.mutate().setRgAngle(fPointArg, fPointRef, Math.PI * 0.5);
+        rot.mutate().setAngleRg(fPointArg, fPointRef, Math.PI * 0.5);
 
         double position = 2 * Math.sqrt(2);
 
@@ -347,7 +347,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(-1, 0, 0);
         FPoint fPointRef = factory.getFPoint(0, 1, 0);
 
-        rot.mutate().setRgAngle(fPointArg, fPointRef, Math.PI * 0.25);
+        rot.mutate().setAngleRg(fPointArg, fPointRef, Math.PI * 0.25);
 
         double position = 1 / Math.sqrt(2);
 
@@ -365,7 +365,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint(1, 0, 0);
         FPoint fPointRef = factory.getFPoint(0, 1, 0);
 
-        rot.mutate().setRgAngle(fPointArg, fPointRef, -Math.PI * 0.25);
+        rot.mutate().setAngleRg(fPointArg, fPointRef, -Math.PI * 0.25);
 
         double position = 1 / Math.sqrt(2);
 
@@ -383,7 +383,7 @@ public class FPointRotateTest {
         FPoint fPoint = TestHelper.getRandFPoint();
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.mutate().setRgAngle(fPoint, factory.getFPoint(), Math.PI),
+                () -> rot.mutate().setAngleRg(fPoint, factory.getFPoint(), Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -393,7 +393,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(1, 2, 3);
 
         Assertions.assertThrows(IllegalStateException.class,
-                () -> rot.mutate().setRgAngle(fPoint, factory.getFPoint(1, 2, 3), Math.PI),
+                () -> rot.mutate().setAngleRg(fPoint, factory.getFPoint(1, 2, 3), Math.PI),
                 "The axes are similar");
     }
 
@@ -403,7 +403,7 @@ public class FPointRotateTest {
         FPoint fPointRef = factory.getFPoint(1, 2, 3);
         FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
-        FPointTestHelper.testReference((a, b) -> rot.mutate().setRgAngle(a, b, Math.PI), fPointRef, fPointArg);
+        FPointTestHelper.testReference((a, b) -> rot.mutate().setAngleRg(a, b, Math.PI), fPointRef, fPointArg);
     }
 
     @Test
@@ -412,7 +412,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(2, 0, 0);
         FPos3D fPos3D = factory.getFPoint(0, 5, 0).toFPos3D();
 
-        FPoint results = rot.mutate().setRgAngle(fPoint, fPos3D, Math.PI * 0.25);
+        FPoint results = rot.mutate().setAngleRg(fPoint, fPos3D, Math.PI * 0.25);
 
         double position = 2 / Math.sqrt(2);
 
@@ -432,7 +432,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(2, 2, 0);
         FPos3D fPos3D = factory.getFPoint(5, 0, 0).toFPos3D();
 
-        FPoint results = rot.mutate().setRgAngle(fPoint, fPos3D, Math.PI * 0.5);
+        FPoint results = rot.mutate().setAngleRg(fPoint, fPos3D, Math.PI * 0.5);
 
         double position = 2 * Math.sqrt(2);
 
@@ -452,7 +452,7 @@ public class FPointRotateTest {
         FPoint fPointIn = factory.getFPoint(0, 0, 0);
         FPoint fPointArg = factory.getFPoint(0, 1, 0);
 
-        fPointIn.apply(p -> rot.mutate().rotQtAround(p, fPointArg, Math.PI));
+        fPointIn.apply(p -> rot.mutate().aroundQt(p, fPointArg, Math.PI));
 
         assertTrue(factory.getFPoint(0, 0, 0).isSimilar(fPointIn),
                 "The position is incorrect");
@@ -464,7 +464,7 @@ public class FPointRotateTest {
         FPoint fPointIn = factory.getFPoint(1, 1, 0);
         FPoint fPointArg = factory.getFPoint(0, 1, 0);
 
-        fPointIn.apply(p -> rot.mutate().rotQtAround(p, fPointArg, Math.PI));
+        fPointIn.apply(p -> rot.mutate().aroundQt(p, fPointArg, Math.PI));
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointIn),
                 "The position is incorrect");
@@ -476,7 +476,7 @@ public class FPointRotateTest {
         FPoint fPointIn = factory.getFPoint(1, 1, 0);
         FPoint fPointArg = factory.getFPoint(0, 1, 0);
 
-        fPointIn.apply(p -> rot.mutate().rotQtAround(p, fPointArg, -Math.PI));
+        fPointIn.apply(p -> rot.mutate().aroundQt(p, fPointArg, -Math.PI));
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointIn),
                 "The position is incorrect");
@@ -489,7 +489,7 @@ public class FPointRotateTest {
         FPoint fPointArg = factory.getFPoint();
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.mutate().rotQtAround(fPointIn, fPointArg, Math.PI),
+                () -> rot.mutate().aroundQt(fPointIn, fPointArg, Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -499,7 +499,7 @@ public class FPointRotateTest {
         FPoint fPointIn = TestHelper.getRandFPoint();
         FPoint fPointArg = TestHelper.getRandFPoint(fPointIn);
 
-        FPointTestHelper.testReference((a, b) -> rot.mutate().rotQtAround(a, b, Math.PI), fPointIn, fPointArg);
+        FPointTestHelper.testReference((a, b) -> rot.mutate().aroundQt(a, b, Math.PI), fPointIn, fPointArg);
     }
 
     @Test
@@ -507,7 +507,7 @@ public class FPointRotateTest {
     void rotateQtWithPrimitives() {
         FPoint fPoint = factory.getFPoint(1, 1, 0);
 
-        FPoint results = rot.mutate().rotQtAround(fPoint, 0, 1, 0, Math.PI);
+        FPoint results = rot.mutate().aroundQt(fPoint, 0, 1, 0, Math.PI);
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPoint),
                 "The position is incorrect");
@@ -521,7 +521,7 @@ public class FPointRotateTest {
         FPoint fPoint = factory.getFPoint(1, 1, 0);
         FPos3D fPos3D = factory.getFPos3D(0, 1, 0);
 
-        FPoint results = rot.mutate().rotQtAround(fPoint, fPos3D, Math.PI);
+        FPoint results = rot.mutate().aroundQt(fPoint, fPos3D, Math.PI);
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPoint),
                 "The position is incorrect");
@@ -535,7 +535,7 @@ public class FPointRotateTest {
         FPoint fPointIn = factory.getFPoint(1, 0, 0);
         FPoint fPointArg = factory.getFPoint(0, 1, 0);
 
-        fPointIn.apply(p ->  rot.mutate().setQtAngle(p, fPointArg, Math.PI * 0.25));
+        fPointIn.apply(p ->  rot.mutate().setAngleQt(p, fPointArg, Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -553,7 +553,7 @@ public class FPointRotateTest {
         FPoint fPointIn = factory.getFPoint(-1, 0, 0);
         FPoint fPointArg = factory.getFPoint(0, 1, 0);
 
-        fPointIn.apply(p -> rot.mutate().setQtAngle(p, fPointArg, Math.PI * 0.25));
+        fPointIn.apply(p -> rot.mutate().setAngleQt(p, fPointArg, Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -571,7 +571,7 @@ public class FPointRotateTest {
         FPoint fPointIn = factory.getFPoint(1, 0, 0);
         FPoint fPointArg = factory.getFPoint(0, 1, 0);
 
-        fPointIn.apply(p -> rot.mutate().setQtAngle(p, fPointArg, -Math.PI * 0.25));
+        fPointIn.apply(p -> rot.mutate().setAngleQt(p, fPointArg, -Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -592,7 +592,7 @@ public class FPointRotateTest {
         double magnitude = fPointIn.getMagnitude();
         double angle = rand.nextDouble() % (Math.PI);
 
-        fPointIn.apply(p -> rot.mutate().setQtAngle(p, fPointArg, angle));
+        fPointIn.apply(p -> rot.mutate().setAngleQt(p, fPointArg, angle));
 
         Assertions.assertAll("Validate rotation",
                 () -> assertEquals(magnitude, fPointIn.getMagnitude(),
@@ -608,7 +608,7 @@ public class FPointRotateTest {
         FPoint fPoint = TestHelper.getRandFPoint();
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.mutate().setQtAngle(factory.getFPoint(), fPoint, Math.PI),
+                () -> rot.mutate().setAngleQt(factory.getFPoint(), fPoint, Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -619,7 +619,7 @@ public class FPointRotateTest {
         FPoint fPointArg = TestHelper.getRandFPoint(fPointIn);
 
         FPointTestHelper.testReference(
-                (a, b) -> rot.mutate().setQtAngle(a, b, Math.PI), fPointIn, fPointArg);
+                (a, b) -> rot.mutate().setAngleQt(a, b, Math.PI), fPointIn, fPointArg);
     }
 
     @Test
@@ -630,7 +630,7 @@ public class FPointRotateTest {
         double magnitude = fPoint.getMagnitude();
         double angle = rand.nextDouble() % (Math.PI);
 
-        FPoint results = rot.mutate().setQtAngle(fPoint, 0, 1, 0, angle);
+        FPoint results = rot.mutate().setAngleQt(fPoint, 0, 1, 0, angle);
 
         Assertions.assertAll("Validate rotation",
                 () -> assertEquals(magnitude, fPoint.getMagnitude(),
@@ -651,7 +651,7 @@ public class FPointRotateTest {
         double magnitude = fPoint.getMagnitude();
         double angle = rand.nextDouble() % (Math.PI);
 
-        FPoint results = rot.mutate().setQtAngle(fPoint, fPos3D, angle);
+        FPoint results = rot.mutate().setAngleQt(fPoint, fPos3D, angle);
 
         Assertions.assertAll("Validate rotation",
                 () -> assertEquals(magnitude, fPoint.getMagnitude(),
@@ -670,7 +670,7 @@ public class FPointRotateTest {
 
         FRotState qt = factory.rotate().state().aroundAxis(factory.getFPos3D(0, 2, 0), Math.PI * 0.5);
 
-        FPoint results = rot.mutate().rotQt(fPoint, qt);
+        FPoint results = rot.mutate().apply(fPoint, qt);
 
         assertTrue(fPoint.isSimilar(0, 1, 1),
                 "The position is incorrect");

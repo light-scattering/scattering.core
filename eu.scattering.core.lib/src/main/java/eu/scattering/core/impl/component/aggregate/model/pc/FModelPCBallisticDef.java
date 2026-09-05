@@ -205,7 +205,7 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
             baseDir.set(pos2D, 0);
             headDir.set(pos1D, 0, 0);
 
-            this.rotation.mutate().setRgAngle(headDir, baseDir, Math.PI * 0.5);
+            this.rotation.mutate().setAngleRg(headDir, baseDir, Math.PI * 0.5);
 
             this.pathDir.translate(this.center);
 

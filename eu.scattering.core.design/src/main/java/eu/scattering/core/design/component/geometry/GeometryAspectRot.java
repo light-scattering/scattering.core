@@ -12,5 +12,5 @@ public interface GeometryAspectRot extends
         ContainerAspectRot,
         ShapeAspectRot {
 
-    Geometry rot(Geometry in, FRotState core);
+    Geometry apply(Geometry in, FRotState core);
 }

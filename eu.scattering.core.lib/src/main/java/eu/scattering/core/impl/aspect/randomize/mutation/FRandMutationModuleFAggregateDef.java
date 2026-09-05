@@ -159,11 +159,11 @@ public class FRandMutationModuleFAggregateDef {
             }
 
             double angleRef = getRotAngleA(axis, cA, cB, particleB, particleLoc, distance);
-            this.factory.rotate().mutate().rotRgAround(inA, axis, angleRef);
-            this.factory.rotate().mutate().rotRgAround(particleLoc, axis, angleRef);
+            this.factory.rotate().mutate().aroundRg(inA, axis, angleRef);
+            this.factory.rotate().mutate().aroundRg(particleLoc, axis, angleRef);
 
             double angleArg = getRotAngleB(axis, cB, particleB, particleLoc);
-            this.factory.rotate().mutate().rotRgAround(inB, axis, angleArg);
+            this.factory.rotate().mutate().aroundRg(inB, axis, angleArg);
 
             if (inA.overlaps(inB)) {
                 continue;
@@ -278,11 +278,11 @@ public class FRandMutationModuleFAggregateDef {
 
             FPoint targetRef = this.factory.getFPoint();
             targetRef.set(engine.nextDoubleInCircle(radiusRef), 0);
-            this.factory.rotate().mutate().setRgAngle(targetRef, base, 0.5 * Math.PI);
+            this.factory.rotate().mutate().setAngleRg(targetRef, base, 0.5 * Math.PI);
 
             FPoint targetArg = this.factory.getFPoint();
             targetArg.set(engine.nextDoubleInCircle(radiusArg), 0);
-            this.factory.rotate().mutate().setRgAngle(targetArg, base, 0.5 * Math.PI);
+            this.factory.rotate().mutate().setAngleRg(targetArg, base, 0.5 * Math.PI);
 
             inA.getRefParticles().translate(base.toFPos3D());
 

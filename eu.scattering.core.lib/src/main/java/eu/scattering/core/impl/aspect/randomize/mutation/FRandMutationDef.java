@@ -469,7 +469,7 @@ public class FRandMutationDef implements FRandMutation {
             baseDir.set(pos2D, 0);
             headDir.set(pos1D, 0, 0);
 
-            this.factory.rotate().mutate().setRgAngle(headDir, baseDir, Math.PI * 0.5);
+            this.factory.rotate().mutate().setAngleRg(headDir, baseDir, Math.PI * 0.5);
 
             vectorDir.translate(center);
 
