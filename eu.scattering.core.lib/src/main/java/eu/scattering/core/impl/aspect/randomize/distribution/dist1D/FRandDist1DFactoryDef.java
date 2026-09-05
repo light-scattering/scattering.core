@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.aspect.randomize.distribution.dist1D;
 
-import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1DFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1DFactory;
 import eu.scattering.core.design.aspect.randomize.distribution.dist1d.custom.FRandDist1DCustom;
 import eu.scattering.core.design.aspect.randomize.distribution.dist1d.fixed.FRandDist1DFixed;
 import eu.scattering.core.design.aspect.randomize.distribution.dist1d.normal.FRandDist1DNormal;
@@ -9,17 +9,17 @@ import eu.scattering.core.design.aspect.randomize.engine.FRandEngine;
 
 import java.util.function.BiConsumer;
 
-public class FRandDist1DFactoryContextDef implements FRandDist1DFactoryContext {
+public class FRandDist1DFactoryDef implements FRandDist1DFactory {
     private final FRandEngine generator;
 
-    private FRandDist1DFactoryContextDef(FRandEngine generator) {
+    private FRandDist1DFactoryDef(FRandEngine generator) {
 
         this.generator = generator;
     }
 
-    public static FRandDist1DFactoryContext create(FRandEngine generator) {
+    public static FRandDist1DFactory create(FRandEngine generator) {
 
-        return new FRandDist1DFactoryContextDef(generator);
+        return new FRandDist1DFactoryDef(generator);
     }
 
     //--------------------------------------------------

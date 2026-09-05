@@ -2,22 +2,20 @@ package eu.scattering.core.impl.aspect.rotate;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
-import eu.scattering.core.design.aspect.rotate.mutation.FRotMutation;
-import eu.scattering.core.design.aspect.rotate.state.FRotStateFactoryContext;
-import eu.scattering.core.impl.aspect.rotate.mutation.FRotMutationDef;
-import eu.scattering.core.impl.aspect.rotate.state.FRotStateQtFactoryContextDef;
+import eu.scattering.core.design.aspect.rotate.mutation.FRotMutate;
+import eu.scattering.core.design.aspect.rotate.state.FRotStateFactory;
+import eu.scattering.core.impl.aspect.rotate.mutation.FRotMutateDef;
+import eu.scattering.core.impl.aspect.rotate.state.FRotStateFactoryDef;
 
 public class FRotAspectDef implements FRotAspect {
-    private final FRotMutation mutate;
-
-    private final FRotStateFactoryContext state;
-
+    private final FRotMutate mutate;
+    private final FRotStateFactory state;
 
     private FRotAspectDef(ScatterFactory factory) {
 
-        this.state = FRotStateQtFactoryContextDef.create(factory);
+        this.state = FRotStateFactoryDef.create(factory);
 
-        this.mutate = FRotMutationDef.create(this.state);
+        this.mutate = FRotMutateDef.create(this.state);
     }
 
     public static FRotAspect create(ScatterFactory factory) {
@@ -28,13 +26,13 @@ public class FRotAspectDef implements FRotAspect {
     //--------------------------------------------------
 
     @Override
-    public FRotStateFactoryContext state() {
+    public FRotStateFactory state() {
 
         return this.state;
     }
 
     @Override
-    public FRotMutation mutate() {
+    public FRotMutate mutate() {
 
         return this.mutate;
     }

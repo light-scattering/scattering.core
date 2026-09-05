@@ -6,7 +6,7 @@ import eu.scattering.core.design.aspect.randomize.distribution.dist3d.custom.FRa
 import eu.scattering.core.design.aspect.randomize.distribution.dist3d.normal.FRandDist3DNormalFactory;
 import eu.scattering.core.design.aspect.randomize.distribution.dist3d.uniform.FRandDist3DUniformFactory;
 
-public interface FRandDist3DFactoryContext extends
+public interface FRandDist3DFactory extends
         FRandDist3DCustomFactory,
         FRandDist3DJointFactory,
         FRandDist3DFixedFactory,

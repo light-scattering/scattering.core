@@ -2,24 +2,24 @@ package eu.scattering.core.impl.aspect.rotate.state;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.rotate.state.FRotState;
-import eu.scattering.core.design.aspect.rotate.state.FRotStateFactoryContext;
+import eu.scattering.core.design.aspect.rotate.state.FRotStateFactory;
 import eu.scattering.core.design.storage.transfer.matrix.variant.FMatrix3x3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos4D;
 import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D;
 import org.json.JSONObject;
 
-public class FRotStateQtFactoryContextDef implements FRotStateFactoryContext {
+public class FRotStateFactoryDef implements FRotStateFactory {
     private final ScatterFactory factory;
 
-    private FRotStateQtFactoryContextDef(ScatterFactory factory) {
+    private FRotStateFactoryDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FRotStateFactoryContext create(ScatterFactory factory) {
+    public static FRotStateFactory create(ScatterFactory factory) {
 
-        return new FRotStateQtFactoryContextDef(factory);
+        return new FRotStateFactoryDef(factory);
     }
 
     //--------------------------------------------------
@@ -27,13 +27,13 @@ public class FRotStateQtFactoryContextDef implements FRotStateFactoryContext {
     @Override
     public FRotState fromComponents(FPos4D quaternion, FPos3D offset, FMatrix3x3D matrix) {
 
-        return FRotStateQtDef.create(this.factory, quaternion, offset, matrix);
+        return FRotStateDef.create(this.factory, quaternion, offset, matrix);
     }
 
     @Override
     public FRotState fromJSON(JSONObject json) {
 
-        return FRotStateQtDef.create(this.factory, json);
+        return FRotStateDef.create(this.factory, json);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FRotStateQtFactoryContextDef implements FRotStateFactoryContext {
         FPos4D quaternion = getQuaternion(axis, angle);
         FMatrix3x3D matrix = getMatrix(quaternion);
 
-        return FRotStateQtDef.create(this.factory, quaternion, offset, matrix);
+        return FRotStateDef.create(this.factory, quaternion, offset, matrix);
     }
 
     @Override

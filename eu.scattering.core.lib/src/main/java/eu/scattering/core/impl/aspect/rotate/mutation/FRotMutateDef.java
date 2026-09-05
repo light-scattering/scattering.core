@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.aspect.rotate.mutation;
 
-import eu.scattering.core.design.aspect.rotate.mutation.FRotMutation;
+import eu.scattering.core.design.aspect.rotate.mutation.FRotMutate;
 import eu.scattering.core.design.aspect.rotate.state.FRotState;
-import eu.scattering.core.design.aspect.rotate.state.FRotStateFactoryContext;
+import eu.scattering.core.design.aspect.rotate.state.FRotStateFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -18,17 +18,17 @@ import java.util.Collection;
 
 import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
-public class FRotMutationDef implements FRotMutation {
-    private final FRotStateFactoryContext state;
+public class FRotMutateDef implements FRotMutate {
+    private final FRotStateFactory state;
 
-    private FRotMutationDef(FRotStateFactoryContext state) {
+    private FRotMutateDef(FRotStateFactory state) {
 
         this.state = state;
     }
 
-    public static FRotMutation create(FRotStateFactoryContext state) {
+    public static FRotMutate create(FRotStateFactory state) {
 
-        return new FRotMutationDef(state);
+        return new FRotMutateDef(state);
     }
 
     //--------------------------------------------------

@@ -14,7 +14,7 @@ public interface FRotState extends Transfer {
 
     FMatrix3x3D getMatrix();
 
-    double getAngle();
-
     FPairPos3D getAxis();
+
+    double getAngle();
 }

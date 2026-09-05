@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class FRotStateQtDef implements FRotState {
+public class FRotStateDef implements FRotState {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "engRotQt";
     private static final String JSON_OFFSET = "offset";
@@ -23,7 +23,7 @@ public class FRotStateQtDef implements FRotState {
     private final FPos4D quaternion;
     private final FMatrix3x3D matrix;
 
-    private FRotStateQtDef(TransferFactory factory, FPos4D quaternion, FPos3D offset, FMatrix3x3D matrix) {
+    private FRotStateDef(TransferFactory factory, FPos4D quaternion, FPos3D offset, FMatrix3x3D matrix) {
 
         this.factory = factory;
 
@@ -34,7 +34,7 @@ public class FRotStateQtDef implements FRotState {
 
     public static FRotState create(TransferFactory factory, FPos4D quaternion, FPos3D offset, FMatrix3x3D matrix) {
 
-        return new FRotStateQtDef(factory, quaternion, offset, matrix);
+        return new FRotStateDef(factory, quaternion, offset, matrix);
     }
 
     public static FRotState create(TransferFactory factory, JSONObject json) {
@@ -47,7 +47,7 @@ public class FRotStateQtDef implements FRotState {
         FPos4D quaternion = factory.getFPos4D(json.getJSONObject(JSON_QUATERNION));
         FMatrix3x3D matrix = factory.getFMatrix3x3D(json.getJSONObject(JSON_MATRIX));
 
-        return new FRotStateQtDef(factory, quaternion, offset, matrix);
+        return new FRotStateDef(factory, quaternion, offset, matrix);
     }
 
     //--------------------------------------------------

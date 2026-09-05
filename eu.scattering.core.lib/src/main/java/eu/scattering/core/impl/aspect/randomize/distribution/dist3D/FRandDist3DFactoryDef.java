@@ -2,7 +2,7 @@ package eu.scattering.core.impl.aspect.randomize.distribution.dist3D;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.distribution.dist1d.FRandDist1D;
-import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3DFactoryContext;
+import eu.scattering.core.design.aspect.randomize.distribution.dist3d.FRandDist3DFactory;
 import eu.scattering.core.design.aspect.randomize.distribution.dist3d.custom.FRandDist3DCustom;
 import eu.scattering.core.design.aspect.randomize.distribution.dist3d.fixed.FRandDist3DFixed;
 import eu.scattering.core.design.aspect.randomize.distribution.dist3d.joint.FRandDist3DJoint;
@@ -14,19 +14,19 @@ import eu.scattering.core.design.storage.transfer.position.p2.variant.FPairPos3D
 
 import java.util.function.BiConsumer;
 
-public class FRandDist3DFactoryContextDef implements FRandDist3DFactoryContext {
+public class FRandDist3DFactoryDef implements FRandDist3DFactory {
     private final ScatterFactory factory;
     private final FRandEngine generator;
 
-    private FRandDist3DFactoryContextDef(FRandEngine generator, ScatterFactory factory) {
+    private FRandDist3DFactoryDef(FRandEngine generator, ScatterFactory factory) {
 
         this.factory = factory;
         this.generator = generator;
     }
 
-    public static FRandDist3DFactoryContext create(FRandEngine generator, ScatterFactory factory) {
+    public static FRandDist3DFactory create(FRandEngine generator, ScatterFactory factory) {
 
-        return new FRandDist3DFactoryContextDef(generator, factory);
+        return new FRandDist3DFactoryDef(generator, factory);
     }
 
     //--------------------------------------------------
