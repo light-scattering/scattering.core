@@ -27,7 +27,7 @@ Scattering Core is a highly optimized Java library designed for the generation a
   - [Model-based generations](#model-based-generation)
     - [PC models](#pc-models)
     - [CC models](#cc-models)
-- [Loading, saving, and exporting](#loading-saving-and-exporting)
+- [Loading and exporting](#loading-and-exporting)
 - [Morphological analysis](#morphological-analysis)
     - [Core properties](#core-properties)
     - [Connectivity and overlap](#connectivity-and-overlap)
@@ -99,7 +99,7 @@ This project began several years ago, well before the LLM era. As a result, the 
 
 During the later stages of development, maintaining the scientific correctness and cleanliness of the code remained the highest priority. AI was used primarily as a research assistant - sourcing information, suggesting component names, and generating initial drafts for a few isolated mathematical functions (such as calculating the gyration tensor or performing PCA).
 
-To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. Furthermore, the generated code was only used as a baseline. Every single line within those marked methods was subsequently refactored, manually analyzed, and tested to ensure strict scientific accuracy.
+To maintain transparency, methods that originated from an LLM prompt are explicitly flagged using a custom `@LLM` annotation. Furthermore, the generated code was only used as a baseline. Every line within those marked methods was subsequently refactored, analyzed, and tested to ensure strict scientific accuracy.
 
 On the other hand, since this manual is neither executable code nor a formal manuscript, I allowed an LLM to polish, structure, and rewrite my original drafts for better readability. The same approach was applied to the wrappers and build tools (which are separate from the core library). While the AI was not used to write the code directly, the development of these peripheral elements followed modern workflows, utilizing the LLM as an assistant and interactive guide.
 
@@ -109,7 +109,7 @@ While Scattering Core is currently highly functional for the generation and morp
 
 ### Web interface and containerization
 
-To make the tool more accessible to users who prefer visual dashboards over command-line tools, I plan to develop a fully integrated graphical user interface (GUI). This initiative will include:
+To make the tool more accessible to users who prefer visual dashboards over command-line tools, I plan to develop a fully integrated graphical user interface (GUI). It will include:
 * **Frontend:** Building a modern React web application to configure generation parameters, execute analysis tasks, and visualize the resulting 3D models.
 * **Backend:** Developing a lightweight REST backend endpoint that exposes the core engine's capabilities.
 * **Docker:** Packaging the entire stack into a single Docker container. This will allow anyone to spin up the complete GUI environment locally with a single command, without worrying about Java versions or node modules.
@@ -156,7 +156,7 @@ If reproducibility is not required, you can initialize the factory without a see
 *(While current development strictly prioritizes mathematical correctness for research publication, the unseeded mode lays the architectural groundwork for multithreaded performance optimizations planned for a near-future release)*
 
 ```java
-// Initialize the factory for maximum multi-threaded performance.
+// Initialize the factory for maximum performance.
 ScatterFactory factory = ScatterCore.createFactory();
 ```
 
@@ -166,7 +166,7 @@ Calculations rely on two core tolerances to maintain numerical stability. Both c
 
 **Epsilon (continuous tolerance)**
 
-The positional threshold used for positioning 3D geometries.
+The positional threshold used for positioning geometries.
 * **Default:** `1E-4`
 * **When to adjust:** Modify this when importing files or working with external algorithms to match their specific definitions of point contact and overlap.
 
@@ -188,7 +188,7 @@ fParticle.setDelta(1E-2);               // Override tolerance for a single parti
 
 **Memory buffering for discrete operations**
 
-Heavy discrete operations (like mesh decomposition) require a reusable data buffer to maintain high performance and prevent memory churn. You should allocate and inject an `FBuffer` into the aggregate before running these calculations:
+Heavy discrete operations (like mesh decomposition) require a reusable data buffer to maintain high performance. You should allocate and inject an `FBuffer` into the aggregate before running these calculations:
 
 ```java
 // Initialize and inject a pre-allocated reusable mesh buffer.
@@ -213,7 +213,7 @@ FSphere pB = factory.getFSphere(2, 0, 0, 1);
 FAggregate agg = factory.getRefFAggregate(List.of(pA, pB));
 ```
 
-While this method is ideal when feeding in coordinates from external algorithms, writing it by hand is tedious and error-prone. To accelerate the process, the library provides built-in utilities for generating common geometric arrangements (note, that the available list of predefined geometries is frequently expanded).
+While this method is ideal when feeding in coordinates from external algorithms, writing it by hand is tedious and error-prone. To accelerate the process, the library provides built-in utilities for generating common geometric arrangements.
 
 ```java
 double rp = 1;  // Particle radius
@@ -231,7 +231,7 @@ FAggregate hex2 = factory.aggregates().geometries().hex2D(20, rp);
 FAggregate hex3 = factory.aggregates().geometries().hex3D(30, rp);
 ```
 
-For highly complex structural geometries the library offers advanced stochastic tools like Producers and Distributions. While a comprehensive guide to these features will be covered in an upcoming tutorial, below are two examples demonstrating how to construct a TiO2:Ag core-satellite composite and a multi-modal particle assembly:
+For highly complex structural geometries the library offers advanced tools like Producers and Distributions. While a comprehensive guide to these features is not included in this tutorial, below are two examples demonstrating how to construct a TiO2:Ag core-satellite composite and a multi-modal particle assembly:
 
 ```java
 // Create the central particle (TiO2) and tag it. 
@@ -245,12 +245,12 @@ FSphereProducer particleAg = factory.getFSphereProducer()
         // Here, a predefined generator places centers on a sphere and assigns radii via a normal distribution.
         .withProdCenterAndDistRadius(
                 factory.getFPointProducer().withOnSphere(36),
-                factory.generator().getFDist1DNormal(2.5, 0.2))
+                factory.random().dist1D().normal(2.5, 0.2))
         // CORRECTIONS: Apply spatial modifications to the generated geometry.
         // You can apply multiple predefined or custom corrections. 
         // Here, a custom lambda snaps each candidate into exact point-contact with the core.
         .addCorrection((candidate, rnd) ->
-                factory.generator().attachLinear(candidate, particleTiO2))
+                factory.random().mutate().attachLinear(candidate, particleTiO2))
         // VALIDATIONS: Enforce strict criteria the particle must pass to be accepted.
         // You can require multiple predefined or custom validators.
         // Here, a predefined validator rejects any candidate that overlaps with previously placed particles.
@@ -263,7 +263,7 @@ FAggregate composite = factory.getRefFAggregate(particleAg.getListFixed(250));
 composite.addRefParticle(particleTiO2);
 
 // Export the finalized composite to a PovRay script for 3D visualization.
-String visual = factory.save().components().toPovRay(composite, ExPovRay.FREE);
+String visual = factory.export().toPovRay(composite, ExPovRay.FREE);
 ```
 
 ```java
@@ -271,17 +271,17 @@ String visual = factory.save().components().toPovRay(composite, ExPovRay.FREE);
 int size = 2500;
 
 // Define a uniform 3D bounding box for spatial distribution.
-FDist3D rangeA = factory.generator().getFDist3DUniform(factory.getFPairPos3D(-200, -100, -100, 200, 100, 100));
+FRandDist3D rangeA = factory.random().dist3D().uniform(factory.getFPairPos3D(-200, -100, -100, 200, 100, 100));
 // Define a 3D normal distribution (centered at the origin by default) with custom standard deviations.
-FDist3D rangeB = factory.generator().getFDist3DNormal().setStd(50, 25, 25);
+FRandDist3D rangeB = factory.random().dist3D().normal().setStd(50, 25, 25);
 
 // Configure a producer to generate particles using a weighted mix of generators.
 FSphereProducer particles = factory.getFSphereProducer()
         // GENERATORS: Chain multiple predefined or custom generators with assigned selection weights.
         // 90% probability: Place small particles (radius 1.0) uniformly within the bounding box.
-        .withDistCenterAndDistRadius(rangeA, factory.generator().getFDist1DNormal(1.0, 0.1), 90)
+        .withDistCenterAndDistRadius(rangeA, factory.random().dist1D().normal(1.0, 0.1), 90)
         // 10% probability: Place intermediate particles (radius 5.0) clustered via the normal distribution.
-        .withDistCenterAndDistRadius(rangeB, factory.generator().getFDist1DNormal(5.0, 1), 10)
+        .withDistCenterAndDistRadius(rangeB, factory.random().dist1D().normal(5.0, 1), 10)
         // VALIDATIONS: Enforce strict criteria candidates must pass to be accepted.
         // Here, a predefined validator rejects any candidates that overlap with existing particles.
         .validateNoOverlap()
@@ -292,7 +292,7 @@ FSphereProducer particles = factory.getFSphereProducer()
 FAggregate geometry = factory.getRefFAggregate(particles.getListRandomized(size));
 
 // Export the finalized geometry to a PovRay script for 3D visualization, including the visual boundary.
-String visual = factory.save().components().toPovRay(geometry, ExPovRay.BOUNDARY);
+String visual = factory.export().toPovRay(geometry, ExPovRay.BOUNDARY);
 ```
 
 <div align="center">
@@ -320,7 +320,7 @@ To accelerate setup, the library includes built-in utilities for generating comm
 // Generate an aggregate composed of 1,000 primary particles with a uniform radius of 1 unit.
 FAggregate mono = factory.aggregates().templates().monodisperse(1_000, 1.0);
 // Generate an aggregate composed of 1,000 primary particles with radii following a normal distribution.
-FAggregate polyAgg = factory.aggregates().templates().polydisperse(1_000, 1.0, 0.1);
+FAggregate poly = factory.aggregates().templates().polydisperse(1_000, 1.0, 0.1);
 ```
 
 To shape the geometry, you must define an aggregation model and bind it to your preliminary particle pool.
@@ -340,13 +340,13 @@ FModelCC d2 = factory.models().cc().ballistic(Dimension.D2, aggregate);
 d3.build();
 
 // Export the 3D visualization.
-String d3Visual = factory.save().components().toPovRay(aggregate, ExPovRay.FREE);
+String d3Visual = factory.export().toPovRay(aggregate, ExPovRay.FREE);
 
 // Execute the 2D ballistic CC aggregation (reusing the same particle pool).
 d2.build();
 
 // Export the 2D visualization.
-String d2Visual = factory.save().components().toPovRay(aggregate, ExPovRay.FREE);
+String d2Visual = factory.export().toPovRay(aggregate, ExPovRay.FREE);
 ```
 
 <div align="center">
@@ -372,8 +372,8 @@ Particle-Cluster methods build aggregates by attaching a single particle at a ti
 // Create a preliminary pool of 1,000 monodisperse primary particles.
 FAggregate aggregate = factory.aggregates().templates().monodisperse(1_000, 1);
 
-// Access the PC model factory context.
-FModelPCFactoryContext context = factory.models().pc();
+// Access the PC model factory.
+FModelPCFactory context = factory.models().pc();
 
 // Initialize standard PC models.
 FModelPC rla = context.rla(aggregate);              // Reaction-Limited Aggregation.
@@ -449,12 +449,12 @@ Cluster-Cluster methods at each step of the aggregation process connect two clus
 // Create a preliminary pool of 1,000 monodisperse primary particles.
 FAggregate aggregate = factory.aggregates().templates().monodisperse(1_000, 1);
 
-// Access the CC model factory context.
-FModelCCFactoryContext context = factory.models().cc();
+// Access the CC model factory.
+FModelCCFactory context = factory.models().cc();
 
 // Initialize standard CC models.
-FModelCC rlca = context.rla(aggregate);             // Reaction-Limited Cluster Aggregation.
-FModelCC dlca = context.dla(aggregate);             // Diffusion-Limited Cluster Aggregation.
+FModelCC rlca = context.rlca(aggregate);            // Reaction-Limited Cluster Aggregation.
+FModelCC dlca = context.dlca(aggregate);            // Diffusion-Limited Cluster Aggregation.
 FModelCC ballistic = context.ballistic(aggregate);  // Ballistic aggregation.
 
 // Initialize a tunable aggregation model.
@@ -490,7 +490,7 @@ You can tightly control the Cluster-Cluster (CC) aggregation logic by attaching 
 Completion validators evaluate the final state of the aggregate. This works exactly the same way as it does in PC models.
 ```java
 // If the fully generated geometry fails this condition, the entire aggregation process restarts.
-model.addCompletionValidator((cluster, iteration) ->
+fModel.addCompletionValidator((cluster, iteration) ->
         // Enforce a strict fractal dimension using the Mass-Radius algorithm.
         cluster.getFractalDimension(FractalDimension.MR_RESTRICTED) > 2.5);
 ```
@@ -500,8 +500,8 @@ Step acceptors evaluate the merging of two intermediate clusters. If the accepto
 // Define a temporary helper aggregate to evaluate the combined geometry.
 FAggregate container = factory.getFAggregate();
 // If the candidate merge fails this condition, the attachment step repeats.
-model.addStepAcceptor((clusterA, clusterB) -> {
-    // Only apply the criterion if the resulting geometry will have at least 100 particles.
+fModel.addStepAcceptor((clusterA, clusterB) -> {
+        // Only apply the criterion if the resulting geometry will have at least 100 particles.
         if (clusterA.size() + clusterB.size() < 100) {
             return true;
         }
@@ -520,7 +520,7 @@ Fragment viewers inspect the initial, small aggregates (fragments) generated by 
 FPlotBar diameter = factory.getFPlotBar();
 
 // Inspect all starting fragments right before the CC aggregation begins.
-model.addFragmentViewer(fragment ->
+fModel.addFragmentViewer(fragment ->
         // Record the diameter of each fragment relative to its particle count.
         diameter.add(fragment.size(), fragment.getDiameter()));
 ```
@@ -530,7 +530,7 @@ Step monitors track dynamic data during the build process without altering the g
 // Create a data container for plotting.
 FPlotBar diameter = factory.getFPlotBar();
 // Observe and record data across all stages of the aggregation process.
-model.addStepMonitor((clusterA, clusterB, index) -> {
+fModel.addStepMonitor((clusterA, clusterB, index) -> {
         // Record the diameter of the primary cluster.
         diameter.add(clusterA.size(), clusterA.getDiameter());
         // Note on lifecycle stages:
@@ -543,9 +543,9 @@ model.addStepMonitor((clusterA, clusterB, index) -> {
 });
 ```
 
-## Loading, saving, and exporting
+## Loading and exporting
 
-The library provides dedicated aspects for serializing aggregates and exporting them to various external formats. This allows you to save your generated structures, import existing ones, or export them for external visualization.
+The library provides dedicated factory aspects for loading and exporting aggregates. This allows you to reconstruct structures from stored data or translate them into external formats for rendering and analysis.
 
 **Loading**
 
@@ -554,33 +554,25 @@ You can reconstruct an `FAggregate` from a string representation. The default an
 ```java
 String data = "...";                                                // The serialized string data.
 
-var load = factory.load().aggregates();                             // Retrieve the loading context for aggregates.
+var load = factory.load().aggregate();                              // Retrieve the loading context for aggregates.
 
 FAggregate fAggregate = load.fromJSON(data);                        // Load from the default JSON format.     
 FAggregate fAggregate = load.fromBasic(data, ExBasic.MULTISPHERE);  // Load from an alternative format.
 ```
 
-**Saving**
-
-For data storage, serialization, or transferring structures between processes, you can save aggregates into standard string formats. The JSON format is highly recommended as it strictly preserves all component properties.
-
-```java
-var save = factory.save().components();                             // Retrieve the saving context for components (including aggregates).
-
-String data = save.toJSON(aggregate);                               // Save to the default JSON format.      
-String data = save.toBasic(aggregate, ExBasic.MULTISPHERE);         // Save to an alternative format.
-```
-
 **Exporting**
 
-When preparing an aggregate for external applications (such as meshing, rendering, or interfacing with legacy software),  you can use specialized exporters tailored to those target environments.
+For data storage, serialization, or preparing structures for external applications (such as meshing or rendering), use the export() aspect. JSON is highly recommended for data retention as it perfectly preserves the internal state, while specialized exporters translate the geometry for third-party software.
 
 ```java
-var save = factory.save().components();                             // Retrieve the saving context for components (including aggregates).
+// Serialize for data storage and transfer.
+String data = factory.export().toJSON(aggregate);                           // Export to the default JSON format.
+String data = factory.export().toBasic(aggregate, ExBasic.MULTISPHERE);     // Export to an alternative format.
 
-String data = save.toFLAGE(aggregate);                              // Export to a format compatible with the FLAGE software.
-String data = save.toNGSolve(aggregate);                            // Export for volumetric mesh generation using NetGen/NGSolve. 
-String data = save.toPovRay(aggregate, ExPovRay.BOUNDARY);          // Export for high-quality 3D rendering using PovRay.
+// Translate for external software and visualization.
+String data = factory.export().toFLAGE(aggregate);                          // Export for the FLAGE software.
+String data = factory.export().toNGSolve(aggregate);                        // Export for volumetric mesh generation using NetGen/NGSolve. 
+String data = factory.export().toPovRay(aggregate, ExPovRay.BOUNDARY);      // Export for high-quality 3D rendering using PovRay.
 ```
 
 ## Morphological analysis
