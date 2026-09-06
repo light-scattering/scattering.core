@@ -2,24 +2,24 @@ package eu.scattering.core.impl.component.aggregate.model.cc;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.cc.FModelCCFactoryContext;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCCFactory;
 import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
 import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.aggregate.model.cc.rlca.FModelCCRLCA;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.utility.type.option.Dimension;
 
-public class FModelCCFactoryContextDef implements FModelCCFactoryContext {
+public class FModelCCFactoryDef implements FModelCCFactory {
     private final ScatterFactory factory;
 
-    private FModelCCFactoryContextDef(ScatterFactory factory) {
+    private FModelCCFactoryDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FModelCCFactoryContext create(ScatterFactory factory) {
+    public static FModelCCFactory create(ScatterFactory factory) {
 
-        return new FModelCCFactoryContextDef(factory);
+        return new FModelCCFactoryDef(factory);
     }
 
     //--------------------------------------------------

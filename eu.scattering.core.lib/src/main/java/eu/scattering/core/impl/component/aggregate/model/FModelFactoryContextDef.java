@@ -2,10 +2,10 @@ package eu.scattering.core.impl.component.aggregate.model;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
-import eu.scattering.core.design.component.aggregate.model.cc.FModelCCFactoryContext;
-import eu.scattering.core.design.component.aggregate.model.pc.FModelPCFactoryContext;
-import eu.scattering.core.impl.component.aggregate.model.cc.FModelCCFactoryContextDef;
-import eu.scattering.core.impl.component.aggregate.model.pc.FModelPCFactoryContextDef;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCCFactory;
+import eu.scattering.core.design.component.aggregate.model.pc.FModelPCFactory;
+import eu.scattering.core.impl.component.aggregate.model.cc.FModelCCFactoryDef;
+import eu.scattering.core.impl.component.aggregate.model.pc.FModelPCFactoryDef;
 
 public class FModelFactoryContextDef implements FModelFactoryContext {
     private final ScatterFactory factory;
@@ -23,14 +23,14 @@ public class FModelFactoryContextDef implements FModelFactoryContext {
     //--------------------------------------------------
 
     @Override
-    public FModelPCFactoryContext pc() {
+    public FModelPCFactory pc() {
 
-        return FModelPCFactoryContextDef.create(this.factory);
+        return FModelPCFactoryDef.create(this.factory);
     }
 
     @Override
-    public FModelCCFactoryContext cc() {
+    public FModelCCFactory cc() {
 
-        return FModelCCFactoryContextDef.create(this.factory);
+        return FModelCCFactoryDef.create(this.factory);
     }
 }

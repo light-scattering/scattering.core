@@ -204,7 +204,7 @@ public final class ScatterFactoryDef implements ScatterFactory {
 
         long timestamp = System.currentTimeMillis();
 
-        System.out.println("Timestamp: " + timestamp);
+        System.out.println("Seed: " + timestamp);
 
         return create(timestamp);
     }
