@@ -2,7 +2,7 @@ package eu.scattering.core.impl.aspect.load;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.load.FLoadAspect;
-import eu.scattering.core.design.aspect.load.aggregate.FAggregateLoader;
+import eu.scattering.core.design.component.aggregate.FAggregateLoader;
 import eu.scattering.core.impl.component.aggregate.FAggregateLoaderDef;
 
 public class FLoadAspectDef implements FLoadAspect {

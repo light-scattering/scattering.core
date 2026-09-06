@@ -124,7 +124,7 @@ public class FAggregateModuleFractalDimensionMRDef {
         results.setName("Mass")
                 .setRefMeta(metaPlotResults);
 
-        return  factory.save().toPythonPlotly(metaGlobal, approximation, results);
+        return  factory.export().toPythonPlotly(metaGlobal, approximation, results);
     }
 
     // -------------------------------------------------------------------------------------------------

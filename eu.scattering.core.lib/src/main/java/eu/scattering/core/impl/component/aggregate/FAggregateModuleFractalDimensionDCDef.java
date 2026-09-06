@@ -106,7 +106,7 @@ public class FAggregateModuleFractalDimensionDCDef {
         results.setName("Density correlation")
                 .setRefMeta(metaPlotResults);
 
-        return  factory.save().toPythonPlotly(metaGlobal, approximation, results);
+        return  factory.export().toPythonPlotly(metaGlobal, approximation, results);
     }
 
     // -------------------------------------------------------------------------------------------------

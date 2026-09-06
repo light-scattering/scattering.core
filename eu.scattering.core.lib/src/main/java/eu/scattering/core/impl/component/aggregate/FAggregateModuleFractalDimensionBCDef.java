@@ -127,7 +127,7 @@ public class FAggregateModuleFractalDimensionBCDef {
         results.setName("Raw box counts")
                 .setRefMeta(metaPlotResults);
 
-        return  factory.save().toPythonPlotly(metaGlobal, approximation, results);
+        return  factory.export().toPythonPlotly(metaGlobal, approximation, results);
     }
 
     // -------------------------------------------------------------------------------------------------

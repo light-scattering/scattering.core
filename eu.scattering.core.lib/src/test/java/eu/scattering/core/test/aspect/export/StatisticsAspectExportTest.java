@@ -36,7 +36,7 @@ public class StatisticsAspectExportTest {
         fStatA.setName("Stat A");
         fStatB.setName("Stat B");
 
-        String script = factory.save().toPythonPlotlyHistogram(fStatMeta, fStatA, fStatB);
+        String script = factory.export().toPythonPlotlyHistogram(fStatMeta, fStatA, fStatB);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -55,7 +55,7 @@ public class StatisticsAspectExportTest {
         fStatA.setName("Stat A");
         fStatB.setName("Stat B");
 
-        String script = factory.save().toPythonPlotlyHistogram(fStatA, fStatB);
+        String script = factory.export().toPythonPlotlyHistogram(fStatA, fStatB);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -91,7 +91,7 @@ public class StatisticsAspectExportTest {
         fPlotInterpolated.setName("Interpolated");
         fPlotSimpleLinearRegression.setName("Linear regression");
 
-        String script = factory.save().toPythonPlotly(fPlotMeta, fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
+        String script = factory.export().toPythonPlotly(fPlotMeta, fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -120,7 +120,7 @@ public class StatisticsAspectExportTest {
         fPlotInterpolated.setName("Interpolated");
         fPlotSimpleLinearRegression.setName("Linear regression");
 
-        String script = factory.save().toPythonPlotly(fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
+        String script = factory.export().toPythonPlotly(fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -160,7 +160,7 @@ public class StatisticsAspectExportTest {
         fPlotB.add(5, 1);
         fPlotB.add(6, 3);
 
-        String script = factory.save().toPythonPlotlyHistogram(fPlotMeta, fPlotA, fPlotB);
+        String script = factory.export().toPythonPlotlyHistogram(fPlotMeta, fPlotA, fPlotB);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -192,7 +192,7 @@ public class StatisticsAspectExportTest {
         fPlotB.add(5, 1);
         fPlotB.add(6, 3);
 
-        String script = factory.save().toPythonPlotlyHistogram(fPlotA, fPlotB);
+        String script = factory.export().toPythonPlotlyHistogram(fPlotA, fPlotB);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -224,7 +224,7 @@ public class StatisticsAspectExportTest {
         fPlotBar.addRef(6, factory.getFStat(0, 1, 2));
         fPlotBar.addRef(8, factory.getFStat(-6, -5, -4));
 
-        String script = factory.save().toPythonPlotly(fPlotBarMeta, fPlotBar);
+        String script = factory.export().toPythonPlotly(fPlotBarMeta, fPlotBar);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -247,7 +247,7 @@ public class StatisticsAspectExportTest {
         fPlotBar.addRef(6, factory.getFStat(0, 1, 2));
         fPlotBar.addRef(8, factory.getFStat(-6, -5, -4));
 
-        String script = factory.save().toPythonPlotly(fPlotBar);
+        String script = factory.export().toPythonPlotly(fPlotBar);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))

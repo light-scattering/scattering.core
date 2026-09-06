@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatterFactory;
-import eu.scattering.core.design.aspect.load.aggregate.FAggregateLoader;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.FAggregateLoader;
 import eu.scattering.core.design.utility.type.preset.ExBasic;
 import eu.scattering.core.impl.component.aggregate.load.ImBasicDef;
 

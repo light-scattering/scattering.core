@@ -23,7 +23,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.randomize.engine;
     exports eu.scattering.core.design.aspect.randomize;
     exports eu.scattering.core.design.aspect.rotate;
-    exports eu.scattering.core.design.aspect.save;
+    exports eu.scattering.core.design.aspect.export;
     exports eu.scattering.core.design.component.aggregate.extension;
     exports eu.scattering.core.design.component.aggregate.model.cc.ballistic;
     exports eu.scattering.core.design.component.aggregate.model.cc.dlca;
@@ -108,5 +108,4 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.aspect.randomize.mutation;
     exports eu.scattering.core.design.aspect.rotate.state;
     exports eu.scattering.core.design.aspect.rotate.mutation;
-    exports eu.scattering.core.design.aspect.load.aggregate;
 }

@@ -41,7 +41,7 @@ public class FModelPCDLAShellTest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.save().toNGSolve(fAggregate);
+            String model = factory.export().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());
@@ -58,7 +58,7 @@ public class FModelPCDLAShellTest {
             fModel.build();
 
             String json = fAggregate.toJSON().toString();
-            String model = factory.save().toNGSolve(fAggregate);
+            String model = factory.export().toNGSolve(fAggregate);
 
             assertFalse(json.isEmpty());
             assertFalse(model.isEmpty());

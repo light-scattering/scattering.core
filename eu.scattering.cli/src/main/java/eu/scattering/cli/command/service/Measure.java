@@ -127,7 +127,7 @@ public class Measure {
 
     private static String getRp(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getFStatParticleRadius());
+        return factory.export().toCLI(aggregate.getFStatParticleRadius());
     }
 
     private static String getRpAvg(FAggregate aggregate) {
@@ -167,7 +167,7 @@ public class Measure {
 
     private static String getOverlapFactorParticleVolumetric(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC));
+        return factory.export().toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC));
     }
 
     private static String getOverlapFactorParticleVolumetricAvg(FAggregate aggregate) {
@@ -192,7 +192,7 @@ public class Measure {
 
     private static String getOverlapFactorParticleQuantitative(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE));
+        return factory.export().toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE));
     }
 
     private static String getOverlapFactorParticleQuantitativeAvg(FAggregate aggregate) {
@@ -217,7 +217,7 @@ public class Measure {
 
     private static String getOverlapFactorParticleLinear(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR));
+        return factory.export().toCLI(aggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR));
     }
 
     private static String getOverlapFactorParticleLinearAvg(FAggregate aggregate) {
@@ -242,17 +242,17 @@ public class Measure {
 
     private static String getOverlapFactorClusterVolumetric(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC));
+        return factory.export().toCLI(aggregate.getOverlapFactor(OverlapFactor.CLUSTER_VOLUMETRIC));
     }
 
     private static String getLength(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getLength());
+        return factory.export().toCLI(aggregate.getLength());
     }
 
     private static String getBoundary(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getBoundary());
+        return factory.export().toCLI(aggregate.getBoundary());
     }
 
     private static String getDiameter(FAggregate aggregate) {
@@ -313,32 +313,32 @@ public class Measure {
 
     private static String getCmAdaptive(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.ADAPTIVE));
+        return factory.export().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.ADAPTIVE));
     }
 
     private static String getCmSimpleMono(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_MONO));
+        return factory.export().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_MONO));
     }
 
     private static String getCmSimplePoly(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY));
+        return factory.export().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY));
     }
 
     private static String getCmComplex(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.VOLUMETRIC));
+        return factory.export().toCLI(aggregate.getMassCenter(factory.getFPoint(), MassCenter.VOLUMETRIC));
     }
 
     private static String getCb(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getCenter(factory.getFPoint(), Center.BOX));
+        return factory.export().toCLI(aggregate.getCenter(factory.getFPoint(), Center.BOX));
     }
 
     private static String getCs(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getCenter(factory.getFPoint(), Center.SPHERE));
+        return factory.export().toCLI(aggregate.getCenter(factory.getFPoint(), Center.SPHERE));
     }
 
     private static String getVolumeAdaptive(FAggregate aggregate) {
@@ -438,12 +438,12 @@ public class Measure {
 
     private static String getCoordinationNumber(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getCoordinationNumber());
+        return factory.export().toCLI(aggregate.getCoordinationNumber());
     }
 
     private static String getCoordinationNumberFunction(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getCoordinationNumberFunction());
+        return factory.export().toCLI(aggregate.getCoordinationNumberFunction());
     }
 
     private static String getCoordinationNumberAvg(FAggregate aggregate) {
@@ -468,12 +468,12 @@ public class Measure {
 
     private static String getTripletAngle(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getTripletAngle());
+        return factory.export().toCLI(aggregate.getTripletAngle());
     }
 
     private static String getTripletAngleFunction(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getTripletAngleFunction());
+        return factory.export().toCLI(aggregate.getTripletAngleFunction());
     }
 
     private static String getTripletAngleAvg(FAggregate aggregate) {
@@ -498,12 +498,12 @@ public class Measure {
 
     private static String getPairDistance(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getPairDistance());
+        return factory.export().toCLI(aggregate.getPairDistance());
     }
 
     private static String getPairDistanceFunction(ScatterFactory factory, FAggregate aggregate) {
 
-        return factory.save().toCLI(aggregate.getPairDistanceFunction());
+        return factory.export().toCLI(aggregate.getPairDistanceFunction());
     }
 
     private static String getPairDistanceAvg(FAggregate aggregate) {

@@ -28,10 +28,10 @@ public class GeometryTest {
         FRandDist3DFactory oi = factory.random().dist3D();
 
 
-        factory.save().toPovRay(agg, ExPovRay.FREE);
-        factory.save().toJSON(agg);
-//        factory.save().toCLI(null);
-        factory.save().toBasic(agg, ExBasic.MULTISPHERE);
+        factory.export().toPovRay(agg, ExPovRay.FREE);
+        factory.export().toJSON(agg);
+        factory.export().toCLI(factory.getFPoint());
+        factory.export().toBasic(agg, ExBasic.MULTISPHERE);
 
         factory.load().aggregate().fromBasic("", ExBasic.MULTISPHERE);
 
@@ -43,5 +43,7 @@ public class GeometryTest {
 
 
         System.out.println("ll");
+
+//        factory.getFPairPos2D()
     }
 }

@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.statistics;
 
 import eu.scattering.core.design.ScatterFactory;
-import eu.scattering.core.design.statistics.StatisticsAspectSave;
+import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.base.FStatMeta;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -13,17 +13,17 @@ import eu.scattering.core.design.statistics.construct.plotbar.FPlotBarMetaGlobal
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatisticsAspectSaveDef implements StatisticsAspectSave {
+public class StatisticsExporterDef implements StatisticsExporter {
     private final ScatterFactory factory;
 
-    private StatisticsAspectSaveDef(ScatterFactory factory) {
+    private StatisticsExporterDef(ScatterFactory factory) {
 
         this.factory = factory;
     }
 
-    public static StatisticsAspectSave create(ScatterFactory factory) {
+    public static StatisticsExporter create(ScatterFactory factory) {
 
-        return new StatisticsAspectSaveDef(factory);
+        return new StatisticsExporterDef(factory);
     }
 
     // -------------------------------------------------------------------------------------------------
