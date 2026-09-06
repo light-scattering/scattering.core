@@ -28,6 +28,7 @@ Scattering Core is a highly optimized Java library designed for the generation a
     - [PC models](#pc-models)
     - [CC models](#cc-models)
 - [Loading and exporting](#loading-and-exporting)
+- [Transformations](#transformations)
 - [Morphological analysis](#morphological-analysis)
     - [Core properties](#core-properties)
     - [Connectivity and overlap](#connectivity-and-overlap)
@@ -573,6 +574,57 @@ String data = factory.export().toBasic(aggregate, ExBasic.MULTISPHERE);     // E
 String data = factory.export().toFLAGE(aggregate);                          // Export for the FLAGE software.
 String data = factory.export().toNGSolve(aggregate);                        // Export for volumetric mesh generation using NetGen/NGSolve. 
 String data = factory.export().toPovRay(aggregate, ExPovRay.BOUNDARY);      // Export for high-quality 3D rendering using PovRay.
+```
+
+## Transformations
+
+The library provides multiple tools to modify an existing aggregate. In this tutorial, only the fundamental operations are described.
+
+**Translation**
+
+You can shift the entire aggregate through 3D space.
+
+```java
+// Translate the geometry by the specified X, Y, and Z offsets (multiple overloads are available).
+fAggregate.translate(1.0, 2.0, 3.0);
+```
+
+**Scaling**
+
+To fully resize an aggregate, you typically need to apply two distinct scaling operations: one for the spatial distribution, and another for the physical geometries.
+
+```java
+// Scale the structural space (changes the distance between particle centers).
+fAggregate.scalePosition(3.0);
+// Scale the component size (changes the physical size of the individual particles).
+fAggregate.scaleSize(3.0);
+```
+
+**Rotation**
+
+You can use predefined alignment methods directly on the aggregate.
+
+```java
+// Align the aggregate using Principal Component Analysis (PCA).
+fAggregate.pca();
+```
+
+Custom spatial rotations are governed by the rotation aspect. There are many overloads available depending on your reference points, axes, and preferred algorithm.
+
+```java
+// Rotate the geometry around the Y-axis using the Rodriguez formula.
+factory.rotate().mutate().aroundRg(fAggregate, 0, 1, 0, Math.PI * 0.5);
+// Rotate the geometry around the Y-axis using quaternions.
+factory.rotate().mutate().aroundQt(fAggregate, 0, 1, 0, Math.PI * 0.5);
+```
+
+Alternatively, if multiple aggregates or shapes must undergo the exact same transformation, it is highly recommended to optimize the process by creating a reusable rotation state.
+
+```java
+// Create a reusable rotation state.
+FRotState state = factory.rotate().state().aroundAxis(0, 1, 0, Math.PI * 0.5);
+// Apply the pre-calculated rotation to the geometry.
+factory.rotate().mutate().apply(fAggregate, state);
 ```
 
 ## Morphological analysis
