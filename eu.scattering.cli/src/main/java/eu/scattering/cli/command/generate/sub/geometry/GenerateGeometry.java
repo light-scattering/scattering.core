@@ -1,8 +1,6 @@
 package eu.scattering.cli.command.generate.geometry;
 
-import eu.scattering.cli.command.generate.geometry.variant.GenerateGeometryGrid1D;
-import eu.scattering.cli.command.generate.geometry.variant.GenerateGeometryGrid2D;
-import eu.scattering.cli.command.generate.geometry.variant.GenerateGeometryGrid3D;
+import eu.scattering.cli.command.generate.geometry.variant.*;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -13,16 +11,17 @@ import java.util.concurrent.Callable;
         subcommands = {
                 GenerateGeometryGrid1D.class,
                 GenerateGeometryGrid2D.class,
-                GenerateGeometryGrid3D.class
-        },
-        mixinStandardHelpOptions = true,
-        usageHelpAutoWidth = true
+                GenerateGeometryGrid3D.class,
+                GenerateGeometryHex2D.class,
+                GenerateGeometryHex3D.class
+        }
 )
 public class GenerateGeometry implements Callable<Integer> {
 
     @Override
     public Integer call() {
         CommandLine.usage(this, System.out);
+
         return 0;
     }
 }

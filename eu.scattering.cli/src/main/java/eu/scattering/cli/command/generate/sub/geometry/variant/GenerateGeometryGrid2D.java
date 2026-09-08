@@ -11,9 +11,7 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(
         name = "grid2D",
-        description = "Generates a 2D grid composed of d0xd1 primary particles.",
-        mixinStandardHelpOptions = true,
-        usageHelpAutoWidth = true
+        description = "Generates a 2D grid composed of d0xd1 primary particles."
 )
 public class GenerateGeometryGrid2D implements Callable<Integer> {
 
@@ -30,7 +28,7 @@ public class GenerateGeometryGrid2D implements Callable<Integer> {
     private ExportMixin export;
 
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
 
         if (rp <= 0) {
             System.out.println("The particle radius must be greater than zero.");
