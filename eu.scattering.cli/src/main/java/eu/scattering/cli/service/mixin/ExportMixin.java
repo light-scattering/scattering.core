@@ -1,6 +1,6 @@
-package eu.scattering.cli.mixin;
+package eu.scattering.cli.service.mixin;
 
-import eu.scattering.cli.aspect.type.FORMAT_EXPORT;
+import eu.scattering.cli.service.type.FORMAT_EXPORT;
 import picocli.CommandLine;
 
 public class ExportMixin {
@@ -8,7 +8,7 @@ public class ExportMixin {
     @CommandLine.Option(
             names = {"-e", "--export"},
             defaultValue = "json",
-            description = "Export format"
+            description = "Geometry export format."
     )
     public FORMAT_EXPORT format;
 }

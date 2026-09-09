@@ -1,6 +1,6 @@
-package eu.scattering.cli.command.generate.geometry;
+package eu.scattering.cli.command.generate.sub.geometry;
 
-import eu.scattering.cli.command.generate.geometry.variant.*;
+import eu.scattering.cli.command.generate.sub.geometry.variant.*;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;

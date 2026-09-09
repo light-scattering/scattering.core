@@ -1,6 +1,6 @@
-package eu.scattering.cli.aspect;
+package eu.scattering.cli.service;
 
-import eu.scattering.cli.aspect.type.FORMAT_LOAD;
+import eu.scattering.cli.service.type.FORMAT_LOAD;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateLoader;
@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class Load {
+public class LoadService {
 
     public static Optional<FAggregate> load(ScatterFactory factory, String file, FORMAT_LOAD format) throws IOException {
 

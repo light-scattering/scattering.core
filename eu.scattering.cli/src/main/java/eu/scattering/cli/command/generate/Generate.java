@@ -1,6 +1,7 @@
 package eu.scattering.cli.command.generate;
 
-import eu.scattering.cli.command.generate.geometry.GenerateGeometry;
+import eu.scattering.cli.command.generate.sub.geometry.GenerateGeometry;
+import eu.scattering.cli.command.generate.sub.model.GenerateModel;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -9,10 +10,9 @@ import java.util.concurrent.Callable;
         name = "generate",
         description = "Generates sphere assemblies.",
         subcommands = {
-                GenerateGeometry.class
-        },
-        mixinStandardHelpOptions = true,
-        usageHelpAutoWidth = true
+                GenerateGeometry.class,
+                GenerateModel.class
+        }
 )
 public class Generate implements Callable<Integer> {
 

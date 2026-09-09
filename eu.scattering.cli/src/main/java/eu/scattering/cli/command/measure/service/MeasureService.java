@@ -1,6 +1,6 @@
 package eu.scattering.cli.command.measure.service;
 
-import eu.scattering.cli.type.TYPE_METRIC;
+import eu.scattering.cli.command.measure.service.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;

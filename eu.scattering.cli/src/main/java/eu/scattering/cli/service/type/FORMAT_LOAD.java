@@ -1,4 +1,4 @@
-package eu.scattering.cli.aspect.type;
+package eu.scattering.cli.service.type;
 
 public enum FORMAT_LOAD {
     JSON, MULTISPHERE

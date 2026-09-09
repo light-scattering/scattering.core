@@ -10,14 +10,14 @@ import picocli.CommandLine;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-        name = "grid1D",
-        description = "Generates a 1D grid composed of d0 primary particles.",
+        name = "hex2D",
+        description = "Create a 2D hexagonal cluster limited by an outer radius.",
         usageHelpAutoWidth = true,
         footer = {
-                "%nExample Configuration:%n  scatter-cli generate geometry grid1D 1.5 20 -e povray"
+                "%nExample Configuration:%n  scatter-cli generate geometry hex2D 1.0 15.0 -e povray"
         }
 )
-public class GenerateGeometryGrid1D implements Callable<Integer> {
+public class GenerateGeometryHex2D implements Callable<Integer> {
 
     @CommandLine.Spec
     private CommandLine.Model.CommandSpec spec;
@@ -31,10 +31,10 @@ public class GenerateGeometryGrid1D implements Callable<Integer> {
 
     @CommandLine.Parameters(
             index = "1",
-            paramLabel = "<d0>",
-            description = "The number of particles along the D0 axis."
+            paramLabel = "<outer_radius>",
+            description = "Geometry outer radius."
     )
-    private int d0;
+    private double reach;
 
     @CommandLine.Mixin
     private ExportMixin export;
@@ -49,8 +49,8 @@ public class GenerateGeometryGrid1D implements Callable<Integer> {
             return 1;
         }
 
-        if (d0 < 1) {
-            System.err.println("Error: The d0 value must be at least one.\n");
+        if (reach < rp) {
+            System.err.println("Error: The outer radius must not be less than the particle radius.\n");
             spec.commandLine().usage(System.err);
 
             return 1;
@@ -59,10 +59,11 @@ public class GenerateGeometryGrid1D implements Callable<Integer> {
         try {
             ScatterFactory factory = ScatterCore.createFactory();
 
-            FAggregate aggregate = factory.aggregates().geometries().grid1D(d0, rp);
+            FAggregate aggregate = factory.aggregates().geometries().hex2D(reach, rp);
             String results = ExportService.export(factory, aggregate, export.format);
 
             System.out.println(results);
+
         } catch (Exception e) {
             System.err.println("Error generating geometry: " + e.getMessage());
 

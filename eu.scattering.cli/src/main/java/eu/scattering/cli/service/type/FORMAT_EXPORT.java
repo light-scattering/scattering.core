@@ -1,8 +1,8 @@
-package eu.scattering.cli.aspect.type;
+package eu.scattering.cli.service.type;
 
 public enum FORMAT_EXPORT {
     JSON, MULTISPHERE,
     FLAGE,
     NETGEN,
-    POVRAY_FREE, POVRAY_BOUNDARY
+    POVRAY, POVRAY_FREE
 }
