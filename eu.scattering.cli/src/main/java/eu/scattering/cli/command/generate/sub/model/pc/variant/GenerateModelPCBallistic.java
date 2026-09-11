@@ -5,6 +5,7 @@ import eu.scattering.cli.command.generate.service.mixin.DistributionMixin;
 import eu.scattering.cli.command.generate.service.mixin.TransformationMixin;
 import eu.scattering.cli.command.generate.service.mixin.ValidationMixin;
 import eu.scattering.cli.service.mixin.ExportMixin;
+import eu.scattering.core.design.utility.type.option.Dimension;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -34,10 +35,16 @@ public class GenerateModelPCBallistic implements Callable<Integer> {
     @CommandLine.Mixin
     private ExportMixin expMixin;
 
+    @CommandLine.Option(
+            names = {"--2d"},
+            description = {"", "Generate in two dimensions."}
+    )
+    public boolean d2;
+
     @Override
     public Integer call() throws Exception {
 
         return GenerateHelper.assemble(spec, transMixin, disMixin, valMixin, expMixin, (models, template) ->
-                models.pc().ballistic(template));
+                models.pc().ballistic(d2 ? Dimension.D2 : Dimension.D3, template));
     }
 }

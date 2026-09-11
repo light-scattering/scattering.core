@@ -5,6 +5,7 @@ import eu.scattering.cli.command.generate.service.mixin.DistributionMixin;
 import eu.scattering.cli.command.generate.service.mixin.TransformationMixin;
 import eu.scattering.cli.command.generate.service.mixin.ValidationMixin;
 import eu.scattering.cli.service.mixin.ExportMixin;
+import eu.scattering.core.design.utility.type.option.Dimension;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -34,10 +35,28 @@ public class GenerateModelCCDLCA implements Callable<Integer> {
     @CommandLine.Mixin
     private ExportMixin expMixin;
 
+    @CommandLine.Option(
+            names = {"-a", "--asymmetric"},
+            description = {"", "Allow asymmetric cluster growth."}
+    )
+    public boolean asymmetric;
+
+    @CommandLine.Option(
+            names = {"-s", "--spawn-internal"},
+            description = {"", "Allow particles to spawn within the cluster boundary."}
+    )
+    public boolean spawn;
+
+    @CommandLine.Option(
+            names = {"--2d"},
+            description = {"", "Generate in two dimensions."}
+    )
+    public boolean d2;
+
     @Override
     public Integer call() throws Exception {
 
         return GenerateHelper.assemble(spec, transMixin, disMixin, valMixin, expMixin, (models, template) ->
-                models.cc().dlca(template));
+                models.cc().dlca(d2 ? Dimension.D2 : Dimension.D3, template).setInternalSpawn(spawn).setSymmetry(!asymmetric));
     }
 }

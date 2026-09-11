@@ -9,11 +9,17 @@ import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "scatter-cli",
+@CommandLine.Command(
+        name = "scatter-cli",
+        customSynopsis = {
+                "",
+                "scatter-cli [-h | --version | --diagnostics]",
+                "scatter-cli <command> [OPTIONS]"
+        },
         mixinStandardHelpOptions = true,
         versionProvider = VersionProvider.class,
         subcommands = { Demo.class, Measure.class, Generate.class, Transform.class, CommandLine.HelpCommand.class},
-        description = "The root command for Scatter-CLI morphological analysis.")
+        description = "The root commands:")
 public class ScatterCLI implements Callable<Integer> {
 
     @CommandLine.Option(

@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.aggregate.model.cc;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.rlca.FModelCCRLCA;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.buffer.transfer.variant.FBufferData;
@@ -243,9 +244,11 @@ public class FModelCCRLCADef implements FModelCCRLCA {
     }
 
     @Override
-    public void setSymmetry(boolean symmetry) {
+    public FModelCC setSymmetry(boolean symmetry) {
 
         this.symmetry = symmetry;
+
+        return this;
     }
 
     @Override

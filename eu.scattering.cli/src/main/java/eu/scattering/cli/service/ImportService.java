@@ -18,7 +18,7 @@ public class ImportService {
 
     public static Optional<FAggregate> load(ScatterFactory factory, ImportMixin importMixin) throws IOException {
 
-        return "-".equals(importMixin.file) ? loadFromStreamConsole(factory, importMixin.format) : loadFromStreamFile(factory, importMixin);
+        return "-".equals(importMixin.output) ? loadFromStreamConsole(factory, importMixin.format) : loadFromStreamFile(factory, importMixin);
     }
 
     //---------------------------------------------------------------------
@@ -30,7 +30,7 @@ public class ImportService {
 
     private static Optional<FAggregate> loadFromStreamFile(ScatterFactory factory, ImportMixin importMixin) throws IOException {
 
-        try (InputStream is = Files.newInputStream(Paths.get(importMixin.file))) {
+        try (InputStream is = Files.newInputStream(Paths.get(importMixin.output))) {
 
             return loadFromStream(factory, is, importMixin.format);
         }

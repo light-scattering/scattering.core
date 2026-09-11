@@ -9,7 +9,7 @@ import eu.scattering.core.design.utility.lambda.TriConsumer;
 public interface FModelPCDLA extends FModelPC {
 
     boolean getInternalSpawn();
-    void setInternalSpawn(boolean internal);
+    FModelPCDLA setInternalSpawn(boolean internal);
 
     // -------------------------------------------------------------------------------------------------
 

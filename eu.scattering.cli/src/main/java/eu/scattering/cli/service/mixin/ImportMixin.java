@@ -15,7 +15,7 @@ public class ImportMixin {
     @CommandLine.Parameters(
             index = "0",
             defaultValue = "-",
-            description = "Input file or '-' for stdin."
+            description = {"", "Input file or '-' for stdin."}
     )
-    public String file;
+    public String output;
 }

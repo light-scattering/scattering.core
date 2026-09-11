@@ -4,6 +4,7 @@ import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -329,9 +330,11 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     }
 
     @Override
-    public void setSymmetry(boolean symmetry) {
+    public FModelCC setSymmetry(boolean symmetry) {
 
         this.symmetry = symmetry;
+
+        return this;
     }
 
     @Override

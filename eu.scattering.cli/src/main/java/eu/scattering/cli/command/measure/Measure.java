@@ -16,8 +16,8 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(
         name = "measure",
         description = "Calculates morphological parameters.",
-        mixinStandardHelpOptions = true,
         usageHelpAutoWidth = true,
+        abbreviateSynopsis = true,
         footer = {
                 "%nExample Configuration:%n  scatter-cli measure input.xyz -m vol-sum srf-sum rg-mono:avg"
         }
@@ -97,23 +97,37 @@ public class Measure implements Callable<Integer> {
     @CommandLine.Option(
             names = {"-e", "--epsilon"},
             defaultValue = "1E-4",
-            description = "Tolerance (default: ${DEFAULT-VALUE})"
+            description = {"", "Tolerance (default: ${DEFAULT-VALUE})."}
     )
     private double epsilon;
 
     @CommandLine.Option(
             names = {"-d", "--delta"},
             defaultValue = "1E-2",
-            description = "Grid (default: ${DEFAULT-VALUE})"
+            description = {"", "Grid (default: ${DEFAULT-VALUE})."}
     )
     private double delta;
 
     @CommandLine.Option(
             names = {"-b", "--buffer"},
             defaultValue = "0",
-            description = "Buffer (default: ${DEFAULT-VALUE})"
+            description = {"", "Buffer (default: ${DEFAULT-VALUE})."}
     )
     private int buffer;
+
+    @CommandLine.Option(
+            names = {"-h", "--help"},
+            usageHelp = true,
+            description = {"", "Show this help message and exit."}
+    )
+    private boolean helpRequested;
+
+    @CommandLine.Option(
+            names = {"-V", "--version"},
+            versionHelp = true,
+            description = {"", "Print version information and exit."}
+    )
+    private boolean versionRequested;
 
     @Override
     public Integer call() {

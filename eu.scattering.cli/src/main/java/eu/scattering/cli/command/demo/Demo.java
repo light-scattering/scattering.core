@@ -12,12 +12,26 @@ public class Demo implements Callable<Integer> {
     @CommandLine.Spec
     private CommandLine.Model.CommandSpec spec;
 
+    @CommandLine.Option(
+            names = {"-h", "--help"},
+            usageHelp = true,
+            description = {"", "Show this help message and exit."}
+    )
+    private boolean helpRequested;
+
+    @CommandLine.Option(
+            names = {"-V", "--version"},
+            versionHelp = true,
+            description = {"", "Print version information and exit."}
+    )
+    private boolean versionRequested;
+
     @Override
     public Integer call() {
 
         String[] args = {
                 "generate", "model", "cc", "tunable",
-                "-df", "1.8", "-kf", "1.3", "-rf", "2048,1.0",
+                "--df", "1.8", "--kf", "1.3", "--rf", "2048,1.0",
                 "-e", "multisphere"
         };
 

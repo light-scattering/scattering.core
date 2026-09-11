@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public interface FModelCC extends FModel {
 
     boolean getSymmetry();
-    void setSymmetry(boolean asymmetry);
+    FModelCC setSymmetry(boolean asymmetry);
 
     // -------------------------------------------------------------------------------------------------
 

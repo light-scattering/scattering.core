@@ -351,9 +351,11 @@ public class FModelPCDLADef implements FModelPCDLA {
     }
 
     @Override
-    public void setInternalSpawn(boolean internal) {
+    public FModelPCDLA setInternalSpawn(boolean internal) {
 
         this.internal = internal;
+
+        return this;
     }
 
     @Override

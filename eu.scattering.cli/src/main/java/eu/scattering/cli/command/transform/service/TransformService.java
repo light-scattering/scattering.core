@@ -23,22 +23,14 @@ public class TransformService {
         }
     }
 
-    private static void rotate(ScatterFactory factory, FAggregate aggregate, double[] data) {
+    private static void rotate(ScatterFactory factory, FAggregate aggregate, TransformMixin.Rotation data) {
 
-        if (data.length != 4) {
-            throw new IllegalArgumentException("Rotation requires exactly 4 parameters (d0,d1,d2,radians).");
-        }
-
-        factory.rotate().mutate().aroundRg(aggregate, factory.getFPoint(data[0], data[1], data[2]), data[3]);
+        factory.rotate().mutate().aroundRg(aggregate, factory.getFPoint(data.d0(), data.d1(), data.d2()), data.radians());
     }
 
-    private static void translate(FAggregate aggregate, double[] data) {
+    private static void translate(FAggregate aggregate, TransformMixin.Translation data) {
 
-        if (data.length != 3) {
-            throw new IllegalArgumentException("Translation requires exactly 3 parameters (d0,d1,d2).");
-        }
-
-        aggregate.translate(data[0], data[1], data[2]);
+        aggregate.translate(data.d0(), data.d1(), data.d2());
     }
 
     private static void scale(FAggregate aggregate, double factor) {

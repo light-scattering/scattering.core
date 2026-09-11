@@ -5,6 +5,7 @@ import eu.scattering.cli.command.generate.service.mixin.DistributionMixin;
 import eu.scattering.cli.command.generate.service.mixin.TransformationMixin;
 import eu.scattering.cli.command.generate.service.mixin.ValidationMixin;
 import eu.scattering.cli.service.mixin.ExportMixin;
+import eu.scattering.core.design.utility.type.option.Dimension;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -35,18 +36,36 @@ public class GenerateModelCCTunable implements Callable<Integer> {
     private ExportMixin expMixin;
 
     @CommandLine.Option(
-            names = {"-df"},
+            names = {"--df"},
             required = true,
-            description = "Fractal dimension."
+            description = {"", "Fractal dimension."}
     )
     public double df;
 
     @CommandLine.Option(
-            names = {"-kf"},
+            names = {"--kf"},
             required = true,
-            description = "Fractal prefactor."
+            description = {"", "Fractal prefactor."}
     )
     public double kf;
+
+    @CommandLine.Option(
+            names = {"-a", "--asymmetric"},
+            description = {"", "Allow asymmetric cluster growth."}
+    )
+    public boolean asymmetric;
+
+    @CommandLine.Option(
+            names = {"-c", "--soft-start"},
+            description = {"", "Loosen structural constraints at early stages to prevent generation failure."}
+    )
+    public boolean soft;
+
+    @CommandLine.Option(
+            names = {"--2d"},
+            description = {"", "Generate in two dimensions."}
+    )
+    public boolean d2;
 
     @Override
     public Integer call() throws Exception {
@@ -66,6 +85,6 @@ public class GenerateModelCCTunable implements Callable<Integer> {
         }
 
         return GenerateHelper.assemble(spec, transMixin, disMixin, valMixin, expMixin, (models, template) ->
-                models.cc().tunable(template, df, kf));
+                models.cc().tunable(d2 ? Dimension.D2 : Dimension.D3, template, df, kf).setEarlyStageCorrection(soft).setSymmetry(!asymmetric));
     }
 }

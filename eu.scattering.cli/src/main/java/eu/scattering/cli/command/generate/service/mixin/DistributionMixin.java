@@ -69,7 +69,7 @@ public class DistributionMixin {
         }
     }
     @CommandLine.Option(
-            names = {"-rf", "--rad-fixed"},
+            names = {"--rf", "--rad-fixed"},
             paramLabel = "<count,radius>",
             converter = RadFixedConverter.class,
             description = "Fixed radius distribution."
@@ -77,7 +77,7 @@ public class DistributionMixin {
     public List<RadFixed> fixed;
 
     @CommandLine.Option(
-            names = {"-rn", "--rad-normal"},
+            names = {"--rn", "--rad-normal"},
             paramLabel = "<count,avg,std>",
             converter = RadNormalConverter.class,
             description = "Normal radius distribution."
@@ -85,7 +85,7 @@ public class DistributionMixin {
     public List<RadNormal> normal;
 
     @CommandLine.Option(
-            names = {"-ru", "--rad-uniform"},
+            names = {"--ru", "--rad-uniform"},
             paramLabel = "<count,min,max>",
             converter = RadUniformConverter.class,
             description = "Uniform radius distribution."

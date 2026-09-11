@@ -312,8 +312,10 @@ public class FModelPCFilippovDef implements FModelPCTunable {
     }
 
     @Override
-    public void setEarlyStageCorrection(boolean correction) {
+    public FModelPCTunable setEarlyStageCorrection(boolean correction) {
 
         this.correction = correction;
+
+        return this;
     }
 }

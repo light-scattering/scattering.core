@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.aggregate.model.cc;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -393,9 +394,11 @@ public class FModelCCTunableDef implements FModelCCTunable {
     }
 
     @Override
-    public void setSymmetry(boolean symmetry) {
+    public FModelCC setSymmetry(boolean symmetry) {
 
         this.symmetry = symmetry;
+
+        return this;
     }
 
     @Override
@@ -429,9 +432,11 @@ public class FModelCCTunableDef implements FModelCCTunable {
     }
 
     @Override
-    public void setCorrection(boolean correction) {
+    public FModelCCTunable setCorrection(boolean correction) {
 
         this.correction = correction;
+
+        return this;
     }
 
     @Override
@@ -441,8 +446,10 @@ public class FModelCCTunableDef implements FModelCCTunable {
     }
 
     @Override
-    public void setEarlyStageCorrection(boolean correction) {
+    public FModelCCTunable setEarlyStageCorrection(boolean correction) {
 
         this.correctionEarly = correction;
+
+        return this;
     }
 }

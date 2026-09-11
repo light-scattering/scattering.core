@@ -25,7 +25,7 @@ public class ValidationMixin {
     }
 
     @CommandLine.Option(
-            names = {"-vbc", "--val-df-bc"},
+            names = {"--vbc", "--val-df-bc"},
             paramLabel = "<target,error>",
             converter = TargetErrorConverter.class,
             description = "Validate Box-Counting fractal dimension."
@@ -33,7 +33,7 @@ public class ValidationMixin {
     public TargetError dfBc;
 
     @CommandLine.Option(
-            names = {"-vmr", "--val-df-mr"},
+            names = {"--vmr", "--val-df-mr"},
             paramLabel = "<target,error>",
             converter = TargetErrorConverter.class,
             description = "Validate Mass-Radius fractal dimension."
@@ -41,7 +41,7 @@ public class ValidationMixin {
     public TargetError dfMr;
 
     @CommandLine.Option(
-            names = {"-vdc", "--val-df-dc"},
+            names = {"--vdc", "--val-df-dc"},
             paramLabel = "<target,error>",
             converter = TargetErrorConverter.class,
             description = "Validate Density-Correlation fractal dimension."

@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
         name = "transform",
         description = "Applies sequential transformations to an existing aggregate model.",
         usageHelpAutoWidth = true,
+        abbreviateSynopsis = true,
         footer = {
                 "%nExample Configuration:%n  scatter-cli transform input.xyz --pca --rotate 90,0,0 --translate 10.5,0,0 -e povray"
         }
@@ -34,6 +35,20 @@ public class Transform implements Callable<Integer> {
 
     @CommandLine.Mixin
     private ExportMixin exportMixin;
+
+    @CommandLine.Option(
+            names = {"-h", "--help"},
+            usageHelp = true,
+            description = {"", "Show this help message and exit."}
+    )
+    private boolean helpRequested;
+
+    @CommandLine.Option(
+            names = {"-V", "--version"},
+            versionHelp = true,
+            description = {"", "Print version information and exit."}
+    )
+    private boolean versionRequested;
 
     @Override
     public Integer call() throws Exception {
