@@ -8,7 +8,7 @@ public class ExportMixin {
     @CommandLine.Option(
             names = {"-e", "--export"},
             defaultValue = "json",
-            description = "Geometry export format."
+            description = {"", "Geometry export format."}
     )
     public FORMAT_EXPORT format;
 }

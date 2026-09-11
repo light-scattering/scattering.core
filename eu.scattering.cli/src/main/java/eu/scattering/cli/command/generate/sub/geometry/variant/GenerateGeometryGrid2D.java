@@ -25,26 +25,26 @@ public class GenerateGeometryGrid2D implements Callable<Integer> {
     @CommandLine.Parameters(
             index = "0",
             paramLabel = "<radius>",
-            description = "Particle radius."
+            description = {"", "Particle radius."}
     )
     private double rp;
 
     @CommandLine.Parameters(
             index = "1",
             paramLabel = "<d0>",
-            description = "The number of particles along the D0 axis."
+            description = {"", "The number of particles along the D0 axis."}
     )
     private int d0;
 
     @CommandLine.Parameters(
             index = "2",
             paramLabel = "<d1>",
-            description = "The number of particles along the D1 axis."
+            description = {"", "The number of particles along the D1 axis."}
     )
     private int d1;
 
     @CommandLine.Mixin
-    private ExportMixin export;
+    private ExportMixin exportMixin;
 
     @Override
     public Integer call() {
@@ -74,7 +74,7 @@ public class GenerateGeometryGrid2D implements Callable<Integer> {
             ScatterFactory factory = ScatterCore.createFactory();
 
             FAggregate aggregate = factory.aggregates().geometries().grid2D(d0, d1, rp);
-            String results = ExportService.export(factory, aggregate, export.format);
+            String results = ExportService.export(factory, aggregate, exportMixin);
 
             System.out.println(results);
         } catch (Exception e) {

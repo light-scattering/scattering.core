@@ -2,6 +2,8 @@ package eu.scattering.cli.command.generate.sub.model.cc.variant;
 
 import eu.scattering.cli.command.generate.GenerateHelper;
 import eu.scattering.cli.command.generate.service.mixin.DistributionMixin;
+import eu.scattering.cli.command.generate.service.mixin.TransformationMixin;
+import eu.scattering.cli.command.generate.service.mixin.ValidationMixin;
 import eu.scattering.cli.service.mixin.ExportMixin;
 import picocli.CommandLine;
 
@@ -21,15 +23,21 @@ public class GenerateModelCCRLCA implements Callable<Integer> {
     private CommandLine.Model.CommandSpec spec;
 
     @CommandLine.Mixin
-    private DistributionMixin dist;
+    private TransformationMixin transMixin;
 
     @CommandLine.Mixin
-    private ExportMixin export;
+    private DistributionMixin disMixin;
+
+    @CommandLine.Mixin
+    private ValidationMixin valMixin;
+
+    @CommandLine.Mixin
+    private ExportMixin expMixin;
 
     @Override
     public Integer call() throws Exception {
 
-        return GenerateHelper.assemble(spec, dist, export, (models, template) ->
-                models.cc().rlca(template).build());
+        return GenerateHelper.assemble(spec, transMixin, disMixin, valMixin, expMixin, (models, template) ->
+                models.cc().rlca(template));
     }
 }

@@ -49,70 +49,58 @@ public class DistributionService {
 
     }
 
-    private static void validateDistFixed(List<double[]> fixed) {
+    private static void validateDistFixed(List<DistributionMixin.RadFixed> fixed) {
 
         if (fixed == null) {
 
             return;
         }
 
-        for (double[] dist : fixed) {
+        for (DistributionMixin.RadFixed dist : fixed) {
 
-            if (dist.length != 2) {
-                throw new IllegalArgumentException("Fixed distributions must contain exactly two parameters.");
-            }
-
-            if (dist[0] < 1) {
+            if (dist.count() < 1) {
                 throw new IllegalArgumentException("The number of primary particles in each distribution must be at least one.");
             }
 
-            if (dist[1] <= 0) {
+            if (dist.radius() <= 0) {
                 throw new IllegalArgumentException("The particle radius in fixed distributions must be greater then zero.");
             }
         }
     }
 
-    private static void validateDistNormal(List<double[]> normal) {
+    private static void validateDistNormal(List<DistributionMixin.RadNormal> normal) {
 
         if (normal == null) {
 
             return;
         }
 
-        for (double[] dist : normal) {
+        for (DistributionMixin.RadNormal dist : normal) {
 
-            if (dist.length != 3) {
-                throw new IllegalArgumentException("Normal distributions must contain exactly three parameters.");
-            }
-
-            if (dist[0] < 1) {
+            if (dist.count() < 1) {
                 throw new IllegalArgumentException("The number of primary particles in each distribution must be at least one.");
             }
 
-            if (dist[2] <= 0) {
+            if (dist.std() <= 0) {
                 throw new IllegalArgumentException("The standard deviation must be greater then zero.");
             }
         }
     }
 
-    private static void validateDistUniform(List<double[]> uniform) {
+    private static void validateDistUniform(List<DistributionMixin.RadUniform> uniform) {
 
         if (uniform == null) {
 
             return;
         }
 
-        for (double[] dist : uniform) {
+        for (DistributionMixin.RadUniform dist : uniform) {
 
-            if (dist.length != 3) {
-                throw new IllegalArgumentException("Uniform distributions must contain exactly three parameters.");
-            }
-
-            if (dist[0] < 1) {
+            if (dist.count() < 1) {
                 throw new IllegalArgumentException("The number of primary particles in each distribution must be at least one.");
             }
 
-            if (dist[2] <= dist[1]) {
+            if (dist.max() <= dist.min()) {
                 throw new IllegalArgumentException("The max value must be greater then the min value.");
             }
         }
@@ -130,39 +118,39 @@ public class DistributionService {
         return producer;
     }
 
-    private static void applyDistFixed(FSphereProducer producer, List<double[]> fixed) {
+    private static void applyDistFixed(FSphereProducer producer, List<DistributionMixin.RadFixed> fixed) {
 
         if (fixed == null) {
 
             return;
         }
 
-        for (double[] dist : fixed) {
-            producer.withFixRadius(dist[1], (int) dist[0]);
+        for (DistributionMixin.RadFixed dist : fixed) {
+            producer.withFixRadius(dist.radius(), dist.count());
         }
     }
 
-    private static void applyDistNormal(ScatterFactory factory, FSphereProducer producer, List<double[]> normal) {
+    private static void applyDistNormal(ScatterFactory factory, FSphereProducer producer, List<DistributionMixin.RadNormal> normal) {
 
         if (normal == null) {
 
             return;
         }
 
-        for (double[] dist : normal) {
-            producer.withDistRadius(factory.random().dist1D().normal(dist[1], dist[2]), (int) dist[0]);
+        for (DistributionMixin.RadNormal dist : normal) {
+            producer.withDistRadius(factory.random().dist1D().normal(dist.avg(), dist.std()), dist.count());
         }
     }
 
-    private static void applyDistUniform(ScatterFactory factory, FSphereProducer producer, List<double[]> uniform) {
+    private static void applyDistUniform(ScatterFactory factory, FSphereProducer producer, List<DistributionMixin.RadUniform> uniform) {
 
         if (uniform == null) {
 
             return;
         }
 
-        for (double[] dist : uniform) {
-            producer.withDistRadius(factory.random().dist1D().uniform(dist[1], dist[2]), (int) dist[0]);
+        for (DistributionMixin.RadUniform dist : uniform) {
+            producer.withDistRadius(factory.random().dist1D().uniform(dist.min(), dist.max()), dist.count());
         }
     }
 }

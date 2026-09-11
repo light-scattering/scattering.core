@@ -1,8 +1,8 @@
 package eu.scattering.cli.command.measure;
 
-import eu.scattering.cli.service.LoadService;
+import eu.scattering.cli.service.ImportService;
 import eu.scattering.cli.command.measure.service.MeasureService;
-import eu.scattering.cli.service.type.FORMAT_LOAD;
+import eu.scattering.cli.service.mixin.ImportMixin;
 import eu.scattering.cli.command.measure.service.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
@@ -17,7 +17,10 @@ import java.util.concurrent.Callable;
         name = "measure",
         description = "Calculates morphological parameters.",
         mixinStandardHelpOptions = true,
-        usageHelpAutoWidth = true
+        usageHelpAutoWidth = true,
+        footer = {
+                "%nExample Configuration:%n  scatter-cli measure input.xyz -m vol-sum srf-sum rg-mono:avg"
+        }
 )
 public class Measure implements Callable<Integer> {
 
@@ -49,6 +52,9 @@ public class Measure implements Callable<Integer> {
                     .iterator();
         }
     }
+
+    @CommandLine.Spec
+    private CommandLine.Model.CommandSpec spec;
 
     @CommandLine.Option(
             names = {"-m", "--metrics"},
@@ -85,28 +91,59 @@ public class Measure implements Callable<Integer> {
     )
     private List<TYPE_METRIC> metrics;
 
-    @CommandLine.Option(names = {"-f", "--format"}, defaultValue = "json", description = "Input format")
-    private FORMAT_LOAD format;
+    @CommandLine.Mixin
+    private ImportMixin importMixin;
 
-    @CommandLine.Option(names = {"-e", "--epsilon"}, defaultValue = "1E-4", description = "Tolerance (default: ${DEFAULT-VALUE})")
+    @CommandLine.Option(
+            names = {"-e", "--epsilon"},
+            defaultValue = "1E-4",
+            description = "Tolerance (default: ${DEFAULT-VALUE})"
+    )
     private double epsilon;
 
-    @CommandLine.Option(names = {"-d", "--delta"}, defaultValue = "1E-2", description = "Grid (default: ${DEFAULT-VALUE})")
+    @CommandLine.Option(
+            names = {"-d", "--delta"},
+            defaultValue = "1E-2",
+            description = "Grid (default: ${DEFAULT-VALUE})"
+    )
     private double delta;
 
-    @CommandLine.Option(names = {"-b", "--buffer"}, defaultValue = "0", description = "Buffer (default: ${DEFAULT-VALUE})")
+    @CommandLine.Option(
+            names = {"-b", "--buffer"},
+            defaultValue = "0",
+            description = "Buffer (default: ${DEFAULT-VALUE})"
+    )
     private int buffer;
-
-    @CommandLine.Parameters(index = "0", defaultValue = "-", description = "Input file or '-' for stdin")
-    private String file;
 
     @Override
     public Integer call() {
+
+        if (epsilon <= 0) {
+            System.err.println("Error: Tolerance (epsilon) must be greater than zero.\n");
+            spec.commandLine().usage(System.err);
+
+            return 1;
+        }
+
+        if (delta <= 0) {
+            System.err.println("Error: Grid step (delta) must be greater than zero.\n");
+            spec.commandLine().usage(System.err);
+
+            return 1;
+        }
+
+        if (buffer < 0) {
+            System.err.println("Error: Buffer must be non-negative.\n");
+            spec.commandLine().usage(System.err);
+
+            return 1;
+        }
+
         try {
             ScatterFactory factory = ScatterFactoryDef.create();
 
-            FAggregate fAggregate = LoadService.load(factory, file, format)
-                    .orElseThrow(() -> new IllegalArgumentException("The geometry could not be parsed"));
+            FAggregate fAggregate = ImportService.load(factory, importMixin)
+                    .orElseThrow(() -> new IllegalArgumentException("The geometry could not be imported."));
 
             if (epsilon != ScatterCoreConfig.SHAPE_EPSILON) {
                 fAggregate.setParticleEpsilon(epsilon);
@@ -126,7 +163,8 @@ public class Measure implements Callable<Integer> {
 
             return 0;
         } catch (IllegalArgumentException e) {
-            System.err.println("Error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage() + "\n");
+            spec.commandLine().usage(System.err);
 
             return 1;
         } catch (Exception e) {

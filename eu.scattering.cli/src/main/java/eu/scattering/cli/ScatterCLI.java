@@ -1,7 +1,9 @@
 package eu.scattering.cli;
 
+import eu.scattering.cli.command.demo.Demo;
 import eu.scattering.cli.command.generate.Generate;
 import eu.scattering.cli.command.measure.Measure;
+import eu.scattering.cli.command.transform.Transform;
 import eu.scattering.cli.util.VersionProvider;
 import picocli.CommandLine;
 
@@ -10,7 +12,7 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(name = "scatter-cli",
         mixinStandardHelpOptions = true,
         versionProvider = VersionProvider.class,
-        subcommands = { Measure.class, Generate.class, CommandLine.HelpCommand.class},
+        subcommands = { Demo.class, Measure.class, Generate.class, Transform.class, CommandLine.HelpCommand.class},
         description = "The root command for Scatter-CLI morphological analysis.")
 public class ScatterCLI implements Callable<Integer> {
 

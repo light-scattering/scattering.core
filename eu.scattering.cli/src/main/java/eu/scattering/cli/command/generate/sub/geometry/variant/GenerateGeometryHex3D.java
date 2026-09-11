@@ -25,19 +25,19 @@ public class GenerateGeometryHex3D implements Callable<Integer> {
     @CommandLine.Parameters(
             index = "0",
             paramLabel = "<radius>",
-            description = "Particle radius."
+            description = {"", "Particle radius."}
     )
     private double rp;
 
     @CommandLine.Parameters(
             index = "1",
             paramLabel = "<outer_radius>",
-            description = "Geometry outer radius."
+            description = {"", "Geometry outer radius."}
     )
     private double reach;
 
     @CommandLine.Mixin
-    private ExportMixin export;
+    private ExportMixin exportMixin;
 
     @Override
     public Integer call() {
@@ -60,7 +60,7 @@ public class GenerateGeometryHex3D implements Callable<Integer> {
             ScatterFactory factory = ScatterCore.createFactory();
 
             FAggregate aggregate = factory.aggregates().geometries().hex3D(reach, rp);
-            String results = ExportService.export(factory, aggregate, export.format);
+            String results = ExportService.export(factory, aggregate, exportMixin);
 
             System.out.println(results);
 
