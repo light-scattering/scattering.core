@@ -25,28 +25,28 @@ public class GenerateGeometryGrid3D implements Callable<Integer> {
     @CommandLine.Parameters(
             index = "0",
             paramLabel = "<radius>",
-            description = {"", "Particle radius."}
+            description = "Particle radius."
     )
     private double rp;
 
     @CommandLine.Parameters(
             index = "1",
             paramLabel = "<d0>",
-            description = {"", "The number of particles along the D0 axis."}
+            description = "The number of particles along the D0 axis."
     )
     private int d0;
 
     @CommandLine.Parameters(
             index = "2",
             paramLabel = "<d1>",
-            description = {"", "The number of particles along the D1 axis."}
+            description = "The number of particles along the D1 axis."
     )
     private int d1;
 
     @CommandLine.Parameters(
             index = "3",
             paramLabel = "<d2>",
-            description = {"", "The number of particles along the D2 axis."}
+            description = "The number of particles along the D2 axis."
     )
     private int d2;
 

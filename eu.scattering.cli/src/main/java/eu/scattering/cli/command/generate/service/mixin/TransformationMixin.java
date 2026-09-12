@@ -6,7 +6,7 @@ public class TransformationMixin {
 
     @CommandLine.Option(
             names = {"--pca"},
-            description = {"", "Apply Principal Component Analysis (PCA) alignment."}
+            description = "Apply Principal Component Analysis (PCA) alignment."
     )
     public boolean pca;
 }

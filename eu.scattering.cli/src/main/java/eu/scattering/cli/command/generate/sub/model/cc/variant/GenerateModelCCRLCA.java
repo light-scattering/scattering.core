@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
         description = "Generates a Reaction-Limited Cluster-Aggregation (RLCA) model.",
         usageHelpAutoWidth = true,
         footer = {
-                "%nExample Configuration:%n  scatter-cli generate model cc rlca -rf 500,1.0 -rn 1000,2.0,0.1 -e povray"
+                "%nExample Configuration:%n  scatter-cli generate model cc rlca --rf 500,1.0 --rn 1000,2.0,0.1 -e povray"
         }
 )
 public class GenerateModelCCRLCA implements Callable<Integer> {
@@ -37,13 +37,13 @@ public class GenerateModelCCRLCA implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-a", "--asymmetric"},
-            description = {"", "Allow asymmetric cluster growth."}
+            description = "Allow asymmetric cluster growth."
     )
     public boolean asymmetric;
 
     @CommandLine.Option(
             names = {"--2d"},
-            description = {"", "Generate in two dimensions."}
+            description = "Generate in two dimensions."
     )
     public boolean d2;
 

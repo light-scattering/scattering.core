@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
         mixinStandardHelpOptions = true,
         versionProvider = VersionProvider.class,
         subcommands = { Demo.class, Measure.class, Generate.class, Transform.class, CommandLine.HelpCommand.class},
-        description = "The root commands:")
+        description = "Root commands:")
 public class ScatterCLI implements Callable<Integer> {
 
     @CommandLine.Option(

@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
         description = "Generates a Diffusion-Limited Cluster-Aggregation (DLCA) model.",
         usageHelpAutoWidth = true,
         footer = {
-                "%nExample Configuration:%n  scatter-cli generate model cc dlca -rf 500,1.0 -rn 1000,2.0,0.1 -e povray"
+                "%nExample Configuration:%n  scatter-cli generate model cc dlca --rf 500,1.0 --rn 1000,2.0,0.1 -e povray"
         }
 )
 public class GenerateModelCCDLCA implements Callable<Integer> {
@@ -37,19 +37,19 @@ public class GenerateModelCCDLCA implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-a", "--asymmetric"},
-            description = {"", "Allow asymmetric cluster growth."}
+            description = "Allow asymmetric cluster growth."
     )
     public boolean asymmetric;
 
     @CommandLine.Option(
             names = {"-s", "--spawn-internal"},
-            description = {"", "Allow particles to spawn within the cluster boundary."}
+            description = "Allow particles to spawn within the cluster boundary."
     )
     public boolean spawn;
 
     @CommandLine.Option(
             names = {"--2d"},
-            description = {"", "Generate in two dimensions."}
+            description = "Generate in two dimensions."
     )
     public boolean d2;
 

@@ -67,13 +67,13 @@ public class TransformMixin {
         @CommandLine.Option(
                 names = {"--scale"},
                 paramLabel = "<factor>",
-                description = {"", "Scale the geometry uniformly."}
+                description = "Scale the geometry uniformly."
         )
         public Double scale;
 
         @CommandLine.Option(
                 names = {"--pca"},
-                description = {"", "Apply Principal Component Analysis (PCA) alignment."}
+                description = "Apply Principal Component Analysis (PCA) alignment."
         )
         public boolean pca;
     }

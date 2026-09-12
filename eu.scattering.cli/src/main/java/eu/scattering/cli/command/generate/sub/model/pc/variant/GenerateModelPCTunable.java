@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
         description = "Generates a PC tunable aggregate model.",
         usageHelpAutoWidth = true,
         footer = {
-                "%nExample Configuration:%n  scatter-cli generate model pc tunable -df 1.8 -kf 1.3 -rn 1000,2.0,0.1 -e povray"
+                "%nExample Configuration:%n  scatter-cli generate model pc tunable --df 1.8 --kf 1.3 --rn 1000,2.0,0.1 -e povray"
         }
 )
 public class GenerateModelPCTunable implements Callable<Integer> {
@@ -38,26 +38,26 @@ public class GenerateModelPCTunable implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--df"},
             required = true,
-            description = {"", "Fractal dimension."}
+            description = "Fractal dimension."
     )
     public double df;
 
     @CommandLine.Option(
             names = {"--kf"},
             required = true,
-            description = {"", "Fractal prefactor."}
+            description = "Fractal prefactor."
     )
     public double kf;
 
     @CommandLine.Option(
             names = {"-c", "--soft-start"},
-            description = {"", "Loosen structural constraints at early stages to prevent generation failure."}
+            description = "Loosen structural constraints at early stages to prevent generation failure."
     )
     public boolean soft;
 
     @CommandLine.Option(
             names = {"--2d"},
-            description = {"", "Generate in two dimensions."}
+            description = "Generate in two dimensions."
     )
     public boolean d2;
 

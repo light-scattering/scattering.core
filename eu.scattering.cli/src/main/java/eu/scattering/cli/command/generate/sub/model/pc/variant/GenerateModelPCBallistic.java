@@ -15,7 +15,7 @@ import java.util.concurrent.Callable;
         description = "Generates a PC ballistic aggregate model.",
         usageHelpAutoWidth = true,
         footer = {
-                "%nExample Configuration:%n  scatter-cli generate model pc ballistic -rf 500,1.0 -rn 1000,2.0,0.1 -e povray"
+                "%nExample Configuration:%n  scatter-cli generate model pc ballistic --rf 500,1.0 --rn 1000,2.0,0.1 -e povray"
         }
 )
 public class GenerateModelPCBallistic implements Callable<Integer> {
@@ -37,7 +37,7 @@ public class GenerateModelPCBallistic implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"--2d"},
-            description = {"", "Generate in two dimensions."}
+            description = "Generate in two dimensions."
     )
     public boolean d2;
 

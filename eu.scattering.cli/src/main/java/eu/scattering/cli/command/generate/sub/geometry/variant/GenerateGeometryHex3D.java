@@ -25,14 +25,14 @@ public class GenerateGeometryHex3D implements Callable<Integer> {
     @CommandLine.Parameters(
             index = "0",
             paramLabel = "<radius>",
-            description = {"", "Particle radius."}
+            description = "Particle radius."
     )
     private double rp;
 
     @CommandLine.Parameters(
             index = "1",
             paramLabel = "<outer_radius>",
-            description = {"", "Geometry outer radius."}
+            description = "Geometry outer radius."
     )
     private double reach;
 

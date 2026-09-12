@@ -25,14 +25,14 @@ public class GenerateGeometryGrid1D implements Callable<Integer> {
     @CommandLine.Parameters(
             index = "0",
             paramLabel = "<radius>",
-            description = {"", "Particle radius."}
+            description = "Particle radius."
     )
     private double rp;
 
     @CommandLine.Parameters(
             index = "1",
             paramLabel = "<d0>",
-            description = {"", "The number of particles along the D0 axis."}
+            description = "The number of particles along the D0 axis."
     )
     private int d0;
 
