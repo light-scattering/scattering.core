@@ -4,6 +4,7 @@ import eu.scattering.cli.command.demo.Demo;
 import eu.scattering.cli.command.generate.Generate;
 import eu.scattering.cli.command.measure.Measure;
 import eu.scattering.cli.command.transform.Transform;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import eu.scattering.cli.util.VersionProvider;
 import picocli.CommandLine;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.Callable;
         name = "scatter-cli",
         customSynopsis = {
                 "",
-                "scatter-cli [-h | --version | --diagnostics]",
+                "scatter-cli [-h | --info | --version | --diagnostics]",
                 "scatter-cli <command> [OPTIONS]"
         },
         mixinStandardHelpOptions = true,
@@ -22,17 +23,20 @@ import java.util.concurrent.Callable;
         description = "Root commands:")
 public class ScatterCLI implements Callable<Integer> {
 
-    @CommandLine.Option(
-            names = {"-h", "--help"},
-            usageHelp = true,
-            description = "Show the help message and exit.")
-    boolean printHelp;
+    @CommandLine.Mixin
+    private HelpMixin helpMixin;
 
     @CommandLine.Option(
             names = {"--version"},
             versionHelp = true,
             description = "Print version information and exit.")
     boolean printVersion;
+
+    @CommandLine.Option(
+            names = {"--info"},
+            description = "Print project info and exit."
+    )
+    boolean printInfo;
 
     @CommandLine.Option(
             names = {"--diagnostics"},
@@ -46,7 +50,7 @@ public class ScatterCLI implements Callable<Integer> {
         if (printDiagnostics) {
             try {
                 VersionProvider provider = new VersionProvider();
-                String[] infoLines = provider.getInfo();
+                String[] infoLines = provider.getDiagnostics();
 
                 for (String line : infoLines) {
                     System.out.println(line);
@@ -60,11 +64,17 @@ public class ScatterCLI implements Callable<Integer> {
             return 0;
         }
 
+        if (printInfo) {
+            System.out.println("Author: Krzysztof Skorupski");
+            System.out.println("GitHub: https://github.com/light-scattering/scattering.core");
+
+            return 0;
+        }
+
         CommandLine.usage(this, System.out);
 
         return 0;
     }
-
 
     public static void main(String[] args) {
         CommandLine cmd = new CommandLine(new ScatterCLI());
