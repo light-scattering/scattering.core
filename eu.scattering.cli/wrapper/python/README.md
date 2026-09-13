@@ -23,20 +23,32 @@ Alternatively, you can run the CLI instantly without installing it using `pipx`:
 pipx run scatter-cli --info
 ```
 
+## Getting started
+
+Once installed, both `scatter-cli` and the `scatter-vis` 3D viewer are globally available in your terminal.
+
+To verify your setup, use the built-in demo command. It generates a standard Cluster-Cluster (CC) aggregate composed of 2,048 primary particles with fractal parameters `df=1.8` and `kf=1.3`, exported in the multisphere format.
+```bash
+scatter-cli demo > demo.xyzr        # Save assembly to a file.
+scatter-cli demo | scatter-vis      # Show a 3D model of the assembly.
+```
+
+Currently, the `scatter-vis` utility exclusively supports data streams in the `multisphere` format.
+
 ## Usage
 
-Once installed, the `scatter-cli` command is globally available. Here is a quick workflow demonstrating how to generate a synthetic fractal-like aggregate model and measure its morphological properties:
+Here is a quick workflow demonstrating how to generate a custom synthetic fractal-like aggregate model and measure its morphological properties:
 ```bash
-# 1. Generate a Diffusion-Limited Aggregation (DLA) fractal-like aggregate model and save to a file.
+# Generate a Diffusion-Limited Aggregation (DLA) fractal-like aggregate model and save it to a file.
 scatter-cli generate model pc dla --rad-fixed 2048,1 --export multisphere --out demo.xyzr
-# 2. Measure the Density-Correlation (DC) fractal dimension of the generated model.
+# Measure the Density-Correlation (DC) fractal dimension of the generated model.
 scatter-cli measure demo.xyzr --metrics df-dc -i multisphere
 ```
 
 <div align="center">
   <table>
     <tr>
-      <td><img src="docs/assets/example.png" alt="PC DLA assembly" width="400"></td>
+      <td><img src="https://raw.githubusercontent.com/light-scattering/scattering.core/develop/eu.scattering.cli/docs/assets/example.png" alt="PC DLA assembly" width="400"></td>
     </tr>
     <tr>
       <td align="center"><em>Fig 1: PC DLA synthetic fractal-like aggregate model.</em></td>

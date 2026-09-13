@@ -21,7 +21,6 @@ The Scattering Core CLI provides a standalone command-line interface for the [Sc
     - [Import and export](#import-and-export)
     - [Examples](#examples-2)
 
-
 ## Getting started
 
 You can run the CLI either directly via the Java archive or by using one of the wrappers.
