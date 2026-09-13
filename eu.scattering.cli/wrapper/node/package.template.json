@@ -5,7 +5,8 @@
   "type": "module",
   "main": "src/scatter-cli.js",
   "bin": {
-    "scatter-cli": "src/scatter-cli.js"
+    "scatter-cli": "src/scatter-cli.js",
+    "scatter-vis": "src/scatter-vis.js"
   },
   "files": [
     "src/",
@@ -13,6 +14,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "open": "^10.1.0"
   },
   "author": {
     "name": "Krzysztof Skorupski",
