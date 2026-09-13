@@ -5,6 +5,7 @@ import eu.scattering.cli.command.transform.service.mixin.TransformMixin;
 import eu.scattering.cli.service.ExportService;
 import eu.scattering.cli.service.ImportService;
 import eu.scattering.cli.service.mixin.ExportMixin;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import eu.scattering.cli.service.mixin.ImportMixin;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
@@ -28,6 +29,9 @@ public class Transform implements Callable<Integer> {
     private CommandLine.Model.CommandSpec spec;
 
     @CommandLine.Mixin
+    private HelpMixin helpMixin;
+
+    @CommandLine.Mixin
     private TransformMixin transMixin;
 
     @CommandLine.Mixin
@@ -39,15 +43,14 @@ public class Transform implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         ScatterFactory factory = ScatterFactoryDef.create();
-        String results = "";
 
         try {
-            FAggregate fAggregate = ImportService.load(factory, importMixin)
+            FAggregate fAggregate = ImportService.importData(factory, importMixin)
                     .orElseThrow(() -> new IllegalArgumentException("The geometry could not be imported."));
 
             TransformService.transform(factory, fAggregate, transMixin);
 
-            results = ExportService.export(factory, fAggregate, exportMixin);
+            ExportService.exportData(factory, fAggregate, exportMixin);
 
         } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage() + "\n");
@@ -59,8 +62,6 @@ public class Transform implements Callable<Integer> {
 
             return 2;
         }
-
-        System.out.println(results);
 
         return 0;
     }

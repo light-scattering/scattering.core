@@ -2,6 +2,7 @@ package eu.scattering.cli.command.measure;
 
 import eu.scattering.cli.service.ImportService;
 import eu.scattering.cli.command.measure.service.MeasureService;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import eu.scattering.cli.service.mixin.ImportMixin;
 import eu.scattering.cli.command.measure.service.type.TYPE_METRIC;
 import eu.scattering.core.design.ScatterFactory;
@@ -56,6 +57,9 @@ public class Measure implements Callable<Integer> {
     @CommandLine.Spec
     private CommandLine.Model.CommandSpec spec;
 
+    @CommandLine.Mixin
+    private HelpMixin helpMixin;
+
     @CommandLine.Option(
             names = {"-m", "--metrics"},
             arity = "1..*",
@@ -92,7 +96,7 @@ public class Measure implements Callable<Integer> {
     private List<TYPE_METRIC> metrics;
 
     @CommandLine.Mixin
-    private ImportMixin importMixin;
+    private ImportMixin impMixin;
 
     @CommandLine.Option(
             names = {"-e", "--epsilon"},
@@ -142,7 +146,7 @@ public class Measure implements Callable<Integer> {
         try {
             ScatterFactory factory = ScatterFactoryDef.create();
 
-            FAggregate fAggregate = ImportService.load(factory, importMixin)
+            FAggregate fAggregate = ImportService.importData(factory, impMixin)
                     .orElseThrow(() -> new IllegalArgumentException("The geometry could not be imported."));
 
             if (epsilon != ScatterCoreConfig.SHAPE_EPSILON) {

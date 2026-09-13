@@ -11,4 +11,10 @@ public class ExportMixin {
             description = "Geometry export format."
     )
     public FORMAT_EXPORT format;
+
+    @CommandLine.Option(
+            names = {"-o", "--out"},
+            description = "Output file (if omitted, prints to stdout)."
+    )
+    public String file;
 }

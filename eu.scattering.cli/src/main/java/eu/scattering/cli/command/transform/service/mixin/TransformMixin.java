@@ -53,6 +53,7 @@ public class TransformMixin {
         @CommandLine.Option(
                 names = {"--translate"},
                 paramLabel = "<d0,d1,d2>",
+                converter = TranslationConverter.class,
                 description = "Translate along the d0, d1, and d2 axes."
         )
         public Translation translate;
@@ -60,6 +61,7 @@ public class TransformMixin {
         @CommandLine.Option(
                 names = {"--rotate"},
                 paramLabel = "<d0,d1,d2,radians>",
+                converter = RotationConverter.class,
                 description = "Rotate around [d0, d1, d2] vector (radians)."
         )
         public Rotation rotate;

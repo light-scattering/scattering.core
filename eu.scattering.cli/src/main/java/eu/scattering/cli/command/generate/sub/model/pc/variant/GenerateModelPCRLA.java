@@ -1,10 +1,12 @@
 package eu.scattering.cli.command.generate.sub.model.pc.variant;
 
 import eu.scattering.cli.command.generate.GenerateHelper;
+import eu.scattering.cli.command.generate.service.mixin.DimensionMixin;
 import eu.scattering.cli.command.generate.service.mixin.DistributionMixin;
 import eu.scattering.cli.command.generate.service.mixin.TransformationMixin;
 import eu.scattering.cli.command.generate.service.mixin.ValidationMixin;
 import eu.scattering.cli.service.mixin.ExportMixin;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import eu.scattering.core.design.utility.type.option.Dimension;
 import picocli.CommandLine;
 
@@ -24,27 +26,27 @@ public class GenerateModelPCRLA implements Callable<Integer> {
     private CommandLine.Model.CommandSpec spec;
 
     @CommandLine.Mixin
+    private HelpMixin helpMixin;
+
+    @CommandLine.Mixin
     private TransformationMixin transMixin;
 
     @CommandLine.Mixin
-    private DistributionMixin disMixin;
+    private DistributionMixin distMixin;
 
     @CommandLine.Mixin
     private ValidationMixin valMixin;
 
     @CommandLine.Mixin
-    private ExportMixin expMixin;
+    private DimensionMixin dimMixin;
 
-    @CommandLine.Option(
-            names = {"--2d"},
-            description = "Generate in two dimensions."
-    )
-    public boolean d2;
+    @CommandLine.Mixin
+    private ExportMixin expMixin;
 
     @Override
     public Integer call() throws Exception {
 
-        return GenerateHelper.assemble(spec, transMixin, disMixin, valMixin, expMixin, (models, template) ->
-                models.pc().rla(d2 ? Dimension.D2 : Dimension.D3, template));
+        return GenerateHelper.assemble(spec, transMixin, distMixin, valMixin, expMixin, (models, template) ->
+                models.pc().rla(dimMixin.d2 ? Dimension.D2 : Dimension.D3, template));
     }
 }

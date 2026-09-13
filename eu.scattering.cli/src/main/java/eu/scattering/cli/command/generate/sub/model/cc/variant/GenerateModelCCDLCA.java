@@ -1,10 +1,9 @@
 package eu.scattering.cli.command.generate.sub.model.cc.variant;
 
 import eu.scattering.cli.command.generate.GenerateHelper;
-import eu.scattering.cli.command.generate.service.mixin.DistributionMixin;
-import eu.scattering.cli.command.generate.service.mixin.TransformationMixin;
-import eu.scattering.cli.command.generate.service.mixin.ValidationMixin;
+import eu.scattering.cli.command.generate.service.mixin.*;
 import eu.scattering.cli.service.mixin.ExportMixin;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import eu.scattering.core.design.utility.type.option.Dimension;
 import picocli.CommandLine;
 
@@ -24,22 +23,25 @@ public class GenerateModelCCDLCA implements Callable<Integer> {
     private CommandLine.Model.CommandSpec spec;
 
     @CommandLine.Mixin
+    private HelpMixin helpMixin;
+
+    @CommandLine.Mixin
     private TransformationMixin transMixin;
 
     @CommandLine.Mixin
-    private DistributionMixin disMixin;
+    private DistributionMixin distMixin;
 
     @CommandLine.Mixin
     private ValidationMixin valMixin;
 
     @CommandLine.Mixin
-    private ExportMixin expMixin;
+    private DimensionMixin dimMixin;
 
-    @CommandLine.Option(
-            names = {"-a", "--asymmetric"},
-            description = "Allow asymmetric cluster growth."
-    )
-    public boolean asymmetric;
+    @CommandLine.Mixin
+    private SymmetryMixin symMixin;
+
+    @CommandLine.Mixin
+    private ExportMixin expMixin;
 
     @CommandLine.Option(
             names = {"-s", "--spawn-internal"},
@@ -47,16 +49,10 @@ public class GenerateModelCCDLCA implements Callable<Integer> {
     )
     public boolean spawn;
 
-    @CommandLine.Option(
-            names = {"--2d"},
-            description = "Generate in two dimensions."
-    )
-    public boolean d2;
-
     @Override
     public Integer call() throws Exception {
 
-        return GenerateHelper.assemble(spec, transMixin, disMixin, valMixin, expMixin, (models, template) ->
-                models.cc().dlca(d2 ? Dimension.D2 : Dimension.D3, template).setInternalSpawn(spawn).setSymmetry(!asymmetric));
+        return GenerateHelper.assemble(spec, transMixin, distMixin, valMixin, expMixin, (models, template) ->
+                models.cc().dlca(dimMixin.d2 ? Dimension.D2 : Dimension.D3, template).setInternalSpawn(spawn).setSymmetry(!symMixin.asymmetric));
     }
 }

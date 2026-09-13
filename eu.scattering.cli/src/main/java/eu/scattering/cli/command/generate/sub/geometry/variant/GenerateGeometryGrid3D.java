@@ -2,6 +2,7 @@ package eu.scattering.cli.command.generate.sub.geometry.variant;
 
 import eu.scattering.cli.service.ExportService;
 import eu.scattering.cli.service.mixin.ExportMixin;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.impl.ScatterCore;
@@ -21,6 +22,9 @@ public class GenerateGeometryGrid3D implements Callable<Integer> {
 
     @CommandLine.Spec
     private CommandLine.Model.CommandSpec spec;
+
+    @CommandLine.Mixin
+    private HelpMixin helpMixin;
 
     @CommandLine.Parameters(
             index = "0",
@@ -84,12 +88,16 @@ public class GenerateGeometryGrid3D implements Callable<Integer> {
             return 1;
         }
 
-        ScatterFactory factory = ScatterCore.createFactory();
+        try {
+            ScatterFactory factory = ScatterCore.createFactory();
 
-        FAggregate aggregate = factory.aggregates().geometries().grid3D(d0, d1, d2, rp);
-        String results = ExportService.export(factory, aggregate, exportMixin);
+            FAggregate aggregate = factory.aggregates().geometries().grid3D(d0, d1, d2, rp);
+            ExportService.exportData(factory, aggregate, exportMixin);
+        } catch (Exception e) {
+            System.err.println("Error generating geometry: " + e.getMessage());
 
-        System.out.println(results);
+            return 2;
+        }
 
         return 0;
     }

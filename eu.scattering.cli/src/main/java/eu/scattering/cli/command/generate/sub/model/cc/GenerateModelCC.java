@@ -4,6 +4,7 @@ import eu.scattering.cli.command.generate.sub.model.cc.variant.GenerateModelCCBa
 import eu.scattering.cli.command.generate.sub.model.cc.variant.GenerateModelCCDLCA;
 import eu.scattering.cli.command.generate.sub.model.cc.variant.GenerateModelCCRLCA;
 import eu.scattering.cli.command.generate.sub.model.cc.variant.GenerateModelCCTunable;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -20,6 +21,9 @@ import java.util.concurrent.Callable;
         }
 )
 public class GenerateModelCC implements Callable<Integer> {
+
+    @CommandLine.Mixin
+    private HelpMixin helpMixin;
 
     @Override
     public Integer call() {

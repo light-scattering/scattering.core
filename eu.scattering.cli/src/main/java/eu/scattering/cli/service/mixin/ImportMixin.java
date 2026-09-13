@@ -17,5 +17,5 @@ public class ImportMixin {
             defaultValue = "-",
             description = "Input file or '-' for stdin."
     )
-    public String output;
+    public String file;
 }

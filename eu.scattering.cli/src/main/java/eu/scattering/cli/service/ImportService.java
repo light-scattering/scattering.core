@@ -16,35 +16,35 @@ import java.util.Optional;
 
 public class ImportService {
 
-    public static Optional<FAggregate> load(ScatterFactory factory, ImportMixin importMixin) throws IOException {
+    public static Optional<FAggregate> importData(ScatterFactory factory, ImportMixin impMixin) throws IOException {
 
-        return "-".equals(importMixin.output) ? loadFromStreamConsole(factory, importMixin.format) : loadFromStreamFile(factory, importMixin);
+        return "-".equals(impMixin.file) ? importFromStreamConsole(factory, impMixin.format) : importFromStreamFile(factory, impMixin);
     }
 
     //---------------------------------------------------------------------
 
-    private static Optional<FAggregate> loadFromStreamConsole(ScatterFactory factory, FORMAT_IMPORT format) throws IOException {
+    private static Optional<FAggregate> importFromStreamConsole(ScatterFactory factory, FORMAT_IMPORT format) throws IOException {
 
-        return loadFromStream(factory, System.in, format);
+        return importFromStream(factory, System.in, format);
     }
 
-    private static Optional<FAggregate> loadFromStreamFile(ScatterFactory factory, ImportMixin importMixin) throws IOException {
+    private static Optional<FAggregate> importFromStreamFile(ScatterFactory factory, ImportMixin impMixin) throws IOException {
 
-        try (InputStream is = Files.newInputStream(Paths.get(importMixin.output))) {
+        try (InputStream is = Files.newInputStream(Paths.get(impMixin.file))) {
 
-            return loadFromStream(factory, is, importMixin.format);
+            return importFromStream(factory, is, impMixin.format);
         }
     }
 
-    private static Optional<FAggregate> loadFromStream(ScatterFactory factory, InputStream stream, FORMAT_IMPORT format) throws IOException {
+    private static Optional<FAggregate> importFromStream(ScatterFactory factory, InputStream stream, FORMAT_IMPORT format) throws IOException {
         String data = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
 
-        return loadFromString(factory, data, format);
+        return importFromString(factory, data, format);
     }
 
     //---------------------------------------------------------------------
 
-    private static Optional<FAggregate> loadFromString(ScatterFactory factory, String data, FORMAT_IMPORT format) {
+    private static Optional<FAggregate> importFromString(ScatterFactory factory, String data, FORMAT_IMPORT format) {
         FAggregateLoader load = factory.load().aggregate();
 
         return Optional.ofNullable(switch (format) {

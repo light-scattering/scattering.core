@@ -15,7 +15,7 @@ import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.impl.ScatterCore;
 import picocli.CommandLine;
 
-import java.util.function.BiConsumer;
+import java.io.IOException;
 import java.util.function.BiFunction;
 
 public class GenerateHelper {
@@ -29,7 +29,6 @@ public class GenerateHelper {
             BiFunction<FModelFactoryContext, FAggregate, FModel> builder)
     {
         ScatterFactory factory = ScatterCore.createFactory();
-        String results = "";
 
         try {
             FAggregate template = DistributionService.assemble(factory, disMixin);
@@ -48,7 +47,7 @@ public class GenerateHelper {
                 return 2;
             }
 
-            results = ExportService.export(factory, template, expMixin);
+            ExportService.exportData(factory, template, expMixin);
         } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage() + "\n");
             spec.commandLine().usage(System.err);
@@ -58,13 +57,15 @@ public class GenerateHelper {
             System.err.println("Error: " + e.getMessage());
 
             return 2;
+        } catch (IOException e) {
+            System.err.println("Error: Cannot write to file. " + e.getMessage());
+
+            return 2;
         } catch (Exception e) {
             System.err.println("Unknown error: " + e.getMessage());
 
             return 2;
         }
-
-        System.out.println(results);
 
         return 0;
     }

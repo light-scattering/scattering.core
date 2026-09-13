@@ -1,11 +1,9 @@
 # Scattering Core CLI
 
-The Scattering Core CLI provides a standalone command-line interface for the Scattering Core library.  In its current state, this CLI tool is designed specifically for the morphological analysis and executing fractal measurement methods on synthetic aggregates.
+[![PyPI](https://img.shields.io/pypi/v/scatter-cli.svg?label=PyPI)](https://pypi.org/project/scatter-cli/)
+[![NPM](https://img.shields.io/npm/v/@light-scattering/scatter-cli.svg?label=NPM)](https://www.npmjs.com/package/@light-scattering/scatter-cli)
 
-> **Note:**
-> This documentation is actively being expanded.
-> It currently focuses on the specific measurement commands required to reproduce the morphological findings of our recently submitted manuscript.
-> Aggregate generation is currently handled directly via the core Java API and will be integrated into the CLI in future updates.
+The Scattering Core CLI provides a standalone command-line interface for the [Scattering Core](https://github.com/light-scattering/scattering.core) library.
 
 ## Table of contents
 
@@ -13,12 +11,16 @@ The Scattering Core CLI provides a standalone command-line interface for the Sca
   - [Java](#java)
   - [Wrappers](#wrappers)
 - [Commands](#commands)
+  - [Generate](#generate)
+    - [Export](#export)
+    - [Examples](#examples)
   - [Measure](#measure)
-    - [Help and available metrics](#help-and-available-metrics)
-    - [Key options](#key-options)
-    - [Input file](#input-file)
-    - [Precision and buffers](#precision-and-buffers)
-    - [Full example](#full-example)
+    - [Import](#import)
+    - [Examples](#examples-1)
+  - [Transform](#transform)
+    - [Import and export](#import-and-export)
+    - [Examples](#examples-2)
+
 
 ## Getting started
 
@@ -26,16 +28,26 @@ You can run the CLI either directly via the Java archive or by using one of the 
 
 ### Java
 
-To invoke the CLI directly using the Java runtime, type:
+To run the CLI directly via the Java runtime, use the following syntax:
 ```bash
-java -jar scatter-cli.jar <command> [options] [file]
+java -jar scatter-cli.jar <command> [OPTIONS]
+```
+
+To verify your setup, use the built-in demo command. It generates a standard Cluster-Cluster (CC) aggregate composed of 2,048 primary particles with fractal parameters `df=1.8` and `kf=1.3`, exported in the `multisphere` format.
+```bash
+java -jar scatter-cli.jar demo
 ```
 
 ### Wrappers
 
-If you installed the CLI through package managers, the Java runtime execution is handled for you automatically. You can omit the `java -jar` prefix and simply use the global command:
+If you installed the CLI via a package manager, the Java runtime is handled automatically. You can drop the `java -jar` prefix and use the global command directly:
 ```bash
-scatter-cli <command> [options] [file]
+scatter-cli <command> [OPTIONS]
+```
+
+For example, running the quick start demo is as simple as:
+```bash
+scatter-cli demo
 ```
 
 For installation instructions and wrapper-specific documentation, please visit their respective repositories:
@@ -44,59 +56,148 @@ For installation instructions and wrapper-specific documentation, please visit t
 
 ## Commands
 
-The CLI is organized around specific commands. At the moment, only the `measure` module is implemented and available for use.
+The CLI is built around three core commands: `generate`, `transform`, and `measure`.
+
+### Generate
+
+Generates particle assemblies.
+```bash
+scatter-cli generate [COMMAND]
+```
+
+The main command is divided into two categories:
+- **`geometry`**: Generates standard geometric arrangements.
+- **`model`**: Generates synthetic, fractal-like aggregate models.
+
+Because the `generate` command uses a nested structure, you can explore the available options at any level by invoking the chain without additional arguments.
+
+To view the list of supported options for any specific generator, use the help flag:
+```bash
+scatter-cli generate model cc dlca --help
+```
+
+#### Export
+
+You can customize the assembly format and save the output directly to a file using the export flags.
+
+I/O flags:
+- **`-e, --export`**: Sets the output assembly format (default: `json`).
+- **`-o, --out`**: Defines the destination file path. If omitted, the transformed data is printed directly to `stdout`.
+
+#### Examples
+
+Generate a 2D grid and print the JSON directly to `stdout`:
+```bash
+scatter-cli generate geometry grid2D 1 12 14
+```
+
+Generate a Particle-Cluster (PC) Diffusion-Limited Aggregation (DLA) model, format it for POV-Ray, and save to a file:
+```bash
+scatter-cli generate model pc dla --rad-fixed 2048,1 --export povray --out assembly.pov
+scatter-cli generate model pc dla --rf 2048,1 -e povray -o assembly.pov
+```
+
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="docs/assets/example.png" alt="PC DLA assembly" width="400"></td>
+    </tr>
+    <tr>
+      <td align="center"><em>Fig 1: PC DLA synthetic fractal-like aggregate model.</em></td>
+    </tr>
+  </table>
+</div>
 
 ### Measure
 
-The `measure` command calculates the morphological parameters of a loaded aggregate. To invoke it, type:
+Calculates morphological parameters of particle assemblies.
 ```bash
-java -jar scatter-cli.jar measure [options] [file]
+scatter-cli measure [OPTIONS] [file]
 ```
 
-#### Help and available metrics
-
-To see a complete list of all available morphological parameters and command options, you can use the built-in help flag:
+To view the complete list of all supported metric tags and configuration options, use the built-in help flag:
 ```bash
-java -jar scatter-cli.jar measure --help
+scatter-cli measure --help
 ```
 
-This will output the documentation directly to your terminal, including a comma-separated list of every valid metric tag (e.g., `np`, `rp`, `df-bc`, etc.) that can be passed to the `--metrics` option.
+Key command options:
+- **`-m, --metrics`**: Defines the parameters to calculate. Separate multiple metric tags with a space.
+- **`-e, --epsilon`**: Continuous geometric tolerance (default: `1E-4`).
+- **`-d, --delta`**: Discrete grid resolution (default: `1E-2`).
+- **`-b, --buffer`**: Reusable data buffer size.
 
-#### Key options
+#### Import
 
-- **`-m`, `--metrics`**: Defines the list of parameters to calculate. To perform multiple measurements simultaneously, separate the metric tags with a space. For example, to measure the three static fractal parameters, type:
+The input file is a positional argument and can be placed anywhere in the command. If omitted, or if `-` is provided, the CLI reads directly from standard input (`stdin`).
+
+I/O flags:
+- **`-i, --import`**: Sets the input assembly format (default: `json`).
+
+#### Examples
+
+Measure static fractal dimensions from a multisphere format:
 ```bash
-measure --metrics df-bc df-mr df-dc
-```
-- **`-f`, `--format`**: Defines the format of the input file. By default, the `json` format is used. To change this to the `multisphere` format (where each particle is defined on a single line as `x y z rp`), type:
-```bash
-measure --format multisphere
-```
-
-#### Input file
-
-The final positional argument is the path to your input file. If omitted (or if `-` is provided), the CLI will read directly from standard input (`stdin`).
-
-#### Precision and buffers
-
-For fine-grained control over morphological calculations, you can configure the geometric tolerance (`epsilon`), grid resolution (`delta`), and pre-allocate memory buffers. These settings directly impact algorithms relying on point connectivity, precise overlap detection, and discrete volumetric meshes.
-
-These parameters can be configured on the fly using command-line arguments during the `measure` command:
-
-*   **`-e, --epsilon`**: Continuous Tolerance (default: `1E-4`).
-*   **`-d, --delta`**: Discrete Tolerance (default: `1E-2`).
-*   **`-b, --buffer`**: Reusable data buffer.
-
-#### Full example
-
-A complete command to measure the fractal dimensions of a multisphere file named `aggregate.geo`:
-```bash
-java -jar scatter-cli.jar measure --metrics df-bc df-mr df-dc --format multisphere aggregate.geo
-java -jar scatter-cli.jar measure -m df-bc df-mr df-dc -f multisphere aggregate.geo
+scatter-cli measure --metrics df-bc df-mr df-dc --import multisphere assembly.xyzr
+scatter-cli measure -m df-bc df-mr df-dc -i multisphere assembly.xyzr
 ```
 
-A complete command to measure the mass center using the mesh decomposition of a multisphere file named `aggregate.geo`:
+Calculate the mass center using mesh decomposition with a custom resolution and buffer:
 ```bash
-java -jar scatter-cli.jar measure --delta 0.5 --buffer 1000 --metrics cm-mesh --format multisphere aggregate.geo
-java -jar scatter-cli.jar measure -d 0.5 -b 1000 -m cm-mesh -f multisphere aggregate.geo
+scatter-cli measure --delta 0.5 --buffer 1000 --metrics cm-mesh --import multisphere assembly.xyzr
+scatter-cli measure -d 0.5 -b 1000 -m cm-mesh -i multisphere assembly.xyzr
 ```
+
+### Transform
+
+Applies sequential transformations to an existing particle assembly.
+```bash
+scatter-cli transform [OPTIONS] [file]
+```
+
+To view the complete list of transformation options, use the built-in help flag:
+```bash
+scatter-cli transform --help
+```
+
+Transformations (like `--rotate` and `--translate`) can be declared multiple times in a single command. They are executed in the exact sequential order they appear.
+
+#### Import and export
+
+The input file is a positional argument and can be placed anywhere in the command. If omitted, or if `-` is provided, the CLI reads directly from standard input (`stdin`).
+
+I/O flags:
+- **`-i, --import`**: Sets the input assembly format (default: `json`).
+- **`-e, --export`**: Sets the output assembly format (default: `json`).
+- **`-o, --out`**: Defines the destination file path. If omitted, the transformed data is printed directly to `stdout`.
+
+#### Examples
+
+Perform multiple, chained transformation tasks in a specific sequence:
+```bash
+scatter-cli transform --rotate 1,0,0,1.5708 --translate 1,2,3 --rotate 0,1,0,1.5709 --pca assembly.json
+```
+
+Convert the assembly format from JSON to POV-Ray:
+```bash
+scatter-cli transform assembly.json --import json --export povray --out assembly.pov
+scatter-cli transform assembly.json -i json -e povray -o assembly.pov
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

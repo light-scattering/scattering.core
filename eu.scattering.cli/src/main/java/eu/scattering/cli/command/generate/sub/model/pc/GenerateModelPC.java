@@ -4,6 +4,7 @@ import eu.scattering.cli.command.generate.sub.model.pc.variant.GenerateModelPCBa
 import eu.scattering.cli.command.generate.sub.model.pc.variant.GenerateModelPCDLA;
 import eu.scattering.cli.command.generate.sub.model.pc.variant.GenerateModelPCRLA;
 import eu.scattering.cli.command.generate.sub.model.pc.variant.GenerateModelPCTunable;
+import eu.scattering.cli.service.mixin.HelpMixin;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -20,6 +21,9 @@ import java.util.concurrent.Callable;
         }
 )
 public class GenerateModelPC implements Callable<Integer> {
+
+    @CommandLine.Mixin
+    private HelpMixin helpMixin;
 
     @Override
     public Integer call() {

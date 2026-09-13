@@ -1,5 +1,6 @@
 package eu.scattering.cli.command.demo;
 
+import eu.scattering.cli.service.mixin.HelpMixin;
 import picocli.CommandLine;
 import java.util.concurrent.Callable;
 
@@ -11,6 +12,9 @@ public class Demo implements Callable<Integer> {
 
     @CommandLine.Spec
     private CommandLine.Model.CommandSpec spec;
+
+    @CommandLine.Mixin
+    private HelpMixin helpMixin;
 
     @Override
     public Integer call() {
