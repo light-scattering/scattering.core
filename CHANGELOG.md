@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-09-14
+
+### Added
+- Complete publishing pipelines and automated remote testing for PyPI (Python) and NPM (Node.js).
+- Node.js wrapper support featuring an ephemeral local 3D viewer (`scatter-vis`).
+- CLI subcommands for natively generating PC (Particle-Cluster) and CC (Cluster-Cluster) aggregate models.
+- Core support for 2D, 3D, and correlated 3D normal distributions with bivariate statistics.
+- Expanded `FAggregate` capabilities with geometric transformations and advanced iteration monitors.
+
+### Changed
+- Overhauled the command-line interface with strict POSIX argument parsing, unified generation flags, and a polished terminal layout.
+- Modernized the random subsystem, streamlined load/export lifecycles, and improved fluent API ergonomics.
+- Reorganized internal logic packages, separated wrapper codebases, and isolated consumer testing environments.
+- Expanded the main README with wrapper execution guides, transformation chapters, and status notes regarding Maven Central.
+
+### Fixed
+- Internal validation logic for 3D correlations and CC radius monitors.
+- CLI diagnostic outputs and incorrect version rendering.
+- 
 ## [0.3.1] - 2026-08-04
 
 ### Added
