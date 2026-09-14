@@ -145,9 +145,13 @@ tasks.register('pythonPackageTest', Exec) {
 
     dependsOn 'pythonPackageAdd'
 
-    def cli = System.getProperty("os.name").toLowerCase().contains("windows") ? "scatter-cli.exe" : "scatter-cli"
+    def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
 
-    commandLine cli, '--version'
+    if (isWindows) {
+        commandLine 'cmd', '/c', 'scatter-cli', '--version'
+    } else {
+        commandLine 'scatter-cli', '--version'
+    }
 
     def outputStream = new ByteArrayOutputStream()
     standardOutput = outputStream
@@ -157,7 +161,7 @@ tasks.register('pythonPackageTest', Exec) {
         def vrExpected = project.version.toString()
 
         if (!vrActual.contains(vrExpected)) {
-            throw new GradleException("Version mismatch! Expected '${vrExpected}, got: '${vrActual}'")
+            throw new GradleException("Version mismatch! Expected '${vrExpected}', got: '${vrActual}'")
         }
     }
 }
@@ -166,12 +170,17 @@ tasks.register('pythonPackageTestRemote', Exec) {
     group = 'wrapper'
     description = 'Runs tests against the package from the PyPI registry.'
 
-    def pipx = System.getProperty("os.name").toLowerCase().contains("windows") ? "pipx.exe" : "pipx"
+    def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
 
-    commandLine pipx, 'run', '--spec', "scatter-cli==${project.version}", 'scatter-cli', '--version'
+    if (isWindows) {
+        commandLine 'cmd', '/c', 'pipx', 'run', '--quiet', '--spec', "scatter-cli==${project.version}", 'scatter-cli', '--version'
+    } else {
+        commandLine 'pipx', 'run', '--quiet', '--spec', "scatter-cli==${project.version}", 'scatter-cli', '--version'
+    }
 
     def outputStream = new ByteArrayOutputStream()
     standardOutput = outputStream
+    errorOutput = outputStream
 
     doLast {
         def vrActual = outputStream.toString().trim()
