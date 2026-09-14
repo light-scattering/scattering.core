@@ -9,6 +9,8 @@ Scattering Core is a highly optimized Java library designed for the generation a
 > **Note:**
 > This documentation is actively being expanded. It currently focuses on the specific methods required to reproduce the findings of the recently submitted manuscript.
 
+> **Maven Central Status:** The Java artifacts published to Maven Central are currently pending an update due to a prolonged token bug issue on Sonatype's Publisher Portal. As soon as support resolves the ticket, the Maven registry will be synced with the latest codebase. In the meantime, please rely on the Node.js (`npm`), Python (`pip`), or GitHub Releases for the most up-to-date distributions.
+> 
 ## Table of contents
 
 - [Ecosystem and installation](#ecosystem-and-installation)
