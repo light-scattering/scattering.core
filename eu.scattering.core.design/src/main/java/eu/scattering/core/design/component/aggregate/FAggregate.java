@@ -198,6 +198,8 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void scaleSize(double factor);
     void scalePosition(double factor);
 
+    void relaxOverlap();
+
     @LLM
     void pca();
 

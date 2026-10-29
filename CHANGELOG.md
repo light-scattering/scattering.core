@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Internal validation logic for 3D correlations and CC radius monitors.
 - CLI diagnostic outputs and incorrect version rendering.
-- 
+
 ## [0.3.1] - 2026-08-04
 
 ### Added

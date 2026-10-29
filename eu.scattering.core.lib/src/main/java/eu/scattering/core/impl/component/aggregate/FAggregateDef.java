@@ -544,6 +544,12 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public void relaxOverlap() {
+
+        this.moduleOverlap.relaxOverlap(0.2);
+    }
+
+    @Override
     public FStat getTripletAngle() {
 
         return this.moduleMorphology.getTripletAngle();

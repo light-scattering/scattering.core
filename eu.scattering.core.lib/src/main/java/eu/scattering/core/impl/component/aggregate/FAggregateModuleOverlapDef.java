@@ -10,10 +10,9 @@ import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.variant.OverlapFactor;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+
+import static eu.scattering.core.impl.ScatterCoreConfig.EPSILON;
 
 public class FAggregateModuleOverlapDef {
     private final ScatterFactory factory;
@@ -230,6 +229,81 @@ public class FAggregateModuleOverlapDef {
             case PARTICLE_QUANTITATIVE -> getParticleQuantitativeOF();
             case CLUSTER_VOLUMETRIC -> getClusterVolumetricOF();
         };
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected void relaxOverlap(double relaxation) {
+        Map<Shape, FVector> core = createDisplacementMap();
+
+        Shape shapeA, shapeB;
+        FVector direction = this.factory.getFVector();
+        List<Shape> refParticles = this.aggregate.getRefParticles().asList();
+
+        int iteration = 0;
+        while (!this.aggregate.isNonOverlapping()) {
+
+            if (iteration > 0) {
+                clearDisplacements(core);
+            }
+
+            for (int i = 0; i < this.aggregate.size() - 1; i++) {
+                for (int j = i + 1; j < this.aggregate.size(); j++) {
+                    shapeA = refParticles.get(i);
+                    shapeB = refParticles.get(j);
+
+                    if (shapeA.overlaps(shapeB)) {
+
+                        if (shapeA.getRefCenter().isSimilar(shapeB.getRefCenter())) {
+                            breakCenterSymmetry(shapeA, shapeB);
+                        }
+
+                        setSeparationVector(direction, shapeA, shapeB, relaxation);
+
+                        core.get(shapeB).add(direction);
+                        core.get(shapeA).sub(direction);
+                    }
+                }
+            }
+
+            core.forEach((p, vec) -> {
+                p.getRefCenter().add(vec.moveBase(0, 0, 0).getRefHead());
+            });
+
+            System.out.println(iteration + " " + this.aggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max());
+
+            iteration++;
+        }
+    }
+
+    private Map<Shape, FVector> createDisplacementMap() {
+        Map<Shape, FVector> core = new HashMap<>(this.aggregate.size());
+
+        this.aggregate.forEach((p) -> core.put(p, this.factory.getFVector()));
+
+        return core;
+    }
+
+    private void clearDisplacements(Map<Shape, FVector> map) {
+
+        map.forEach((p, vec) -> vec.set(0, 0, 0, 0, 0, 0));
+    }
+
+    private void breakCenterSymmetry(Shape shapeA, Shape shapeB) {
+        double shift = Math.min(shapeA.getRadius() * 1E-4, shapeB.getRadius() * 1E-4);
+        FPos3D trans = this.factory.random().engine().nextDoubleOnSphere(shift);
+
+        shapeA.getRefCenter().add(trans);
+    }
+
+    private void setSeparationVector(FVector dir, Shape shapeA, Shape shapeB, double relaxation) {
+        double distRequired = shapeA.getRadius() + shapeB.getRadius() + EPSILON;
+        double distCurrent = shapeA.getRefCenter().getDistance(shapeB.getRefCenter());
+        double dist = (distRequired - distCurrent) * 0.5 * relaxation;
+
+        dir.setBase(shapeA.getCenterX(), shapeA.getCenterY(), shapeA.getCenterZ());
+        dir.setHead(shapeB.getCenterX(), shapeB.getCenterY(), shapeB.getCenterZ());
+        dir.setMagnitude(dist);
     }
 
     // -------------------------------------------------------------------------------------------------

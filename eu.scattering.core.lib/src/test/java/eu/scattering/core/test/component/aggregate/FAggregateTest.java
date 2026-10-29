@@ -9,6 +9,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.functionality.Producer;
 import eu.scattering.core.design.mathematics.helper.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
@@ -24,6 +25,7 @@ import eu.scattering.core.design.storage.transfer.position.p1.variant.FPos3D;
 import eu.scattering.core.design.utility.type.method.*;
 import eu.scattering.core.design.utility.type.option.Length;
 import eu.scattering.core.design.utility.type.option.Location;
+import eu.scattering.core.design.utility.type.preset.ExPovRay;
 import eu.scattering.core.design.utility.type.variant.Center;
 import eu.scattering.core.design.utility.type.variant.FractalDimension;
 import eu.scattering.core.design.utility.type.variant.OverlapFactor;
@@ -3670,6 +3672,128 @@ public class FAggregateTest {
             assertTrue(tensor.get1x1() >= tensor.get2x2(), "Y variance should be >= Z variance");
 
             assertTrue(aggregate.isPointConnected());
+        }
+
+        @Test
+        @DisplayName("Relax overlap - monodisperse / 2 particles")
+        void relaxOverlapMono2P() {
+            Shape shape1 = factory.getFSphere(1, 0, 0, 1);
+            Shape shapeNew = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape1, shapeNew));
+            FAggregate aggregate = factory.getRefFAggregate(core);
+
+            assertFalse(aggregate.isNonOverlapping(), "Particles should overlap");
+
+            aggregate.relaxOverlap();
+
+            assertTrue(aggregate.isNonOverlapping(), "Particles should not overlap");
+            assertTrue(aggregate.isPointConnected());
+        }
+
+        @Test
+        @DisplayName("Relax overlap - monodisperse / 3 particles")
+        void relaxOverlapMono3P() {
+            Shape shape1 = factory.getFSphere(1, 0, 0, 1);
+            Shape shape2 = factory.getFSphere(-1, 0, 0, 1);
+            Shape shapeNew = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape1, shape2, shapeNew));
+            FAggregate aggregate = factory.getRefFAggregate(core);
+
+            assertFalse(aggregate.isNonOverlapping(), "Particles should overlap");
+
+            aggregate.relaxOverlap();
+
+            assertTrue(aggregate.isNonOverlapping(), "Particles should not overlap");
+            assertTrue(aggregate.isPointConnected());
+        }
+
+        @Test
+        @DisplayName("Relax overlap - monodisperse / 7 particles")
+        void relaxOverlapMono7P() {
+            Shape shape1 = factory.getFSphere(1, 0, 0, 1);
+            Shape shape2 = factory.getFSphere(-1, 0, 0, 1);
+            Shape shape3 = factory.getFSphere(0, 1, 0, 1);
+            Shape shape4 = factory.getFSphere(0, -1, 0, 1);
+            Shape shape5 = factory.getFSphere(0, 0, 1, 1);
+            Shape shape6 = factory.getFSphere(0, 0, -1, 1);
+            Shape shapeNew = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape1, shape2, shape3, shape4, shape5, shape6, shapeNew));
+            FAggregate aggregate = factory.getRefFAggregate(core);
+
+            assertFalse(aggregate.isNonOverlapping(), "Particles should overlap");
+
+            aggregate.relaxOverlap();
+
+            assertTrue(aggregate.isNonOverlapping(), "Particles should not overlap");
+            assertTrue(aggregate.isPointConnected());
+        }
+
+        @Test
+        @DisplayName("Relax overlap - polydisperse / 7 particles")
+        void relaxOverlapPoly7P() {
+            Shape shape1 = factory.getFSphere(1.2, 0, 0, 2);
+            Shape shape2 = factory.getFSphere(-0.9, 0, 0, 1.2);
+            Shape shape3 = factory.getFSphere(0, 0.5, 0, 0.1);
+            Shape shape4 = factory.getFSphere(0, -2, 0, 2.5);
+            Shape shape5 = factory.getFSphere(0, 0, 0.2, 0.1);
+            Shape shape6 = factory.getFSphere(0, 0, -1.1, 1.5);
+            Shape shapeNew = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape1, shape2, shape3, shape4, shape5, shape6, shapeNew));
+            FAggregate aggregate = factory.getRefFAggregate(core);
+
+            assertFalse(aggregate.isNonOverlapping(), "Particles should overlap");
+
+            aggregate.relaxOverlap();
+
+            assertTrue(aggregate.isNonOverlapping(), "Particles should not overlap");
+            assertTrue(aggregate.isPointConnected());
+        }
+
+        @Test
+        @Disabled
+        @DisplayName("Relax overlap - Hex 3D")
+        void relaxOverlapHex3D() {
+            FAggregate aggregate = factory.aggregates().geometries().hex3D(15, 1);
+            aggregate.addRefParticle(factory.getFSphere(0, 0, 0, 2));
+            aggregate.index();
+
+            String dataA = factory.export().toNGSolve(aggregate);
+            assertFalse(aggregate.isNonOverlapping(), "Particles should overlap");
+
+            aggregate.relaxOverlap();
+
+            aggregate.index();
+            String dataB = factory.export().toNGSolve(aggregate);
+
+            assertTrue(aggregate.isNonOverlapping(), "Particles should not overlap");
+        }
+
+        @Test
+        @Disabled
+        @DisplayName("Relax overlap - Box")
+        void relaxOverlapBox() {
+            FSphereProducer producer = factory.getFSphereProducer().withDistCenterAndDistRadius(
+                    factory.random().dist3D().uniform(-10, 10, -10, 10, -10, 10),
+                    factory.random().dist1D().normal(1, 0.1),
+                    10000
+            );
+
+            FAggregate aggregate = factory.getRefFAggregate(producer.getList());
+            aggregate.index();
+
+
+
+            assertFalse(aggregate.isNonOverlapping());
+
+            aggregate.relaxOverlap();
+
+            String data = factory.export().toNGSolve(aggregate);
+
+            assertTrue(aggregate.isNonOverlapping(), "Particles should not overlap");
         }
     }
 
