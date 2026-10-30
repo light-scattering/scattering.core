@@ -212,8 +212,9 @@ public class FAggregateModuleSupportDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
+    protected int forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
         List<Shape> candidates = new ArrayList<>();
+        int pairs = 0;
 
         Queue<Shape> queue = new LinkedList<>(this.aggregate.getRefParticles().asList());
 
@@ -222,12 +223,35 @@ public class FAggregateModuleSupportDef {
         for (Shape shape : this.aggregate) {
             candidates.clear();
 
-            shape.touchesOrOverlaps(queue, candidates);
+            pairs += shape.touchesOrOverlaps(queue, candidates);
 
             candidates.forEach(e -> consumer.accept(shape, e));
 
             queue.poll();
         }
+
+        return pairs;
+    }
+
+    protected int forEachPairOverlapping(BiConsumer<Shape, Shape> consumer) {
+        List<Shape> candidates = new ArrayList<>();
+        int pairs = 0;
+
+        Queue<Shape> queue = new LinkedList<>(this.aggregate.getRefParticles().asList());
+
+        queue.poll();
+
+        for (Shape shape : this.aggregate) {
+            candidates.clear();
+
+            pairs += shape.overlaps(queue, candidates);
+
+            candidates.forEach(e -> consumer.accept(shape, e));
+
+            queue.poll();
+        }
+
+        return pairs;
     }
 
     // -------------------------------------------------------------------------------------------------

@@ -186,7 +186,8 @@ public interface FAggregate extends Component, Iterable<Shape> {
     void translate(FVector offset);
     void translate(FPairPos3D offset);
 
-    void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
+    int forEachPairInContact(BiConsumer<Shape, Shape> consumer);
+    int forEachPairOverlapping(BiConsumer<Shape, Shape> consumer);
 
     double project(FAggregate arg, FVector dir);
     double project(FAggregate arg, FVector dir, double distLimit);

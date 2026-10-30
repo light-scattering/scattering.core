@@ -2,6 +2,7 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatterFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -233,60 +234,56 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected void relaxOverlap(double relaxation) {
-        Map<Shape, FVector> core = createDisplacementMap();
-
-        Shape shapeA, shapeB;
-        FVector direction = this.factory.getFVector();
-        List<Shape> refParticles = this.aggregate.getRefParticles().asList();
+    protected void relaxOverlap() {
+        Map<Shape, FPoint> map = createShiftMap();
+        FPoint vec = this.factory.getFPoint();
 
         int iteration = 0;
-        while (!this.aggregate.isNonOverlapping()) {
+        while (true) {
 
-            if (iteration > 0) {
-                clearDisplacements(core);
+            if (iteration++ > 0) {
+                clearShiftMap(map);
             }
 
-            for (int i = 0; i < this.aggregate.size() - 1; i++) {
-                for (int j = i + 1; j < this.aggregate.size(); j++) {
-                    shapeA = refParticles.get(i);
-                    shapeB = refParticles.get(j);
+            int pairs = this.aggregate.forEachPairOverlapping((shapeA, shapeB) ->
+                    updateShiftMap(map, vec, shapeA, shapeB));
 
-                    if (shapeA.overlaps(shapeB)) {
-
-                        if (shapeA.getRefCenter().isSimilar(shapeB.getRefCenter())) {
-                            breakCenterSymmetry(shapeA, shapeB);
-                        }
-
-                        setSeparationVector(direction, shapeA, shapeB, relaxation);
-
-                        core.get(shapeB).add(direction);
-                        core.get(shapeA).sub(direction);
-                    }
-                }
+            if (pairs == 0) {
+                break;
             }
 
-            core.forEach((p, vec) -> {
-                p.getRefCenter().add(vec.moveBase(0, 0, 0).getRefHead());
-            });
+            applyShiftMap(map);
+        };
+    }
 
-            System.out.println(iteration + " " + this.aggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max());
+    private Map<Shape, FPoint> createShiftMap() {
+        Map<Shape, FPoint> map = new HashMap<>(this.aggregate.size());
 
-            iteration++;
+        this.aggregate.forEach((p) -> map.put(p, this.factory.getFPoint()));
+
+        return map;
+    }
+
+    private void clearShiftMap(Map<Shape, FPoint> map) {
+
+        map.forEach((p, vec) -> vec.set(0, 0, 0));
+    }
+
+    private void updateShiftMap(Map<Shape, FPoint> map, FPoint vec, Shape shapeA, Shape shapeB) {
+
+        if (shapeA.getRefCenter().isSimilar(shapeB.getRefCenter())) {
+            breakCenterSymmetry(shapeA, shapeB);
         }
+
+        setSeparationVector(vec, shapeA, shapeB);
+
+        map.get(shapeB).add(vec);
+        map.get(shapeA).sub(vec);
     }
 
-    private Map<Shape, FVector> createDisplacementMap() {
-        Map<Shape, FVector> core = new HashMap<>(this.aggregate.size());
+    private void applyShiftMap(Map<Shape, FPoint> map) {
 
-        this.aggregate.forEach((p) -> core.put(p, this.factory.getFVector()));
-
-        return core;
-    }
-
-    private void clearDisplacements(Map<Shape, FVector> map) {
-
-        map.forEach((p, vec) -> vec.set(0, 0, 0, 0, 0, 0));
+        map.forEach((p, vec) -> p.getRefCenter().add(vec));
     }
 
     private void breakCenterSymmetry(Shape shapeA, Shape shapeB) {
@@ -296,14 +293,15 @@ public class FAggregateModuleOverlapDef {
         shapeA.getRefCenter().add(trans);
     }
 
-    private void setSeparationVector(FVector dir, Shape shapeA, Shape shapeB, double relaxation) {
+    private void setSeparationVector(FPoint vec, Shape shapeA, Shape shapeB) {
         double distRequired = shapeA.getRadius() + shapeB.getRadius() + EPSILON;
         double distCurrent = shapeA.getRefCenter().getDistance(shapeB.getRefCenter());
-        double dist = (distRequired - distCurrent) * 0.5 * relaxation;
+        double dist = (distRequired - distCurrent) * 0.5 * 0.25;
 
-        dir.setBase(shapeA.getCenterX(), shapeA.getCenterY(), shapeA.getCenterZ());
-        dir.setHead(shapeB.getCenterX(), shapeB.getCenterY(), shapeB.getCenterZ());
-        dir.setMagnitude(dist);
+        vec.set(shapeB.getRefCenter());
+        vec.sub(shapeA.getRefCenter());
+
+        vec.setMagnitude(dist);
     }
 
     // -------------------------------------------------------------------------------------------------
