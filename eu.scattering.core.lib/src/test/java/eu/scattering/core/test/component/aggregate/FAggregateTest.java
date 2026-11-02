@@ -3773,7 +3773,7 @@ public class FAggregateTest {
         }
 
         @Test
-//        @Disabled
+        @Disabled
         @DisplayName("Relax overlap - Box")
         void relaxOverlapBox() {
             FSphereProducer producer = factory.getFSphereProducer().withDistCenterAndDistRadius(

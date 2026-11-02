@@ -30,15 +30,21 @@ public class FAggregateModuleOverlapDef {
     // -------------------------------------------------------------------------------------------------
 
     protected boolean isNonOverlapping() {
-        Queue<Shape> queue = new LinkedList<>(this.aggregate.getRefParticles().asList());
+        boolean[] hasOverlap = {false};
 
-        while (!queue.isEmpty()) {
-            if (queue.poll().overlaps(queue) != 0) {
+        FCellList core = FCellList.create(this.aggregate, (shapeA, shapeB, indexA, indexB) -> {
+
+            if (shapeA.overlaps(shapeB)) {
+                hasOverlap[0] = true;
                 return false;
             }
-        }
 
-        return true;
+            return true;
+        });
+
+        core.execute();
+
+        return !hasOverlap[0];
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -236,243 +242,6 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    public interface CollisionHandler {
-
-        void accept(Shape shapeA, Shape shapeB, int indexA, int indexB);
-    }
-
-    private static class FAggregateCore {
-        CollisionHandler handler;
-
-        FAggregate aggregate;
-        List<Shape> particles;
-
-        double minX = Double.POSITIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double minZ = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
-        double maxZ = Double.NEGATIVE_INFINITY;
-        double maxRadius = 0;
-
-        int d0 = 0;
-        int d1 = 0;
-        int d2 = 0;
-        int cellsNumber = 0;
-        double cellsSize = 0;
-
-        int[] head;
-        int[] next;
-
-        private FAggregateCore(FAggregate aggregate, CollisionHandler handler) {
-            this.handler = handler;
-
-            this.aggregate = aggregate;
-            this.particles = aggregate.getRefParticles().asList();
-
-            this.head = new int[0];
-            this.next = new int[this.aggregate.size()];
-        }
-
-        public static FAggregateCore create(FAggregate aggregate, CollisionHandler handler) {
-
-            return new FAggregateCore(aggregate, handler);
-        }
-
-        public void process() {
-            resetState();
-            setSize();
-            setGrid();
-            setArrays();
-            populateCells();
-            execute();
-        }
-
-        private void resetState() {
-            this.minX = Double.POSITIVE_INFINITY;
-            this.minY = Double.POSITIVE_INFINITY;
-            this.minZ = Double.POSITIVE_INFINITY;
-            this.maxX = Double.NEGATIVE_INFINITY;
-            this.maxY = Double.NEGATIVE_INFINITY;
-            this.maxZ = Double.NEGATIVE_INFINITY;
-            this.maxRadius = 0;
-        }
-
-        private void setSize() {
-
-            for (Shape shape : this.aggregate) {
-                this.minX = Math.min(this.minX, shape.getCenterX());
-                this.minY = Math.min(this.minY, shape.getCenterY());
-                this.minZ = Math.min(this.minZ, shape.getCenterZ());
-                this.maxX = Math.max(this.maxX, shape.getCenterX());
-                this.maxY = Math.max(this.maxY, shape.getCenterY());
-                this.maxZ = Math.max(this.maxZ, shape.getCenterZ());
-
-                this.maxRadius = Math.max(this.maxRadius, shape.getRadius());
-            }
-        }
-
-        private void setGrid() {
-            this.cellsSize = (this.maxRadius * 2) + EPSILON;
-
-            this.d0 = (int) Math.ceil((this.maxX - this.minX) / this.cellsSize) + 1;
-            this.d1 = (int) Math.ceil((this.maxY - this.minY) / this.cellsSize) + 1;
-            this.d2 = (int) Math.ceil((this.maxZ - this.minZ) / this.cellsSize) + 1;
-
-            this.cellsNumber = this.d0 * this.d1 * this.d2;
-        }
-
-        private void setArrays() {
-
-            if (this.head.length < this.cellsNumber) {
-                this.head = new int[this.cellsNumber];
-            }
-
-            Arrays.fill(this.head, 0, this.cellsNumber, -1);
-            Arrays.fill(this.next, -1);
-        }
-
-        private void populateCells() {
-
-            int i = 0;
-            for (Shape shape : this.particles) {
-                int cx = (int) ((shape.getCenterX() - minX) / cellsSize);
-                int cy = (int) ((shape.getCenterY() - minY) / cellsSize);
-                int cz = (int) ((shape.getCenterZ() - minZ) / cellsSize);
-                int cellId = cx + (cy * d0) + (cz * d0 * d1);
-
-                next[i] = head[cellId];
-                head[cellId] = i;
-
-                i++;
-            }
-        }
-
-        private void execute() {
-
-            for (int i = 0; i < this.particles.size(); i++) {
-                Shape shapeA = this.particles.get(i);
-
-                int cx = (int) ((shapeA.getCenterX() - minX) / cellsSize);
-                int cy = (int) ((shapeA.getCenterY() - minY) / cellsSize);
-                int cz = (int) ((shapeA.getCenterZ() - minZ) / cellsSize);
-
-                for (int nx = cx - 1; nx <= cx + 1; nx++) {
-                    if (nx < 0 || nx >= d0) {
-                        continue;
-                    }
-
-                    for (int ny = cy - 1; ny <= cy + 1; ny++) {
-                        if (ny < 0 || ny >= d1) {
-                            continue;
-                        }
-
-                        for (int nz = cz - 1; nz <= cz + 1; nz++) {
-                            if (nz < 0 || nz >= d2) {
-                                continue;
-                            }
-
-                            int j = head[nx + (ny * d0) + (nz * d0 * d1)];
-
-                            while (j != -1) {
-                                if (j > i) {
-                                    Shape shapeB = this.particles.get(j);
-
-                                    handler.accept(shapeA, shapeB, i, j);
-                                }
-
-                                j = next[j];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    protected void relaxOverlap() {
-        FPoint[] shifts = new FPoint[this.aggregate.size()];
-        FBoxDouble pairs = this.factory.getFBoxDouble();
-        FPoint vec = this.factory.getFPoint();
-
-        for (int i = 0; i < shifts.length; i++) {
-            shifts[i] = this.factory.getFPoint();
-        }
-
-        FAggregateCore core = FAggregateCore.create(this.aggregate, (shapeA, shapeB, indexA, indexB) -> {
-            if (shapeA.overlaps(shapeB)) {
-                updateShifts(shifts, vec, shapeA, shapeB, indexA, indexB);
-                pairs.setValue(pairs.getValue() + 1);
-            }
-        });
-
-
-        int iteration = 0;
-        while (true) {
-
-            if (iteration++ > 0) {
-                for (FPoint shift : shifts) {
-                    shift.set(0, 0, 0);
-                }
-            }
-
-            pairs.setValue(0);
-
-            core.process();
-
-            if (pairs.getValue() == 0) {
-                break;
-            }
-
-            System.out.println(iteration);
-
-            updateParticles(shifts);
-        }
-    }
-
-    private void updateShifts(FPoint[] shifts, FPoint vec, Shape shapeA, Shape shapeB, int indexA, int indexB) {
-
-        if (shapeA.getRefCenter().isSimilar(shapeB.getRefCenter())) {
-            breakCenterSymmetry(shapeA, shapeB);
-        }
-
-        setSeparationVector(vec, shapeA, shapeB);
-
-        shifts[indexB].add(vec);
-        shifts[indexA].sub(vec);
-    }
-
-    private void updateParticles(FPoint[] shifts) {
-
-        int i = 0;
-        for (Shape shape : this.aggregate) {
-            shape.getRefCenter().add(shifts[i++]);
-        }
-    }
-
-    private void breakCenterSymmetry(Shape shapeA, Shape shapeB) {
-        double shift = Math.min(shapeA.getRadius() * 1E-4, shapeB.getRadius() * 1E-4);
-        FPos3D trans = this.factory.random().engine().nextDoubleOnSphere(shift);
-
-        shapeA.getRefCenter().add(trans);
-    }
-
-    private void setSeparationVector(FPoint vec, Shape shapeA, Shape shapeB) {
-        double dx = shapeB.getCenterX() - shapeA.getCenterX();
-        double dy = shapeB.getCenterY() - shapeA.getCenterY();
-        double dz = shapeB.getCenterZ() - shapeA.getCenterZ();
-
-        double distRequired = shapeA.getRadius() + shapeB.getRadius() + EPSILON;
-        double distCurrent = Math.sqrt((dx * dx) + (dy * dy) + (dz * dz));
-
-        double shift = (distRequired - distCurrent) * 0.5 * 0.25;
-        double shiftFactor = shift / distCurrent;
-
-        vec.set(dx * shiftFactor, dy * shiftFactor, dz * shiftFactor);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
     private FStat getParticleQuantitativeOF() {
         FStat results = this.factory.getFStat();
 
@@ -647,5 +416,277 @@ public class FAggregateModuleOverlapDef {
         }
 
         return results;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected int forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
+        int[] particlePairs = {0};
+
+        FCellList core = FCellList.create(this.aggregate, (shapeA, shapeB, indexA, indexB) -> {
+
+            if (shapeA.touchesOrOverlaps(shapeB)) {
+                consumer.accept(shapeA, shapeB);
+                particlePairs[0]++;
+            }
+
+            return true;
+        });
+
+        core.execute();
+
+        return particlePairs[0];
+    }
+
+    protected int forEachPairOverlapping(BiConsumer<Shape, Shape> consumer) {
+        int[] particlePairs = {0};
+
+        FCellList core = FCellList.create(this.aggregate, (shapeA, shapeB, indexA, indexB) -> {
+
+            if (shapeA.overlaps(shapeB)) {
+                consumer.accept(shapeA, shapeB);
+                particlePairs[0]++;
+            }
+
+            return true;
+        });
+
+        core.execute();
+
+        return particlePairs[0];
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected void relaxOverlap() {
+        int[] particlePairs = {0};
+
+        FPoint separationVector = this.factory.getFPoint();
+        FPoint[] particleShifts = new FPoint[this.aggregate.size()];
+
+        for (int i = 0; i < particleShifts.length; i++) {
+            particleShifts[i] = this.factory.getFPoint();
+        }
+
+        FCellList core = FCellList.create(this.aggregate, (shapeA, shapeB, indexA, indexB) -> {
+
+            if (shapeA.overlaps(shapeB)) {
+                updateShifts(particleShifts, separationVector, shapeA, shapeB, indexA, indexB);
+                particlePairs[0]++;
+            }
+
+            return true;
+        });
+
+
+        int iteration = 0;
+        while (true) {
+
+            if (iteration++ > 0) {
+                for (FPoint shift : particleShifts) {
+                    shift.set(0, 0, 0);
+                }
+            }
+
+            particlePairs[0] = 0;
+
+            core.execute();
+
+            if (particlePairs[0] == 0) {
+                break;
+            }
+
+            updateParticles(particleShifts);
+        }
+    }
+
+    private void updateShifts(FPoint[] shifts, FPoint vec, Shape shapeA, Shape shapeB, int indexA, int indexB) {
+
+        if (shapeA.getRefCenter().isSimilar(shapeB.getRefCenter())) {
+            breakCenterSymmetry(shapeA, shapeB);
+        }
+
+        setSeparationVector(vec, shapeA, shapeB);
+
+        shifts[indexB].add(vec);
+        shifts[indexA].sub(vec);
+    }
+
+    private void updateParticles(FPoint[] shifts) {
+
+        int i = 0;
+        for (Shape shape : this.aggregate) {
+            shape.getRefCenter().add(shifts[i++]);
+        }
+    }
+
+    private void breakCenterSymmetry(Shape shapeA, Shape shapeB) {
+        double shift = Math.min(shapeA.getRadius() * 1E-4, shapeB.getRadius() * 1E-4);
+        FPos3D trans = this.factory.random().engine().nextDoubleOnSphere(shift);
+
+        shapeA.getRefCenter().add(trans);
+    }
+
+    private void setSeparationVector(FPoint vec, Shape shapeA, Shape shapeB) {
+        double dx = shapeB.getCenterX() - shapeA.getCenterX();
+        double dy = shapeB.getCenterY() - shapeA.getCenterY();
+        double dz = shapeB.getCenterZ() - shapeA.getCenterZ();
+
+        double distRequired = shapeA.getRadius() + shapeB.getRadius() + EPSILON;
+        double distCurrent = Math.sqrt((dx * dx) + (dy * dy) + (dz * dz));
+
+        double shift = (distRequired - distCurrent) * 0.5 * 0.25;
+        double shiftFactor = shift / distCurrent;
+
+        vec.set(dx * shiftFactor, dy * shiftFactor, dz * shiftFactor);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @FunctionalInterface
+    public interface NeighbourPredicate {
+
+        boolean test(Shape shapeA, Shape shapeB, int indexA, int indexB);
+    }
+
+    private static class FCellList {
+        NeighbourPredicate handler;
+
+        List<Shape> particles;
+
+        double minX, minY, minZ, minR;
+        double maxX, maxY, maxZ, maxR;
+
+        int d0, d1, d2, gridSize;
+        double cellLength = 0;
+
+        int[] head;
+        int[] next;
+
+        private FCellList(FAggregate aggregate, NeighbourPredicate handler) {
+            this.handler = handler;
+
+            this.particles = aggregate.getRefParticles().asList();
+
+            this.head = new int[0];
+            this.next = new int[this.particles.size()];
+        }
+
+        public static FCellList create(FAggregate aggregate, NeighbourPredicate handler) {
+
+            return new FCellList(aggregate, handler);
+        }
+
+        public void execute() {
+            setGeometry();
+            setArrays();
+            search();
+        }
+
+        private void setGeometry() {
+            this.minX = Double.POSITIVE_INFINITY;
+            this.minY = Double.POSITIVE_INFINITY;
+            this.minZ = Double.POSITIVE_INFINITY;
+            this.minR = Double.POSITIVE_INFINITY;
+            this.maxX = Double.NEGATIVE_INFINITY;
+            this.maxY = Double.NEGATIVE_INFINITY;
+            this.maxZ = Double.NEGATIVE_INFINITY;
+            this.maxR = Double.NEGATIVE_INFINITY;
+
+            for (Shape shape : this.particles) {
+                FPoint center = shape.getRefCenter();
+
+                double x = center.getX();
+                double y = center.getY();
+                double z = center.getZ();
+                double r = shape.getRadius();
+
+                this.minX = Math.min(this.minX, x);
+                this.minY = Math.min(this.minY, y);
+                this.minZ = Math.min(this.minZ, z);
+                this.minR = Math.min(this.minR, r);
+                this.maxX = Math.max(this.maxX, x);
+                this.maxY = Math.max(this.maxY, y);
+                this.maxZ = Math.max(this.maxZ, z);
+                this.maxR = Math.max(this.maxR, r);
+            }
+
+            this.cellLength = (this.maxR * 2) + EPSILON;
+
+            this.d0 = (int) Math.ceil((this.maxX - this.minX) / this.cellLength) + 1;
+            this.d1 = (int) Math.ceil((this.maxY - this.minY) / this.cellLength) + 1;
+            this.d2 = (int) Math.ceil((this.maxZ - this.minZ) / this.cellLength) + 1;
+
+            this.gridSize = this.d0 * this.d1 * this.d2;
+        }
+
+        private void setArrays() {
+
+            if (this.head.length < this.gridSize) {
+                this.head = new int[this.gridSize];
+            }
+
+            Arrays.fill(this.head, 0, this.gridSize, -1);
+            Arrays.fill(this.next, -1);
+
+            int i = 0;
+            for (Shape shape : this.particles) {
+                int cx = (int) ((shape.getCenterX() - minX) / cellLength);
+                int cy = (int) ((shape.getCenterY() - minY) / cellLength);
+                int cz = (int) ((shape.getCenterZ() - minZ) / cellLength);
+                int cellId = cx + (cy * d0) + (cz * d0 * d1);
+
+                next[i] = head[cellId];
+                head[cellId] = i;
+
+                i++;
+            }
+        }
+
+        private void search() {
+
+            searchLoop:
+            for (int i = 0; i < this.particles.size(); i++) {
+                Shape shapeA = this.particles.get(i);
+
+                int cx = (int) ((shapeA.getCenterX() - minX) / cellLength);
+                int cy = (int) ((shapeA.getCenterY() - minY) / cellLength);
+                int cz = (int) ((shapeA.getCenterZ() - minZ) / cellLength);
+
+                for (int nx = cx - 1; nx <= cx + 1; nx++) {
+                    if (nx < 0 || nx >= d0) {
+                        continue;
+                    }
+
+                    for (int ny = cy - 1; ny <= cy + 1; ny++) {
+                        if (ny < 0 || ny >= d1) {
+                            continue;
+                        }
+
+                        for (int nz = cz - 1; nz <= cz + 1; nz++) {
+                            if (nz < 0 || nz >= d2) {
+                                continue;
+                            }
+
+                            int j = head[nx + (ny * d0) + (nz * d0 * d1)];
+
+                            while (j != -1) {
+                                if (j > i) {
+                                    Shape shapeB = this.particles.get(j);
+
+                                    boolean continueSearch = handler.test(shapeA, shapeB, i, j);
+
+                                    if (!continueSearch) {
+                                        break searchLoop;
+                                    }
+                                }
+
+                                j = next[j];
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

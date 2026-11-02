@@ -544,6 +544,18 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public int forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
+
+        return this.moduleOverlap.forEachPairInContact(consumer);
+    }
+
+    @Override
+    public int forEachPairOverlapping(BiConsumer<Shape, Shape> consumer) {
+
+        return this.moduleOverlap.forEachPairOverlapping(consumer);
+    }
+
+    @Override
     public void relaxOverlap() {
 
         this.moduleOverlap.relaxOverlap();
@@ -721,18 +733,6 @@ public class FAggregateDef implements FAggregate {
     public void clear() {
 
         this.moduleSupport.clear();
-    }
-
-    @Override
-    public int forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
-
-        return this.moduleSupport.forEachPairInContact(consumer);
-    }
-
-    @Override
-    public int forEachPairOverlapping(BiConsumer<Shape, Shape> consumer) {
-
-        return this.moduleSupport.forEachPairOverlapping(consumer);
     }
 
     //--------------------------------------------------
